@@ -11,7 +11,7 @@ const Auth = () => {
     }
   }, []);
 
-  return <div>Auth</div>;
+  return <div className="bg-background text-primary text-[40px] font-bold">Auth</div>;
 };
 
 export default Auth;

@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "tailwindcss": "^3.3.3",
     "workbox-webpack-plugin": "^7.0.0"
   }
 }
