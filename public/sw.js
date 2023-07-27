@@ -6,6 +6,7 @@ const assets = [
   '/public/index.html',
   '/src/index.tsx',
   '/src/App.tsx',
+  '/public/manifest.json',
   // '/src/pages/Home.jsx',
   // '/src/pages/Product.jsx',
   // '/src/pages/Carts.jsx',
