@@ -7,7 +7,7 @@ const Auth = () => {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      navigate("/");
+      navigate("/spalsh");
     }
   }, []);
 
