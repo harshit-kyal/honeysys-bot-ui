@@ -1,7 +1,6 @@
 import axios from "axios";
-import config from './config';
 const axiosInstance = axios.create({
-    baseURL: config.getHost(),
+    baseURL: "",
     timeout: 600000,
 });
 
@@ -31,7 +30,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     (response) => {
-        // Return the response if it's successful
         return response;
     },
     async (error) => {
