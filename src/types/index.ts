@@ -36,8 +36,6 @@ export interface RootSliceType {
 
 export interface CustomButton {
   title: string;
-  containerStyles?: string;
-  textStyles?: string;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
   btnType?: 'button' | 'submit';
 }
