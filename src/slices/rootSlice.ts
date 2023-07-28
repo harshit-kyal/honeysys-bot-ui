@@ -9,6 +9,7 @@ const initialState: RootSliceType = {
     primary: "#09215B",
     secondary: "#0D1282",
     background: "#FFFFFF",
+    error: "#C25E5E",
   },
   bot: "",
   radius: "",

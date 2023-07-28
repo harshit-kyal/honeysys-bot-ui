@@ -12,6 +12,7 @@ function App() {
       "--background",
       color.background
     );
+    document.documentElement.style.setProperty("--error", color.error);
   }, []);
   return <Routing />;
 }

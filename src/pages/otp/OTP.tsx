@@ -15,13 +15,10 @@ const OTP = () => {
     const cssArray = Array.from(cssEle);
 
     cssArray.forEach((element) => {
-      // element.style.display = "none";
+      (element as HTMLElement).style.cssText =
+        "--tw-ring-opacity: 1;--tw-ring-color: var(--error);";
     });
   };
-
-  useEffect(() => {
-    wrongOTP();
-  }, []);
 
   return (
     <div className="w-screen h-screen px-5 py-3">

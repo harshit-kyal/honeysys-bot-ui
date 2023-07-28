@@ -7,6 +7,7 @@ export interface RootSliceType {
     primary: string;
     secondary: string;
     background: string;
+    error: string;
   };
   bot: string;
   radius: string;
@@ -37,5 +38,5 @@ export interface RootSliceType {
 export interface CustomButton {
   title: string;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
-  btnType?: 'button' | 'submit';
+  btnType?: "button" | "submit";
 }

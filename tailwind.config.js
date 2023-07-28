@@ -8,6 +8,7 @@ module.exports = {
         primary: "var(--primary)",
         secondary: "var(--secondary)",
         background: "var(--background)",
+        error: "#C25E5E",
       }
     },
   },
