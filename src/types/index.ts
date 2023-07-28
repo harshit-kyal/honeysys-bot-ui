@@ -1,3 +1,5 @@
+import { MouseEventHandler } from "react";
+
 export interface RootSliceType {
   loading: boolean;
   error: string;
@@ -30,4 +32,12 @@ export interface RootSliceType {
     categorySectionTemplate: string;
     categoryLikeSectionTemplate: string;
   };
+}
+
+export interface CustomButton {
+  title: string;
+  containerStyles?: string;
+  textStyles?: string;
+  handleClick?: MouseEventHandler<HTMLButtonElement>;
+  btnType?: 'button' | 'submit';
 }
