@@ -1,0 +1,23 @@
+input,
+select {
+    border-bottom: 2px solid #25a18e;
+    box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.08);
+    border-radius: 0px;
+    letter-spacing: 0.1rem;
+}
+select {
+    background-color: #fff;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input:focus,
+select:focus {
+    outline: none !important;
+}
+
+select:focus{
+    outline: none !important;
+}
