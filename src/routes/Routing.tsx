@@ -21,9 +21,9 @@ const Routing = () => {
       <Route path="/splash" element={<Splash />} />
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<OTP />} />
+      <Route path="/success" element={<Success />} />
       <Route path="/" element={<ProtectedRoute />}>
         <Route index element={<Home />} />
-        <Route path="/success" element={<Success />} />
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/categories/:id" element={<Categories />} />
         <Route path="/addProduct/:id" element={<AddProduct />} />

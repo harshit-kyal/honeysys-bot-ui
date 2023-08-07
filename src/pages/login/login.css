@@ -1,11 +1,12 @@
-input,
-select {
+.login input,
+.login select {
     border-bottom: 2px solid #25a18e;
     box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.08);
     border-radius: 0px;
     letter-spacing: 0.1rem;
 }
-select {
+
+.login select {
     background-color: #fff;
     border-radius: 0px;
     -webkit-appearance: none;
@@ -13,11 +14,16 @@ select {
     appearance: none;
 }
 
-input:focus,
-select:focus {
+.login input:focus,
+.login select:focus {
     outline: none !important;
 }
 
-select:focus{
+.login select:focus {
     outline: none !important;
+}
+
+.login-chk input[type='checkbox'] {
+    flex-shrink: 0;
+    margin-top: 6px;
 }

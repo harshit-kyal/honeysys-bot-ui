@@ -1,7 +1,10 @@
 import React from "react";
 import Button from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const Success = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-screen h-screen px-5 py-5">
       <img src="/images/happy_sun.svg" alt="happy_sun_image" />
@@ -15,7 +18,12 @@ const Success = () => {
         for, making your shopping experience delightful and efficient.
       </div>
       <div className="flex justify-center mt-5">
-        <Button title="Let's Go" />
+        <Button
+          title="Let's Go"
+          handleClick={() => {
+            navigate("/");
+          }}
+        />
       </div>
     </div>
   );

@@ -9,10 +9,10 @@ const Splash = () => {
   };
   return (
     <div className="px-4 py-5 text-center w-100">
-      <div className="w-100 flex justify-center">
+      <div className="w-100 flex justify-center mt-3">
         <img src="/images/Logo.svg" alt="logo" height={250} width={250}></img>
       </div>
-      <div className="mt-8 font-bold text-[24px]">
+      <div className="mt-8 font-semibold text-[24px]">
         Unleash the Future with Our{" "}
         <span className="text-primary"> Bot Powered </span> Ecommerce Platform!
       </div>

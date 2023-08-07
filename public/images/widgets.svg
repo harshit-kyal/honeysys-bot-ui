@@ -1,0 +1,41 @@
+<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="20" height="21" fill="#EAA7A7"/>
+<g id="Landing Screen" clip-path="url(#clip0_470_23619)">
+<rect width="390" height="844" transform="translate(-109 -440)" fill="white"/>
+<g id="Frame 185" clip-path="url(#clip1_470_23619)">
+<rect width="390" height="766" transform="translate(-109 -396)" fill="white"/>
+<g id="Bot Conversation - 2">
+<g id="Quick Reply" filter="url(#filter0_d_470_23619)">
+<rect x="-89" y="-10" width="282" height="41" rx="4" fill="white"/>
+<g id="widgets">
+<mask id="mask0_470_23619" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
+<rect id="Bounding box" y="0.5" width="20" height="20" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_470_23619)">
+<path id="widgets_2" d="M13.1057 11.0673L9.44872 7.41026L13.1057 3.75323L16.7419 7.41026L13.1057 11.0673ZM3.6731 9.33971V4.17311H8.8397V9.33971H3.6731ZM11.1602 16.8269V11.6603H16.3268V16.8269H11.1602ZM3.6731 16.8269V11.6603H8.8397V16.8269H3.6731Z" fill="#09215B"/>
+</g>
+</g>
+<rect x="-88.5" y="-9.5" width="281" height="40" rx="3.5" stroke="#0D1282"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_470_23619" x="-97" y="-18" width="298" height="57" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="4"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_470_23619"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_470_23619" result="shape"/>
+</filter>
+<clipPath id="clip0_470_23619">
+<rect width="390" height="844" fill="white" transform="translate(-109 -440)"/>
+</clipPath>
+<clipPath id="clip1_470_23619">
+<rect width="390" height="766" fill="white" transform="translate(-109 -396)"/>
+</clipPath>
+</defs>
+</svg>

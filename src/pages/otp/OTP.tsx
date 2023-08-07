@@ -33,6 +33,7 @@ const OTP = () => {
         </div>
         <div className="flex justify-around otp-div">
           <VerificationInput
+            inputType="number"
             onChange={(e: any) => {
               setOTP(e);
             }}
@@ -49,6 +50,7 @@ const OTP = () => {
           title="Verify & Continue"
           handleClick={() => {
             if (OTP !== "") {
+              localStorage.setItem("accessToken", OTP);
               navigate("/success");
             }
           }}

@@ -40,3 +40,9 @@ export interface CustomButton {
   handleClick?: MouseEventHandler<HTMLButtonElement>;
   btnType?: "button" | "submit";
 }
+
+export interface HomeSliceType {
+  loading: boolean;
+  error: string;
+  chatArray: JSX.Element[];
+}
