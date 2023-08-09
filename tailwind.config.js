@@ -9,7 +9,13 @@ module.exports = {
         secondary: "var(--secondary)",
         background: "var(--background)",
         error: "#C25E5E",
-      }
+      },
+      borderRadius: {
+        default: "var(--radius)",
+      },
+      boxShadow: {
+        default: "var(--shadow)",
+      },
     },
   },
   plugins: [],

@@ -11,14 +11,14 @@ const initialState: RootSliceType = {
     background: "#FFFFFF",
     error: "#C25E5E",
   },
-  bot: "",
-  radius: "",
+  bot: "/images/chat_logo.svg",
+  radius: "4px",
   Conversations: {
-    fontfamily: "",
-    fontstyle: "",
-    titlesize: 0,
-    contentsize: 0,
-    timestampsize: 0,
+    fontfamily: "poppins",
+    fontstyle: "meduim",
+    titlesize: 14,
+    contentsize: 14,
+    timestampsize: 12,
     greetingTemplate: "",
   },
 
@@ -27,7 +27,8 @@ const initialState: RootSliceType = {
   },
 
   Catalog: {
-    categoryTemplate: "",
+    categoryTemplate:
+      "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%)",
     likeSectionTemplate: "",
   },
 

@@ -45,4 +45,6 @@ export interface HomeSliceType {
   loading: boolean;
   error: string;
   chatArray: JSX.Element[];
+  locationModal: boolean;
+  deniedModal: boolean;
 }

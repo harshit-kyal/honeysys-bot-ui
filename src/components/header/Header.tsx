@@ -1,13 +1,18 @@
 import React from "react";
 import { Header, Text } from "@polynomialai/alpha-react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
 
 const HeaderBar = () => {
+  const bot = useAppSelector((state) => state.root.bot);
+  const navigate = useNavigate();
+
   return (
     <Header
       className="px-5 py-[10px] bg-primary"
       logo={
         <div className="flex items-center">
-          <img src="/images/Header_Logo.svg" alt="logo" />
+          <img src={bot} alt="logo" height={40} width={40} className="rounded-full bg-[#E6E6E6] p-1" />
           <div className="flex flex-col ml-2">
             <Text type="body" size="lg" className="font-semibold">
               HoneySys Bot
@@ -27,6 +32,9 @@ const HeaderBar = () => {
             alt="shopping"
             width={24}
             height={24}
+            onClick={() => {
+              navigate("/cart");
+            }}
           />
           <img src="/images/option.svg" alt="option" width={24} height={24} />
         </div>

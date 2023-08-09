@@ -6,6 +6,8 @@ const initialState: HomeSliceType = {
   loading: false,
   error: "",
   chatArray: [],
+  locationModal: false,
+  deniedModal: false,
 };
 
 // export const getMasterName = createAsyncThunk("getMasterName", async () => {
@@ -47,6 +49,18 @@ export const HomeSlice = createSlice({
         chatArray: action.payload,
       };
     },
+    setLocationModal(state, action) {
+      return {
+        ...state,
+        locationModal: action.payload,
+      };
+    },
+    setDeniedModal(state, action) {
+      return {
+        ...state,
+        deniedModal: action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     // builder
@@ -66,5 +80,11 @@ export const HomeSlice = createSlice({
   },
 });
 
-export const { setLoading, setError, setChatArray } = HomeSlice.actions;
+export const {
+  setLoading,
+  setError,
+  setChatArray,
+  setLocationModal,
+  setDeniedModal,
+} = HomeSlice.actions;
 export default HomeSlice.reducer;

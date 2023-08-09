@@ -12,7 +12,7 @@ const ActionButton = ({
 }) => {
   return (
     <button
-      className="w-full flex justify-center items-center gap-1 rounded border border-primary py-[10px] mt-[2px]"
+      className="w-full flex justify-center items-center gap-1 bg-background rounded-default border border-primary py-[10px] mt-[2px]"
       onClick={onClick}
     >
       <img src={src} alt="" height={20} style={{objectFit: 'contain'}} />

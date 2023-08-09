@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import SearchBar from "../../components/SearchBar";
-import TimeStamp, { currentTime } from "../../components/TimeStamp";
+import { currentTime } from "../../components/TimeStamp";
 import { RichCard, Text } from "@polynomialai/alpha-react";
 import ChatWrapper from "../../components/ChatWrapper";
-import ActionButton from "../../components/ActionButton";
 import GetStart from "../../components/GetStart";
+import LocationPermission from "../../components/LocationPermission";
+import DeniedModal from "../../components/DeniedModal";
+import BotMessageCard from "../../components/Resuable/BotMessageCard";
+import UserMessageCard from "../../components/Resuable/UserMessageCard";
 
 const Home = () => {
   const [ChatArray, setChatArray] = useState<JSX.Element[]>([]);
@@ -48,17 +51,15 @@ const Home = () => {
           setChatArray((array) => [
             ...array,
             <ChatWrapper type="user">
-              <RichCard
-                className="w-[80%] bg-[#0D1282] text-white"
-                content={inputText}
-                contentCN="text-sm"
-                time={currentTime()}
-                timeCN="text-white font-normal"
-              ></RichCard>
+              <div className="w-[80%]">
+                <UserMessageCard content={inputText} />
+              </div>
             </ChatWrapper>,
           ]);
         }}
       />
+      <LocationPermission />
+      <DeniedModal />
     </div>
   );
 };
