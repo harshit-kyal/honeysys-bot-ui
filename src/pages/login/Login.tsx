@@ -18,7 +18,7 @@ const Login = () => {
         <span className="text-primary">Retail Revolution</span>
       </div>
       <div className="text-[14px] font-normal">Provide Your Mobile Number</div>
-      <div className="mt-4 flex">
+      <div className="mt-4 flex pr-4">
         <select className="px-3">
           <option className="px-3">{`+91 (IND)`}</option>
         </select>
@@ -27,7 +27,7 @@ const Login = () => {
           name="phoneno"
           id="phoneno"
           placeholder="Enter your mobile number"
-          className="ml-2"
+          className="ml-2 w-full"
           required
           max={10}
           min={10}

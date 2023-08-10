@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-const BackButton = () => {
+const BackButton = (noTitle?:any) => {
   const navigate = useNavigate();
   return (
     <div
@@ -18,7 +18,7 @@ const BackButton = () => {
           height={24}
           width={24}
         />
-        <span className="text-sm font-[400] ms-2">Back</span>
+        {!noTitle && <span className="text-sm font-[400] ms-2">Back</span>}
       </div>
     </div>
   );

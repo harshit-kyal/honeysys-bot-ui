@@ -9,6 +9,7 @@ module.exports = {
         secondary: "var(--secondary)",
         background: "var(--background)",
         error: "#C25E5E",
+        secondaryFontColor: "#505050"
       },
       borderRadius: {
         default: "var(--radius)",

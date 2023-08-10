@@ -6,7 +6,10 @@ import { useAppSelector } from "../../app/hooks";
 const HeaderBar = () => {
   const bot = useAppSelector((state) => state.root.bot);
   const navigate = useNavigate();
-
+  
+  const hadnleNavigation = (route:string) =>{
+    navigate(route);
+  }
   return (
     <Header
       className="px-5 py-[10px] bg-primary"
@@ -23,20 +26,25 @@ const HeaderBar = () => {
           </div>
         </div>
       }
-      onSettingsClick={() => {}}
+      onSettingsClick={() => { 
+       
+      }}
       settingLogo={
         <div className="flex flex-shrink-0 h-full w-max gap-2">
-          <img src="/images/search.svg" alt="search" width={24} height={24} />
+          <img src="/images/search.svg" alt="search" width={24} height={24} onClick={ ()=>hadnleNavigation('/search')} />
           <img
             src="/images/shopping.svg"
             alt="shopping"
             width={24}
             height={24}
             onClick={() => {
-              navigate("/cart");
+              hadnleNavigation("/cart");
             }}
           />
-          <img src="/images/option.svg" alt="option" width={24} height={24} />
+          <img src="/images/logout.svg" alt="logout" width={20} height={20} onClick={() => {
+            localStorage.clear();
+            hadnleNavigation('/splash');
+          }} />
         </div>
       }
     />
