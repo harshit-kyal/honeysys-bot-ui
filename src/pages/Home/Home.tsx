@@ -4,8 +4,8 @@ import { currentTime } from "../../components/TimeStamp";
 import { RichCard, Text } from "@polynomialai/alpha-react";
 import ChatWrapper from "../../components/ChatWrapper";
 import GetStart from "../../components/GetStart";
-import LocationPermission from "../../components/LocationPermission";
-import DeniedModal from "../../components/DeniedModal";
+import LocationPermission from "../../components/Modal/LocationPermission";
+import DeniedModal from "../../components/Modal/DeniedModal";
 import BotMessageCard from "../../components/Resuable/BotMessageCard";
 import UserMessageCard from "../../components/Resuable/UserMessageCard";
 

@@ -1,11 +1,11 @@
 import { AddModal, Button, Text } from "@polynomialai/alpha-react";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setLocationModal } from "../slices/homeSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setLocationPermission } from "../../slices/homeSlice";
 
 const LocationPermission = () => {
   const dispatch = useAppDispatch();
-  const locationModal = useAppSelector((state) => state.home.locationModal);
+  const locationPermission = useAppSelector((state) => state.home.locationPermission);
 
   return (
     <AddModal
@@ -31,7 +31,7 @@ const LocationPermission = () => {
           <div className="flex gap-5">
             <Button
               onClick={() => {
-                dispatch(setLocationModal(false));
+                dispatch(setLocationPermission(false));
               }}
               type="secondary"
               className="border-[#C90303] text-[#C90303] w-36 py-3 drop-shadow-xl"
@@ -83,9 +83,9 @@ const LocationPermission = () => {
       }
       Header={<></>}
       Footer={<></>}
-      isOpen={locationModal}
+      isOpen={locationPermission}
       onClose={() => {
-        dispatch(setLocationModal(false));
+        dispatch(setLocationPermission(false));
       }}
     />
   );

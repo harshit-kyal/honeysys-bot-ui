@@ -6,8 +6,9 @@ const initialState: HomeSliceType = {
   loading: false,
   error: "",
   chatArray: [],
-  locationModal: false,
+  locationPermission: false,
   deniedModal: false,
+  locationModal: false,
 };
 
 // export const getMasterName = createAsyncThunk("getMasterName", async () => {
@@ -49,6 +50,12 @@ export const HomeSlice = createSlice({
         chatArray: action.payload,
       };
     },
+    setLocationPermission(state, action) {
+      return {
+        ...state,
+        locationPermission: action.payload,
+      };
+    },
     setLocationModal(state, action) {
       return {
         ...state,
@@ -84,6 +91,7 @@ export const {
   setLoading,
   setError,
   setChatArray,
+  setLocationPermission,
   setLocationModal,
   setDeniedModal,
 } = HomeSlice.actions;

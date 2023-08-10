@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import BackButton from "../../components/BackButton";
+import BackButton from "../../components/Button/BackButton";
 import { VerificationInput } from "@polynomialai/alpha-react";
 import "./index.css";
-import Button from "../../components/Button";
+import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router";
 
 const OTP = () => {

@@ -1,11 +1,11 @@
 import { AddModal, Text } from "@polynomialai/alpha-react";
 import React from "react";
-import { setDeniedModal } from "../slices/homeSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setLocationModal } from "../../slices/homeSlice";
 
-const DeniedModal = () => {
+const LocationModal = () => {
   const dispatch = useAppDispatch();
-  const deniedModal = useAppSelector((state) => state.home.deniedModal);
+  const locationModal = useAppSelector((state) => state.home.locationModal);
 
   return (
     <AddModal
@@ -32,12 +32,12 @@ const DeniedModal = () => {
       }
       Header={<></>}
       Footer={<></>}
-      isOpen={deniedModal}
+      isOpen={locationModal}
       onClose={() => {
-        dispatch(setDeniedModal(false));
+        dispatch(setLocationModal(false));
       }}
     />
   );
 };
 
-export default DeniedModal;
+export default LocationModal;

@@ -1,7 +1,7 @@
 import React from "react";
-import BackButton from "../../components/BackButton";
+import BackButton from "../../components/Button/BackButton";
 import { CheckBox, Text } from "@polynomialai/alpha-react";
-import Button from "../../components/Button";
+import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
