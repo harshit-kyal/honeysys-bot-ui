@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './searchProduct.css'
-import BackButton from '../../components/BackButton';
 import { ProductCard } from '@polynomialai/alpha-react';
+import BackButton from '../../components/Button/BackButton';
 
 const SearchProduct = () => {
     const [searchStr, setSearchStr] = useState('');
