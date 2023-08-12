@@ -1,6 +1,7 @@
 import React from "react";
 import { ReplyCard, RichCard } from "@polynomialai/alpha-react";
 import { useAppSelector } from "../../app/hooks";
+import { currentTime } from "../TimeStamp";
 
 interface CardProp {
   time?: string;
@@ -19,10 +20,10 @@ const ReplyMessageCard = ({
 
   return (
     <RichCard
-      className="bg-primary text-white"
-      time={time}
+      className="w-full bg-primary text-white"
+      time={currentTime()}
       content={content}
-      timeCN={`text-[${Conversations.timestampsize}px]`}
+      timeCN={`text-[${Conversations.timestampsize}px] text-white`}
     >
       <ReplyCard title={replyTitle} titleCN="text-primary">
         <div>

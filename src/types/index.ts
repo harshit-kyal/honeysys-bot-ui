@@ -26,7 +26,11 @@ export interface RootSliceType {
 
   Catalog: {
     categoryTemplate: string;
-    likeSectionTemplate: string;
+    likeSectionTemplate: {
+      title: string;
+      price: string;
+      image: string;
+    };
   };
 
   Categories: {

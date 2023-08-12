@@ -29,11 +29,15 @@ const initialState: RootSliceType = {
   Catalog: {
     categoryTemplate:
       "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%)",
-    likeSectionTemplate: "",
+    likeSectionTemplate: {
+      title: "",
+      price: "",
+      image: "",
+    },
   },
 
   Categories: {
-    categorySectionTemplate: "",
+    categorySectionTemplate: "rounded-full",
     categoryLikeSectionTemplate: "",
   },
 };

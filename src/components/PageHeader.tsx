@@ -26,7 +26,7 @@ const PageHeader = ({
           <img src="/images/white_back.svg" alt="back" height={24} width={24} />
           <Text type="body" size="lg" className="inline-block text-white ml-2">
             <div
-              className="whitespace-nowrap text-ellipsis overflow-hidden"
+              className=" whitespace-nowrap text-ellipsis overflow-hidden"
               style={{width: 'calc(100vw - 172px)'}}
             >
               {title}
