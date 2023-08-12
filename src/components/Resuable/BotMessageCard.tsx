@@ -8,7 +8,7 @@ interface CardProp {
   imageSrc?: string;
   time?: string;
   title?: string;
-  content?: string | string[];
+  contentArray?: string | string[];
 }
 
 const BotMessageCard = ({
@@ -16,7 +16,7 @@ const BotMessageCard = ({
   imageSrc,
   time,
   title,
-  content,
+  contentArray,
 }: CardProp) => {
   const bot = useAppSelector((state) => state.root.bot);
   const Conversations = useAppSelector((state) => state.root.Conversations);
@@ -25,18 +25,18 @@ const BotMessageCard = ({
     <RichCard
       imageSrc={imageSrc}
       title={title}
-      logoSrc={bot}
+      logoSrc={imageSrc ? bot : ""}
       time={currentTime()}
       titleCN="text-[#09215B] text-sm"
       timeCN={`text-[${Conversations.timestampsize}px]`}
     >
       <div className="my-2">
-        {content && typeof content === "string" ? (
+        {contentArray && typeof contentArray === "string" ? (
           <Text type="body" size="md" className="font-normal mb-1">
-            {content}
+            {contentArray}
           </Text>
-        ) : Array.isArray(content) ? (
-          content.map((item: string, index: number) => (
+        ) : Array.isArray(contentArray) ? (
+          contentArray.map((item: string, index: number) => (
             <Text
               key={index}
               type="body"

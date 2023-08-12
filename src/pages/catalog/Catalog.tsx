@@ -3,8 +3,12 @@ import PageHeader from "../../components/PageHeader";
 import { OverlayCard, Text } from "@polynomialai/alpha-react";
 import OverlayWrapperCard from "../../components/Resuable/OverlayWrapperCard";
 import CatalogProductCard from "../../components/Resuable/CatalogProductCard";
+import { useNavigate } from "react-router-dom";
+import { CategorieData } from "../../constants/HomeConst";
 
 const Catalog = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Catalog" />
@@ -41,13 +45,20 @@ const Catalog = () => {
         </div>
 
         <div className="flex overflow-x-auto gap-4">
-          {Array.from({ length: 10 }, (_, index) => (
-            <OverlayWrapperCard
-              key={index}
-              className="w-[100px] h-[92px] flex-shrink-0"
-              imageSrc="/images/vegetables.svg"
-              title="Fruits & Vegetables"
-            />
+          {CategorieData.map((item: any, index: number) => (
+            <div
+              onClick={() => {
+                navigate(`/categories/${item.id}`);
+              }}
+              key={"categories" + index}
+            >
+              <OverlayWrapperCard
+                key={index}
+                className="w-[100px] h-[92px] flex-shrink-0"
+                imageSrc="/images/vegetables.svg"
+                title="Fruits & Vegetables"
+              />
+            </div>
           ))}
         </div>
 
