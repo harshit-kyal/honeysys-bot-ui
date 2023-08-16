@@ -1,4 +1,4 @@
-import { AddModal, Text } from "@polynomialai/alpha-react";
+import { AddDialog, Text } from "@polynomialai/alpha-react";
 import React from "react";
 import { setDeniedModal } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -8,8 +8,9 @@ const DeniedModal = () => {
   const deniedModal = useAppSelector((state) => state.home.deniedModal);
 
   return (
-    <AddModal
-      Body={
+    <AddDialog
+      title=" Steps to Enable Location"
+      children={
         <div className="my-5">
           <Text type="body" size="lg" className="font-semibold">
             Steps to Enable Location
@@ -30,8 +31,8 @@ const DeniedModal = () => {
           </Text>
         </div>
       }
-      Header={<></>}
-      Footer={<></>}
+      // Header={<></>}
+      // Footer={<></>}
       isOpen={deniedModal}
       onClose={() => {
         dispatch(setDeniedModal(false));

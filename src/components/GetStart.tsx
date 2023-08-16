@@ -1,87 +1,112 @@
 import React from "react";
 import ChatWrapper from "./ChatWrapper";
-import TimeStamp, { currentTime } from "./TimeStamp";
+import TimeStamp from "./TimeStamp";
 import ActionButton from "./Resuable/ActionButton";
-import { useAppDispatch } from "../app/hooks";
-import { setDeniedModal, setLocationModal } from "../slices/homeSlice";
 import { useNavigate } from "react-router-dom";
 import BotMessageCard from "./Resuable/BotMessageCard";
 import ReplyMessageCard from "./Resuable/ReplyMessageCard";
-import { ProductCard, ReplyCard, RichCard, SummaryCard } from "@polynomialai/alpha-react";
+import {
+  ProductCard,
+  ReplyCard,
+  RichCard,
+  SummaryCard,
+  Text,
+} from "@polynomialai/alpha-react";
 import CartReplyCard from "./Resuable/CartReplyCard";
+import OrderSummaryCard from "./Resuable/OrderSummaryCard";
 
 const GetStart = ({ setChatArray }: { setChatArray: any }) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleTrackMyOrder = () => {
-    return <>
-      {setChatArray((array: any) => [
-        ...array,
-        <ChatWrapper type="user">
-          <div className="flex flex-col max-w-[80%]">
-            <ReplyMessageCard
-              content="Track your Orders"
-              replyArray={[
-                "Thank you for Jiya for shopping with us at Honeysys Ecommerce. ",
-              ]}
-            />
-          </div>
-        </ChatWrapper>,
-        <ChatWrapper type="bot">
-          <div className="flex flex-col max-w-[80%]">
-            <RichCard>
-              <>
-                <ReplyCard
-                  className="w-full"
-                  title="Honeysys Bot"
-                  titleCN="text-primary"
-                >
-                  <div className="flex flex-col max-w-[80%]">
-                    {/* <p> */}
-                    🛒 Order #532612378<br />
-                    Total 6 items  ₹ 316.00
-                    {/* </p> */}
-                    {/* <img src="/images/onions.svg"></img> */}
+    return (
+      <>
+        {setChatArray((array: any) => [
+          ...array,
+          <ChatWrapper type="user">
+            <div className="flex flex-col max-w-[80%]">
+              <ReplyMessageCard
+                content="Track your Orders"
+                replyArray={[
+                  "Thank you for Jiya for shopping with us at Honeysys Ecommerce. ",
+                ]}
+              />
+            </div>
+          </ChatWrapper>,
+          <ChatWrapper type="bot">
+            <div className="flex flex-col max-w-[80%]">
+              <RichCard>
+                <>
+                  <div className="relative">
+                    <ReplyCard
+                      className="w-full"
+                      title="Honeysys Bot"
+                      titleCN="text-primary"
+                    >
+                      <div className="flex flex-col justify-evenly w-full">
+                        <Text type="body" size="sm" className="text-[#505050]">
+                          🛒 Order #532612378
+                        </Text>
+                        <Text type="label" size="lg" className="text-[#505050]">
+                          Total 6 items ₹ 316.00
+                        </Text>
+                        <img
+                          src="/images/vegetables.svg"
+                          height={50}
+                          alt="vegetable"
+                          className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                        />
+                      </div>
+                    </ReplyCard>
                   </div>
-                </ReplyCard>
-                <div className="text-[14px] font-normal">
-                  1. <span className="font-semibold">June 27, 2023 </span>- Onions, Chilly Powder, lorem ipsum, lorem ipsum -
-                  <span className="font-semibold">₹ 450.00</span> - Delivered
-                </div>
-              </>
-            </RichCard>
-            <RichCard className="mt-2">
-              <>
-                <ReplyCard
-                  className="w-full"
-                  title="Honeysys Bot"
-                  titleCN="text-primary"
-                >
-                  <div className="flex flex-col max-w-[80%]">
-                    {/* <p> */}
-                    🛒 Order #532612378<br />
-                    Total 4 items  ₹ 316.00
-                    {/* </p> */}
-                    {/* <img src="/images/onions.svg"></img> */}
+                  <div className="text-[14px] font-normal">
+                    1. <span className="font-semibold">June 27, 2023 </span>-
+                    Onions, Chilly Powder, lorem ipsum, lorem ipsum -
+                    <span className="font-semibold">₹ 450.00</span> - Delivered
                   </div>
-                </ReplyCard>
-                <div className="text-[14px] font-normal">
-                  2. <span className="font-semibold">June 23, 2023 </span>- Onions, Chilly Powder, lorem ipsum, lorem ipsum -
-                  <span className="font-semibold">₹ 230.00</span> - Delivered
-                </div>
-              </>
-            </RichCard>
-          </div>
-
-        </ChatWrapper>,
-      ])}
-    </>
-  }
+                </>
+              </RichCard>
+              <RichCard className="mt-2">
+                <>
+                  <ReplyCard
+                    className="w-full"
+                    title="Honeysys Bot"
+                    titleCN="text-primary"
+                  >
+                    <div className="flex flex-col max-w-[80%]">
+                      {/* <p> */}
+                      🛒 Order #532612378
+                      <br />
+                      Total 4 items ₹ 316.00
+                      {/* </p> */}
+                      {/* <img src="/images/onions.svg"></img> */}
+                    </div>
+                  </ReplyCard>
+                  <div className="text-[14px] font-normal">
+                    2. <span className="font-semibold">June 23, 2023 </span>-
+                    Onions, Chilly Powder, lorem ipsum, lorem ipsum -
+                    <span className="font-semibold">₹ 230.00</span> - Delivered
+                  </div>
+                </>
+              </RichCard>
+            </div>
+          </ChatWrapper>,
+        ])}
+      </>
+    );
+  };
 
   return (
     <>
       <TimeStamp date={new Date().toISOString()} />
+      <ChatWrapper type="bot">
+        <div className="flex flex-col max-w-[80%]">
+          <OrderSummaryCard
+            handleTrackMyOrder={handleTrackMyOrder}
+            setChatArray={setChatArray}
+          />
+        </div>
+      </ChatWrapper>
       <ChatWrapper type="bot">
         <div className="flex flex-col max-w-[80%]">
           <BotMessageCard
@@ -165,7 +190,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                 <ActionButton
                                   src="/images/location.svg"
                                   text="Change Location"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 />
                               </div>
                             </ChatWrapper>,
@@ -201,7 +226,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                 <ActionButton
                                   src="/images/location.svg"
                                   text="Change Location"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 />
                               </div>
                             </ChatWrapper>,
@@ -217,7 +242,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                   src=""
                                   text="View Sent Cart"
                                   className="bg-primary text-white"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 />
                               </div>
                             </ChatWrapper>,
@@ -233,7 +258,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                 />
                                 <ActionButton
                                   text="10 mins Delivery"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 />
                                 <ActionButton
                                   text="After 3 Days"
@@ -262,7 +287,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                           />
                                           <ActionButton
                                             text="7:00 AM - 10:00 AM"
-                                            onClick={() => { }}
+                                            onClick={() => {}}
                                           />
                                           <ActionButton
                                             text="12:00 PM - 04:00 PM"
@@ -306,246 +331,19 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                                                 />
                                                               </div>
                                                             </ChatWrapper>,
-                                                            // order invoice 
+                                                            // order invoice
                                                             <ChatWrapper type="bot">
                                                               <div className="flex flex-col max-w-[80%]">
-                                                                <BotMessageCard
-                                                                  title=""
-                                                                  contentArray={[
-                                                                    "Great! The total payable amount for this order is. ",
-                                                                  ]}
-                                                                />
-                                                                <>
-                                                                  <SummaryCard
-                                                                    className="w-full"
-                                                                    imageSrc="/images/onion.svg"
-                                                                    priceList={[
-                                                                      {
-                                                                        price: '₹ 316.00',
-                                                                        title: 'Estimated Price'
-                                                                      },
-                                                                      {
-                                                                        price: '₹ 20.00',
-                                                                        title: 'Delivery Charges'
-                                                                      },
-                                                                      {
-                                                                        price: '₹ 18.00',
-                                                                        title: 'GST Applied (12%)'
-                                                                      },
-                                                                      {
-                                                                        price: '-₹ 40.00',
-                                                                        title: 'Coupon Code'
-                                                                      }
-                                                                    ]}
-                                                                    subtitle="Quantity 6"
-                                                                    title="Fresh onions (500gm), Tomatoes (500gm)"
-                                                                    totalAmount="₹ 314.00"
-                                                                    totaltitle="Total Amount"
-                                                                  />
-                                                                </>
-                                                                <BotMessageCard
-                                                                  title="Hurry, order now before the products sell out."
-                                                                />
-                                                                <ActionButton
-                                                                  text="Review & Pay"
-                                                                  onClick={() => {
-                                                                    setChatArray(
-                                                                      (array: any) => [
-                                                                        ...array,
-                                                                        // review and pay
-                                                                        <ChatWrapper type="user">
-                                                                          <div className="flex flex-col max-w-[80%]">
-                                                                            <ReplyMessageCard
-                                                                              content="Review & Pay"
-                                                                              replyArray={[
-                                                                                "Great! The total payable amount for this order is. Hurry, order now before the products sell out.",
-                                                                              ]}
-                                                                            />
-                                                                          </div>
-                                                                        </ChatWrapper>,
-                                                                        // payment success
-                                                                        <ChatWrapper type="bot">
-                                                                          <div className="flex flex-col max-w-[80%]">
-                                                                            <RichCard
-                                                                              className="w-full bg-background"
-                                                                            >
-                                                                              <>
-                                                                                <ReplyCard
-                                                                                  className="w-full"
-                                                                                  title="Honeysys Bot"
-                                                                                  titleCN="text-primary"
-                                                                                >
-                                                                                  <div className="flex flex-col max-w-[80%]">
-                                                                                    <p>
-                                                                                      🛒 Order #532612378<br />
-                                                                                      Total 6 items  ₹ 316.00
-                                                                                    </p>
-                                                                                  </div>
-                                                                                </ReplyCard>
-                                                                                <div className="text-[14px] text-black font-normal">
-                                                                                  <div>
-                                                                                    Thank you for Jiya for shopping with us at Honeysys Ecommerce.
-                                                                                  </div>
-                                                                                  <br />
-                                                                                  <div>
-                                                                                    Here’s a quick update on your order with order ID #532612378.
-                                                                                    Total amount: <span className="font-semibold">₹ 310.00</span>
-                                                                                  </div>
-                                                                                  <br />
-                                                                                  <div>
-                                                                                    While we are preparing your order, please take a moment to share your feedback with us.
-                                                                                  </div>
-                                                                                </div>
-                                                                              </>
-                                                                            </RichCard>
-                                                                            <div className="flex">
-                                                                              <ActionButton
-                                                                                text="Very Happy"
-                                                                                onClick={() => {
-                                                                                  setChatArray(
-                                                                                    (array: any) => [
-                                                                                      ...array,
-                                                                                      <ChatWrapper type="user">
-                                                                                        <div className="flex flex-col max-w-[80%]">
-                                                                                          <ReplyMessageCard
-                                                                                            content="Very Happy"
-                                                                                            replyArray={[
-                                                                                              "Great! The total payable amount for this order is. Hurry, order now before the products sell out.",
-                                                                                            ]}
-                                                                                          />
-                                                                                        </div>
-                                                                                      </ChatWrapper>,
-                                                                                      // thank you for ordering
-                                                                                      <ChatWrapper type="bot">
-                                                                                        <div className="flex flex-col max-w-[80%]">
-                                                                                          <BotMessageCard
-                                                                                            contentArray={['Thank you for your valuable feedback. We are improving ourselves day by day.']}
-                                                                                          ></BotMessageCard>
-                                                                                          <ActionButton
-                                                                                            text="Track Your Orders"
-                                                                                            onClick={() => { handleTrackMyOrder() }} />
-                                                                                          <ActionButton
-                                                                                            text="Track My Refunds"
-                                                                                            onClick={() => {handleTrackMyOrder() }} />
-                                                                                        </div>
-                                                                                      </ChatWrapper>
-                                                                                    ])
-                                                                                }} />
-                                                                              <ActionButton
-                                                                                text="Good"
-                                                                                onClick={() => {
-                                                                                  setChatArray(
-                                                                                    (array: any) => [
-                                                                                      ...array,
-                                                                                      <ChatWrapper type="user">
-                                                                                        <div className="flex flex-col max-w-[80%]">
-                                                                                          <ReplyMessageCard
-                                                                                            content="Good"
-                                                                                            replyArray={[
-                                                                                              "Great! The total payable amount for this order is. Hurry, order now before the products sell out.",
-                                                                                            ]}
-                                                                                          />
-                                                                                        </div>
-                                                                                      </ChatWrapper>,
-                                                                                      // thank you for ordering
-                                                                                      <ChatWrapper type="bot">
-                                                                                        <div className="flex flex-col max-w-[80%]">
-                                                                                          <BotMessageCard
-                                                                                            contentArray={['Thank you for your valuable feedback. We are improving ourselves day by day.']}
-                                                                                          ></BotMessageCard>
-                                                                                          <ActionButton
-                                                                                            text="Track Your Orders"
-                                                                                            onClick={() => { handleTrackMyOrder() }} />
-                                                                                          <ActionButton
-                                                                                            text="Track My Refunds"
-                                                                                            onClick={() => {handleTrackMyOrder() }} />
-                                                                                        </div>
-                                                                                      </ChatWrapper>
-                                                                                    ])
-                                                                                }} />
-                                                                            </div>
-                                                                            <ActionButton
-                                                                              text="Not Happy"
-                                                                              onClick={() => {
-                                                                                setChatArray(
-                                                                                  (array: any) => [
-                                                                                    ...array,
-                                                                                    <ChatWrapper type="user">
-                                                                                      <div className="flex flex-col max-w-[80%]">
-                                                                                        <ReplyMessageCard
-                                                                                          content="Not Happy"
-                                                                                          replyArray={[
-                                                                                            "Great! The total payable amount for this order is. Hurry, order now before the products sell out.",
-                                                                                          ]}
-                                                                                        />
-                                                                                      </div>
-                                                                                    </ChatWrapper>,
-                                                                                    // thank you for ordering
-                                                                                    <ChatWrapper type="bot">
-                                                                                      <div className="flex flex-col max-w-[80%]">
-                                                                                        <BotMessageCard
-                                                                                          contentArray={['Thank you for your valuable feedback. We are improving ourselves day by day.']}
-                                                                                        ></BotMessageCard>
-                                                                                        <ActionButton
-                                                                                          text="Track Your Orders"
-                                                                                          onClick={() => { handleTrackMyOrder() }} />
-                                                                                        <ActionButton
-                                                                                          text="Track My Refunds"
-                                                                                          onClick={() => { handleTrackMyOrder()}} />
-                                                                                      </div>
-                                                                                    </ChatWrapper>
-                                                                                  ])
-                                                                              }} />
-                                                                          </div>
-                                                                        </ChatWrapper>,
-                                                                      ])
-                                                                  }}
-                                                                />
-                                                                <ActionButton
-                                                                  text="Apply Coupon"
-                                                                  onClick={() => {
-                                                                    setChatArray(
-                                                                      (array: any) => [
-                                                                        ...array,
-                                                                        //user apply coupon select
-                                                                        <ChatWrapper type="user">
-                                                                          <div className="flex flex-col max-w-[80%]">
-                                                                            <ReplyMessageCard
-                                                                              content="Apply Coupon"
-                                                                              replyArray={[
-                                                                                "Great! The total payable amount for this order is. Hurry, order now before the products sell out.",
-                                                                              ]}
-                                                                            />
-                                                                          </div>
-                                                                        </ChatWrapper>,
-                                                                        // guide user how to apply coupon code
-                                                                        <ChatWrapper type="bot">
-                                                                          <div className="flex flex-col max-w-[80%]">
-                                                                            <RichCard
-                                                                            >
-                                                                              <>
-                                                                                <div className="text-[14px] font-normal">
-                                                                                  <div>
-                                                                                    Amazing!!! Please enter the coupon code to apply.👋
-                                                                                  </div>
-                                                                                  <br />
-                                                                                  <div className="font-medium">
-                                                                                    Eg. “My coupon code is COUPON15”
-                                                                                  </div>
-                                                                                  <br />
-                                                                                  <div className="font-semibold">
-                                                                                    Hurry, order now before the products sell out.
-                                                                                  </div>
-                                                                                </div>
-                                                                              </>
-                                                                            </RichCard>
-                                                                          </div>
-                                                                        </ChatWrapper>
-                                                                      ])
-                                                                  }}
+                                                                <OrderSummaryCard
+                                                                  handleTrackMyOrder={
+                                                                    handleTrackMyOrder
+                                                                  }
+                                                                  setChatArray={
+                                                                    setChatArray
+                                                                  }
                                                                 />
                                                               </div>
-                                                            </ChatWrapper>
+                                                            </ChatWrapper>,
                                                           ]
                                                         );
                                                       }}
@@ -557,7 +355,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                           />
                                           <ActionButton
                                             text="06:00 PM - 09:00 PM"
-                                            onClick={() => { }}
+                                            onClick={() => {}}
                                           />
                                         </div>
                                       </ChatWrapper>,
@@ -566,7 +364,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                 />
                                 <ActionButton
                                   text="Pickup From Store"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 />
                               </div>
                             </ChatWrapper>,
@@ -576,7 +374,9 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                       <ActionButton
                         src="/images/order.svg"
                         text="Track Your Order"
-                        onClick={() => { handleTrackMyOrder() }}
+                        onClick={() => {
+                          handleTrackMyOrder();
+                        }}
                       />
                     </div>
                   </ChatWrapper>,

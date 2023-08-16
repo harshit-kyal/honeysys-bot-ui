@@ -1,15 +1,18 @@
-import { AddModal, Button, Text } from "@polynomialai/alpha-react";
+import { AddDialog, Button, Text } from "@polynomialai/alpha-react";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setLocationPermission } from "../../slices/homeSlice";
 
 const LocationPermission = () => {
   const dispatch = useAppDispatch();
-  const locationPermission = useAppSelector((state) => state.home.locationPermission);
+  const locationPermission = useAppSelector(
+    (state) => state.home.locationPermission
+  );
 
   return (
-    <AddModal
-      Body={
+    <AddDialog
+      title=""
+      children={
         <div className="flex flex-col items-center gap-5">
           <img
             src="/images/colored_location.svg"
@@ -81,9 +84,9 @@ const LocationPermission = () => {
           </div>
         </div>
       }
-      Header={<></>}
-      Footer={<></>}
-      isOpen={locationPermission}
+      // Header={<></>}
+      // Footer={<></>}
+      isOpen={true}
       onClose={() => {
         dispatch(setLocationPermission(false));
       }}

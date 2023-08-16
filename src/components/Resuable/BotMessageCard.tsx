@@ -8,7 +8,7 @@ interface CardProp {
   imageSrc?: string;
   time?: string;
   title?: string;
-  contentArray?: string | string[];
+  contentArray?: string | (string | JSX.Element)[];
 }
 
 const BotMessageCard = ({
@@ -36,7 +36,7 @@ const BotMessageCard = ({
             {contentArray}
           </Text>
         ) : Array.isArray(contentArray) ? (
-          contentArray.map((item: string, index: number) => (
+          contentArray.map((item, index: number) => (
             <Text
               key={index}
               type="body"
