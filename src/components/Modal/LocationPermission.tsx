@@ -86,7 +86,7 @@ const LocationPermission = () => {
       }
       // Header={<></>}
       // Footer={<></>}
-      isOpen={true}
+      isOpen={locationPermission}
       onClose={() => {
         dispatch(setLocationPermission(false));
       }}
