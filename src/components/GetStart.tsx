@@ -5,13 +5,7 @@ import ActionButton from "./Resuable/ActionButton";
 import { useNavigate } from "react-router-dom";
 import BotMessageCard from "./Resuable/BotMessageCard";
 import ReplyMessageCard from "./Resuable/ReplyMessageCard";
-import {
-  ProductCard,
-  ReplyCard,
-  RichCard,
-  SummaryCard,
-  Text,
-} from "@polynomialai/alpha-react";
+import { ReplyCard, RichCard, Text } from "@polynomialai/alpha-react";
 import CartReplyCard from "./Resuable/CartReplyCard";
 import OrderSummaryCard from "./Resuable/OrderSummaryCard";
 
@@ -68,20 +62,28 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
               </RichCard>
               <RichCard className="mt-2">
                 <>
-                  <ReplyCard
-                    className="w-full"
-                    title="Honeysys Bot"
-                    titleCN="text-primary"
-                  >
-                    <div className="flex flex-col max-w-[80%]">
-                      {/* <p> */}
-                      🛒 Order #532612378
-                      <br />
-                      Total 4 items ₹ 316.00
-                      {/* </p> */}
-                      {/* <img src="/images/onions.svg"></img> */}
-                    </div>
-                  </ReplyCard>
+                  <div className="relative">
+                    <ReplyCard
+                      className="w-full"
+                      title="Honeysys Bot"
+                      titleCN="text-primary"
+                    >
+                      <div className="flex flex-col justify-evenly w-full">
+                        <Text type="body" size="sm" className="text-[#505050]">
+                          🛒 Order #532612378
+                        </Text>
+                        <Text type="label" size="lg" className="text-[#505050]">
+                          Total 6 items ₹ 316.00
+                        </Text>
+                        <img
+                          src="/images/vegetables.svg"
+                          height={50}
+                          alt="vegetable"
+                          className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                        />
+                      </div>
+                    </ReplyCard>
+                  </div>
                   <div className="text-[14px] font-normal">
                     2. <span className="font-semibold">June 23, 2023 </span>-
                     Onions, Chilly Powder, lorem ipsum, lorem ipsum -
@@ -99,14 +101,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   return (
     <>
       <TimeStamp date={new Date().toISOString()} />
-      <ChatWrapper type="bot">
-        <div className="flex flex-col max-w-[80%]">
-          <OrderSummaryCard
-            handleTrackMyOrder={handleTrackMyOrder}
-            setChatArray={setChatArray}
-          />
-        </div>
-      </ChatWrapper>
       <ChatWrapper type="bot">
         <div className="flex flex-col max-w-[80%]">
           <BotMessageCard

@@ -1,6 +1,6 @@
 import React from "react";
 import PageHeader from "../../components/PageHeader";
-import { OverlayCard, Text } from "@polynomialai/alpha-react";
+import { Text } from "@polynomialai/alpha-react";
 import OverlayWrapperCard from "../../components/Resuable/OverlayWrapperCard";
 import CatalogProductCard from "../../components/Resuable/CatalogProductCard";
 import { useNavigate } from "react-router-dom";
