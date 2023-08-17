@@ -23,9 +23,9 @@ const BotMessageCard = ({
 
   return (
     <RichCard
-      imageSrc={imageSrc}
+      image={<img src={imageSrc} alt="" />}
       title={title}
-      logoSrc={imageSrc ? bot : ""}
+      logo={imageSrc ? <img src={bot} alt="" /> : <></>}
       time={currentTime()}
       titleCN="text-[#09215B] text-sm"
       timeCN={`text-[${Conversations.timestampsize}px]`}

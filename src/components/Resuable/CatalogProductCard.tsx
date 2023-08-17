@@ -25,7 +25,9 @@ const CatalogProductCard = ({ id, imageSrc, price, title }: cardProps) => {
       }}
     >
       <ProductCard
-        imageSrc={imageSrc}
+        image={
+          <img src={imageSrc} className={likeSectionTemplate.image} alt="" />
+        }
         addBtn={
           <PlusButton
             onClick={() => {
@@ -35,7 +37,6 @@ const CatalogProductCard = ({ id, imageSrc, price, title }: cardProps) => {
         }
         price={priceCopy}
         title={title}
-        imageCn={likeSectionTemplate.image}
         priceCn={likeSectionTemplate.price}
         titleCn={likeSectionTemplate.title}
       />

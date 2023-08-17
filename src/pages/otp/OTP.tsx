@@ -49,10 +49,10 @@ const OTP = () => {
         <Button
           title="Verify & Continue"
           handleClick={() => {
-            if (OTP !== "") {
+            // if (OTP !== "") {
               localStorage.setItem("accessToken", OTP);
               navigate("/success");
-            }
+            // }
           }}
         />
       </div>

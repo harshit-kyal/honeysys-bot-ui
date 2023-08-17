@@ -49,7 +49,7 @@ const OrderSummaryCard = ({
           "Great! The total payable amount for this order is. 👇",
           <SummaryCard
             className="w-full mt-3"
-            imageSrc="/images/onion.svg"
+            image={<img src="/images/onion.svg" alt="" />}
             priceList={[
               {
                 price: "₹ 316.00",

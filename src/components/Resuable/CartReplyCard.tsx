@@ -22,7 +22,7 @@ const CartReplyCard = ({ imageSrc = "", time, items, price }: CardProp) => {
       <ProductCard
         addBtn={<React.Fragment />}
         className="gap-0 rounded p-1 mb-1"
-        imageSrc={imageSrc}
+        image={<img src={imageSrc} alt="" />}
         price={`₹ ${price?.toLocaleString("en-IN")} (estimated total)`}
         title={`🛒 Total ${items} items`}
       />
