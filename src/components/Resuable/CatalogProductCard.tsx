@@ -21,7 +21,7 @@ const CatalogProductCard = ({ id, imageSrc, price, title }: cardProps) => {
   return (
     <div
       onClick={() => {
-        navigate(`/viewProduct/${id}`);
+        navigate(`/pdp/${id}`);
       }}
     >
       <ProductCard
