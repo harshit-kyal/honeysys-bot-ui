@@ -3,6 +3,8 @@ import PageHeader from "../../components/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { CategorieData } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
+import { EditImage, ProductDropDown } from "@polynomialai/alpha-react";
+import { fruitsVegetables } from "../../constants/HomeConst";
 
 const Categories = () => {
   const { id } = useParams();
@@ -20,6 +22,35 @@ const Categories = () => {
           >
             <BadgeCard text={item.title} active={id === item.id} />
           </div>
+        ))}
+      </div>
+      <div>
+        {fruitsVegetables.map((item: any, index: number) => (
+          <ProductDropDown
+            buttonCN="w-[100%]"
+            displayItem={{
+              image: (
+                <img
+                  src={item.imageSrc}
+                  className="h-[60px] w-[60px] rounded-md"
+                />
+              ),
+              title: item.title,
+            }}
+            options={item.products.map((i: any, index: number) => ({
+              image: (
+                <img
+                  src={item.imageSrc}
+                  className="h-[60px] w-[60px] rounded-md"
+                />
+              ),
+              title: i.title,
+              onclick:()=>{
+              
+              }
+            }))}
+            optionsContainerCN="w-[100%]"
+          />
         ))}
       </div>
     </div>

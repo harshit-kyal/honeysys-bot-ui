@@ -68,3 +68,34 @@ export const CategorieData: any[] = [
     ],
   },
 ];
+export const fruitsVegetables: any[] = [
+  {
+    id: "1",
+    imageSrc: "/images/vegetables.svg",
+    title: "Fresh Vegetables",
+    products: [
+      {
+        id: "1",
+        imageSrc: "/images/onion.svg",
+        title: "Leafy Vegetables",
+        subtypes: [
+          {
+            id: "1",
+            imageSrc: "/images/onion.svg",
+            title: "Fresh Cauliflower",
+          },
+          { id: "2", imageSrc: "/images/onion.svg", title: "Fresh Cabbage " },
+          { id: "2", imageSrc: "/images/onion.svg", title: "Fresh Spinach" },
+        ],
+      },
+      { id: "2", imageSrc: "/images/onion.svg", title: "tomatoes" },
+      { id: "3", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
+    ],
+  },
+  {
+    id: "2",
+    imageSrc: "/images/vegetables.svg",
+    title: "Fresh Fruits",
+    products: [],
+  },
+];

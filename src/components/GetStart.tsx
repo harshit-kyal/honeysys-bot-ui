@@ -214,7 +214,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                   src="/images/catelog.svg"
                                   text="View Catalog"
                                   onClick={() => {
-                                    navigate("/catelog");
+                                    navigate("/catalog");
                                   }}
                                 />
                                 <ActionButton
