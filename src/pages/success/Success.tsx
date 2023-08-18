@@ -7,13 +7,15 @@ const Success = () => {
 
   return (
     <div className="w-screen h-screen px-5 py-5">
-      <img src="/images/happy_sun.svg" alt="happy_sun_image" />
+      <div className="flex justify-center w-full">
+        <img src="/images/happy_sun.svg" alt="happy_sun_image" />
+      </div>
       <div className="text-center my-6 text-2xl font-semibold">
         <div className="text-primary">Congratulations!</div>
         <div>Your account has been</div>
         <div>successfully created</div>
       </div>
-      <div className="px-5 text-sm font-normal flex text-justify">
+      <div className="px-5 text-sm font-normal flex text-justify justify-center">
         Our intuitive platform ensures that you find exactly what you're looking
         for, making your shopping experience delightful and efficient.
       </div>

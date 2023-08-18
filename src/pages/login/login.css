@@ -6,6 +6,13 @@
     letter-spacing: 0.01rem;
     box-shadow: none;
     font-size: 14px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.login input::placeholder{
+    font-size: 13px;
 }
 
 .login select {
@@ -14,6 +21,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    font-size: 13px;
 }
 
 .login input:focus,

@@ -19,15 +19,15 @@ const Login = () => {
       </div>
       <div className="text-[14px] font-normal">Provide Your Mobile Number</div>
       <div className="mt-4 flex pr-4">
-        <select className="px-3">
-          <option className="px-3">{`+91 (IND)`}</option>
+        <select className="px-2">
+          <option className="px-2">{`+91 (IND)`}</option>
         </select>
         <input
           type="tel"
           name="phoneno"
           id="phoneno"
           placeholder="Enter your mobile number"
-          className="ml-2 w-full"
+          className="ml-2 sm:w-full md:w-52"
           required
           max={10}
           min={10}
@@ -36,16 +36,16 @@ const Login = () => {
       <div className="mt-8">
         <CheckBox
           onChange={function Ha() {}}
-          selected={true}
+          selected={false}
           className="login-chk w-full items-start"
         >
           <Text
             type="body"
             size="md"
-            className="whitespace-pre-line text-gray-400 font-normal"
+            className="whitespace-pre-line text-gray-400 font-normal text-[12px]"
           >
             By clicking on “Send Verification Code” you accept our{" "}
-            <Text type="body" size="md" className="inline-block text-primary underline underline-offset-[1.5px] font-normal">
+            <Text type="body" size="md" className="inline-block text-primary underline underline-offset-[1.5px] font-normal text-[12px]">
               <a href="#">Terms & Conditions</a>
             </Text>
             {" "}and authorize us for your future support and guidance.
