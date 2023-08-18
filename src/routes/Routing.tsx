@@ -14,6 +14,7 @@ import ViewProduct from "../pages/viewProduct/ViewProduct";
 import Cart from "../pages/cart/Cart";
 import Address from "../pages/address/Address";
 import SearchProduct from "../pages/searchProduct/SearchProduct";
+import PDP from "../pages/PDP/PDP";
 
 const Routing = () => {
   return (
@@ -29,6 +30,7 @@ const Routing = () => {
         <Route path="/categories/:id" element={<Categories />} />
         <Route path="/addProduct/:id" element={<AddProduct />} />
         <Route path="/viewProduct/:id" element={<ViewProduct />} />
+        <Route path="/pdp/:id" element={<PDP />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/address" element={<Address />} />
         <Route path="/search" element={<SearchProduct />} />

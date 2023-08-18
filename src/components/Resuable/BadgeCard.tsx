@@ -15,7 +15,7 @@ const BadgeCard = ({ text, active }: CardProp) => {
   return (
     <Badge
       text={text}
-      className={`${categorySectionTemplate} ${
+      className={`${categorySectionTemplate} flex-shrink-0 ${
         active ? "bg-primary text-background" : "text-primary bg-background border border-primary"
       }`}
     />

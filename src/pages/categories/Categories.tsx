@@ -33,6 +33,7 @@ const Categories = () => {
                 <img
                   src={item.imageSrc}
                   className="h-[60px] w-[60px] rounded-md"
+                  alt=""
                 />
               ),
               title: item.title,
@@ -42,12 +43,13 @@ const Categories = () => {
                 <img
                   src={item.imageSrc}
                   className="h-[60px] w-[60px] rounded-md"
+                  alt=""
                 />
               ),
               title: i.title,
-              onclick:()=>{
-              
-              }
+              onClick: () => {
+                navigate(`/viewProduct/${i.id}`);
+              },
             }))}
             optionsContainerCN="w-[100%]"
           />
