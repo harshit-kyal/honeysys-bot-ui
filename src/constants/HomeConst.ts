@@ -108,95 +108,21 @@ export const fruitsVegetables: any[] = [
   },
 ];
 
-export const LeafyVegetables: any[] = [
-  {
-    id: "1",
-    imageSrc: "/images/vegetables.svg",
-    title: "Fresh Vegetables",
-    products: [
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "Leafy Vegetables",
-      },
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "tomatoes",
-      },
-      { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
-    ],
-  },
-  {
-    id: "2",
-    imageSrc: "/images/vegetables.svg",
-    title: "Fresh Fruits",
-    products: [
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "Leafy Vegetables",
-      },
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "tomatoes",
-      },
-      { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
-    ],
-  },
-  {
-    id: "2",
-    imageSrc: "/images/vegetables.svg",
-    title: "Fresh Fruits",
-    products: [
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "Leafy Vegetables",
-      },
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "tomatoes",
-      },
-      { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
-    ],
-  },
-  {
-    id: "2",
-    imageSrc: "/images/vegetables.svg",
-    title: "Fresh Fruits",
-    products: [
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "Leafy Vegetables",
-      },
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "tomatoes",
-      },
-      { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
-    ],
-  },
-  {
-    id: "2",
-    imageSrc: "/images/vegetables.svg",
-    title: "Fresh Fruits",
-    products: [
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "Leafy Vegetables",
-      },
-      {
-        id: "1",
-        imageSrc: "/images/onion.svg",
-        title: "tomatoes",
-      },
-      { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
-    ],
-  },
-];
+export const LeafyVegetables: any = {
+  id: "1",
+  imageSrc: "/images/vegetables.svg",
+  title: "Fresh Vegetables",
+  products: [
+    {
+      id: "1",
+      imageSrc: "/images/onion.svg",
+      title: "Leafy Vegetables",
+    },
+    {
+      id: "1",
+      imageSrc: "/images/onion.svg",
+      title: "tomatoes",
+    },
+    { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
+  ],
+};

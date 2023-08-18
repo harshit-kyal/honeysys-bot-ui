@@ -19,7 +19,7 @@ const OrderSummaryCard = ({
 }) => {
   const ThankYouCard = () => (
     <ChatWrapper type="bot">
-      <div className="flex flex-col max-w-[80%]">
+      <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
         <BotMessageCard
           contentArray={[
             "Thank you for your valuable feedback. We are improving ourselves day by day.",
@@ -49,7 +49,7 @@ const OrderSummaryCard = ({
           "Great! The total payable amount for this order is. 👇",
           <SummaryCard
             className="w-full mt-3"
-            image={<img src="/images/onion.svg" alt="" />}
+            image={<img src="/images/onion.svg" alt="" className="h-[60px] w-[60px] rounded-md" />}
             priceList={[
               {
                 price: "₹ 316.00",
@@ -85,7 +85,7 @@ const OrderSummaryCard = ({
             ...array,
             // review and pay
             <ChatWrapper type="user">
-              <div className="flex flex-col max-w-[80%]">
+              <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                 <ReplyMessageCard
                   content="Review & Pay"
                   replyArray={[
@@ -96,7 +96,7 @@ const OrderSummaryCard = ({
             </ChatWrapper>,
             // payment success
             <ChatWrapper type="bot">
-              <div className="flex flex-col max-w-[80%]">
+              <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                 <RichCard className="w-full bg-background">
                   <>
                     <div className="relative">
@@ -155,7 +155,7 @@ const OrderSummaryCard = ({
                       setChatArray((array: any) => [
                         ...array,
                         <ChatWrapper type="user">
-                          <div className="flex flex-col max-w-[80%]">
+                          <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                             <ReplyMessageCard
                               content="Very Happy"
                               replyArray={[
@@ -175,7 +175,7 @@ const OrderSummaryCard = ({
                       setChatArray((array: any) => [
                         ...array,
                         <ChatWrapper type="user">
-                          <div className="flex flex-col max-w-[80%]">
+                          <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                             <ReplyMessageCard
                               content="Good"
                               replyArray={[
@@ -196,7 +196,7 @@ const OrderSummaryCard = ({
                     setChatArray((array: any) => [
                       ...array,
                       <ChatWrapper type="user">
-                        <div className="flex flex-col max-w-[80%]">
+                        <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                           <ReplyMessageCard
                             content="Not Happy"
                             replyArray={[
@@ -222,7 +222,7 @@ const OrderSummaryCard = ({
             ...array,
             //user apply coupon select
             <ChatWrapper type="user">
-              <div className="flex flex-col max-w-[80%]">
+              <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                 <ReplyMessageCard
                   content="Apply Coupon"
                   replyArray={[
@@ -233,7 +233,7 @@ const OrderSummaryCard = ({
             </ChatWrapper>,
             // guide user how to apply coupon code
             <ChatWrapper type="bot">
-              <div className="flex flex-col max-w-[80%]">
+              <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
                 <RichCard>
                   <>
                     <div className="text-[14px] font-normal">

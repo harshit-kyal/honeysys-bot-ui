@@ -24,7 +24,7 @@ const OverlayWrapperCard = ({
   return (
     <OverlayCard
       className={className}
-      image={<img src={imageSrc} alt="" />}
+      image={<img src={imageSrc} alt="" className="w-full h-full object-contain" />}
       overlay={overlay ? overlay : Catalog.categoryTemplate}
       titleCn={title ? "justify-end" : ""}
     >

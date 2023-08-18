@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "../../components/Button/BackButton";
-import { VerificationInput } from "@polynomialai/alpha-react";
+import { Text, VerificationInput } from "@polynomialai/alpha-react";
 import "./index.css";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router";
 
 const OTP = () => {
   const [OTP, setOTP] = useState<string>("");
+  const [minutes, setMinutes] = useState<number>(0);
+  const [seconds, setSeconds] = useState<number>(10);
   const navigate = useNavigate();
 
   const wrongOTP = () => {
@@ -20,10 +22,31 @@ const OTP = () => {
     });
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
   return (
     <div className="w-screen h-screen px-5 py-3">
       <BackButton />
-      <div className="text-2xl font-semibold">
+      <div className="text-2xl font-semibold -mt-4">
         <div>Enter Verification Code and </div>
         <div className="text-primary">Experience The Future</div>
       </div>
@@ -50,11 +73,33 @@ const OTP = () => {
           title="Verify & Continue"
           handleClick={() => {
             // if (OTP !== "") {
-              localStorage.setItem("accessToken", OTP);
-              navigate("/success");
+            localStorage.setItem("accessToken", "123");
+            navigate("/success");
             // }
           }}
         />
+      </div>
+      <div className="flex justify-center gap-1 mt-5">
+        <Text type="body" size="md">
+          Didn’t get the code?
+        </Text>
+        <Text type="body" size="md" className="text-primary">
+          {seconds > 0 || minutes > 0 ? (
+            <>
+              {minutes.toLocaleString("en-IN", { minimumIntegerDigits: 2 })}:
+              {seconds.toLocaleString("en-IN", { minimumIntegerDigits: 2 })}
+            </>
+          ) : (
+            <div
+              onClick={() => {
+                setMinutes(1);
+                setSeconds(30);
+              }}
+            >
+              Resend
+            </div>
+          )}
+        </Text>
       </div>
     </div>
   );

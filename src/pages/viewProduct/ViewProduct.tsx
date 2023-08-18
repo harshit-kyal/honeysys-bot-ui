@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { useParams } from "react-router-dom";
-import { Badge, ProductCard, Text } from "@polynomialai/alpha-react";
-import Dropdown from "../../components/Resuable/Dropdown";
-import ActionButton from "../../components/Resuable/ActionButton";
+import {
+  ProductCard,
+  // DrawerModal,
+} from "@polynomialai/alpha-react";
 import { LeafyVegetables } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 
@@ -107,28 +108,29 @@ const ViewProduct = () => {
       {/* header */}
       <PageHeader title={`Leafy Vegetables`} />
       {/* Detail Section */}
-      <div>
-        {LeafyVegetables.map((item: any) => (
+      <div className="pb-12">
+        {Array.from({ length: 5 }).map(() => (
           <ProductCard
             addBtn={<AddBtn />}
             className="w-full my-[6px] mb-3 px-5"
             image={
               <img
-                src={item.imageSrc}
+                src={LeafyVegetables.imageSrc}
                 className="object-cover rounded-lg w-[60px] h-[60px]"
                 alt=""
               />
             }
             onClick={() => {}}
-            title={item.title}
+            title={LeafyVegetables.title}
           />
         ))}
       </div>
-      <div className="flex overflow-x-auto px-5 py-2 bg-[#F1F1F1] gap-3 sticky bottom-0">
+      <div className="flex w-full px-5 py-2 bg-[#F1F1F1] gap-3 fixed bottom-0 overflow-x-auto">
         <BadgeCard text="Back to category selection" active={false} />
         <BadgeCard text="Electronics for you" active={false} />
         {/* className="flex-shrink-0 bg-background border border-primary" */}
       </div>
+      {/* <DrawerModal /> */}
     </div>
   );
 };

@@ -77,12 +77,14 @@ const PDP = () => {
       {/* header */}
       <PageHeader title={`${Data.title} (${activePrice?.option})`} />
       {/* Product Image */}
-      <img
-        src={Data.imageSrc}
-        alt="Product_Image"
-        height={"45vh"}
-        className="!h-[45vh]"
-      />
+      <div className="flex justify-center">
+        <img
+          src={Data.imageSrc}
+          alt="Product_Image"
+          height={"45vh"}
+          className="h-auto sm:!h-[45vh]"
+        />
+      </div>
       {/* Detail Section */}
       <div
         className="px-5 pb-5 mt-4 flex flex-col justify-between"

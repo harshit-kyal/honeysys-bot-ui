@@ -11,7 +11,7 @@ const Login = () => {
     navigation("/otp");
   };
   return (
-    <div className="login px-2 py-4">
+    <div className="login px-5 py-3">
       <BackButton />
       <div className="text-[26px] font-bold -mt-4">
         Log in and Embrace the{" "}

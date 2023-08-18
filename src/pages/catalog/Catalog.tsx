@@ -13,7 +13,7 @@ const Catalog = () => {
     <div className="h-screen pt-[60px]">
       <PageHeader title="Catalog" />
       <OverlayWrapperCard
-        className="w-[100%] h-[250px] rounded-none"
+        className="w-full h-auto rounded-none"
         imageSrc="/images/Welcome.svg"
         overlay="rgba(0, 0, 0, 0.5)"
         contentTitle="Welcome!!"
@@ -75,14 +75,16 @@ const Catalog = () => {
           </Text>
         </div>
 
-        <div className="flex flex-col overflow-y-auto gap-3">
+        <div className="flex w-full flex-wrap overflow-y-auto gap-3">
           {Array.from({ length: 10 }, (_, index) => (
-            <CatalogProductCard
-              id="1"
-              imageSrc="/images/shirt.svg"
-              price={3500}
-              title="Denim T-shirt Sandstorm Color (XL)"
-            />
+            <div className="w-full sm:w-[50%] flex-shrink-0 basis-full sm:basis-[49%]">
+              <CatalogProductCard
+                id="1"
+                imageSrc="/images/shirt.svg"
+                price={3500}
+                title="Denim T-shirt Sandstorm Color (XL)"
+              />
+            </div>
           ))}
         </div>
       </div>
