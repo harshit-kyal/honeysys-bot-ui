@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import BackButton from "../../components/Button/BackButton";
 import { CheckBox, Text } from "@polynomialai/alpha-react";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import axiosInstance from "../../lib/axiosInstance";
 
 const Login = () => {
+  const [Mobile, setMobile] = useState<string>();
+  const [TnC, setTnC] = useState<boolean>(false);
+
   const navigation = useNavigate();
   const handleGetStartedClick = () => {
-    navigation("/otp");
+    // if (!Mobile || Mobile === "") {
+    //   alert("Enter Mobile No");
+    // } else if (!TnC) {
+    //   alert("Check Term and conditions");
+    // } else {
+      navigation("/otp");
+    // }
   };
+
   return (
     <div className="login px-5 py-3">
       <BackButton />
@@ -35,8 +46,10 @@ const Login = () => {
       </div>
       <div className="mt-8">
         <CheckBox
-          onChange={function Ha() {}}
-          selected={false}
+          onChange={() => {
+            setTnC(!TnC);
+          }}
+          selected={TnC}
           className="login-chk w-full items-start"
         >
           <Text
@@ -45,10 +58,14 @@ const Login = () => {
             className="whitespace-pre-line text-gray-400 font-normal text-[12px]"
           >
             By clicking on “Send Verification Code” you accept our{" "}
-            <Text type="body" size="md" className="inline-block text-primary underline underline-offset-[1.5px] font-normal text-[12px]">
+            <Text
+              type="body"
+              size="md"
+              className="inline-block text-primary underline underline-offset-[1.5px] font-normal text-[12px]"
+            >
               <a href="#">Terms & Conditions</a>
-            </Text>
-            {" "}and authorize us for your future support and guidance.
+            </Text>{" "}
+            and authorize us for your future support and guidance.
           </Text>
         </CheckBox>
       </div>

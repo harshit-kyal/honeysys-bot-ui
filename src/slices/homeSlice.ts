@@ -1,20 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 import { HomeSliceType } from "../types";
+import { getStoreDataApi } from "../api";
 
 const initialState: HomeSliceType = {
   loading: false,
   error: "",
-  chatArray: [],
   locationPermission: false,
   deniedModal: false,
   locationModal: false,
+  storeData: {},
 };
 
-// export const getMasterName = createAsyncThunk("getMasterName", async () => {
-//   const response: any = await getMasterNameApi();
-//   return response.data;
-// });
+export const getStoreData = createAsyncThunk("getStoreData", async () => {
+  const response: any = await getStoreDataApi();
+  return response;
+});
 
 // export const getEmployeeSalesData = createAsyncThunk(
 //   "getEmployeeSalesData",
@@ -68,22 +69,32 @@ export const HomeSlice = createSlice({
         deniedModal: action.payload,
       };
     },
+    setStoreData(state, action) {
+      return {
+        ...state,
+        storeData: action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
-    // builder
-    //   .addCase(getMasterName.pending, (state) => {
-    //     state.loading = true;
-    //   })
-    //   .addCase(getMasterName.fulfilled, (state, action) => {
-    //     if (action.payload.data) {
-    //       state.MasterName = action.payload.data;
-    //     }
-    //     state.error = "";
-    //   })
-    //   .addCase(getMasterName.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.error.message || "Something went wrong.";
-    //   })
+    builder
+      .addCase(getStoreData.pending, (state) => {
+        state.loading = true;
+        console.log("pending");
+      })
+      .addCase(getStoreData.fulfilled, (state, action) => {
+        console.log(action);
+        console.log("done");
+        if (action.payload) {
+          state.storeData = action.payload.data;
+        }
+        state.error = "";
+      })
+      .addCase(getStoreData.rejected, (state, action) => {
+        console.log(action)
+        state.loading = false;
+        state.error = action.error.message || "Something went wrong.";
+      });
   },
 });
 
