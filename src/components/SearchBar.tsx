@@ -21,6 +21,10 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
           onChange={(e) => {
             setinputText(e.target.value);
           }}
+          onKeyDown={(e) => {
+            e.key === "Enter" && onClick(inputText);
+            setinputText("");
+          }}
         />
         <div className="h-[45px] w-[45px] flex-shrink-0">
           <img
