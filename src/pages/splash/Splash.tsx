@@ -4,16 +4,17 @@ import Button from "../../components/Button/Button";
 
 const Splash = () => {
   const navigation = useNavigate();
-  const handleGetStartedClick = () => {
+  const handleGetStartedClick = React.useCallback(() => {
     navigation("/login");
-  };
+  }, [navigation]);
+
   return (
     <div className="px-4 py-5 text-center w-100">
       <div className="w-100 flex justify-center mt-3">
         <img src="/images/Logo.svg" alt="logo" height={250} width={250}></img>
       </div>
       <div className="mt-8 font-semibold text-[24px]">
-        Unleash the Future with Our{" "}
+        Unleash the Future with Our
         <span className="text-primary"> Bot Powered </span> Ecommerce Platform!
       </div>
       <div className="w-100 flex justify-center mt-6">

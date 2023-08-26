@@ -4,7 +4,6 @@ import { CheckBox, Text } from "@polynomialai/alpha-react";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
-import axiosInstance from "../../lib/axiosInstance";
 
 const Login = () => {
   const [Mobile, setMobile] = useState<string>();

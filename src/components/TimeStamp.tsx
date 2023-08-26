@@ -3,8 +3,6 @@ import React from "react";
 
 const TimeStamp = ({ date }: { date: string }) => {
   const now = new Date(date);
-  console.log(date);
-  console.log(now);
 
   const formattedDate = now
     .toLocaleString("en-US", {

@@ -10,8 +10,6 @@ axiosInstance.interceptors.request.use(
         let headers = {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": `application/json`,
-            clientId: '2508190884',
-            secret: '9b395a79-b30a-4f3a-abb4-22b76d62ee07',
         };
         // if (accessToken) {
         //     headers = 

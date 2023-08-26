@@ -53,3 +53,11 @@ export interface HomeSliceType {
   deniedModal: boolean;
   storeData: any;
 }
+
+export interface BotSliceType {
+  loading: boolean;
+  error: string;
+  botInfo: any;
+  convId: string;
+  botType: string;
+}

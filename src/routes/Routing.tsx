@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
-import Auth from "../pages/Auth/Auth";
 import ProtectedRoute from "./ProtectedRoute";
 import Splash from "../pages/splash/Splash";
 import Login from "../pages/login/Login";
@@ -19,7 +18,6 @@ import PDP from "../pages/PDP/PDP";
 const Routing = () => {
   return (
     <Routes>
-      <Route path="auth" element={<Auth />} />
       <Route path="/splash" element={<Splash />} />
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<OTP />} />

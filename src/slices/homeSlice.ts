@@ -12,22 +12,15 @@ const initialState: HomeSliceType = {
   storeData: {},
 };
 
+const log = async (data: any) => {
+  console.log(data);
+};
+
 export const getStoreData = createAsyncThunk("getStoreData", async () => {
   const response: any = await getStoreDataApi();
+  await log(response);
   return response;
 });
-
-// export const getEmployeeSalesData = createAsyncThunk(
-//   "getEmployeeSalesData",
-//   async (_, { getState }) => {
-//     const currentState = getState() as RootState;
-//     const response: any = await getEmployeeSalesDataApi(
-//       currentState.dashboard.RangeDate !== "" &&
-//         currentState.dashboard.RangeDate
-//     );
-//     return response.data;
-//   }
-// );
 
 export const HomeSlice = createSlice({
   name: "home",
@@ -91,7 +84,7 @@ export const HomeSlice = createSlice({
         state.error = "";
       })
       .addCase(getStoreData.rejected, (state, action) => {
-        console.log(action)
+        console.log(action);
         state.loading = false;
         state.error = action.error.message || "Something went wrong.";
       });

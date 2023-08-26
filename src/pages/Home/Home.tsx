@@ -5,8 +5,14 @@ import LocationPermission from "../../components/Modal/LocationPermission";
 import DeniedModal from "../../components/Modal/DeniedModal";
 import UserMessageCard from "../../components/Resuable/UserMessageCard";
 import GetStart from "../../components/GetStart";
+import { getChat } from "../../services";
+import { useAppSelector } from "../../app/hooks";
 
 const Home = () => {
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botInfo = useAppSelector((state) => state.bot.botInfo);
+  const botType = useAppSelector((state) => state.bot.botType);
+
   const [ChatArray, setChatArray] = useState<JSX.Element[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +29,7 @@ const Home = () => {
     if (ChatArray.length === 0) {
       setChatArray((array) => [
         ...array,
-        <GetStart setChatArray={setChatArray} />,
+        <GetStart setChatArray={setChatArray} key={new Date().getTime()} />,
       ]);
     }
   }, []);
@@ -45,6 +51,14 @@ const Home = () => {
       </div>
       <SearchBar
         onClick={(inputText: string) => {
+          const newData = {
+            conversationId: convId,
+            text: inputText,
+            voiceFlag: false,
+          };
+          getChat(newData, botType).then((data) => {
+            console.log(data);
+          });
           setChatArray((array) => [
             ...array,
             <ChatWrapper type="user">
