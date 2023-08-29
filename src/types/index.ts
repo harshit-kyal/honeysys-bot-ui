@@ -48,10 +48,12 @@ export interface CustomButton {
 export interface HomeSliceType {
   loading: boolean;
   error: string;
+  ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
   deniedModal: boolean;
   storeData: any;
+  UiUpdate: boolean;
 }
 
 export interface BotSliceType {

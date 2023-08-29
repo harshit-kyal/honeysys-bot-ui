@@ -2,9 +2,12 @@ import React from "react";
 import { Header, Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
+import { getChat } from "../../services";
 
 const HeaderBar = () => {
   const bot = useAppSelector((state) => state.root.bot);
+  const botType = useAppSelector((state) => state.bot.botType);
+  const convId = useAppSelector((state) => state.bot.convId);
   const navigate = useNavigate();
 
   const hadnleNavigation = (route: string) => {
@@ -40,7 +43,17 @@ const HeaderBar = () => {
             alt="search"
             width={24}
             height={24}
-            onClick={() => hadnleNavigation("/search")}
+            onClick={async () => {
+              // const newData = {
+              //   conversationId: convId,
+              //   text: "search",
+              //   voiceFlag: false,
+              // };
+              // await getChat(newData, botType);
+              // setTimeout(() => {
+              hadnleNavigation("/search");
+              // }, 500);
+            }}
           />
           <img
             src="/images/shopping.svg"

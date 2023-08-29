@@ -24,8 +24,6 @@ export const getConversationId = async (botType: string, token: string) => {
 };
 
 export const getChat = async (newData: any, botType: string) => {
-  console.log(newData);
-  // let botType = getQueryVariable("botType");
   if (!botType) {
     botType = encrypt("Sales+CRM-Bot");
   }
@@ -42,7 +40,7 @@ export const getChat = async (newData: any, botType: string) => {
   }
 
   return await axiosInstance.post(
-    `${environment.directlineURL}/directline/polyline/initConversation/?botType=${botType}`,
+    `${environment.directlineURL}/directline/polyline/getMessages/?botType=${botType}`,
     newData
   );
 };

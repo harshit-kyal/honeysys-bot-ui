@@ -6,10 +6,12 @@ import { getStoreDataApi } from "../api";
 const initialState: HomeSliceType = {
   loading: false,
   error: "",
+  ChatArray: [],
   locationPermission: false,
   deniedModal: false,
   locationModal: false,
   storeData: {},
+  UiUpdate: false,
 };
 
 const log = async (data: any) => {
@@ -41,7 +43,7 @@ export const HomeSlice = createSlice({
     setChatArray(state, action) {
       return {
         ...state,
-        chatArray: action.payload,
+        ChatArray: action.payload,
       };
     },
     setLocationPermission(state, action) {
@@ -66,6 +68,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         storeData: action.payload,
+      };
+    },
+    setUiUpdate(state, action) {
+      return {
+        ...state,
+        UiUpdate: action.payload,
       };
     },
   },
@@ -98,5 +106,6 @@ export const {
   setLocationPermission,
   setLocationModal,
   setDeniedModal,
+  setUiUpdate,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

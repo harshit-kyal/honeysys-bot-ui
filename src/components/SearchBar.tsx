@@ -13,6 +13,7 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
         }}
       >
         <input
+          id="search"
           type="text"
           value={inputText}
           className="h-[45px] text-sm placeholder:text-xs active:outline-none hover:outline-none focus:outline-none placeholder:text-[#969696] placeholder:font-normal ps-5"
@@ -33,9 +34,10 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
             src="/images/send.svg"
             alt="send"
             className="h-full w-full"
-            onClick={() => {
+            onClick={(e) => {
               onClick(inputText);
               setinputText("");
+              document.getElementById("search")!.focus();
             }}
           />
         </div>
