@@ -62,6 +62,7 @@ export const RootSlice = createSlice({
   name: "root",
   initialState,
   reducers: {
+    resetRoom: () => initialState,
     setLoading(state, action) {
       return {
         ...state,
@@ -93,5 +94,5 @@ export const RootSlice = createSlice({
   },
 });
 
-export const { setLoading, setError } = RootSlice.actions;
+export const { resetRoom, setLoading, setError } = RootSlice.actions;
 export default RootSlice.reducer;

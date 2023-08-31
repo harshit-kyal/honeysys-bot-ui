@@ -15,6 +15,7 @@ import { io } from "socket.io-client";
 import { getChatData, setChatArray, setUiUpdate } from "../../slices/homeSlice";
 import FloatingButton from "../../components/FloatingButton";
 import Loading from "../../components/Loading";
+import { RootState } from "../../app/store";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -82,7 +83,9 @@ const Home = () => {
   const replyFunction = (data: any) => {
     if (data.activities) {
       const activities: any[] = data.activities;
-      dispatch(setChatArray([...ChatArray, ...activities]));
+      console.log("state1", ChatArray);
+      console.log("state", ChatArray, [...ChatArray, ...activities]);
+      dispatch(setChatArray([...activities]));
     }
   };
 
@@ -135,9 +138,14 @@ const Home = () => {
           console.log(error);
         });
     }
+
+    return () => {
+      setChatComponentArray([]);
+    };
   }, []);
 
   useEffect(() => {
+    console.log("state", ChatArray);
     ChatArray.forEach((activity: any, index: number) => {
       if (
         activity.type === "message" &&

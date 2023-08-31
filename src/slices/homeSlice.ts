@@ -35,6 +35,7 @@ export const HomeSlice = createSlice({
   name: "home",
   initialState,
   reducers: {
+    resetHome: () => initialState,
     setLoading(state, action) {
       return {
         ...state,
@@ -110,7 +111,10 @@ export const HomeSlice = createSlice({
       .addCase(getChatData.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload) {
-          state.storeData = action.payload.data;
+          // state.ChatArray = [
+          //   ...state.ChatArray,
+          //   ...action.payload.data.activities,
+          // ];
         }
         state.error = "";
       })
@@ -122,6 +126,7 @@ export const HomeSlice = createSlice({
 });
 
 export const {
+  resetHome,
   setLoading,
   setError,
   setChatArray,

@@ -13,6 +13,7 @@ export const BotSlice = createSlice({
   name: "bot",
   initialState,
   reducers: {
+    resetBot: () => initialState,
     setBotInfo(state, action) {
       return {
         ...state,
@@ -34,5 +35,5 @@ export const BotSlice = createSlice({
   },
 });
 
-export const { setBotInfo, setConvId, setBotType } = BotSlice.actions;
+export const { resetBot, setBotInfo, setConvId, setBotType } = BotSlice.actions;
 export default BotSlice.reducer;

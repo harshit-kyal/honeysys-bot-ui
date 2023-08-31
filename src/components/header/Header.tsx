@@ -1,8 +1,12 @@
 import { Header, Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { resetRoom } from "../../slices/rootSlice";
+import { resetHome } from "../../slices/homeSlice";
+import { resetBot } from "../../slices/botSlice";
 
 const HeaderBar = () => {
+  const dispatch = useAppDispatch();
   const bot = useAppSelector((state) => state.root.bot);
   const navigate = useNavigate();
 
@@ -59,6 +63,9 @@ const HeaderBar = () => {
             height={20}
             onClick={() => {
               localStorage.clear();
+              dispatch(resetHome());
+              dispatch(resetBot());
+              dispatch(resetRoom());
               hadnleNavigation("/splash");
             }}
           />
