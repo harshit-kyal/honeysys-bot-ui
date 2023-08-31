@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 import { HomeSliceType } from "../types";
-import { getStoreDataApi } from "../api";
+import { getChatApi, getStoreDataApi } from "../api";
 
 const initialState: HomeSliceType = {
   loading: false,
@@ -23,6 +23,14 @@ export const getStoreData = createAsyncThunk("getStoreData", async () => {
   await log(response);
   return response;
 });
+
+export const getChatData = createAsyncThunk(
+  "getChatData",
+  async ({ newData, botType }: { newData: any; botType: string }) => {
+    const response: any = await getChatApi({ newData, botType });
+    return response;
+  }
+);
 
 export const HomeSlice = createSlice({
   name: "home",
@@ -80,7 +88,7 @@ export const HomeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getStoreData.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
         console.log("pending");
       })
       .addCase(getStoreData.fulfilled, (state, action) => {
@@ -93,6 +101,21 @@ export const HomeSlice = createSlice({
       })
       .addCase(getStoreData.rejected, (state, action) => {
         console.log(action);
+        // state.loading = false;
+        state.error = action.error.message || "Something went wrong.";
+      })
+
+      .addCase(getChatData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChatData.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload) {
+          state.storeData = action.payload.data;
+        }
+        state.error = "";
+      })
+      .addCase(getChatData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Something went wrong.";
       });

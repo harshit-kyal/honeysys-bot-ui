@@ -1,3 +1,4 @@
+import { useAppDispatch } from "../app/hooks";
 import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
 import { encrypt } from "./aes";
@@ -23,24 +24,4 @@ export const getConversationId = async (botType: string, token: string) => {
   );
 };
 
-export const getChat = async (newData: any, botType: string) => {
-  if (!botType) {
-    botType = encrypt("Sales+CRM-Bot");
-  }
-  // let header = {
-  //   "Access-Control-Allow-Origin": "*",
-  // };
-  // var authToken = localStorage.getItem("authToken");
-  // if (authToken) {
-  //   newData.authToken = authToken;
-  // }
-  newData.timestamp = new Date();
-  if (!newData.attachment) {
-    newData.attachment = [];
-  }
 
-  return await axiosInstance.post(
-    `${environment.directlineURL}/directline/polyline/getMessages/?botType=${botType}`,
-    newData
-  );
-};

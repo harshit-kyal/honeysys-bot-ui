@@ -5,27 +5,54 @@ import LocationPermission from "../../components/Modal/LocationPermission";
 import DeniedModal from "../../components/Modal/DeniedModal";
 import UserMessageCard from "../../components/Resuable/UserMessageCard";
 import GetStart from "../../components/GetStart";
-import { fetchBot, getChat, getConversationId } from "../../services";
+import { fetchBot, getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import BotMessageCard from "../../components/Resuable/BotMessageCard";
 import { environment } from "../../environments/environment";
 import { setBotInfo, setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
-import { setChatArray, setUiUpdate } from "../../slices/homeSlice";
+import { getChatData, setChatArray, setUiUpdate } from "../../slices/homeSlice";
 import FloatingButton from "../../components/FloatingButton";
+import Loading from "../../components/Loading";
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
-  const botInfo = useAppSelector((state) => state.bot.botInfo);
+  const loading = useAppSelector((state) => state.home.loading);
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
 
   const [ChatComponentArray, setChatComponentArray] = useState<JSX.Element[]>(
     []
   );
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isLoadingVisible, setLoadingVisible] = useState(false);
+  const loadingDelayTimeout = useRef<number | undefined>(undefined);
+
+  const showLoading = () => {
+    // Show loading after a short delay (300ms)
+    loadingDelayTimeout.current = window.setTimeout(() => {
+      setLoadingVisible(true);
+    }, 300);
+  };
+
+  const hideLoading = () => {
+    // Clear any existing timeouts and hide loading
+    if (loadingDelayTimeout.current) {
+      clearTimeout(loadingDelayTimeout.current);
+    }
+    setLoadingVisible(false);
+  };
+
+  useEffect(() => {
+    // Handle loading state changes
+    if (loading) {
+      showLoading();
+    } else {
+      hideLoading();
+    }
+  }, [loading]);
 
   const scroll = () => {
     if (scrollRef.current) {
@@ -49,21 +76,13 @@ const Home = () => {
   }, []);
 
   const setArray = (component: JSX.Element) => {
-    console.log("setArray");
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
 
   const replyFunction = (data: any) => {
-    console.log("replyFunction", data);
     if (data.activities) {
       const activities: any[] = data.activities;
-      // setChatArray((prevChartArray: any) => {
-      // console.log("IN setChatArray");
-      // const newChartArray = [...prevChartArray];
-      console.log(ChatArray, activities);
       dispatch(setChatArray([...ChatArray, ...activities]));
-      //   return newChartArray;
-      // });
     }
   };
 
@@ -96,38 +115,16 @@ const Home = () => {
                   text: "init",
                   voiceFlag: false,
                 };
-                getChat(newData, botType);
-
-                // setChatComponentArray([
-                //   <ChatWrapper type={"bot"} key={new Date().getTime()}>
-                //     <div className="w-[80%]">
-                //       <BotMessageCard title={`botType : ${botType}`} />
-                //     </div>
-                //   </ChatWrapper>,
-                //   <ChatWrapper type={"bot"} key={new Date().getTime()}>
-                //     <div className="w-[80%]">
-                //       <BotMessageCard
-                //         title={`conversationId : ${data?.data?.conversationId}`}
-                //       />
-                //     </div>
-                //   </ChatWrapper>,
-                // ]);
+                dispatch(getChatData({ newData, botType }));
                 socket.on("sendMessage", (message) => {
                   if (message.data && message.data !== "") {
                     let data = message.data;
-                    console.log(data);
                     replyFunction(data);
                   }
-                });
-                socket.on("fetchHomeData", () => {
-                  // this.fetchHomeData();
                 });
                 socket.on("error", (error) => {
                   console.log(error);
                 });
-                // socket.on("fetchHomeData", () => {
-                //   fetchHomeData();
-                // });
               })
               .catch((error) => {
                 console.log(error);
@@ -141,9 +138,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(ChatArray);
     ChatArray.forEach((activity: any, index: number) => {
-      console.log(activity);
       if (
         activity.type === "message" &&
         activity.text === "I am unable to continue. Come back later."
@@ -195,8 +190,7 @@ const Home = () => {
 
   useEffect(() => {
     scroll();
-  }, [ChatComponentArray]);
-  console.log("ChatComponentArray", ChatComponentArray);
+  }, [ChatComponentArray, isLoadingVisible]);
 
   return (
     <div
@@ -208,6 +202,7 @@ const Home = () => {
         className="bg-background h-full overflow-y-auto py-5"
       >
         {ChatComponentArray}
+        {isLoadingVisible && <Loading />}
       </div>
       <SearchBar
         onClick={(inputText: string) => {
@@ -216,7 +211,7 @@ const Home = () => {
             text: inputText,
             voiceFlag: false,
           };
-          getChat(newData, botType);
+          dispatch(getChatData({ newData, botType }));
         }}
       />
       <LocationPermission />

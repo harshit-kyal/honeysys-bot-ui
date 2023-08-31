@@ -1,4 +1,6 @@
+import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
+import { encrypt } from "../services/aes";
 
 export const getStoreDataApi = async () => {
   try {
@@ -30,5 +32,33 @@ export const CategoriesDataApi = async () => {
       return { data: error.response.data };
     }
     throw error; // Rethrow the error so that the caller can handle it
+  }
+};
+export const getChatApi = async ({
+  newData,
+  botType,
+}: {
+  newData: any;
+  botType: string;
+}) => {
+  if (!botType) {
+    botType = encrypt("Sales+CRM-Bot");
+  }
+  newData.timestamp = new Date();
+  if (!newData.attachment) {
+    newData.attachment = [];
+  }
+
+  try {
+    const response: any = await axiosInstance.post(
+      `${environment.directlineURL}/directline/polyline/getMessages/?botType=${botType}`,
+      newData
+    );
+    return { data: response.data };
+  } catch (error: any) {
+    if (error && error.response) {
+      return { data: error.response.data };
+    }
+    throw error;
   }
 };
