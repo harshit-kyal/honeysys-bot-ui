@@ -1,5 +1,4 @@
 import { Divider, ProductCard } from "@polynomialai/alpha-react";
-import React from "react";
 import PlusButton from "../Button/PlusButton";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";

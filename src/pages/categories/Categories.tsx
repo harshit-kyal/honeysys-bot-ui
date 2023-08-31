@@ -1,9 +1,8 @@
-import React from "react";
 import PageHeader from "../../components/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { CategorieData } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
-import { EditImage, ProductDropDown } from "@polynomialai/alpha-react";
+import { ProductDropDown } from "@polynomialai/alpha-react";
 import { fruitsVegetables } from "../../constants/HomeConst";
 
 const Categories = () => {

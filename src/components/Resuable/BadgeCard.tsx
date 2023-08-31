@@ -1,5 +1,4 @@
 import { Badge } from "@polynomialai/alpha-react";
-import React from "react";
 import { useAppSelector } from "../../app/hooks";
 
 interface CardProp {

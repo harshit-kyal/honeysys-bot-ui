@@ -1,5 +1,4 @@
 import { AddDialog, Text } from "@polynomialai/alpha-react";
-import React from "react";
 import { setDeniedModal } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
@@ -31,8 +30,6 @@ const DeniedModal = () => {
           </Text>
         </div>
       }
-      // Header={<></>}
-      // Footer={<></>}
       isOpen={deniedModal}
       onClose={() => {
         dispatch(setDeniedModal(false));

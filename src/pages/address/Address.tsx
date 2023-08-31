@@ -1,5 +1,4 @@
 import React from "react";
-import BackButton from "../../components/Button/BackButton";
 import { Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
@@ -44,7 +43,10 @@ const Address = () => {
         </Text>
       </div>
       <div className="bg-slate-100" style={{ height: "calc(100% - 40px)" }}>
-        <Wrapper apiKey={"AIzaSyAUWdjoeM1tSvhlkB9LPywwsWCli2lQxxY"} render={render}>
+        <Wrapper
+          apiKey={"AIzaSyAUWdjoeM1tSvhlkB9LPywwsWCli2lQxxY"}
+          render={render}
+        >
           <MyMapComponent center={center} zoom={zoom} />
         </Wrapper>
       </div>

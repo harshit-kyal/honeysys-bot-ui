@@ -1,7 +1,5 @@
-import { useAppDispatch } from "../app/hooks";
 import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
-import { encrypt } from "./aes";
 
 export const fetchBot = async (botType: string) => {
   return await axiosInstance.get(
@@ -23,5 +21,3 @@ export const getConversationId = async (botType: string, token: string) => {
     { headers }
   );
 };
-
-

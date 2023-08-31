@@ -1,4 +1,3 @@
-import React from "react";
 import { CustomButton } from "../../types";
 
 const Button = ({ title, handleClick, btnType }: CustomButton) => {

@@ -1,4 +1,3 @@
-import React from "react";
 import ChatWrapper from "./ChatWrapper";
 import TimeStamp from "./TimeStamp";
 import ActionButton from "./Resuable/ActionButton";
@@ -8,9 +7,8 @@ import ReplyMessageCard from "./Resuable/ReplyMessageCard";
 import { ReplyCard, RichCard, Text } from "@polynomialai/alpha-react";
 import CartReplyCard from "./Resuable/CartReplyCard";
 import OrderSummaryCard from "./Resuable/OrderSummaryCard";
-import axiosInstance from "../lib/axiosInstance";
 import { getStoreData } from "../slices/homeSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch } from "../app/hooks";
 
 const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   const navigate = useNavigate();

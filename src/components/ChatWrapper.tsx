@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ChatWrapperProps {
   type: "bot" | "user";
   children: JSX.Element;

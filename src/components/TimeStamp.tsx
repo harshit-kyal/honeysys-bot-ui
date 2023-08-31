@@ -1,5 +1,4 @@
 import { Text } from "@polynomialai/alpha-react";
-import React from "react";
 
 const TimeStamp = ({ date }: { date: string }) => {
   const now = new Date(date);

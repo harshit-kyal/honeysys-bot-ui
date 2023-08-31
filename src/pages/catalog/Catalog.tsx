@@ -1,4 +1,3 @@
-import React from "react";
 import PageHeader from "../../components/PageHeader";
 import { Text } from "@polynomialai/alpha-react";
 import OverlayWrapperCard from "../../components/Resuable/OverlayWrapperCard";

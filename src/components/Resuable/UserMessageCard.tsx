@@ -1,4 +1,3 @@
-import React from "react";
 import { RichCard } from "@polynomialai/alpha-react";
 import { currentTime } from "../TimeStamp";
 import { useAppSelector } from "../../app/hooks";

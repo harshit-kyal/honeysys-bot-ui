@@ -1,12 +1,9 @@
-import React from "react";
 import { Header, Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 
 const HeaderBar = () => {
   const bot = useAppSelector((state) => state.root.bot);
-  const botType = useAppSelector((state) => state.bot.botType);
-  const convId = useAppSelector((state) => state.bot.convId);
   const navigate = useNavigate();
 
   const hadnleNavigation = (route: string) => {

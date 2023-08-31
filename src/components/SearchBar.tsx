@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Input } from "@polynomialai/alpha-react";
+import { useState } from "react";
+import { useAppSelector } from "../app/hooks";
 
 const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
   const [inputText, setinputText] = useState<string>("");
+  const loading = useAppSelector((state) => state.home.loading);
 
   return (
     <div className="fixed bottom-0 left-0">
@@ -23,7 +24,7 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
             setinputText(e.target.value);
           }}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && inputText !== "" && !loading) {
               onClick(inputText);
               setinputText("");
             }
@@ -35,9 +36,11 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
             alt="send"
             className="h-full w-full"
             onClick={(e) => {
-              onClick(inputText);
-              setinputText("");
-              document.getElementById("search")!.focus();
+              if (inputText !== "" && !loading) {
+                onClick(inputText);
+                setinputText("");
+                document.getElementById("search")!.focus();
+              }
             }}
           />
         </div>

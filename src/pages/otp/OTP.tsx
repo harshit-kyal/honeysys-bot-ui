@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BackButton from "../../components/Button/BackButton";
 import { Text, VerificationInput } from "@polynomialai/alpha-react";
 import "./index.css";

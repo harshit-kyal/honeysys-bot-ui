@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
 import { HomeSliceType } from "../types";
 import { getChatApi, getStoreDataApi } from "../api";
 

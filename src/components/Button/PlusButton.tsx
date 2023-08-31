@@ -1,5 +1,3 @@
-import React from "react";
-
 const PlusButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className="h-6 w-6" onClick={onClick}>

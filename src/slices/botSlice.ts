@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
 import { BotSliceType } from "../types";
 
 const initialState: BotSliceType = {

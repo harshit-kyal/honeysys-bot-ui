@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./searchProduct.css";
 import { ProductCard } from "@polynomialai/alpha-react";
 import BackButton from "../../components/Button/BackButton";

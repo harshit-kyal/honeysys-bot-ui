@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { useParams } from "react-router-dom";
 import { Text } from "@polynomialai/alpha-react";

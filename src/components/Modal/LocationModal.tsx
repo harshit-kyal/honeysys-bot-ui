@@ -1,5 +1,4 @@
 import { AddDialog, Text } from "@polynomialai/alpha-react";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setLocationModal } from "../../slices/homeSlice";
 
@@ -31,8 +30,6 @@ const LocationModal = () => {
           </Text>
         </div>
       }
-      // Header={<></>}
-      // Footer={<></>}
       isOpen={locationModal}
       onClose={() => {
         dispatch(setLocationModal(false));

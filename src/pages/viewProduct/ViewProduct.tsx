@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PageHeader from "../../components/PageHeader";
-import { useParams } from "react-router-dom";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import { LeafyVegetables } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 
 const ViewProduct = () => {
-  const { id } = useParams();
   const [Modal, setModal] = useState<boolean>(false);
 
   const ProductData: { imageSrc: string; title: string; pricing: any[] } = {

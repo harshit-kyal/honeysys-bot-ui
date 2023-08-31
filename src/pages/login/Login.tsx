@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BackButton from "../../components/Button/BackButton";
 import { CheckBox, Text } from "@polynomialai/alpha-react";
 import Button from "../../components/Button/Button";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const Login = () => {
-  const [Mobile, setMobile] = useState<string>();
+  // const [Mobile, setMobile] = useState<string>();
   const [TnC, setTnC] = useState<boolean>(false);
 
   const navigation = useNavigate();
@@ -16,7 +16,7 @@ const Login = () => {
     // } else if (!TnC) {
     //   alert("Check Term and conditions");
     // } else {
-      navigation("/otp");
+    navigation("/otp");
     // }
   };
 

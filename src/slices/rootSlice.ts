@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
 import { RootSliceType } from "../types";
 
 const initialState: RootSliceType = {

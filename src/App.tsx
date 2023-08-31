@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import Routing from "./routes/Routing";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { useAppSelector } from "./app/hooks";
 
 function App() {
   const color = useAppSelector((state) => state.root.color);

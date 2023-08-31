@@ -1,5 +1,4 @@
 import { AddDialog, Button, Text } from "@polynomialai/alpha-react";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setLocationPermission } from "../../slices/homeSlice";
 
@@ -44,7 +43,6 @@ const LocationPermission = () => {
             <Button
               onClick={() => {
                 if (navigator.geolocation) {
-                  // alert("Location data received: ");
                   console.log(navigator.permissions);
                   navigator.permissions
                     .query({ name: "geolocation" })
@@ -84,8 +82,6 @@ const LocationPermission = () => {
           </div>
         </div>
       }
-      // Header={<></>}
-      // Footer={<></>}
       isOpen={locationPermission}
       onClose={() => {
         dispatch(setLocationPermission(false));

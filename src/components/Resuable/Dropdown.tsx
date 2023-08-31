@@ -1,5 +1,4 @@
 import { DropDown } from "@polynomialai/alpha-react";
-import React from "react";
 
 const Dropdown = ({
   option,
