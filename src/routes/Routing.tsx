@@ -1,18 +1,23 @@
+import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home/Home";
 import ProtectedRoute from "./ProtectedRoute";
-import Splash from "../pages/splash/Splash";
-import Login from "../pages/login/Login";
-import OTP from "../pages/otp/OTP";
-import Success from "../pages/success/Success";
-import Catalog from "../pages/catalog/Catalog";
-import Categories from "../pages/categories/Categories";
-import AddProduct from "../pages/addProduct/AddProduct";
-import ViewProduct from "../pages/viewProduct/ViewProduct";
-import Cart from "../pages/cart/Cart";
-import Address from "../pages/address/Address";
-import SearchProduct from "../pages/searchProduct/SearchProduct";
-import PDP from "../pages/PDP/PDP";
+
+// Lazy-loaded components
+const Splash = lazy(() => import("../pages/splash/Splash"));
+const Login = lazy(() => import("../pages/login/Login"));
+const OTP = lazy(() => import("../pages/otp/OTP"));
+const Success = lazy(() => import("../pages/success/Success"));
+const Catalog = lazy(() => import("../pages/catalog/Catalog"));
+const Categories = lazy(() => import("../pages/categories/Categories"));
+const AddProduct = lazy(() => import("../pages/addProduct/AddProduct"));
+const ViewProduct = lazy(() => import("../pages/viewProduct/ViewProduct"));
+const Cart = lazy(() => import("../pages/cart/Cart"));
+const Address = lazy(() => import("../pages/address/Address"));
+const SearchProduct = lazy(
+  () => import("../pages/searchProduct/SearchProduct")
+);
+const PDP = lazy(() => import("../pages/PDP/PDP"));
+const Home = lazy(() => import("../pages/Home/Home"));
 
 const Routing = () => {
   return (

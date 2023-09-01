@@ -1,21 +1,26 @@
-import { useEffect, useState, useRef } from "react";
-import SearchBar from "../../components/SearchBar";
-import ChatWrapper from "../../components/ChatWrapper";
-import LocationPermission from "../../components/Modal/LocationPermission";
-import DeniedModal from "../../components/Modal/DeniedModal";
-import UserMessageCard from "../../components/Resuable/UserMessageCard";
-import GetStart from "../../components/GetStart";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { fetchBot, getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import BotMessageCard from "../../components/Resuable/BotMessageCard";
 import { environment } from "../../environments/environment";
 import { setBotInfo, setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
 import { getChatData, setChatArray, setUiUpdate } from "../../slices/homeSlice";
-import FloatingButton from "../../components/FloatingButton";
-import Loading from "../../components/Loading";
-import { RootState } from "../../app/store";
+const SearchBar = lazy(() => import("../../components/SearchBar"));
+const ChatWrapper = lazy(() => import("../../components/ChatWrapper"));
+const LocationPermission = lazy(
+  () => import("../../components/Modal/LocationPermission")
+);
+const DeniedModal = lazy(() => import("../../components/Modal/DeniedModal"));
+const UserMessageCard = lazy(
+  () => import("../../components/Resuable/UserMessageCard")
+);
+const GetStart = lazy(() => import("../../components/GetStart"));
+const BotMessageCard = lazy(
+  () => import("../../components/Resuable/BotMessageCard")
+);
+const FloatingButton = lazy(() => import("../../components/FloatingButton"));
+const Loading = lazy(() => import("../../components/Loading"));
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -205,13 +210,15 @@ const Home = () => {
       className="w-full bg-background text-primary text-[40px] font-bold"
       style={{ height: "calc(100vh - 125px)", marginBottom: 65 }}
     >
-      <div
-        ref={scrollRef}
-        className="bg-background h-full overflow-y-auto py-5"
-      >
-        {ChatComponentArray}
-        {isLoadingVisible && <Loading />}
-      </div>
+      <Suspense fallback={<Loading />}>
+        <div
+          ref={scrollRef}
+          className="bg-background h-full overflow-y-auto py-5"
+        >
+          {ChatComponentArray}
+          {isLoadingVisible && <Loading />}
+        </div>
+      </Suspense>
       <SearchBar
         onClick={(inputText: string) => {
           const newData = {
@@ -222,9 +229,15 @@ const Home = () => {
           dispatch(getChatData({ newData, botType }));
         }}
       />
-      <LocationPermission />
-      <DeniedModal />
-      <FloatingButton />
+      <Suspense fallback={<Loading />}>
+        <LocationPermission />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <DeniedModal />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <FloatingButton />
+      </Suspense>
     </div>
   );
 };
