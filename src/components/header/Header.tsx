@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { resetRoom } from "../../slices/rootSlice";
 import { resetHome } from "../../slices/homeSlice";
 import { resetBot } from "../../slices/botSlice";
+import "../../styles/header.css";
 
 const HeaderBar = () => {
   const dispatch = useAppDispatch();
@@ -15,21 +16,27 @@ const HeaderBar = () => {
   };
   return (
     <Header
-      className="px-5 py-[10px] bg-primary"
+      className="px-3 xs:px-5 py-[10px] bg-primary"
       logo={
         <div className="flex items-center">
           <img
             src={bot}
             alt="logo"
-            height={40}
-            width={40}
-            className="rounded-full bg-[#E6E6E6] p-1"
+            className="rounded-full bg-[#E6E6E6] p-1 header-logo"
           />
-          <div className="flex flex-col ml-2">
-            <Text type="body" size="lg" className="font-semibold">
+          <div className="flex flex-col ml-2 overflow-hidden">
+            <Text
+              type="body"
+              size="lg"
+              className="font-semibold text-sm xs:text-base"
+            >
               Botcy
             </Text>
-            <Text type="label" size="lg" className="font-medium">
+            <Text
+              type="label"
+              size="lg"
+              className="font-medium text-[.5rem] xs:text-[.625rem] overflow-hidden whitespace-nowrap text-ellipsis"
+            >
               Bot Powered E-commerce Platform
             </Text>
           </div>
@@ -37,12 +44,11 @@ const HeaderBar = () => {
       }
       onSettingsClick={() => {}}
       settingLogo={
-        <div className="flex flex-shrink-0 h-full w-max gap-2">
+        <div className="flex items-center flex-shrink-0 h-full w-max gap-2">
           <img
             src="/images/search.svg"
             alt="search"
-            width={24}
-            height={24}
+            className="header-btn"
             onClick={async () => {
               hadnleNavigation("/search");
             }}
@@ -50,8 +56,7 @@ const HeaderBar = () => {
           <img
             src="/images/shopping.svg"
             alt="shopping"
-            width={24}
-            height={24}
+            className="header-btn"
             onClick={() => {
               hadnleNavigation("/cart");
             }}
@@ -59,8 +64,7 @@ const HeaderBar = () => {
           <img
             src="/images/logout.svg"
             alt="logout"
-            width={20}
-            height={20}
+            className="header-btn-logout"
             onClick={() => {
               localStorage.clear();
               dispatch(resetHome());

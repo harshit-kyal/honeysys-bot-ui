@@ -21,11 +21,11 @@ const SearchProduct = () => {
   ]);
   return (
     <div className="">
-      <div className="header flex items-center justify-evenly flex-shrink-0 px-1">
+      <div className="header h-[72px] overflow-hidden flex items-center justify-evenly flex-shrink-0 px-5">
         <div className="pt-6">
           <BackButton noTitle={true} />
         </div>
-        <div>
+        <div className="flex-1 px-3">
           <input
             name="search"
             id="search"

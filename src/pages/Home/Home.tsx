@@ -69,18 +69,6 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    if (ChatComponentArray.length === 0) {
-      setChatComponentArray([
-        ...ChatComponentArray,
-        <GetStart
-          setChatArray={setChatComponentArray}
-          key={new Date().getTime()}
-        />,
-      ]);
-    }
-  }, []);
-
   const setArray = (component: JSX.Element) => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
@@ -95,6 +83,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (ChatComponentArray.length === 0) {
+      setChatComponentArray([
+        ...ChatComponentArray,
+        <GetStart
+          setChatArray={setChatComponentArray}
+          key={new Date().getTime()}
+        />,
+      ]);
+    }
     if (botType === "") {
       fetchBot(environment.botType)
         .then((data) => {
@@ -168,7 +165,7 @@ const Home = () => {
             type={activity.value?.sender === "user" ? "user" : "bot"}
             key={new Date().getTime() + index}
           >
-            <div className="w-[80%]">
+            <div className="chatWrapper">
               {activity.value.sender === "user" ? (
                 <UserMessageCard content={activity.text} />
               ) : (
@@ -188,7 +185,7 @@ const Home = () => {
             type={activity.value?.sender === "user" ? "user" : "bot"}
             key={new Date().getTime() + index}
           >
-            <div className="w-[80%]">
+            <div className="chatWrapper">
               {activity.value.sender === "user" ? (
                 <UserMessageCard content={activity.text} />
               ) : (

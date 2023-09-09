@@ -15,7 +15,7 @@ const UserMessageCard = ({ time, content }: CardProp) => {
       className="bg-primary text-white"
       time={currentTime()}
       content={content}
-      contentCN="text-sm"
+      contentCN="text-sm mb-2"
       timeCN={`text-white text-[${Conversations.timestampsize}px]`}
     />
   );

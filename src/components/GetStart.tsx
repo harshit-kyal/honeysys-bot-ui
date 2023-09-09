@@ -20,7 +20,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
         {setChatArray((array: any) => [
           ...array,
           <ChatWrapper type="user">
-            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+            <div className="flex flex-col chatWrapper">
               <ReplyMessageCard
                 content="Track your Orders"
                 replyArray={[
@@ -30,7 +30,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
             </div>
           </ChatWrapper>,
           <ChatWrapper type="bot">
-            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+            <div className="flex flex-col chatWrapper">
               <RichCard>
                 <>
                   <div className="relative">
@@ -104,7 +104,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
     <>
       <TimeStamp date={new Date().toISOString()} />
       <ChatWrapper type="bot">
-        <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+        <div className="flex flex-col chatWrapper">
           <BotMessageCard
             contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
             imageSrc="/images/greeting.svg"
@@ -117,7 +117,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
               setChatArray((array: any) => [
                 ...array,
                 <ChatWrapper type="user">
-                  <div className="max-w-[80%] sm:w-[50%] md:w-[40%]">
+                  <div className="chatWrapper">
                     <ReplyMessageCard
                       content="Get Started"
                       replyArray={[
@@ -128,7 +128,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                   </div>
                 </ChatWrapper>,
                 <ChatWrapper type="bot">
-                  <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                  <div className="flex flex-col chatWrapper">
                     <BotMessageCard
                       imageSrc="/images/greeting2.svg"
                       contentArray={[
@@ -187,7 +187,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           ...array,
                           // Location from Map
                           <ChatWrapper type="user">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <ReplyMessageCard
                                 content="Test Lane, Street 3, 12th Street, Custom Lane, Tested Street, Custom Tested sector"
                                 replyArray={[
@@ -198,7 +198,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           </ChatWrapper>,
                           // Propmt for confirm Location
                           <ChatWrapper type="bot">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <BotMessageCard
                                 title="👋 One more question!"
                                 contentArray={[
@@ -215,7 +215,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           </ChatWrapper>,
                           // user add location
                           <ChatWrapper type="user">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <ReplyMessageCard
                                 content="Jiya Sharma, Ocean View Apartment, D-302"
                                 replyArray={[
@@ -228,7 +228,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           </ChatWrapper>,
                           // Got you message
                           <ChatWrapper type="bot">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <BotMessageCard
                                 title="👋 Got you!"
                                 contentArray={[
@@ -251,7 +251,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           </ChatWrapper>,
                           // Cart Order Message
                           <ChatWrapper type="user">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <CartReplyCard
                                 imageSrc="/images/vegetables.svg"
                                 price={3500}
@@ -269,7 +269,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           </ChatWrapper>,
                           // Delivery type selection
                           <ChatWrapper type="bot">
-                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                            <div className="flex flex-col chatWrapper">
                               <BotMessageCard
                                 title="👋 Got you!"
                                 contentArray={[
@@ -288,7 +288,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                     ...array,
                                     // user select delivery time
                                     <ChatWrapper type="user">
-                                      <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                      <div className="flex flex-col chatWrapper">
                                         <ReplyMessageCard
                                           content="After 3 Days"
                                           replyArray={[
@@ -299,7 +299,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                     </ChatWrapper>,
                                     // Time Slots
                                     <ChatWrapper type="bot">
-                                      <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                      <div className="flex flex-col chatWrapper">
                                         <BotMessageCard
                                           title="👋 Got you!"
                                           contentArray={[
@@ -317,7 +317,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                               ...array,
                                               // user select time slot
                                               <ChatWrapper type="user">
-                                                <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                                <div className="flex flex-col chatWrapper">
                                                   <ReplyMessageCard
                                                     content="12:00 PM - 04:00 PM"
                                                     replyArray={[
@@ -328,7 +328,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                               </ChatWrapper>,
                                               // Confirm Time Slots
                                               <ChatWrapper type="bot">
-                                                <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                                <div className="flex flex-col chatWrapper">
                                                   <BotMessageCard
                                                     title="👋 Got you!"
                                                     contentArray={[
@@ -343,7 +343,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                                           ...array,
                                                           // user confirm
                                                           <ChatWrapper type="user">
-                                                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                                            <div className="flex flex-col chatWrapper">
                                                               <ReplyMessageCard
                                                                 content="Confirm"
                                                                 replyArray={[
@@ -354,7 +354,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                                           </ChatWrapper>,
                                                           // order invoice
                                                           <ChatWrapper type="bot">
-                                                            <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">
+                                                            <div className="flex flex-col chatWrapper">
                                                               <OrderSummaryCard
                                                                 handleTrackMyOrder={
                                                                   handleTrackMyOrder
