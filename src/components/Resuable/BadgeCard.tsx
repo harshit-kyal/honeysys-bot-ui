@@ -4,19 +4,30 @@ import { useAppSelector } from "../../app/hooks";
 interface CardProp {
   text: string;
   active: boolean;
+  borderCn?: string | null;
 }
 
-const BadgeCard = ({ text, active }: CardProp) => {
+const BadgeCard = ({ text, active, borderCn }: CardProp) => {
   const categorySectionTemplate = useAppSelector(
     (state) => state.root.Categories.categorySectionTemplate
   );
-
+  console.log("radius", borderCn);
   return (
     <Badge
       text={text}
-      className={`${categorySectionTemplate} flex-shrink-0 ${
-        active ? "bg-primary text-background" : "text-primary bg-background border border-primary"
-      }`}
+      className={
+        borderCn && borderCn != undefined
+          ? `${categorySectionTemplate} flex-shrink-0 ${
+              active
+                ? "bg-primary text-background"
+                : "text-primary bg-background border border-primary"
+            } ] ${borderCn}`
+          : `${categorySectionTemplate} flex-shrink-0 ${
+              active
+                ? "bg-primary text-background"
+                : "text-primary bg-background border border-primary"
+            } ]`
+      }
     />
   );
 };

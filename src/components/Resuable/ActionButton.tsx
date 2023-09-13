@@ -5,15 +5,18 @@ const ActionButton = ({
   text,
   onClick,
   className,
+  radius,
 }: {
   src?: string;
   text: string;
   onClick: () => void;
   className?: string;
+  radius: any;
 }) => {
   return (
     <button
       className={`w-full flex justify-center items-center gap-1 bg-background rounded-default border border-primary py-[10px] mt-[2px] ${className}`}
+      style={{ borderRadius: radius }}
       onClick={onClick}
     >
       {src && (

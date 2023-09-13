@@ -21,7 +21,13 @@ export interface RootSliceType {
   };
 
   Cart: {
-    cartTemplate: string;
+    imgBorderColor: string;
+    titleSize: number;
+    titleWeight: number;
+    quantitySize: number;
+    quantityWeight: number;
+    priceSize: number;
+    priceWeight: number;
   };
 
   Catalog: {

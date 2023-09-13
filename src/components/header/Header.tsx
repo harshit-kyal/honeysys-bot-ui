@@ -16,7 +16,7 @@ const HeaderBar = () => {
   };
   return (
     <Header
-      className="px-3 xs:px-5 py-[10px] bg-primary"
+      className="max-[350px]:px-3 min-[350px]:px-5 py-[10px] bg-primary"
       logo={
         <div className="flex items-center">
           <img
@@ -25,20 +25,12 @@ const HeaderBar = () => {
             className="rounded-full bg-[#E6E6E6] p-1 header-logo"
           />
           <div className="flex flex-col ml-2 overflow-hidden">
-            <Text
-              type="body"
-              size="lg"
-              className="font-semibold text-sm xs:text-base"
-            >
+            <div className="font-semibold text-sm !min-[350px]:text-base">
               Botcy
-            </Text>
-            <Text
-              type="label"
-              size="lg"
-              className="font-medium text-[.5rem] xs:text-[.625rem] overflow-hidden whitespace-nowrap text-ellipsis"
-            >
+            </div>
+            <div className="font-medium max-[350px]:text-[.5rem] min-[350px]:text-[.625rem] overflow-hidden whitespace-nowrap text-ellipsis">
               Bot Powered E-commerce Platform
-            </Text>
+            </div>
           </div>
         </div>
       }
@@ -48,7 +40,7 @@ const HeaderBar = () => {
           <img
             src="/images/search.svg"
             alt="search"
-            className="header-btn"
+            className="header-btn "
             onClick={async () => {
               hadnleNavigation("/search");
             }}
@@ -64,7 +56,7 @@ const HeaderBar = () => {
           <img
             src="/images/logout.svg"
             alt="logout"
-            className="header-btn-logout"
+            className="header-btn-logout "
             onClick={() => {
               localStorage.clear();
               dispatch(resetHome());

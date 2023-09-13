@@ -1,7 +1,8 @@
 import { Button, CartCard, Text } from "@polynomialai/alpha-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
+import { json } from "stream/consumers";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -63,16 +64,24 @@ const Cart = () => {
     }
     setCartListValue({ ...cartList });
   };
+  const [cardData, setCardData] = useState<any>("");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const cartTemplate: any = searchParams.get("cartTemplate");
+    const data = JSON.parse(decodeURIComponent(cartTemplate));
+    setCardData(data);
+  }, [window.location.search]);
+
   return (
     <div className="h-screen sticky">
       <PageHeader title="Your Cart" isDisableSearch={false} />
       {cartList ? (
         <>
-          <div className="px-2 pt-20">
+          <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
             <div className="flex justify-between items-center">
               <span className="text-[12px] font-semibold">Total 6 items</span>
               <button
-                className="border-primary border-2 bg-white text-primary rounded-md px-2 py-1 text-[11px] font-medium"
+                className="border-primary border-2 bg-white text-primary rounded-md px-2 py-1 min-[264.5px]:text-[11px] max-[264.5px]:text-[10px] font-medium"
                 onClick={() => {
                   navigate("/catalog");
                 }}
@@ -80,7 +89,7 @@ const Cart = () => {
                 Add More
               </button>
             </div>
-            <div className="max-h-72 h-72 overflow-x-hidden overflow-y-scroll mt-4">
+            <div className="max-h-72  overflow-x-hidden overflow-y-scroll mt-4">
               {cartList.itemList.map((items: any, index: number) => (
                 <CartCard
                   key={index}
@@ -88,14 +97,32 @@ const Cart = () => {
                   image={
                     <img
                       src={items.imageSrc}
-                      className="border-1 border-[#09215B]"
+                      className={
+                        cardData?.border
+                          ? `!${cardData.border} h-full`
+                          : "border-5 border-cartImgBorderColor h-full"
+                      }
                       alt=""
                     />
                   }
                   price={items.price}
                   quantity={items.quantity}
                   title={items.title}
-                  titleCn="font-normal text-[#505050] text-[12px]"
+                  titleCn={
+                    cardData?.titleCn
+                      ? `${cardData.titleCn} text-[12px]`
+                      : "!font-cartTitleWeight text-[#505050] !text-cartTitleSmallSize  min-[330px]:!text-cartTitleSize"
+                  }
+                  priceCn={
+                    cardData?.priceCn
+                      ? cardData.priceCn
+                      : "!font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
+                  }
+                  quantityCn={
+                    cardData?.quantityCn
+                      ? cardData.quantityCn
+                      : "!font-cartQuantityWeight  !text-cartQuantitySmallSize  min-[330px]:!text-cartQuantitySize"
+                  }
                   addClick={() => handleIncrement(index, "increment")}
                   minusClick={() => handleIncrement(index, "decrement")}
                 />
@@ -119,7 +146,7 @@ const Cart = () => {
               <span>Total Amount</span>
               <span>{cartList.totalAmount}</span>
             </div>
-            <div className="text-[12px] text-secondaryFontColor font-light mt-2">
+            <div className="min-[264.5px]:text-[12px] max-[264.5px]:text-[11px] text-secondaryFontColor font-light mt-2">
               By continuing, you agree to share your cart and phone number with
               the business so it can confirm your order and total price
               including any tax and discounts.

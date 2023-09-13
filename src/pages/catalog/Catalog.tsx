@@ -4,10 +4,16 @@ import OverlayWrapperCard from "../../components/Resuable/OverlayWrapperCard";
 import CatalogProductCard from "../../components/Resuable/CatalogProductCard";
 import { useNavigate } from "react-router-dom";
 import { CategorieData } from "../../constants/HomeConst";
+import { useEffect, useState } from "react";
 
 const Catalog = () => {
   const navigate = useNavigate();
-
+  const [productTemplate, setProductTemplate] = useState<any>("");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const params: any = searchParams.get("productTemplate");
+    setProductTemplate(JSON.parse(decodeURIComponent(params)));
+  }, [window.location.search]);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Catalog" />
@@ -18,7 +24,7 @@ const Catalog = () => {
         contentTitle="Welcome!!"
         content="Our intuitive platform ensures that you find exactly what you're looking for, making your shopping experience delightful and efficient."
       />
-      <div className="p-5 flex gap-3 border">
+      <div className="p-3 min-[350px]:!p-5 flex gap-3 border">
         <img src="/images/location.svg" alt="location" height={24} />
         <div className="flex flex-col">
           <Text type="body" size="md" className="font-medium">
@@ -29,8 +35,8 @@ const Catalog = () => {
           </Text>
         </div>
       </div>
-      <div className="p-5">
-        <div className="flex pb-3 justify-between">
+      <div className="p-3 min-[350px]:!p-5">
+        <div className="flex pb-1 min-[350px]:!pb-3  justify-between">
           <Text type="body" size="lg" className="font-medium">
             Categories
           </Text>
@@ -53,7 +59,7 @@ const Catalog = () => {
             >
               <OverlayWrapperCard
                 key={index}
-                className="w-[100px] h-[92px] flex-shrink-0"
+                className=" w-[90px] h-[92px] min-[350px]:!w-[100px] flex-shrink-0"
                 imageSrc="/images/vegetables.svg"
                 title="Fruits & Vegetables"
               />
@@ -61,7 +67,7 @@ const Catalog = () => {
           ))}
         </div>
 
-        <div className="flex py-5 justify-between">
+        <div className="flex py-3 min-[350px]:!py-5 justify-between">
           <Text type="body" size="lg" className="font-medium">
             You May Like
           </Text>
@@ -82,6 +88,12 @@ const Catalog = () => {
                 imageSrc="/images/shirt.svg"
                 price={3500}
                 title="Denim T-shirt Sandstorm Color (XL)"
+                titleCn={
+                  productTemplate?.titleCn ? productTemplate.titleCn : ""
+                }
+                priceCn={
+                  productTemplate?.priceCn ? productTemplate.priceCn : ""
+                }
               />
             </div>
           ))}

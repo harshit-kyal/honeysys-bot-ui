@@ -22,7 +22,13 @@ const initialState: RootSliceType = {
   },
 
   Cart: {
-    cartTemplate: "",
+    imgBorderColor: "blue",
+    titleSize: 14,
+    titleWeight: 400,
+    quantitySize: 10,
+    quantityWeight: 400,
+    priceSize: 14,
+    priceWeight: 400,
   },
 
   Catalog: {

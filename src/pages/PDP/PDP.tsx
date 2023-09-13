@@ -71,7 +71,12 @@ const PDP = () => {
     DataCopy.pricing = pricingCopy;
     setData(DataCopy);
   };
-
+  const [radius, setRadius] = useState<any>("");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const filtersParam = searchParams.get("radius");
+    setRadius(filtersParam);
+  }, []);
   return (
     <div className="h-screen pt-[60px]">
       {/* header */}
@@ -140,6 +145,7 @@ const PDP = () => {
           >
             <ActionButton
               className="bg-primary text-white rounded-md gap-3 h-[41px]"
+              radius={radius}
               src="/images/shopping.svg"
               text={`₹ ${activePrice?.price?.toLocaleString("en-IN", {
                 minimumFractionDigits: 2,

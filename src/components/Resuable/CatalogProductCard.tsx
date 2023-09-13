@@ -8,15 +8,24 @@ interface cardProps {
   imageSrc: string;
   title: string;
   price: number;
+  titleCn: string | null;
+  priceCn: string | null;
 }
 
-const CatalogProductCard = ({ id, imageSrc, price, title }: cardProps) => {
+const CatalogProductCard = ({
+  id,
+  imageSrc,
+  price,
+  title,
+  titleCn,
+  priceCn,
+}: cardProps) => {
   const navigate = useNavigate();
   const priceCopy: string = `₹ ${price.toLocaleString("en-IN")}`;
   const likeSectionTemplate = useAppSelector(
     (state) => state.root.Catalog.likeSectionTemplate
   );
-
+  console.log("sec", priceCn);
   return (
     <div
       onClick={() => {
@@ -36,8 +45,16 @@ const CatalogProductCard = ({ id, imageSrc, price, title }: cardProps) => {
         }
         price={priceCopy}
         title={title}
-        priceCn={likeSectionTemplate.price}
-        titleCn={likeSectionTemplate.title}
+        priceCn={
+          priceCn
+            ? `${likeSectionTemplate.price} ${priceCn}`
+            : likeSectionTemplate.price
+        }
+        titleCn={
+          titleCn
+            ? `${likeSectionTemplate.title} ${titleCn}`
+            : likeSectionTemplate.title
+        }
       />
       <Divider />
     </div>
