@@ -54,6 +54,8 @@ export interface CustomButton {
 export interface HomeSliceType {
   loading: boolean;
   error: string;
+  mobileNo: string;
+  otp: number;
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;

@@ -1,23 +1,42 @@
 import { useState } from "react";
 import BackButton from "../../components/Button/BackButton";
-import { CheckBox, Text } from "@polynomialai/alpha-react";
-import Button from "../../components/Button/Button";
+import { CheckBox, Input, Text, Button } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import { botApi } from "../../api";
+import { useDispatch } from "react-redux";
+import { setMobileNo, setOtp } from "../../slices/homeSlice";
+import { useAppSelector } from "../../app/hooks";
 
 const Login = () => {
-  // const [Mobile, setMobile] = useState<string>();
+  const dispatch = useDispatch();
+  const Mobile = useAppSelector((state) => state.home.mobileNo);
   const [TnC, setTnC] = useState<boolean>(false);
+  const [Loading, setLoading] = useState<boolean>(false);
 
   const navigation = useNavigate();
   const handleGetStartedClick = () => {
-    // if (!Mobile || Mobile === "") {
-    //   alert("Enter Mobile No");
-    // } else if (!TnC) {
-    //   alert("Check Term and conditions");
-    // } else {
-    navigation("/otp");
-    // }
+    if (!Mobile || Mobile === "") {
+      alert("Enter Mobile No");
+    } else if (Mobile.length !== 10) {
+      alert("Enter Valid Mobile No");
+    } else if (!TnC) {
+      alert("Check Term and conditions");
+    } else {
+      // setLoading(true);
+      // botApi({
+      //   loginId: Mobile,
+      //   action: "login",
+      //   clientName: "honeySys",
+      // }).then((response) => {
+      //   setLoading(false);
+      //   if (response.data?.code === 200) {
+      //     dispatch(setOtp(response.data?.data?.otp));
+      //     alert(`OTP : ${response.data?.data?.otp}`);
+          navigation("/otp");
+      //   }
+      // });
+    }
   };
 
   return (
@@ -33,14 +52,24 @@ const Login = () => {
           <option className="px-2">{`+91 (IND)`}</option>
         </select>
         <input
-          type="tel"
+          type="number"
           name="phoneno"
           id="phoneno"
           placeholder="Enter your mobile number"
-          className="ml-2 sm:w-full md:w-52"
+          className="ml-2 sm:w-full md:w-52 !text-sm"
           required
-          max={10}
-          min={10}
+          value={Mobile}
+          onChange={(e) => {
+            if (Mobile.length <= 9) {
+              dispatch(setMobileNo(e.target.value));
+            }
+          }}
+          onKeyDown={(e) => {
+            if (Mobile.length === 10 && e.key === "Backspace") {
+              e.preventDefault();
+              dispatch(setMobileNo(Mobile.slice(0, -1)));
+            }
+          }}
         ></input>
       </div>
       <div className="mt-8">
@@ -70,9 +99,21 @@ const Login = () => {
       </div>
       <div className="flex justify-center mt-8 w-100">
         <Button
-          title="Send Verification Code"
-          handleClick={handleGetStartedClick}
-        />
+          isLoading={Loading}
+          onClick={handleGetStartedClick}
+          className="flex justify-center items-center !bg-primary text-background px-6 py-2 rounded-3xl min-h-[46px] min-w-[165px]"
+        >
+          <span className="text-white text-[14px] flex">
+            <span className="mt-1">Get Started</span>
+            <img
+              src="/images/arrow_circle_right.svg"
+              alt="right"
+              width={30}
+              height={30}
+              className="ml-2"
+            ></img>
+          </span>
+        </Button>
       </div>
     </div>
   );

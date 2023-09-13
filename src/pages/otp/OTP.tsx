@@ -4,12 +4,16 @@ import { Text, VerificationInput } from "@polynomialai/alpha-react";
 import "./index.css";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router";
+import { useAppSelector } from "../../app/hooks";
+import { botApi } from "../../api";
 
 const OTP = () => {
+  const Mobile = useAppSelector((state) => state.home.mobileNo);
   const [OTP, setOTP] = useState<string>("");
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(10);
   const navigate = useNavigate();
+  const CorrectOTP = useAppSelector((state) => state.home.otp);
 
   const wrongOTP = () => {
     const cssEle = document.getElementsByClassName("ring-primary-color");
@@ -57,6 +61,7 @@ const OTP = () => {
         <div className="flex justify-around otp-div">
           <VerificationInput
             inputType="number"
+            length={4}
             onChange={(e: any) => {
               setOTP(e);
             }}
@@ -72,10 +77,34 @@ const OTP = () => {
         <Button
           title="Verify & Continue"
           handleClick={() => {
-            // if (OTP !== "") {
-            localStorage.setItem("accessToken", "123");
-            navigate("/success");
+            console.log(OTP);
+            if (OTP === "") {
+              alert("Enter OTP");
+            }
+            // else if (parseInt(OTP) !== CorrectOTP) {
+            //   alert("Enter OTP is incorrect");
             // }
+            else {
+              // botApi({
+              //   loginId: Mobile,
+              //   otp: OTP,
+              //   action: "genrateAccessToken",
+              //   clientName: "honeySys",
+              // }).then((response) => {
+              //   if (response.data?.code === 200) {
+              //     console.log(response);
+              //     localStorage.setItem(
+              //       "accessToken",
+              //       response.data?.data.access_token
+              //     );
+              localStorage.setItem(
+                "accessToken",
+                "response.data?.data.access_token"
+              );
+              navigate("/success");
+              // }
+              // });
+            }
           }}
         />
       </div>

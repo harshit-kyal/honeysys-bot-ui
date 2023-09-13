@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchBot, getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { environment } from "../../environments/environment";
@@ -6,21 +6,15 @@ import { setBotInfo, setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
 import { getChatData, setChatArray, setUiUpdate } from "../../slices/homeSlice";
-const SearchBar = lazy(() => import("../../components/SearchBar"));
-const ChatWrapper = lazy(() => import("../../components/ChatWrapper"));
-const LocationPermission = lazy(
-  () => import("../../components/Modal/LocationPermission")
-);
-const DeniedModal = lazy(() => import("../../components/Modal/DeniedModal"));
-const UserMessageCard = lazy(
-  () => import("../../components/Resuable/UserMessageCard")
-);
-const GetStart = lazy(() => import("../../components/GetStart"));
-const BotMessageCard = lazy(
-  () => import("../../components/Resuable/BotMessageCard")
-);
-const FloatingButton = lazy(() => import("../../components/FloatingButton"));
-const Loading = lazy(() => import("../../components/Loading"));
+import ChatWrapper from "../../components/ChatWrapper";
+import SearchBar from "../../components/SearchBar";
+import LocationPermission from "../../components/Modal/LocationPermission";
+import DeniedModal from "../../components/Modal/DeniedModal";
+import UserMessageCard from "../../components/Resuable/UserMessageCard";
+import GetStart from "../../components/GetStart";
+import BotMessageCard from "../../components/Resuable/BotMessageCard";
+import FloatingButton from "../../components/FloatingButton";
+import Loading from "../../components/Loading";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -37,14 +31,12 @@ const Home = () => {
   const loadingDelayTimeout = useRef<number | undefined>(undefined);
 
   const showLoading = () => {
-    // Show loading after a short delay (300ms)
     loadingDelayTimeout.current = window.setTimeout(() => {
       setLoadingVisible(true);
     }, 300);
   };
 
   const hideLoading = () => {
-    // Clear any existing timeouts and hide loading
     if (loadingDelayTimeout.current) {
       clearTimeout(loadingDelayTimeout.current);
     }
@@ -52,7 +44,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // Handle loading state changes
     if (loading) {
       showLoading();
     } else {
@@ -76,8 +67,6 @@ const Home = () => {
   const replyFunction = (data: any) => {
     if (data.activities) {
       const activities: any[] = data.activities;
-      console.log("state1", ChatArray);
-      console.log("state", ChatArray, [...ChatArray, ...activities]);
       dispatch(setChatArray([...activities]));
     }
   };
@@ -147,7 +136,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log("state", ChatArray);
     ChatArray.forEach((activity: any, index: number) => {
       if (
         activity.type === "message" &&
@@ -207,15 +195,13 @@ const Home = () => {
       className="w-full bg-background text-primary text-[40px] font-bold"
       style={{ height: "calc(100vh - 125px)", marginBottom: 65 }}
     >
-      <Suspense fallback={<Loading />}>
-        <div
-          ref={scrollRef}
-          className="bg-background h-full overflow-y-auto py-5"
-        >
-          {ChatComponentArray}
-          {isLoadingVisible && <Loading />}
-        </div>
-      </Suspense>
+      <div
+        ref={scrollRef}
+        className="bg-background h-full overflow-y-auto py-5"
+      >
+        {ChatComponentArray}
+        {isLoadingVisible && <Loading />}
+      </div>
       <SearchBar
         onClick={(inputText: string) => {
           const newData = {
@@ -226,15 +212,9 @@ const Home = () => {
           dispatch(getChatData({ newData, botType }));
         }}
       />
-      <Suspense fallback={<Loading />}>
-        <LocationPermission />
-      </Suspense>
-      <Suspense fallback={<Loading />}>
-        <DeniedModal />
-      </Suspense>
-      <Suspense fallback={<Loading />}>
-        <FloatingButton />
-      </Suspense>
+      <LocationPermission />
+      <DeniedModal />
+      <FloatingButton />
     </div>
   );
 };

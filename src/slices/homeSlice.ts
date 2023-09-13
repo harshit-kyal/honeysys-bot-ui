@@ -5,6 +5,8 @@ import { getChatApi, getStoreDataApi } from "../api";
 const initialState: HomeSliceType = {
   loading: false,
   error: "",
+  mobileNo: "",
+  otp: 0,
   ChatArray: [],
   locationPermission: false,
   deniedModal: false,
@@ -46,6 +48,18 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         error: action.payload,
+      };
+    },
+    setMobileNo(state, action) {
+      return {
+        ...state,
+        mobileNo: action.payload,
+      };
+    },
+    setOtp(state, action) {
+      return {
+        ...state,
+        otp: action.payload,
       };
     },
     setChatArray(state, action) {
@@ -129,6 +143,8 @@ export const {
   resetHome,
   setLoading,
   setError,
+  setMobileNo,
+  setOtp,
   setChatArray,
   setLocationPermission,
   setLocationModal,

@@ -10,6 +10,7 @@ import OrderSummaryCard from "./Resuable/OrderSummaryCard";
 import { getStoreData } from "../slices/homeSlice";
 import { useAppDispatch } from "../app/hooks";
 import { useEffect, useState } from "react";
+import { botApi } from "../api";
 
 const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   const navigate = useNavigate();
@@ -194,7 +195,18 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                         //       console.log(result.state);
                         //     };
                         //   });
-                        dispatch(getStoreData());
+
+                        botApi({
+                          pincode: "500081",
+                          type: "location",
+                          action: "getStores",
+                          clientName: "honeySys",
+                        }).then((response) => {
+                          if (response.data?.code === 200) {
+                            console.log(response);
+                          }
+                        });
+
                         setChatArray((array: any) => [
                           ...array,
                           // Location from Map

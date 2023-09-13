@@ -6,20 +6,23 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     async (reqConfig) => {
-        const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJlM2MwYWQxYWJiMzQzYzI5MjYxMzYiLCJhcHBUeXBlIjoiU3VwZXIgQWRtaW4iLCJyb2xlSWQiOiI2MzIwNzdiZGNmZmQ3YzIxZWJlN2M4ZjAiLCJzZXNzaW9uSWQiOiJhbHBoYW51bWVyaWMiLCJ1c2VyTmFtZSI6Ikd1ZXN0IHVzZXIgIiwiaWF0IjoxNjkyNjk2NTcxLCJleHAiOjE3MjQyMzI1NzF9.O72ZRE7Aop33DgbXTyNjuEUsPf0nii6oxz7bc1mQr08';
+        const token = localStorage.getItem('token')
+        // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJlM2MwYWQxYWJiMzQzYzI5MjYxMzYiLCJhcHBUeXBlIjoiU3VwZXIgQWRtaW4iLCJyb2xlSWQiOiI2MzIwNzdiZGNmZmQ3YzIxZWJlN2M4ZjAiLCJzZXNzaW9uSWQiOiJhbHBoYW51bWVyaWMiLCJ1c2VyTmFtZSI6Ikd1ZXN0IHVzZXIgIiwiaWF0IjoxNjkyNjk2NTcxLCJleHAiOjE3MjQyMzI1NzF9.O72ZRE7Aop33DgbXTyNjuEUsPf0nii6oxz7bc1mQr08
         let headers = {
-            Authorization: `Bearer ${accessToken}`,
             "Content-Type": `application/json`,
         };
-        // if (accessToken) {
-        //     headers = 
-        // }
-        // else {
-        //     headers = {
-        //         "Content-Type": "application/json",
-        //     };
-        // }
-        return { ...reqConfig, headers };
+        if (token) {
+            headers = {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": `application/json`,
+            };
+        }
+        else {
+            headers = {
+                "Content-Type": `application/json`,
+            };
+        }
+        return { headers, ...reqConfig, };
     },
     (error) => {
         return Promise.reject(error);
