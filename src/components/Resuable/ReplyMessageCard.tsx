@@ -15,14 +15,14 @@ const ReplyMessageCard = ({
   content,
   replyArray,
 }: CardProp) => {
-  const Conversations = useAppSelector((state) => state.root.Conversations);
+  const Conversations = useAppSelector((state) => state.root.conversationUI);
 
   return (
     <RichCard
       className="w-full bg-primary text-white"
       time={currentTime()}
       content={content}
-      timeCN={`text-[${Conversations.timestampsize}px] text-white`}
+      timeCN={`font-[${Conversations.timeStampFontStyle}] text-white`}
     >
       <ReplyCard title={replyTitle} titleCN="text-primary">
         <div>

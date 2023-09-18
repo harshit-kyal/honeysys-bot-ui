@@ -4,44 +4,46 @@ export interface RootSliceType {
   loading: boolean;
   error: string;
   color: {
-    primary: string;
-    secondary: string;
-    background: string;
     error: string;
   };
-  bot: string;
-  radius: string;
-  Conversations: {
-    fontfamily: string;
-    fontstyle: string;
-    titlesize: number;
-    contentsize: number;
-    timestampsize: number;
-    greetingTemplate: string;
-  };
 
-  Cart: {
-    imgBorderColor: string;
-    titleSize: number;
-    titleWeight: number;
-    quantitySize: number;
-    quantityWeight: number;
-    priceSize: number;
-    priceWeight: number;
+  overallThemeUI: {
+    theme: [string, string, string];
+    botIcons: string;
+    actionButtonBorder: string;
   };
-
-  Catalog: {
-    categoryTemplate: string;
-    likeSectionTemplate: {
-      title: string;
-      price: string;
-      image: string;
+  conversationUI: {
+    fontFamily: string;
+    conversationFontStyle: string;
+    timeStampFontStyle: string;
+    greetingMessage: string;
+  };
+  cartUI: {
+    imageBorderColor: string;
+    titleWeight: string;
+    titleColor: string;
+    quantityWeight: string;
+    priceWeight: string;
+    priceSize: string;
+    priceColor: string;
+  };
+  CatalogUI: {
+    categoryBackDrop: string;
+    youMayLike: {
+      imageBorderColor: string;
+      titleWeight: string;
+      titleColor: string;
+      priceWeight: string;
+      priceColor: string;
     };
   };
-
-  Categories: {
-    categorySectionTemplate: string;
-    categoryLikeSectionTemplate: string;
+  CategoriesUI: {
+    quickReplyBorderRadius: string;
+    drawer: {
+      imageBorderColor: string;
+      titleWeight: string;
+      titleColor: string;
+    };
   };
 }
 

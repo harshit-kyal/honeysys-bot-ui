@@ -1,3 +1,4 @@
+import axios from "axios";
 import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
 import { encrypt } from "../services/aes";
@@ -22,6 +23,24 @@ export const botApi = async (body: any) => {
     throw error; // Rethrow the error so that the caller can handle it
   }
 };
+
+const getTheme = () => {
+  try {
+    axios
+      .post("botcyadminpanel.onrender.com/getTheme", {
+        clientName: "honeySys",
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  } catch (error: any) {
+    if (error && error.response) {
+      return { data: error.response.data };
+    }
+    throw error; // Rethrow the error so that the caller can handle it
+  }
+};
+
 export const getStoreDataApi = async () => {
   try {
     const response: any = await axiosInstance.post("/pincode/stores", {

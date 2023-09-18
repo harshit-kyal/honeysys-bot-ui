@@ -15,9 +15,15 @@ import GetStart from "../../components/GetStart";
 import BotMessageCard from "../../components/Resuable/BotMessageCard";
 import FloatingButton from "../../components/FloatingButton";
 import Loading from "../../components/Loading";
+import TimeStamp from "../../components/TimeStamp";
+import ActionButton from "../../components/Resuable/ActionButton";
+import ReplyMessageCard from "../../components/Resuable/ReplyMessageCard";
 
 const Home = () => {
   const dispatch = useAppDispatch();
+  const reviewToken = localStorage.getItem("reviewToken");
+  const greetingMessage = localStorage.getItem("greetingMessage") || "Hey";
+
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const loading = useAppSelector((state) => state.home.loading);
@@ -71,8 +77,24 @@ const Home = () => {
     }
   };
 
+  const [radius, setRadius] = useState<string | null>("");
+  const [title, setTitle] = useState<string | null>("");
+  const [theme, setTheme] = useState<any>("");
+
   useEffect(() => {
-    if (ChatComponentArray.length === 0) {
+    const searchParams = new URLSearchParams(window.location.search);
+    const filtersParam = searchParams.get("radius");
+    setRadius(filtersParam);
+    const titleData = searchParams.get("title");
+    setTitle(titleData);
+    const themeData = searchParams.get("theme");
+    setTheme(themeData);
+    // ///////////////////////
+    console.log("filtersParam", filtersParam, titleData,themeData);
+  }, [window.location.search]);
+
+  useEffect(() => {
+    if (!reviewToken && ChatComponentArray.length === 0) {
       setChatComponentArray([
         ...ChatComponentArray,
         <GetStart
@@ -80,8 +102,38 @@ const Home = () => {
           key={new Date().getTime()}
         />,
       ]);
+    } else {
+      setChatComponentArray([
+        <TimeStamp date={new Date().toISOString()} />,
+        <ChatWrapper type="bot">
+          <div className="flex flex-col chatWrapper">
+            <BotMessageCard
+              contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
+              imageSrc="/images/greeting.svg"
+              title={title ? title : greetingMessage}
+            />
+            <ActionButton
+              src="/images/widgets.svg"
+              text="Get Started"
+              radius={radius}
+              onClick={() => {}}
+            />
+          </div>
+        </ChatWrapper>,
+        <ChatWrapper type="user">
+          <div className="chatWrapper">
+            <ReplyMessageCard
+              content="Get Started"
+              replyArray={[
+                "Greetings!",
+                "I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform.",
+              ]}
+            ></ReplyMessageCard>
+          </div>
+        </ChatWrapper>,
+      ]);
     }
-    if (botType === "") {
+    if (!reviewToken && botType === "") {
       fetchBot(environment.botType)
         .then((data) => {
           dispatch(setBotInfo(data.data.data[0]));
@@ -193,14 +245,14 @@ const Home = () => {
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
-      style={{ height: "calc(100vh - 125px)", marginBottom: 65 }}
+      style={{ height: "calc(100vh - 118px)", marginBottom: 65 }}
     >
       <div
         ref={scrollRef}
         className="bg-background h-full overflow-y-auto py-5"
       >
         {ChatComponentArray}
-        {isLoadingVisible && <Loading />}
+        {isLoadingVisible && !reviewToken && <Loading />}
       </div>
       <SearchBar
         onClick={(inputText: string) => {

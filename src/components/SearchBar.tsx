@@ -4,6 +4,7 @@ import { useAppSelector } from "../app/hooks";
 const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
   const [inputText, setinputText] = useState<string>("");
   const loading = useAppSelector((state) => state.home.loading);
+  const reviewToken = localStorage.getItem("reviewToken");
 
   return (
     <div className="fixed bottom-0 left-0">
@@ -14,6 +15,7 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
         }}
       >
         <input
+          disabled={reviewToken ? true : false}
           id="search"
           type="text"
           value={inputText}

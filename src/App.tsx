@@ -5,70 +5,148 @@ import { useAppSelector } from "./app/hooks";
 
 function App() {
   const color = useAppSelector((state) => state.root.color);
-  const radius = useAppSelector((state) => state.root.radius);
-  const Catalog = useAppSelector((state) => state.root.Catalog);
-  const Cart = useAppSelector((state) => state.root.Cart);
+  const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
+  const conversationUI = useAppSelector((state) => state.root.conversationUI);
+  const cartUI = useAppSelector((state) => state.root.cartUI);
+  const CatalogUI = useAppSelector((state) => state.root.CatalogUI);
+  const CategoriesUI = useAppSelector((state) => state.root.CategoriesUI);
 
   const searchParams = new URLSearchParams(window.location.search);
   const cartTemplate = searchParams.get("cartTemplate");
 
   console.log("cartTemplate", cartTemplate);
   useEffect(() => {
-    document.documentElement.style.setProperty("--primary", color.primary);
-    document.documentElement.style.setProperty("--secondary", color.secondary);
-    document.documentElement.style.setProperty(
-      "--background",
-      color.background
-    );
+    // error color
     document.documentElement.style.setProperty("--error", color.error);
-    document.documentElement.style.setProperty("--radius", radius);
+
+    // overallThemeUI
+    // document.documentElement.style.setProperty(
+    //   "--primary",
+    //   overallThemeUI.theme[0]
+    // );
+    // document.documentElement.style.setProperty(
+    //   "--secondary",
+    //   overallThemeUI.theme[1]
+    // );
+    // document.documentElement.style.setProperty(
+    //   "--background",
+    //   overallThemeUI.theme[2]
+    // );
     document.documentElement.style.setProperty(
-      "--shadow",
-      Catalog.categoryTemplate
+      "--botIcons",
+      overallThemeUI.botIcons
     );
+    localStorage.setItem("botIcons", overallThemeUI.botIcons);
+    document.documentElement.style.setProperty(
+      "--actionButtonBorder",
+      overallThemeUI.actionButtonBorder
+    );
+
+    // conversationUI
+    document.documentElement.style.setProperty(
+      "--fontFamily",
+      conversationUI.fontFamily
+    );
+    document.documentElement.style.setProperty(
+      "--conversationFontStyle",
+      conversationUI.conversationFontStyle
+    );
+    document.documentElement.style.setProperty(
+      "--timeStampFontStyle",
+      conversationUI.timeStampFontStyle
+    );
+    document.documentElement.style.setProperty(
+      "--greetingMessage",
+      conversationUI.greetingMessage
+    );
+    localStorage.setItem("greetingMessage", conversationUI.greetingMessage);
 
     // Cart
     document.documentElement.style.setProperty(
-      "--cartImgBorderColor",
-      Cart.imgBorderColor
-    );
-    document.documentElement.style.setProperty(
-      "--cartTitleSize",
-      Cart.titleSize.toString() + "px"
-    );
-    document.documentElement.style.setProperty(
-      "--cartTitleSmallSize",
-      (Cart.titleSize - 2).toString() + "px"
+      "--cartImageBorderColor",
+      cartUI.imageBorderColor
     );
     document.documentElement.style.setProperty(
       "--cartTitleWeight",
-      Cart.titleWeight.toString()
+      cartUI.titleWeight
     );
     document.documentElement.style.setProperty(
-      "--cartQuantitySize",
-      Cart.quantitySize.toString() + "px"
-    );
-    document.documentElement.style.setProperty(
-      "--cartQuantitySmallSize",
-      (Cart.quantitySize - 2).toString() + "px"
+      "--cartTitleColor",
+      cartUI.titleColor
     );
     document.documentElement.style.setProperty(
       "--cartQuantityWeight",
-      Cart.quantityWeight.toString()
-    );
-    document.documentElement.style.setProperty(
-      "--cartPriceSize",
-      Cart.priceSize.toString() + "px"
-    );
-    document.documentElement.style.setProperty(
-      "--cartPriceSmallSize",
-      (Cart.priceSize - 2).toString() + "px"
+      cartUI.quantityWeight
     );
     document.documentElement.style.setProperty(
       "--cartPriceWeight",
-      Cart.priceWeight.toString()
+      cartUI.priceWeight
     );
-  }, []);
+    document.documentElement.style.setProperty(
+      "--cartPriceColor",
+      cartUI.priceColor
+    );
+    document.documentElement.style.setProperty(
+      "--cartPriceSmallSize",
+      (parseInt(cartUI.priceSize) - 2).toString() + "px"
+    );
+    document.documentElement.style.setProperty(
+      "--cartPriceSize",
+      cartUI.priceSize
+    );
+
+    // Catalog
+    document.documentElement.style.setProperty(
+      "--categoryBackDrop",
+      CatalogUI.categoryBackDrop
+    );
+    document.documentElement.style.setProperty(
+      "--catalogImageBorderColor",
+      CatalogUI.youMayLike.imageBorderColor
+    );
+    document.documentElement.style.setProperty(
+      "--catalogPriceWeight",
+      CatalogUI.youMayLike.priceWeight
+    );
+    document.documentElement.style.setProperty(
+      "--catalogPriceColor",
+      CatalogUI.youMayLike.priceColor
+    );
+    document.documentElement.style.setProperty(
+      "--catalogTitleWeight",
+      CatalogUI.youMayLike.titleWeight
+    );
+    document.documentElement.style.setProperty(
+      "--catalogTitleColor",
+      CatalogUI.youMayLike.titleColor
+    );
+
+    // Categories
+    document.documentElement.style.setProperty(
+      "--quickReplyBorderRadius",
+      CategoriesUI.quickReplyBorderRadius
+    );
+    document.documentElement.style.setProperty(
+      "--categoriesImageBorderColor",
+      CategoriesUI.drawer.imageBorderColor
+    );
+    document.documentElement.style.setProperty(
+      "--categoriesTitleWeight",
+      CategoriesUI.drawer.titleWeight
+    );
+    document.documentElement.style.setProperty(
+      "--categoriesTitleColor",
+      CategoriesUI.drawer.titleColor
+    );
+  }, [overallThemeUI, conversationUI, cartUI, CatalogUI, CategoriesUI]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const reviewToken = searchParams.get("token");
+    console.log(reviewToken,window.location.href)
+    reviewToken && localStorage.setItem("reviewToken", reviewToken);
+  }, [window.location.search]);
+
   return <Routing />;
 }
 

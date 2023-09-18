@@ -4,10 +4,13 @@ import { Text, VerificationInput } from "@polynomialai/alpha-react";
 import "./index.css";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { botApi } from "../../api";
+import { setTheme } from "../../slices/rootSlice";
 
 const OTP = () => {
+  const dispatch = useAppDispatch();
+
   const Mobile = useAppSelector((state) => state.home.mobileNo);
   const [OTP, setOTP] = useState<string>("");
   const [minutes, setMinutes] = useState<number>(0);
@@ -80,30 +83,26 @@ const OTP = () => {
             console.log(OTP);
             if (OTP === "") {
               alert("Enter OTP");
-            }
-            // else if (parseInt(OTP) !== CorrectOTP) {
-            //   alert("Enter OTP is incorrect");
-            // }
-            else {
-              // botApi({
-              //   loginId: Mobile,
-              //   otp: OTP,
-              //   action: "genrateAccessToken",
-              //   clientName: "honeySys",
-              // }).then((response) => {
-              //   if (response.data?.code === 200) {
-              //     console.log(response);
-              //     localStorage.setItem(
-              //       "accessToken",
-              //       response.data?.data.access_token
-              //     );
-              localStorage.setItem(
-                "accessToken",
-                "response.data?.data.access_token"
-              );
-              navigate("/success");
-              // }
-              // });
+            } else if (parseInt(OTP) !== CorrectOTP) {
+              alert("Enter OTP is incorrect");
+            } else {
+              botApi({
+                loginId: Mobile,
+                otp: OTP,
+                action: "genrateAccessToken",
+                clientName: "honeySys",
+              }).then((response) => {
+                if (response.data?.code === 200) {
+                  console.log(response);
+                  localStorage.setItem(
+                    "accessToken",
+                    response.data?.data.access_token
+                  );
+                  // response.data.data.customiseUI
+                  dispatch(setTheme(response.data.data.customiseUI));
+                  navigate("/success");
+                }
+              });
             }
           }}
         />

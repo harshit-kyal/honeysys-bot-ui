@@ -110,7 +110,9 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
     const titleData = searchParams.get("title");
     setTitle(titleData);
   }, [window.location.search]);
-  
+
+  const greetingMessage = localStorage.getItem("greetingMessage") || "Hey";
+
   return (
     <>
       <TimeStamp date={new Date().toISOString()} />
@@ -119,7 +121,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
           <BotMessageCard
             contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
             imageSrc="/images/greeting.svg"
-            title={title ? title : "👋 Greetings!"}
+            title={title ? title : greetingMessage}
           />
           <ActionButton
             src="/images/widgets.svg"
@@ -283,15 +285,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                 imageSrc="/images/vegetables.svg"
                                 price={3500}
                                 items={6}
-                              />
-                              <ActionButton
-                                src=""
-                                text="View Sent Cart"
-                                className="bg-primary text-white"
-                                radius={radius}
-                                onClick={() => {
-                                  navigate("/cart");
-                                }}
                               />
                             </div>
                           </ChatWrapper>,

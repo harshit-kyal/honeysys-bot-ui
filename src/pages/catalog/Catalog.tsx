@@ -14,6 +14,7 @@ const Catalog = () => {
     const params: any = searchParams.get("productTemplate");
     setProductTemplate(JSON.parse(decodeURIComponent(params)));
   }, [window.location.search]);
+
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Catalog" />
@@ -45,7 +46,13 @@ const Catalog = () => {
             size="md"
             className="font-normal text-primary underline"
           >
-            View all
+            <span
+              onClick={() => {
+                navigate(`/categories/1`);
+              }}
+            >
+              View all
+            </span>
           </Text>
         </div>
 

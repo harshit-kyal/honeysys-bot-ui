@@ -93,7 +93,7 @@ const Cart = () => {
               {cartList.itemList.map((items: any, index: number) => (
                 <CartCard
                   key={index}
-                  className=""
+                  className="text-"
                   image={
                     <img
                       src={items.imageSrc}
@@ -111,12 +111,13 @@ const Cart = () => {
                   titleCn={
                     cardData?.titleCn
                       ? `${cardData.titleCn} text-[12px]`
-                      : "!font-cartTitleWeight text-[#505050] !text-cartTitleSmallSize  min-[330px]:!text-cartTitleSize"
+                      : "!font-cartTitleWeight !text-cartTitleColor"
                   }
                   priceCn={
                     cardData?.priceCn
                       ? cardData.priceCn
-                      : "!font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
+                      : "!text-cartPriceColor !font-cartPriceWeight"
+                      // : "!text-cartPriceColor !font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
                   }
                   quantityCn={
                     cardData?.quantityCn

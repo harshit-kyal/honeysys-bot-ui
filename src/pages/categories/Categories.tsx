@@ -18,6 +18,7 @@ const Categories = () => {
     const productParams: any = searchParams.get("productViewTemplate");
     setProductViewTemplate(JSON.parse(decodeURIComponent(productParams)));
   }, [window.location.search]);
+
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Categories" />
@@ -42,22 +43,27 @@ const Categories = () => {
           <ProductDropDown
             key={index}
             buttonCN="w-[100%]"
-            buttonTextCN={productViewTemplate?.titleCn}
+            buttonTextCN={
+              productViewTemplate?.titleCn
+                ? productViewTemplate?.titleCn
+                : "!font-categoriesTitleWeight text-categoriesTitleColor"
+            }
             displayItem={{
               image: (
                 <img
                   src={item.imageSrc}
-                  className="h-[60px] w-[60px] rounded-md"
+                  className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
                   alt=""
                 />
               ),
               title: item.title,
             }}
+            optionTextCN="!font-categoriesTitleWeight text-categoriesTitleColor"
             options={item.products.map((i: any, index: number) => ({
               image: (
                 <img
                   src={item.imageSrc}
-                  className="h-[60px] w-[60px] rounded-md"
+                  className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
                   alt=""
                 />
               ),

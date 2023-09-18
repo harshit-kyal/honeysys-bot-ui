@@ -1,5 +1,4 @@
 import { RichCard, Text } from "@polynomialai/alpha-react";
-import { useAppSelector } from "../../app/hooks";
 import { currentTime } from "../TimeStamp";
 
 interface CardProp {
@@ -17,8 +16,7 @@ const BotMessageCard = ({
   title,
   contentArray,
 }: CardProp) => {
-  const bot = useAppSelector((state) => state.root.bot);
-  const Conversations = useAppSelector((state) => state.root.Conversations);
+  const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
 
   if (imageSrc) {
     return (
@@ -27,12 +25,12 @@ const BotMessageCard = ({
         title={title}
         logo={<img src={bot} alt="" />}
         time={currentTime()}
-        titleCN="text-[#09215B] text-sm"
-        timeCN={`text-[${Conversations.timestampsize}px]`}
+        titleCN="text-primary text-sm"
+        timeCN="!font-timeStampFontStyle"
       >
         <div className="my-2">
           {contentArray && typeof contentArray === "string" ? (
-            <Text type="body" size="md" className="font-normal mb-1">
+            <Text type="body" size="md" className="font-conversationFontStyle text-black mb-1">
               {contentArray}
             </Text>
           ) : Array.isArray(contentArray) ? (
@@ -41,7 +39,7 @@ const BotMessageCard = ({
                 key={index}
                 type="body"
                 size="md"
-                className="font-normal mb-1"
+                className="font-conversationFontStyle text-black mb-1"
               >
                 {item}
               </Text>
@@ -56,8 +54,8 @@ const BotMessageCard = ({
     <RichCard
       title={title}
       time={currentTime()}
-      titleCN="text-[#09215B] text-sm"
-      timeCN={`text-[${Conversations.timestampsize}px]`}
+      titleCN="text-primary text-sm"
+      timeCN="font-timeStampFontStyle"
     >
       <div className="my-2">
         {contentArray && typeof contentArray === "string" ? (

@@ -8,7 +8,7 @@ interface CardProp {
 }
 
 const UserMessageCard = ({ time, content }: CardProp) => {
-  const Conversations = useAppSelector((state) => state.root.Conversations);
+  const Conversations = useAppSelector((state) => state.root.conversationUI);
 
   return (
     <RichCard
@@ -16,7 +16,7 @@ const UserMessageCard = ({ time, content }: CardProp) => {
       time={currentTime()}
       content={content}
       contentCN="text-sm mb-2"
-      timeCN={`text-white text-[${Conversations.timestampsize}px]`}
+      timeCN={`text-white font-[${Conversations.timeStampFontStyle}px]`}
     />
   );
 };

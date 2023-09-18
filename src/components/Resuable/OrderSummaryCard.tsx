@@ -23,6 +23,7 @@ const OrderSummaryCard = ({
     const borderRadius = searchParams.get("radius");
     setRadius(borderRadius);
   }, []);
+
   const ThankYouCard = () => (
     <ChatWrapper type="bot">
       <div className="flex flex-col max-w-[80%] sm:w-[50%] md:w-[40%]">

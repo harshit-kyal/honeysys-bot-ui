@@ -4,6 +4,9 @@ import HeaderBar from "../components/header/Header";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("accessToken");
+  const reviewToken = localStorage.getItem("reviewToken");
+  console.log(reviewToken);
+
   const [isHeader, setIsHeader] = useState<boolean>(false);
   const location = useLocation();
 
@@ -13,15 +16,18 @@ const ProtectedRoute = () => {
     } else {
       setIsHeader(false);
     }
-  }, [location.pathname]);
+  }, [location.pathname, localStorage.getItem("reviewToken")]);
 
-  return token ? (
+  return token || reviewToken ? (
     <div className="">
       {isHeader && <HeaderBar />}
       <Outlet />
     </div>
-  ) : (
+  ) : !reviewToken ? (
     <Navigate to="/splash" />
+    // <></>
+  ) : (
+    <></>
   );
 };
 

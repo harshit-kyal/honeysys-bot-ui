@@ -5,45 +5,47 @@ const initialState: RootSliceType = {
   loading: false,
   error: "",
   color: {
-    primary: "#09215B",
-    secondary: "#0D1282",
-    background: "#FFFFFF",
     error: "#C25E5E",
   },
-  bot: "/images/chat_logo.svg",
-  radius: "4px",
-  Conversations: {
-    fontfamily: "poppins",
-    fontstyle: "meduim",
-    titlesize: 14,
-    contentsize: 14,
-    timestampsize: 12,
-    greetingTemplate: "",
+  overallThemeUI: {
+    theme: ["#09215B", "#0D1282", "#FFFFFF"],
+    // theme: ["#00C9A7", "#128C7E", "#FFFFFF"],
+    botIcons:
+      "https://res.cloudinary.com/dqbub4vtj/image/upload/v1694763084/y1ty56zfgvzy5oiypzn2.png",
+    actionButtonBorder: "4px",
   },
-
-  Cart: {
-    imgBorderColor: "blue",
-    titleSize: 14,
-    titleWeight: 400,
-    quantitySize: 10,
-    quantityWeight: 400,
-    priceSize: 14,
-    priceWeight: 400,
+  conversationUI: {
+    fontFamily: "poppins",
+    conversationFontStyle: "400",
+    timeStampFontStyle: "500",
+    greetingMessage: "👋 Greetings!",
   },
-
-  Catalog: {
-    categoryTemplate:
-      "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%)",
-    likeSectionTemplate: {
-      title: "",
-      price: "",
-      image: "",
+  cartUI: {
+    imageBorderColor: "#E6E6E6",
+    titleWeight: "500",
+    titleColor: "#000",
+    quantityWeight: "500",
+    priceWeight: "500",
+    priceSize: "12px",
+    priceColor: "#000000",
+  },
+  CatalogUI: {
+    categoryBackDrop: "linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 126%)",
+    youMayLike: {
+      imageBorderColor: "none",
+      titleWeight: "500",
+      titleColor: "#000",
+      priceWeight: "500",
+      priceColor: "#505050",
     },
   },
-
-  Categories: {
-    categorySectionTemplate: "rounded-full",
-    categoryLikeSectionTemplate: "",
+  CategoriesUI: {
+    quickReplyBorderRadius: "1000px",
+    drawer: {
+      imageBorderColor: "#E6E6E6",
+      titleWeight: "500",
+      titleColor: "#000",
+    },
   },
 };
 
@@ -68,7 +70,7 @@ export const RootSlice = createSlice({
   name: "root",
   initialState,
   reducers: {
-    resetRoom: () => initialState,
+    resetRoot: () => initialState,
     setLoading(state, action) {
       return {
         ...state,
@@ -79,6 +81,26 @@ export const RootSlice = createSlice({
       return {
         ...state,
         error: action.payload,
+      };
+    },
+    setTheme(state, action) {
+      return {
+        ...state,
+        overallThemeUI: action.payload.overallThemeUI,
+        conversationUI: action.payload.conversationUI,
+        cartUI: action.payload.cartUI,
+        CatalogUI: action.payload.CatalogUI,
+        CategoriesUI: action.payload.CategoriesUI,
+      };
+    },
+    setThemeColor(state, action) {
+      return {
+        ...state,
+        overallThemeUI: action.payload.overallThemeUI,
+        conversationUI: action.payload.conversationUI,
+        cartUI: action.payload.cartUI,
+        CatalogUI: action.payload.CatalogUI,
+        CategoriesUI: action.payload.CategoriesUI,
       };
     },
   },
@@ -100,5 +122,6 @@ export const RootSlice = createSlice({
   },
 });
 
-export const { resetRoom, setLoading, setError } = RootSlice.actions;
+export const { resetRoot, setLoading, setError, setTheme, setThemeColor } =
+  RootSlice.actions;
 export default RootSlice.reducer;

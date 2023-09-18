@@ -23,19 +23,20 @@ const Login = () => {
     } else if (!TnC) {
       alert("Check Term and conditions");
     } else {
-      // setLoading(true);
-      // botApi({
-      //   loginId: Mobile,
-      //   action: "login",
-      //   clientName: "honeySys",
-      // }).then((response) => {
-      //   setLoading(false);
-      //   if (response.data?.code === 200) {
-      //     dispatch(setOtp(response.data?.data?.otp));
-      //     alert(`OTP : ${response.data?.data?.otp}`);
+      setLoading(true);
+      botApi({
+        loginId: Mobile,
+        action: "login",
+        clientName: "honeySys",
+      }).then((response) => {
+        console.log(response)
+        setLoading(false);
+        if (response.data?.code === 200) {
+          dispatch(setOtp(response.data?.data?.otp));
+          alert(`OTP : ${response.data?.data?.otp}`);
           navigation("/otp");
-      //   }
-      // });
+        }
+      });
     }
   };
 

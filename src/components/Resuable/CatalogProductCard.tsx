@@ -22,10 +22,9 @@ const CatalogProductCard = ({
 }: cardProps) => {
   const navigate = useNavigate();
   const priceCopy: string = `₹ ${price.toLocaleString("en-IN")}`;
-  const likeSectionTemplate = useAppSelector(
-    (state) => state.root.Catalog.likeSectionTemplate
-  );
-  console.log("sec", priceCn);
+  // const likeSectionTemplate = useAppSelector(
+  //   (state) => state.root.CatalogUI.youmayLike
+  // );
   return (
     <div
       onClick={() => {
@@ -33,8 +32,13 @@ const CatalogProductCard = ({
       }}
     >
       <ProductCard
+      className="mb-2"
         image={
-          <img src={imageSrc} className={likeSectionTemplate.image} alt="" />
+          <img
+            src={imageSrc}
+            className="border border-catalogImageBorderColor"
+            alt=""
+          />
         }
         addBtn={
           <PlusButton
@@ -47,13 +51,13 @@ const CatalogProductCard = ({
         title={title}
         priceCn={
           priceCn
-            ? `${likeSectionTemplate.price} ${priceCn}`
-            : likeSectionTemplate.price
+            ? `!font-catalogPriceWeight !text-catalogPriceColor ${priceCn}`
+            : `!font-catalogPriceWeight !text-catalogPriceColor`
         }
         titleCn={
           titleCn
-            ? `${likeSectionTemplate.title} ${titleCn}`
-            : likeSectionTemplate.title
+            ? `!font-catalogTitleWeight !text-catalogTitleColor ${titleCn}`
+            : `!font-catalogTitleWeight !text-catalogTitleColor`
         }
       />
       <Divider />

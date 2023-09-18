@@ -1,15 +1,16 @@
 import { Header, Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { resetRoom } from "../../slices/rootSlice";
+import { resetRoot } from "../../slices/rootSlice";
 import { resetHome } from "../../slices/homeSlice";
 import { resetBot } from "../../slices/botSlice";
 import "../../styles/header.css";
 
 const HeaderBar = () => {
   const dispatch = useAppDispatch();
-  const bot = useAppSelector((state) => state.root.bot);
+  const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
   const navigate = useNavigate();
+  const reviewToken = localStorage.getItem("reviewToken");
 
   const hadnleNavigation = (route: string) => {
     navigate(route);
@@ -42,7 +43,7 @@ const HeaderBar = () => {
             alt="search"
             className="header-btn "
             onClick={async () => {
-              hadnleNavigation("/search");
+              !reviewToken && hadnleNavigation("/search");
             }}
           />
           <img
@@ -50,7 +51,7 @@ const HeaderBar = () => {
             alt="shopping"
             className="header-btn"
             onClick={() => {
-              hadnleNavigation("/cart");
+              !reviewToken && hadnleNavigation("/cart");
             }}
           />
           <img
@@ -58,11 +59,13 @@ const HeaderBar = () => {
             alt="logout"
             className="header-btn-logout "
             onClick={() => {
-              localStorage.clear();
-              dispatch(resetHome());
-              dispatch(resetBot());
-              dispatch(resetRoom());
-              hadnleNavigation("/splash");
+              if (!reviewToken) {
+                localStorage.clear();
+                dispatch(resetHome());
+                dispatch(resetBot());
+                dispatch(resetRoot());
+                hadnleNavigation("/splash");
+              }
             }}
           />
         </div>
