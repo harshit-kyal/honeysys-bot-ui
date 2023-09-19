@@ -2,6 +2,7 @@ import axios from "axios";
 import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
 import { encrypt } from "../services/aes";
+import { setTheme } from "../slices/rootSlice";
 
 export const botApi = async (body: any) => {
   const accessToken =
@@ -24,15 +25,21 @@ export const botApi = async (body: any) => {
   }
 };
 
-const getTheme = () => {
+export const getTheme = async () => {
   try {
-    axios
-      .post("botcyadminpanel.onrender.com/getTheme", {
+    const response = await axios
+      .post("https://botcyadminpanel.onrender.com/getTheme", {
         clientName: "honeySys",
       })
       .then((response) => {
-        console.log(response);
+        console.log("pooji", response.data.data);
+        return response?.data?.data;
+      })
+      .catch((error) => {
+        if (error && error?.response) {
+        }
       });
+    return response;
   } catch (error: any) {
     if (error && error.response) {
       return { data: error.response.data };

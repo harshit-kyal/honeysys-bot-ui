@@ -1,4 +1,7 @@
-import { useAppSelector } from "../app/hooks";
+import { getTheme } from "../api";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { setUiUpdate } from "../slices/homeSlice";
+import { setTheme } from "../slices/rootSlice";
 
 const FloatingButton = () => {
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
@@ -32,12 +35,30 @@ const FloatingButton = () => {
   document.body.addEventListener("dragover", drag_over, false);
   document.body.addEventListener("drop", drop, false);
 
+  const dispatch = useAppDispatch();
+
+  const updateUI = () => {
+    getTheme().then((response) => {
+      dispatch(
+        setTheme({
+          overallThemeUI: response.overallThemeUI,
+          conversationUI: response.conversationUI,
+          cartUI: response.cartUI,
+          CatalogUI: response.CatalogUI,
+          CategoriesUI: response.CategoriesUI,
+        })
+      );
+      dispatch(setUiUpdate(false));
+    });
+  };
+
   return (
     <div
       className="absolute right-[2.5px] bottom-[70px] bg-primary rounded-full flex justify-center items-center"
       draggable="true"
       id="dragme"
       style={{ display: UiUpdate ? "block" : "none" }}
+      onClick={updateUI}
     >
       <img
         src="/images/refresh-arrow-white.png"

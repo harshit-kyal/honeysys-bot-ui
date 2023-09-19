@@ -42,7 +42,6 @@ const CartReplyCard = ({ imageSrc = "", time, items, price }: CardProp) => {
         src=""
         text="View Sent Cart"
         className="bg-primary text-white"
-        radius={null}
         onClick={() => {
           navigate("/cart");
         }}

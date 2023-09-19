@@ -20,18 +20,18 @@ function App() {
     document.documentElement.style.setProperty("--error", color.error);
 
     // overallThemeUI
-    // document.documentElement.style.setProperty(
-    //   "--primary",
-    //   overallThemeUI.theme[0]
-    // );
-    // document.documentElement.style.setProperty(
-    //   "--secondary",
-    //   overallThemeUI.theme[1]
-    // );
-    // document.documentElement.style.setProperty(
-    //   "--background",
-    //   overallThemeUI.theme[2]
-    // );
+    document.documentElement.style.setProperty(
+      "--primary",
+      overallThemeUI.theme[0]
+    );
+    document.documentElement.style.setProperty(
+      "--secondary",
+      overallThemeUI.theme[1]
+    );
+    document.documentElement.style.setProperty(
+      "--background",
+      overallThemeUI.theme[2]
+    );
     document.documentElement.style.setProperty(
       "--botIcons",
       overallThemeUI.botIcons

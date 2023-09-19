@@ -1,5 +1,6 @@
 import { RichCard, Text } from "@polynomialai/alpha-react";
 import { currentTime } from "../TimeStamp";
+import { useEffect } from "react";
 
 interface CardProp {
   children?: JSX.Element;
@@ -26,11 +27,16 @@ const BotMessageCard = ({
         logo={<img src={bot} alt="" />}
         time={currentTime()}
         titleCN="text-primary text-sm"
-        timeCN="!font-timeStampFontStyle"
+        contentCN={"!font-conversationFontStyle"}
+        timeCN={"!font-timeStampFontStyle"}
       >
         <div className="my-2">
           {contentArray && typeof contentArray === "string" ? (
-            <Text type="body" size="md" className="font-conversationFontStyle text-black mb-1">
+            <Text
+              type="body"
+              size="md"
+              className="font-conversationFontStyle text-black mb-1"
+            >
               {contentArray}
             </Text>
           ) : Array.isArray(contentArray) ? (
@@ -55,7 +61,8 @@ const BotMessageCard = ({
       title={title}
       time={currentTime()}
       titleCN="text-primary text-sm"
-      timeCN="font-timeStampFontStyle"
+      contentCN={"!font-conversationFontStyle"}
+      timeCN={"!font-timeStampFontStyle"}
     >
       <div className="my-2">
         {contentArray && typeof contentArray === "string" ? (

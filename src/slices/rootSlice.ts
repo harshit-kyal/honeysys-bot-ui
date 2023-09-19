@@ -96,11 +96,31 @@ export const RootSlice = createSlice({
     setThemeColor(state, action) {
       return {
         ...state,
-        overallThemeUI: action.payload.overallThemeUI,
-        conversationUI: action.payload.conversationUI,
-        cartUI: action.payload.cartUI,
-        CatalogUI: action.payload.CatalogUI,
-        CategoriesUI: action.payload.CategoriesUI,
+        overallThemeUI: action.payload,
+      };
+    },
+    setConversationUI(state, action) {
+      return {
+        ...state,
+        conversationUI: action.payload,
+      };
+    },
+    setCartUI(state, action) {
+      return {
+        ...state,
+        cartUI: action.payload,
+      };
+    },
+    setCatalogUI(state, action) {
+      return {
+        ...state,
+        CatalogUI: action.payload,
+      };
+    },
+    setCategoriesUI(state, action) {
+      return {
+        ...state,
+        CategoriesUI: action.payload,
       };
     },
   },
@@ -122,6 +142,15 @@ export const RootSlice = createSlice({
   },
 });
 
-export const { resetRoot, setLoading, setError, setTheme, setThemeColor } =
-  RootSlice.actions;
+export const {
+  resetRoot,
+  setLoading,
+  setError,
+  setTheme,
+  setThemeColor,
+  setConversationUI,
+  setCartUI,
+  setCatalogUI,
+  setCategoriesUI,
+} = RootSlice.actions;
 export default RootSlice.reducer;

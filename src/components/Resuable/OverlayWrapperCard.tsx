@@ -19,11 +19,13 @@ const OverlayWrapperCard = ({
   overlay,
 }: CardProps) => {
   const Catalog = useAppSelector((state) => state.root.CatalogUI);
-
+  console.log("Catalog.categoryBackDrop", Catalog.categoryBackDrop);
   return (
     <OverlayCard
       className={className}
-      image={<img src={imageSrc} alt="" className="w-full h-full object-contain" />}
+      image={
+        <img src={imageSrc} alt="" className="w-full h-full object-contain" />
+      }
       overlay={overlay ? overlay : Catalog.categoryBackDrop}
       titleCn={title ? "justify-end" : ""}
     >

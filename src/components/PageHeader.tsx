@@ -13,13 +13,16 @@ const PageHeader = ({
   const hadnleNavigation = (route: string) => {
     navigate(route);
   };
+  const reviewToken = localStorage.getItem("reviewToken");
   return (
     <div className="fixed top-0 w-full z-50">
       <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[10px]">
         <div
           className="flex"
           onClick={() => {
-            navigate(-1);
+            if (!reviewToken) {
+              navigate(-1);
+            }
           }}
         >
           <img src="/images/white_back.svg" alt="back" height={24} width={24} />

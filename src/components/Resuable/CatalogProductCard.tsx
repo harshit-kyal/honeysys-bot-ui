@@ -8,8 +8,8 @@ interface cardProps {
   imageSrc: string;
   title: string;
   price: number;
-  titleCn: string | null;
-  priceCn: string | null;
+  // titleCn: string | null;
+  // priceCn: string | null;
 }
 
 const CatalogProductCard = ({
@@ -17,8 +17,8 @@ const CatalogProductCard = ({
   imageSrc,
   price,
   title,
-  titleCn,
-  priceCn,
+  // titleCn,
+  // priceCn,
 }: cardProps) => {
   const navigate = useNavigate();
   const priceCopy: string = `₹ ${price.toLocaleString("en-IN")}`;
@@ -49,15 +49,9 @@ const CatalogProductCard = ({
         }
         price={priceCopy}
         title={title}
-        priceCn={
-          priceCn
-            ? `!font-catalogPriceWeight !text-catalogPriceColor ${priceCn}`
-            : `!font-catalogPriceWeight !text-catalogPriceColor`
+        priceCn={ `!font-catalogPriceWeight !text-catalogPriceColor`
         }
-        titleCn={
-          titleCn
-            ? `!font-catalogTitleWeight !text-catalogTitleColor ${titleCn}`
-            : `!font-catalogTitleWeight !text-catalogTitleColor`
+        titleCn={ `!font-catalogTitleWeight !text-catalogTitleColor`
         }
       />
       <Divider />

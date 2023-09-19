@@ -18,7 +18,8 @@ import Loading from "../../components/Loading";
 import TimeStamp from "../../components/TimeStamp";
 import ActionButton from "../../components/Resuable/ActionButton";
 import ReplyMessageCard from "../../components/Resuable/ReplyMessageCard";
-
+import { setConversationUI, setThemeColor } from "../../slices/rootSlice";
+import { getTheme } from "../../api";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -69,30 +70,49 @@ const Home = () => {
   const setArray = (component: JSX.Element) => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
-
+  const [pc, setpc] = useState(false);
   const replyFunction = (data: any) => {
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(setChatArray([...activities]));
     }
   };
-
-  const [radius, setRadius] = useState<string | null>("");
-  const [title, setTitle] = useState<string | null>("");
-  const [theme, setTheme] = useState<any>("");
-
+  const [botIcon, setbotIcon] = useState("");
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const filtersParam = searchParams.get("radius");
-    setRadius(filtersParam);
+    const radiusParam = searchParams.get("radius");
     const titleData = searchParams.get("title");
-    setTitle(titleData);
-    const themeData = searchParams.get("theme");
-    setTheme(themeData);
-    // ///////////////////////
-    console.log("filtersParam", filtersParam, titleData,themeData);
+    // const botIconParams: any = searchParams.get("botPicture");
+    // setbotIcon(JSON.parse(botIconParams));
+    const timeStampFontStyleParams: any =
+      searchParams.get("timeStampFontStyle");
+    const conversationFontStyleParams: any = searchParams.get(
+      "conversationFontStyle"
+    );
+    const fontFamilyParams: any = searchParams.get("fontFamily");
+    if (fontFamilyParams && fontFamilyParams !== "undefined") {
+      dispatch(
+        setConversationUI({
+          fontFamily: fontFamilyParams || "poppins",
+          conversationFontStyle: conversationFontStyleParams,
+          timeStampFontStyle: timeStampFontStyleParams,
+          greetingMessage: titleData,
+        })
+      );
+    }
+    const themeParams: any = searchParams.get("theme");
+    if (themeParams) {
+      dispatch(
+        setThemeColor({
+          theme: JSON.parse(themeParams),
+          botIcons:
+            "https://res.cloudinary.com/dqbub4vtj/image/upload/v1694763084/y1ty56zfgvzy5oiypzn2.png",
+          actionButtonBorder: radiusParam,
+        })
+      );
+    }
   }, [window.location.search]);
-
+  console.log("boticon", botIcon);
   useEffect(() => {
     if (!reviewToken && ChatComponentArray.length === 0) {
       setChatComponentArray([
@@ -110,12 +130,11 @@ const Home = () => {
             <BotMessageCard
               contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
               imageSrc="/images/greeting.svg"
-              title={title ? title : greetingMessage}
+              title={greetingMessage}
             />
             <ActionButton
               src="/images/widgets.svg"
               text="Get Started"
-              radius={radius}
               onClick={() => {}}
             />
           </div>
@@ -186,7 +205,6 @@ const Home = () => {
       setChatComponentArray([]);
     };
   }, []);
-
   useEffect(() => {
     ChatArray.forEach((activity: any, index: number) => {
       if (
@@ -241,7 +259,6 @@ const Home = () => {
   useEffect(() => {
     scroll();
   }, [ChatComponentArray, isLoadingVisible]);
-
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"

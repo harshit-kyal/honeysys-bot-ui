@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
 import { json } from "stream/consumers";
+import { useDispatch } from "react-redux";
+import { setCartUI } from "../../slices/rootSlice";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -64,14 +66,23 @@ const Cart = () => {
     }
     setCartListValue({ ...cartList });
   };
-  const [cardData, setCardData] = useState<any>("");
+  const dispatch = useDispatch();
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const cartTemplate: any = searchParams.get("cartTemplate");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    setCardData(data);
+    dispatch(
+      setCartUI({
+        imageBorderColor: data.imageBorderColor,
+        titleWeight: data.titleWeight,
+        titleColor: data.titleColor,
+        quantityWeight: data.quantityWeight,
+        priceWeight: data.priceWeight,
+        priceSize: data.priceSize,
+        priceColor: data.priceColor,
+      })
+    );
   }, [window.location.search]);
-
   return (
     <div className="h-screen sticky">
       <PageHeader title="Your Cart" isDisableSearch={false} />
@@ -97,10 +108,7 @@ const Cart = () => {
                   image={
                     <img
                       src={items.imageSrc}
-                      className={
-                        cardData?.border
-                          ? `!${cardData.border} h-full`
-                          : "border-5 border-cartImgBorderColor h-full"
+                      className={"border-5 border-cartImgBorderColor h-full"
                       }
                       alt=""
                     />
@@ -108,21 +116,11 @@ const Cart = () => {
                   price={items.price}
                   quantity={items.quantity}
                   title={items.title}
-                  titleCn={
-                    cardData?.titleCn
-                      ? `${cardData.titleCn} text-[12px]`
-                      : "!font-cartTitleWeight !text-cartTitleColor"
+                  titleCn={"!font-cartTitleWeight !text-cartTitleColor"}
+                  priceCn={"!text-cartPriceColor !font-cartPriceWeight"
+                    // : "!text-cartPriceColor !font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
                   }
-                  priceCn={
-                    cardData?.priceCn
-                      ? cardData.priceCn
-                      : "!text-cartPriceColor !font-cartPriceWeight"
-                      // : "!text-cartPriceColor !font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
-                  }
-                  quantityCn={
-                    cardData?.quantityCn
-                      ? cardData.quantityCn
-                      : "!font-cartQuantityWeight  !text-cartQuantitySmallSize  min-[330px]:!text-cartQuantitySize"
+                  quantityCn={ "!font-cartQuantityWeight  !text-cartQuantitySmallSize  min-[330px]:!text-cartQuantitySize"
                   }
                   addClick={() => handleIncrement(index, "increment")}
                   minusClick={() => handleIncrement(index, "decrement")}

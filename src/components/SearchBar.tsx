@@ -32,11 +32,11 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
             }
           }}
         />
-        <div className="h-[45px] w-[45px] flex-shrink-0">
+        <div className="h-[45px] w-[45px] flex-shrink-0 bg-primary flex justify-center items-center">
           <img
-            src="/images/send.svg"
+            src="/images/send1.svg"
             alt="send"
-            className="h-full w-full"
+            className="h-6 w-6"
             onClick={(e) => {
               if (inputText !== "" && !loading) {
                 onClick(inputText);

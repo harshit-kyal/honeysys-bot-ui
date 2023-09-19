@@ -5,18 +5,27 @@ import BadgeCard from "../../components/Resuable/BadgeCard";
 import { ProductDropDown } from "@polynomialai/alpha-react";
 import { fruitsVegetables } from "../../constants/HomeConst";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCategoriesUI } from "../../slices/rootSlice";
 
 const Categories = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [headerTemplate, setHeaderTemplate] = useState<any>("");
-  const [productViewTemplate, setProductViewTemplate] = useState<any>("");
+  const dispatch = useDispatch();
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const headerParams: any = searchParams.get("headerTemplate");
-    setHeaderTemplate(JSON.parse(decodeURIComponent(headerParams)));
-    const productParams: any = searchParams.get("productViewTemplate");
-    setProductViewTemplate(JSON.parse(decodeURIComponent(productParams)));
+    const headerParams: any = searchParams.get("categoriesData");
+    const data = JSON.parse(decodeURIComponent(headerParams));
+    dispatch(
+      setCategoriesUI({
+        quickReplyBorderRadius: data.borderRadius,
+        drawer: {
+          imageBorderColor: "#E6E6E6",
+          titleWeight: data.titleWeight,
+          titleColor: data.titleColor,
+        },
+      })
+    );
   }, [window.location.search]);
 
   return (
@@ -30,11 +39,7 @@ const Categories = () => {
               navigate(`/categories/${item.id}`);
             }}
           >
-            <BadgeCard
-              text={item.title}
-              borderCn={headerTemplate?.borderCn}
-              active={id === item.id}
-            />
+            <BadgeCard text={item.title} active={id === item.id} />
           </div>
         ))}
       </div>
@@ -44,9 +49,7 @@ const Categories = () => {
             key={index}
             buttonCN="w-[100%]"
             buttonTextCN={
-              productViewTemplate?.titleCn
-                ? productViewTemplate?.titleCn
-                : "!font-categoriesTitleWeight text-categoriesTitleColor"
+              "!font-categoriesTitleWeight text-categoriesTitleColor"
             }
             displayItem={{
               image: (

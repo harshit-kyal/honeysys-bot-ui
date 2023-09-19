@@ -33,7 +33,6 @@ const OrderSummaryCard = ({
           ]}
         ></BotMessageCard>
         <ActionButton
-          radius={radius}
           text="Track Your Orders"
           onClick={() => {
             handleTrackMyOrder();
@@ -41,7 +40,6 @@ const OrderSummaryCard = ({
         />
         <ActionButton
           text="Track My Refunds"
-          radius={radius}
           onClick={() => {
             handleTrackMyOrder();
           }}
@@ -95,7 +93,6 @@ const OrderSummaryCard = ({
       />
       <ActionButton
         text="Review & Pay"
-        radius={radius}
         onClick={() => {
           setChatArray((array: any) => [
             ...array,
@@ -167,7 +164,6 @@ const OrderSummaryCard = ({
                 <div className="flex">
                   <ActionButton
                     text="Very Happy"
-                    radius={radius}
                     onClick={() => {
                       setChatArray((array: any) => [
                         ...array,
@@ -188,7 +184,6 @@ const OrderSummaryCard = ({
                   />
                   <ActionButton
                     text="Good"
-                    radius={radius}
                     onClick={() => {
                       setChatArray((array: any) => [
                         ...array,
@@ -210,7 +205,6 @@ const OrderSummaryCard = ({
                 </div>
                 <ActionButton
                   text="Not Happy"
-                  radius={radius}
                   onClick={() => {
                     setChatArray((array: any) => [
                       ...array,
@@ -236,7 +230,6 @@ const OrderSummaryCard = ({
       />
       <ActionButton
         text="Apply Coupon"
-        radius={radius}
         onClick={() => {
           setChatArray((array: any) => [
             ...array,

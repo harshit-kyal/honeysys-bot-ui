@@ -5,14 +5,32 @@ import CatalogProductCard from "../../components/Resuable/CatalogProductCard";
 import { useNavigate } from "react-router-dom";
 import { CategorieData } from "../../constants/HomeConst";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCatalogUI } from "../../slices/rootSlice";
 
 const Catalog = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [productTemplate, setProductTemplate] = useState<any>("");
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const params: any = searchParams.get("productTemplate");
+    const params: any = searchParams.get("catalogData");
+    const Data = JSON.parse(decodeURIComponent(params));
+    const backDrop: any = searchParams.get("categoryBackDrop");
+    // console.log("pooji", backDrop, Data,backDropData);
     setProductTemplate(JSON.parse(decodeURIComponent(params)));
+    dispatch(
+      setCatalogUI({
+        categoryBackDrop: backDrop,
+        youMayLike: {
+          imageBorderColor: Data.imageBorderColor,
+          titleWeight: Data.titleWeight,
+          titleColor: Data.titleColor,
+          priceWeight: Data.priceWeight,
+          priceColor: Data.priceColor,
+        },
+      })
+    );
   }, [window.location.search]);
 
   return (
@@ -95,12 +113,6 @@ const Catalog = () => {
                 imageSrc="/images/shirt.svg"
                 price={3500}
                 title="Denim T-shirt Sandstorm Color (XL)"
-                titleCn={
-                  productTemplate?.titleCn ? productTemplate.titleCn : ""
-                }
-                priceCn={
-                  productTemplate?.priceCn ? productTemplate.priceCn : ""
-                }
               />
             </div>
           ))}
