@@ -71,17 +71,19 @@ const Cart = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const cartTemplate: any = searchParams.get("cartTemplate");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    dispatch(
-      setCartUI({
-        imageBorderColor: data.imageBorderColor,
-        titleWeight: data.titleWeight,
-        titleColor: data.titleColor,
-        quantityWeight: data.quantityWeight,
-        priceWeight: data.priceWeight,
-        priceSize: data.priceSize,
-        priceColor: data.priceColor,
-      })
-    );
+    {
+      dispatch(
+        setCartUI({
+          imageBorderColor: data?.imageBorderColor,
+          titleWeight: data?.titleWeight,
+          titleColor: data?.titleColor,
+          quantityWeight: data?.quantityWeight,
+          priceWeight: data?.priceWeight,
+          priceSize: data?.priceSize,
+          priceColor: data?.priceColor,
+        })
+      );
+    }
   }, [window.location.search]);
   return (
     <div className="h-screen sticky">
@@ -108,8 +110,7 @@ const Cart = () => {
                   image={
                     <img
                       src={items.imageSrc}
-                      className={"border-5 border-cartImgBorderColor h-full"
-                      }
+                      className={"border-5 border-cartImgBorderColor h-full"}
                       alt=""
                     />
                   }
@@ -117,10 +118,12 @@ const Cart = () => {
                   quantity={items.quantity}
                   title={items.title}
                   titleCn={"!font-cartTitleWeight !text-cartTitleColor"}
-                  priceCn={"!text-cartPriceColor !font-cartPriceWeight"
+                  priceCn={
+                    "!text-cartPriceColor !font-cartPriceWeight"
                     // : "!text-cartPriceColor !font-cartPriceWeight  !text-cartPriceSmallSize  min-[330px]:!text-cartPriceSize"
                   }
-                  quantityCn={ "!font-cartQuantityWeight  !text-cartQuantitySmallSize  min-[330px]:!text-cartQuantitySize"
+                  quantityCn={
+                    "!font-cartQuantityWeight  !text-cartQuantitySmallSize  min-[330px]:!text-cartQuantitySize"
                   }
                   addClick={() => handleIncrement(index, "increment")}
                   minusClick={() => handleIncrement(index, "decrement")}

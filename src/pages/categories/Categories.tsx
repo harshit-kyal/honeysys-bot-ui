@@ -18,11 +18,11 @@ const Categories = () => {
     const data = JSON.parse(decodeURIComponent(headerParams));
     dispatch(
       setCategoriesUI({
-        quickReplyBorderRadius: data.borderRadius,
+        quickReplyBorderRadius: data?.borderRadius,
         drawer: {
           imageBorderColor: "#E6E6E6",
-          titleWeight: data.titleWeight,
-          titleColor: data.titleColor,
+          titleWeight: data?.titleWeight,
+          titleColor: data?.titleColor,
         },
       })
     );

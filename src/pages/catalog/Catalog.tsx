@@ -23,11 +23,11 @@ const Catalog = () => {
       setCatalogUI({
         categoryBackDrop: backDrop,
         youMayLike: {
-          imageBorderColor: Data.imageBorderColor,
-          titleWeight: Data.titleWeight,
-          titleColor: Data.titleColor,
-          priceWeight: Data.priceWeight,
-          priceColor: Data.priceColor,
+          imageBorderColor: Data?.imageBorderColor,
+          titleWeight: Data?.titleWeight,
+          titleColor: Data?.titleColor,
+          priceWeight: Data?.priceWeight,
+          priceColor: Data?.priceColor,
         },
       })
     );

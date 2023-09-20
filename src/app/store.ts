@@ -4,6 +4,7 @@ import homeSlice from "../slices/homeSlice";
 import botSlice from "../slices/botSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import rootSlice from "../slices/rootSlice";
 const persistConfig = {
   key: "persist-key",
   storage,

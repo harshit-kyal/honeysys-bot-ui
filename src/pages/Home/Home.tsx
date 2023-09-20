@@ -101,7 +101,7 @@ const Home = () => {
       );
     }
     const themeParams: any = searchParams.get("theme");
-    if (themeParams) {
+    if (themeParams || radiusParam) {
       dispatch(
         setThemeColor({
           theme: JSON.parse(themeParams),
