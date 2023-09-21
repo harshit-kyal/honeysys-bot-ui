@@ -8,7 +8,7 @@ import "../../styles/header.css";
 
 const HeaderBar = () => {
   const dispatch = useAppDispatch();
-  const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
+  const overallThemeUI = useAppSelector((state)=> state.root.overallThemeUI);
   const navigate = useNavigate();
   const reviewToken = localStorage.getItem("reviewToken");
 
@@ -21,7 +21,7 @@ const HeaderBar = () => {
       logo={
         <div className="flex items-center">
           <img
-            src={bot}
+            src={overallThemeUI.botIcons}
             alt="logo"
             className="rounded-full bg-[#E6E6E6]  header-logo"
           />
