@@ -6,8 +6,8 @@ const Success = () => {
 
   return (
     <div className="w-screen h-screen px-5 py-5">
-      <div className="flex justify-center w-full">
-        <img src="/images/happy_sun.svg" alt="happy_sun_image" />
+      <div className="flex justify-center w-full mt-20">
+        <img src="/images/success.svg" alt="happy_sun_image" />
       </div>
       <div className="text-center my-6 text-2xl font-semibold">
         <div className="text-primary">Congratulations!</div>

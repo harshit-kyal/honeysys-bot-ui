@@ -201,7 +201,8 @@ const Home = () => {
     ChatArray.forEach((activity: any, index: number) => {
       if (
         activity.type === "message" &&
-        activity.text === "I am unable to continue. Come back later."
+        activity.text ===
+          "It seems you have to login first to access the above service. Please provide your mobile number"
       ) {
         dispatch(setUiUpdate(true));
       } else if (

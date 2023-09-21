@@ -51,6 +51,7 @@ export interface CustomButton {
   title: string;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
   btnType?: "button" | "submit";
+  disable?: boolean;
 }
 
 export interface HomeSliceType {

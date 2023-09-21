@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
 import BackButton from "../../components/Button/BackButton";
-import { Text, VerificationInput } from "@polynomialai/alpha-react";
+import { Text, VerificationInput, Button } from "@polynomialai/alpha-react";
 import "./index.css";
-import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { botApi } from "../../api";
 import { setTheme } from "../../slices/rootSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const OTP = () => {
   const dispatch = useAppDispatch();
 
   const Mobile = useAppSelector((state) => state.home.mobileNo);
   const [OTP, setOTP] = useState<string>("");
+  const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(10);
+  const [seconds, setSeconds] = useState<number>(30);
   const navigate = useNavigate();
   const CorrectOTP = useAppSelector((state) => state.home.otp);
 
-  const wrongOTP = () => {
-    const cssEle = document.getElementsByClassName("ring-primary-color");
-
-    const cssArray = Array.from(cssEle);
-
-    cssArray.forEach((element) => {
-      (element as HTMLElement).style.cssText =
-        "--tw-ring-opacity: 1;--tw-ring-color: var(--error);";
+  const wrongOTP = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#C25E5E",
+        color: "#FFF",
+      },
     });
   };
 
@@ -73,53 +74,50 @@ const OTP = () => {
       </div>
       <div className="text-sm font-normal mt-10">
         Enter the verification code has been sent to your provided mobile number
-        <span className="text-primary font-[500]">+9178XXXXXX03</span>. Check
-        your SMS for the following.
+        <span className="text-primary font-[500]">
+          +91 {Mobile.slice(0, 2)}XXXXXX{Mobile.slice(8, 10)}
+        </span>
+        . Check your SMS for the following.
       </div>
       <div className="mt-10 flex justify-center">
         <Button
-          title="Verify & Continue"
-          handleClick={() => {
+          className="flex justify-center items-center !bg-primary text-background px-6 py-2 rounded-3xl min-h-[46px] min-w-[187px]"
+          isLoading={Loading}
+          onClick={() => {
             console.log(OTP);
             if (OTP === "") {
-              alert("Enter OTP");
+              wrongOTP({ text: "Please enter OTP" });
             } else if (parseInt(OTP) !== CorrectOTP) {
-              alert("Enter OTP is incorrect");
+              wrongOTP({ text: "You have entered incorrect OTP" });
             } else {
+              setLoading(true);
               botApi({
                 loginId: Mobile,
                 otp: OTP,
                 action: "genrateAccessToken",
                 clientName: "honeySys",
-              }).then((response) => {
-                if (response.data?.code === 200) {
-                  console.log(response);
-                  localStorage.setItem(
-                    "accessToken",
-                    response.data?.data.access_token
-                  );
-                  console.log(
-                    "response botui",
-                    response.data.data.customiseUI.overallThemeUI
-                  );
-                  // dispatch(
-                  //   setTheme({
-                  //     overallThemeUI:
-                  //       response.data.data.customiseUI.overallThemeUI,
-                  //     conversationUI:
-                  //       response.data.data.customiseUI.conversationUI,
-                  //     cartUI: response.data.data.customiseUI.cartUI,
-                  //     CatalogUI: response.data.data.customiseUI.CatalogUI,
-                  //     CategoriesUI: response.data.data.customiseUI.CategoriesUI,
-                  //   })
-                  // );
-                  dispatch(setTheme(response.data.data.customiseUI));
-                  navigate("/success");
-                }
-              });
+              })
+                .then((response) => {
+                  if (response.data?.code === 200) {
+                    console.log(response);
+                    localStorage.setItem(
+                      "accessToken",
+                      response.data?.data.access_token
+                    );
+                    dispatch(setTheme(response.data.data.customiseUI));
+                    navigate("/success");
+                    setLoading(false);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  setLoading(false);
+                });
             }
           }}
-        />
+        >
+          Verify & Continue
+        </Button>
       </div>
       <div className="flex justify-center gap-1 mt-5">
         <Text type="body" size="md">
@@ -143,6 +141,7 @@ const OTP = () => {
           )}
         </Text>
       </div>
+      <Toaster />
     </div>
   );
 };

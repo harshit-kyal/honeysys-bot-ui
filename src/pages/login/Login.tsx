@@ -7,6 +7,7 @@ import { botApi } from "../../api";
 import { useDispatch } from "react-redux";
 import { setMobileNo, setOtp } from "../../slices/homeSlice";
 import { useAppSelector } from "../../app/hooks";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -14,14 +15,25 @@ const Login = () => {
   const [TnC, setTnC] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
 
+  const wrongOTP = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#C25E5E",
+        color: "#FFF",
+      },
+    });
+  };
+
   const navigation = useNavigate();
   const handleGetStartedClick = () => {
     if (!Mobile || Mobile === "") {
-      alert("Enter Mobile No");
+      wrongOTP({ text: "Enter Mobile No" });
     } else if (Mobile.length !== 10) {
-      alert("Enter Valid Mobile No");
+      wrongOTP({ text: "Enter Valid Mobile No" });
     } else if (!TnC) {
-      alert("Check Term and conditions");
+      wrongOTP({ text: "Check Term and conditions" });
     } else {
       setLoading(true);
       botApi({
@@ -29,12 +41,14 @@ const Login = () => {
         action: "login",
         clientName: "honeySys",
       }).then((response) => {
-        console.log(response)
+        console.log(response);
         setLoading(false);
         if (response.data?.code === 200) {
           dispatch(setOtp(response.data?.data?.otp));
-          alert(`OTP : ${response.data?.data?.otp}`);
-          navigation("/otp");
+          toast.success(`OTP : ${response.data?.data?.otp}`);
+          setTimeout(() => {
+            navigation("/otp");
+          }, 2000);
         }
       });
     }
@@ -116,6 +130,7 @@ const Login = () => {
           </span>
         </Button>
       </div>
+      <Toaster />
     </div>
   );
 };
