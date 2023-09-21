@@ -16,16 +16,18 @@ const Categories = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const headerParams: any = searchParams.get("categoriesData");
     const data = JSON.parse(decodeURIComponent(headerParams));
-    dispatch(
-      setCategoriesUI({
-        quickReplyBorderRadius: data?.borderRadius,
-        drawer: {
-          imageBorderColor: "#E6E6E6",
-          titleWeight: data?.titleWeight,
-          titleColor: data?.titleColor,
-        },
-      })
-    );
+    if (headerParams) {
+      dispatch(
+        setCategoriesUI({
+          quickReplyBorderRadius: data?.borderRadius,
+          drawer: {
+            imageBorderColor: "#E6E6E6",
+            titleWeight: data?.titleWeight,
+            titleColor: data?.titleColor,
+          },
+        })
+      );
+    }
   }, [window.location.search]);
 
   return (

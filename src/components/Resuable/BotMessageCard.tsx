@@ -5,6 +5,7 @@ import { useEffect } from "react";
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
+  botIcon?: string;
   time?: string;
   title?: string;
   contentArray?: string | (string | JSX.Element)[];
@@ -16,9 +17,10 @@ const BotMessageCard = ({
   time,
   title,
   contentArray,
+  botIcon,
 }: CardProp) => {
   const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
-
+  console.log("kp", bot);
   if (imageSrc) {
     return (
       <RichCard

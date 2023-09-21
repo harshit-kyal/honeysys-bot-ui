@@ -23,7 +23,7 @@ const HeaderBar = () => {
           <img
             src={bot}
             alt="logo"
-            className="rounded-full bg-[#E6E6E6] p-1 header-logo"
+            className="rounded-full bg-[#E6E6E6]  header-logo"
           />
           <div className="flex flex-col ml-2 overflow-hidden">
             <div className="font-semibold text-sm !min-[350px]:text-base">

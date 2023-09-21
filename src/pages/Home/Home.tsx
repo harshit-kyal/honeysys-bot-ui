@@ -19,11 +19,12 @@ import TimeStamp from "../../components/TimeStamp";
 import ActionButton from "../../components/Resuable/ActionButton";
 import ReplyMessageCard from "../../components/Resuable/ReplyMessageCard";
 import { setConversationUI, setThemeColor } from "../../slices/rootSlice";
-import { getTheme } from "../../api";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
-  const greetingMessage = localStorage.getItem("greetingMessage") || "Hey";
+  const [title, setTitle] = useState<string | null>(null);
+  const conversationUI = useAppSelector((state) => state.root.conversationUI);
+  const greetingMessage = conversationUI.greetingMessage;
 
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
@@ -70,33 +71,26 @@ const Home = () => {
   const setArray = (component: JSX.Element) => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
-  const [pc, setpc] = useState(false);
   const replyFunction = (data: any) => {
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(setChatArray([...activities]));
     }
   };
-  const [botIcon, setbotIcon] = useState("");
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const radiusParam = searchParams.get("radius");
-    const titleData = searchParams.get("title");
-    // const botIconParams: any = searchParams.get("botPicture");
-    // setbotIcon(JSON.parse(botIconParams));
-    const timeStampFontStyleParams: any =
-      searchParams.get("timeStampFontStyle");
-    const conversationFontStyleParams: any = searchParams.get(
-      "conversationFontStyle"
-    );
-    const fontFamilyParams: any = searchParams.get("fontFamily");
-    if (fontFamilyParams && fontFamilyParams !== "undefined") {
+    const cartTemplate: any = searchParams.get("conversationCart");
+    const data = JSON.parse(decodeURIComponent(cartTemplate));
+    setTitle(data?.title)
+    const botIconParams: any = searchParams.get("botIcon");
+   if(cartTemplate) {
       dispatch(
         setConversationUI({
-          fontFamily: fontFamilyParams || "poppins",
-          conversationFontStyle: conversationFontStyleParams,
-          timeStampFontStyle: timeStampFontStyleParams,
-          greetingMessage: titleData,
+          fontFamily: data?.fontFamily || "poppins",
+          conversationFontStyle: data?.conversationFontStyle,
+          timeStampFontStyle: data?.timeStampFontStyle,
+          greetingMessage: data?.title,
         })
       );
     }
@@ -105,14 +99,12 @@ const Home = () => {
       dispatch(
         setThemeColor({
           theme: JSON.parse(themeParams),
-          botIcons:
-            "https://res.cloudinary.com/dqbub4vtj/image/upload/v1694763084/y1ty56zfgvzy5oiypzn2.png",
+          botIcons: JSON.parse(decodeURIComponent(botIconParams)),
           actionButtonBorder: radiusParam,
         })
       );
     }
   }, [window.location.search]);
-  console.log("boticon", botIcon);
   useEffect(() => {
     if (!reviewToken && ChatComponentArray.length === 0) {
       setChatComponentArray([
@@ -204,7 +196,7 @@ const Home = () => {
     return () => {
       setChatComponentArray([]);
     };
-  }, []);
+  }, [title]);
   useEffect(() => {
     ChatArray.forEach((activity: any, index: number) => {
       if (
@@ -270,6 +262,7 @@ const Home = () => {
       >
         {ChatComponentArray}
         {isLoadingVisible && !reviewToken && <Loading />}
+        {/* {botIcon ? <img src={botIcon} height="50px" width="50px"></img> : ""} */}
       </div>
       <SearchBar
         onClick={(inputText: string) => {

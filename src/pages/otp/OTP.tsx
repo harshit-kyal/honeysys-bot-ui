@@ -98,7 +98,21 @@ const OTP = () => {
                     "accessToken",
                     response.data?.data.access_token
                   );
-                  // response.data.data.customiseUI
+                  console.log(
+                    "response botui",
+                    response.data.data.customiseUI.overallThemeUI
+                  );
+                  // dispatch(
+                  //   setTheme({
+                  //     overallThemeUI:
+                  //       response.data.data.customiseUI.overallThemeUI,
+                  //     conversationUI:
+                  //       response.data.data.customiseUI.conversationUI,
+                  //     cartUI: response.data.data.customiseUI.cartUI,
+                  //     CatalogUI: response.data.data.customiseUI.CatalogUI,
+                  //     CategoriesUI: response.data.data.customiseUI.CategoriesUI,
+                  //   })
+                  // );
                   dispatch(setTheme(response.data.data.customiseUI));
                   navigate("/success");
                 }

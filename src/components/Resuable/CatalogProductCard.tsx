@@ -36,7 +36,7 @@ const CatalogProductCard = ({
         image={
           <img
             src={imageSrc}
-            className="border border-catalogImageBorderColor"
+            // className="border border-catalogImageBorderColor"
             alt=""
           />
         }

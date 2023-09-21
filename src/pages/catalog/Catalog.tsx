@@ -17,20 +17,20 @@ const Catalog = () => {
     const params: any = searchParams.get("catalogData");
     const Data = JSON.parse(decodeURIComponent(params));
     const backDrop: any = searchParams.get("categoryBackDrop");
-    // console.log("pooji", backDrop, Data,backDropData);
-    setProductTemplate(JSON.parse(decodeURIComponent(params)));
-    dispatch(
-      setCatalogUI({
-        categoryBackDrop: backDrop,
-        youMayLike: {
-          imageBorderColor: Data?.imageBorderColor,
-          titleWeight: Data?.titleWeight,
-          titleColor: Data?.titleColor,
-          priceWeight: Data?.priceWeight,
-          priceColor: Data?.priceColor,
-        },
-      })
-    );
+    if (backDrop && params) {
+      dispatch(
+        setCatalogUI({
+          categoryBackDrop: backDrop,
+          youMayLike: {
+            imageBorderColor: Data?.imageBorderColor,
+            titleWeight: Data?.titleWeight,
+            titleColor: Data?.titleColor,
+            priceWeight: Data?.priceWeight,
+            priceColor: Data?.priceColor,
+          },
+        })
+      );
+    }
   }, [window.location.search]);
 
   return (
@@ -39,7 +39,6 @@ const Catalog = () => {
       <OverlayWrapperCard
         className="w-full h-auto rounded-none"
         imageSrc="/images/Welcome.svg"
-        overlay="rgba(0, 0, 0, 0.5)"
         contentTitle="Welcome!!"
         content="Our intuitive platform ensures that you find exactly what you're looking for, making your shopping experience delightful and efficient."
       />

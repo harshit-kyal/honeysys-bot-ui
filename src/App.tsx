@@ -143,7 +143,7 @@ function App() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const reviewToken = searchParams.get("token");
-    console.log(reviewToken,window.location.href)
+    console.log("window.location.href",window.location.href)
     reviewToken && localStorage.setItem("reviewToken", reviewToken);
   }, [window.location.search]);
 

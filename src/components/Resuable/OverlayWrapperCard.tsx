@@ -26,7 +26,7 @@ const OverlayWrapperCard = ({
       image={
         <img src={imageSrc} alt="" className="w-full h-full object-contain" />
       }
-      overlay={overlay ? overlay : Catalog.categoryBackDrop}
+      overlay={ Catalog.categoryBackDrop}
       titleCn={title ? "justify-end" : ""}
     >
       <>

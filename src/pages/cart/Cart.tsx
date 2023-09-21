@@ -14,37 +14,37 @@ const Cart = () => {
     totalAmount: "₹1212.00",
     itemList: [
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 2,
       },
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 1,
       },
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 3,
       },
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 1,
       },
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 3,
       },
       {
-        imageSrc: "/images/vegetables.svg",
+        imageSrc: "/images/onion.svg",
         title: "Fresh Onion (500gm)",
         price: "₹60.00",
         quantity: 2,
@@ -71,7 +71,8 @@ const Cart = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const cartTemplate: any = searchParams.get("cartTemplate");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    {
+    console.log(data);
+    if(cartTemplate){
       dispatch(
         setCartUI({
           imageBorderColor: data?.imageBorderColor,
@@ -110,7 +111,9 @@ const Cart = () => {
                   image={
                     <img
                       src={items.imageSrc}
-                      className={"border-5 border-cartImgBorderColor h-full"}
+                      className={
+                        "border-5 rounded-lg border object-cover !border-cartImageBorderColor h-full"
+                      }
                       alt=""
                     />
                   }
