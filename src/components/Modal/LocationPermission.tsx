@@ -43,31 +43,25 @@ const LocationPermission = () => {
             <Button
               onClick={() => {
                 if (navigator.geolocation) {
-                  console.log(navigator.permissions);
                   navigator.permissions
                     .query({ name: "geolocation" })
                     .then(function (result) {
                       if (result.state === "granted") {
-                        console.log(result.state);
                         alert("granted");
                         navigator.geolocation.getCurrentPosition(function (
                           position
                         ) {
-                          console.log(position);
                         });
                       } else if (result.state === "prompt") {
                         navigator.geolocation.getCurrentPosition(function (
                           position
                         ) {
-                          console.log(position);
                         });
                         alert("prompt");
-                        console.log(result.state);
                       } else if (result.state === "denied") {
                         alert("denied");
                       }
                       result.onchange = function () {
-                        console.log(result.state);
                       };
                     });
                 } else {

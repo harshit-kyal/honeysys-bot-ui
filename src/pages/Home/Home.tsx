@@ -82,9 +82,9 @@ const Home = () => {
     const radiusParam = searchParams.get("radius");
     const cartTemplate: any = searchParams.get("conversationCart");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    setTitle(data?.title)
+    setTitle(data?.title);
     const botIconParams: any = searchParams.get("botIcon");
-   if(cartTemplate) {
+    if (cartTemplate) {
       dispatch(
         setConversationUI({
           fontFamily: data?.fontFamily || "poppins",
@@ -95,11 +95,20 @@ const Home = () => {
       );
     }
     const themeParams: any = searchParams.get("theme");
-    if (themeParams || radiusParam) {
+    const themeParamsData = JSON.parse(decodeURIComponent(themeParams));
+    const botIconParamsData = JSON.parse(decodeURIComponent(botIconParams));
+    if (
+      themeParams &&
+      radiusParam &&
+      botIconParams &&
+      themeParamsData !== undefined &&
+      radiusParam !== undefined &&
+      botIconParamsData !== undefined
+    ) {
       dispatch(
         setThemeColor({
-          theme: JSON.parse(themeParams),
-          botIcons: JSON.parse(decodeURIComponent(botIconParams)),
+          theme: themeParamsData,
+          botIcons: botIconParamsData,
           actionButtonBorder: radiusParam,
         })
       );

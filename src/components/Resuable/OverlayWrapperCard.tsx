@@ -19,7 +19,6 @@ const OverlayWrapperCard = ({
   overlay,
 }: CardProps) => {
   const Catalog = useAppSelector((state) => state.root.CatalogUI);
-  console.log("Catalog.categoryBackDrop", Catalog.categoryBackDrop);
   return (
     <OverlayCard
       className={className}

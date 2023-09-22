@@ -203,7 +203,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                           clientName: "honeySys",
                         }).then((response) => {
                           if (response.data?.code === 200) {
-                            console.log(response);
                           }
                         });
 

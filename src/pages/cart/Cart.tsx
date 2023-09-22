@@ -71,7 +71,6 @@ const Cart = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const cartTemplate: any = searchParams.get("cartTemplate");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    console.log(data);
     if(cartTemplate){
       dispatch(
         setCartUI({

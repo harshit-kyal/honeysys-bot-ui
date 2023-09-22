@@ -41,7 +41,6 @@ const Login = () => {
         action: "login",
         clientName: "honeySys",
       }).then((response) => {
-        console.log(response);
         setLoading(false);
         if (response.data?.code === 200) {
           dispatch(setOtp(response.data?.data?.otp));

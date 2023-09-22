@@ -84,7 +84,6 @@ const OTP = () => {
           className="flex justify-center items-center !bg-primary text-background px-6 py-2 rounded-3xl min-h-[46px] min-w-[187px]"
           isLoading={Loading}
           onClick={() => {
-            console.log(OTP);
             if (OTP === "") {
               wrongOTP({ text: "Please enter OTP" });
             } else if (parseInt(OTP) !== CorrectOTP) {
@@ -99,7 +98,6 @@ const OTP = () => {
               })
                 .then((response) => {
                   if (response.data?.code === 200) {
-                    console.log(response);
                     localStorage.setItem(
                       "accessToken",
                       response.data?.data.access_token
@@ -110,7 +108,6 @@ const OTP = () => {
                   }
                 })
                 .catch((error) => {
-                  console.log(error);
                   setLoading(false);
                 });
             }

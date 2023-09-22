@@ -13,8 +13,6 @@ function App() {
 
   const searchParams = new URLSearchParams(window.location.search);
   const cartTemplate = searchParams.get("cartTemplate");
-
-  console.log("cartTemplate", cartTemplate);
   useEffect(() => {
     // error color
     document.documentElement.style.setProperty("--error", color.error);
@@ -143,7 +141,6 @@ function App() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const reviewToken = searchParams.get("token");
-    console.log("window.location.href",window.location.href)
     reviewToken && localStorage.setItem("reviewToken", reviewToken);
   }, [window.location.search]);
 

@@ -16,7 +16,6 @@ const initialState: HomeSliceType = {
 };
 
 const log = async (data: any) => {
-  console.log(data);
 };
 
 export const getStoreData = createAsyncThunk("getStoreData", async () => {
@@ -103,18 +102,15 @@ export const HomeSlice = createSlice({
     builder
       .addCase(getStoreData.pending, (state) => {
         // state.loading = true;
-        console.log("pending");
       })
       .addCase(getStoreData.fulfilled, (state, action) => {
-        console.log(action);
-        console.log("done");
+
         if (action.payload) {
           state.storeData = action.payload.data;
         }
         state.error = "";
       })
       .addCase(getStoreData.rejected, (state, action) => {
-        console.log(action);
         // state.loading = false;
         state.error = action.error.message || "Something went wrong.";
       })
