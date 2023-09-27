@@ -7,17 +7,18 @@ export const fetchBot = async (botType: string) => {
   );
 };
 
-export const getConversationId = async (botType: string, token: string) => {
+export const getConversationId = async (botType: string) => {
   let headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
     "Accept-Language": "en-US",
     "X-SAP-PVL": "en-US",
-    Authorization: `Bearer ${token}`,
+    // Authorization: `Bearer ${token}`,
   };
   return await axiosInstance.post(
-    `${environment.directlineURL}/directline/polyline/initConversation/?botType=${botType}`,
+    `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/initConversation/?botType=${botType}`,
     {},
     { headers }
   );
 };
+// `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/initConversation/?botType=${botType}`

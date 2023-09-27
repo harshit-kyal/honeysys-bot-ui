@@ -8,13 +8,14 @@ import { ReplyCard, RichCard, Text } from "@polynomialai/alpha-react";
 import CartReplyCard from "./Resuable/CartReplyCard";
 import OrderSummaryCard from "./Resuable/OrderSummaryCard";
 import { getStoreData } from "../slices/homeSlice";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { botApi } from "../api";
 
 const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const conversationUI = useAppSelector((state) => state.root.conversationUI);
 
   const handleTrackMyOrder = () => {
     return (
@@ -119,6 +120,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
       <ChatWrapper type="bot">
         <div className="flex flex-col chatWrapper">
           <BotMessageCard
+            title={conversationUI.greetingMessage}
             contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
             imageSrc="/images/greeting.svg"
           />
@@ -151,7 +153,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                     />
                     <ActionButton
                       src="/images/location.svg"
-                     
                       text="Provide Location"
                       onClick={() => {
                         // navigate("/address");
@@ -231,7 +232,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                               />
                               <ActionButton
                                 src="/images/location.svg"
-                               
                                 text="Change Location"
                                 onClick={() => {}}
                               />
@@ -262,7 +262,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                               <ActionButton
                                 src="/images/catelog.svg"
                                 text="View Catalog"
-                               
                                 onClick={() => {
                                   navigate("/catalog");
                                 }}
@@ -270,7 +269,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                               <ActionButton
                                 src="/images/location.svg"
                                 text="Change Location"
-                               
                                 onClick={() => {}}
                               />
                             </div>
@@ -297,12 +295,10 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                               />
                               <ActionButton
                                 text="10 mins Delivery"
-                               
                                 onClick={() => {}}
                               />
                               <ActionButton
                                 text="After 3 Days"
-                               
                                 onClick={() => {
                                   setChatArray((array: any) => [
                                     ...array,
@@ -328,12 +324,10 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                         />
                                         <ActionButton
                                           text="7:00 AM - 10:00 AM"
-                                         
                                           onClick={() => {}}
                                         />
                                         <ActionButton
                                           text="12:00 PM - 04:00 PM"
-                                         
                                           onClick={() => {
                                             setChatArray((array: any) => [
                                               ...array,
@@ -359,7 +353,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                                   />
                                                   <ActionButton
                                                     text="Confirm"
-                                                   
                                                     onClick={() => {
                                                       setChatArray(
                                                         (array: any) => [
@@ -399,7 +392,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                                         />
                                         <ActionButton
                                           text="06:00 PM - 09:00 PM"
-                                         
                                           onClick={() => {}}
                                         />
                                       </div>
@@ -409,7 +401,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                               />
                               <ActionButton
                                 text="Pickup From Store"
-                               
                                 onClick={() => {}}
                               />
                             </div>
@@ -419,7 +410,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                     />
                     <ActionButton
                       src="/images/order.svg"
-                     
                       text="Track Your Order"
                       onClick={() => {
                         handleTrackMyOrder();

@@ -7,6 +7,7 @@ const initialState: HomeSliceType = {
   error: "",
   mobileNo: "",
   otp: 0,
+  userId: "",
   ChatArray: [],
   locationPermission: false,
   deniedModal: false,
@@ -15,8 +16,7 @@ const initialState: HomeSliceType = {
   UiUpdate: false,
 };
 
-const log = async (data: any) => {
-};
+const log = async (data: any) => {};
 
 export const getStoreData = createAsyncThunk("getStoreData", async () => {
   const response: any = await getStoreDataApi();
@@ -59,6 +59,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         otp: action.payload,
+      };
+    },
+    setUserId(state, action) {
+      return {
+        ...state,
+        userId: action.payload,
       };
     },
     setChatArray(state, action) {
@@ -104,7 +110,6 @@ export const HomeSlice = createSlice({
         // state.loading = true;
       })
       .addCase(getStoreData.fulfilled, (state, action) => {
-
         if (action.payload) {
           state.storeData = action.payload.data;
         }
@@ -141,6 +146,7 @@ export const {
   setError,
   setMobileNo,
   setOtp,
+  setUserId,
   setChatArray,
   setLocationPermission,
   setLocationModal,

@@ -96,14 +96,17 @@ export const getChatApi = async ({
 
   try {
     const response: any = await axiosInstance.post(
-      `${environment.directlineURL}/directline/polyline/getMessages/?botType=${botType}`,
+      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`,
       newData
     );
+
     return { data: response.data };
   } catch (error: any) {
     if (error && error.response) {
+      console.log("error", error);
       return { data: error.response.data };
     }
     throw error;
   }
 };
+// `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`

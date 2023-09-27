@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 import { botApi } from "../../api";
 import { useDispatch } from "react-redux";
-import { setMobileNo, setOtp } from "../../slices/homeSlice";
+import { setMobileNo, setOtp, setUserId } from "../../slices/homeSlice";
 import { useAppSelector } from "../../app/hooks";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -43,6 +43,7 @@ const Login = () => {
       }).then((response) => {
         setLoading(false);
         if (response.data?.code === 200) {
+          dispatch(setUserId(response.data?.data?.id));
           dispatch(setOtp(response.data?.data?.otp));
           toast.success(`OTP : ${response.data?.data?.otp}`);
           setTimeout(() => {

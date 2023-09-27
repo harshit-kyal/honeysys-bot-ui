@@ -4,23 +4,24 @@
 
 export const environment = {
   production: false,
-  token: 'Bearer qP0qsYX9_Ho.I8jcNeh6zIUNDQWENCo5-aVddv0cWE_aOI0iep3Dm9Q',
+  token: "Bearer qP0qsYX9_Ho.I8jcNeh6zIUNDQWENCo5-aVddv0cWE_aOI0iep3Dm9Q",
 
-  botType:"U2FsdGVkX18N0PyYXHvIp8GlINfAd89LfNzqpWTm4dg=",
+  botType: "U2FsdGVkX18N0PyYXHvIp8GlINfAd89LfNzqpWTm4dg=",
 
   // directlineURL: "https://lenskits.polynomial.ai",
-  directlineURL: 'https://intelligence.polynomial.ai',
+  // directlineURL: 'https://cca3-2405-201-200b-5087-9803-24e3-3b6b-274.ngrok-free.app',
+  directlineURL: "https://89d3-49-36-83-110.ngrok-free.app",
   // directlineURL: "http://localhost:8000",
   // directlineURL: "https://polynomial-directline.herokuapp.com",
   apiURLAzure:
-    'https://colive-dev-colive-bot-management-apis.azurewebsites.net',
+    "https://colive-dev-colive-bot-management-apis.azurewebsites.net",
   // apiURLAzure_new: "https://polynomial-coco-solution.azurewebsites.net",
   apiURLAzure_new: "https://intelligence.polynomial.ai/interaction_studio",
   // apiURLAzure_new: "http://20.244.8.172:30042",
   AESSecret: "Interaction-Studio-By-Polynomial.AI",
   uploadToken: "Bearer qP0qsYX9_Ho.PGotiqdrD_L2wPddgXe7Ym1lgW6y0XZZTdMN7PGZwxM",
-  avatarURL:"https://coliveshona.blob.core.windows.net/coliveshonabot/Shona.png",
-
+  avatarURL:
+    "https://coliveshona.blob.core.windows.net/coliveshonabot/Shona.png",
 };
 
 // api: "https://colive-dev.azurewebsites.net/shonaIntelligenceServiceDev",

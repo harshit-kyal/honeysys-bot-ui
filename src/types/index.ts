@@ -59,6 +59,7 @@ export interface HomeSliceType {
   error: string;
   mobileNo: string;
   otp: number;
+  userId:string;
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
