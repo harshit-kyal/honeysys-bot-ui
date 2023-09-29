@@ -495,7 +495,16 @@ const Home = () => {
                 return dispatch(setUiUpdate(false));
               }
               if (activity.type === "message" && activity.text !== "") {
-                console.log("text", activity?.text, activity?.value?.sender);
+                console.log("text", activity.text);
+                if (
+                  activity.text ===
+                  "Sorry an error occured while processing the request"
+                ) {
+                  dispatch(setUiUpdate(true));
+                } else {
+                  dispatch(setUiUpdate(false));
+                }
+
                 return (
                   <div className="w-full">
                     {activity?.value?.sender === "user" ? (
