@@ -2,6 +2,8 @@ import { RichCard, Text } from "@polynomialai/alpha-react";
 import { currentTime } from "../TimeStamp";
 import { useEffect } from "react";
 import ActionButton from "./ActionButton";
+import { getChatData } from "../../slices/homeSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 interface CardProp {
   children?: JSX.Element;
@@ -22,6 +24,9 @@ const BotMessageCard = ({
   botIcon,
   actionDataArray,
 }: CardProp) => {
+  const dispatch = useAppDispatch();
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
   const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
   if (actionDataArray && actionDataArray.length !== 0) {
     {
@@ -71,7 +76,6 @@ const BotMessageCard = ({
       </RichCard>
     );
   }
-
   return (
     <>
       {actionDataArray && actionDataArray.length !== 0 ? (
@@ -82,7 +86,14 @@ const BotMessageCard = ({
               key={index}
               src={data.iconUrl}
               text={data.text}
-              onClick={() => {}}
+              onClick={() => {
+                const newData = {
+                  conversationId: convId,
+                  text: data.text.slice(2),
+                  voiceFlag: false,
+                };
+                dispatch(getChatData({ newData, botType }));
+              }}
             />
           ))}
         </>

@@ -92,18 +92,20 @@ const Home = () => {
       {
         type: "richCard",
         value: {
-          data: {
-            title: "hii",
-            imageURL:
-              "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-            description: [
-              "Welcome to HoneySys Bot powered e-commerce experience.",
-              "I will assist you in shopping for your product discovery, cart management and checkout experiences.",
-              "Provide your location to help us show the products available near you.",
-            ],
-            botIcon:
-              "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695209051/sie7cwqzpqovkpu67a2k.png",
-          },
+          data: [
+            {
+              title: "hii",
+              imageURL:
+                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+              description: [
+                "Welcome to HoneySys Bot powered e-commerce experience.",
+                "I will assist you in shopping for your product discovery, cart management and checkout experiences.",
+                "Provide your location to help us show the products available near you.",
+              ],
+              botIcon:
+                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695209051/sie7cwqzpqovkpu67a2k.png",
+            },
+          ],
 
           sender: "bot",
           status: "Talking with Bot",
@@ -153,27 +155,29 @@ const Home = () => {
       {
         type: "summaryCard",
         value: {
-          data: {
-            imageURL:
-              "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-            quantity: "",
-            price: [
-              {
-                price: "₹ 316.00",
-                title: "Estimated Price",
-              },
-              {
-                price: "₹ 20.00",
-                title: "Delivery Charges",
-              },
-            ],
-            subtitle: "Quantity 6",
-            title: "Fresh onions (500gm), Tomatoes (500gm)",
-            totalAmount: "₹ 314.00",
-            totaltitle: "Total Amount",
-            topText: "Great! The total payable amount for this order is. 👇",
-            bottomText: " Hurry, order now before the products sell out.",
-          },
+          data: [
+            {
+              imageURL:
+                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+              quantity: "",
+              price: [
+                {
+                  price: "₹ 316.00",
+                  title: "Estimated Price",
+                },
+                {
+                  price: "₹ 20.00",
+                  title: "Delivery Charges",
+                },
+              ],
+              subtitle: "Quantity 6",
+              title: "Fresh onions (500gm), Tomatoes (500gm)",
+              totalAmount: "₹ 314.00",
+              totaltitle: "Total Amount",
+              topText: "Great! The total payable amount for this order is. 👇",
+              bottomText: " Hurry, order now before the products sell out.",
+            },
+          ],
 
           sender: "bot",
           status: "Talking with Bot",
@@ -410,7 +414,7 @@ const Home = () => {
       ]);
     }
     if (!reviewToken && botType === "") {
-      dispatch(setChatArray([...chat]));
+      // dispatch(setChatArray([...chat]));
       // fetchBot(environment.botType)
       //   .then((data) => {
       //     dispatch(setBotInfo(data.data.data[0]));
@@ -418,7 +422,7 @@ const Home = () => {
       if (convId) {
         console.log(convId);
       } else {
-        let botType = "U2FsdGVkX18N0PyYXHvIp8GlINfAd89LfNzqpWTm4dg=";
+        let botType = "e-comm";
         // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
         getConversationId(botType)
           .then((data: any) => {
@@ -470,7 +474,6 @@ const Home = () => {
   useEffect(() => {
     console.log("ChatArray", ChatArray);
     ChatArray.map((activity: any, index: number) => {
-      console.log("text1", activity?.text, activity[0]?.value?.sender);
       setArray(
         <ChatWrapper
           type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
@@ -508,18 +511,24 @@ const Home = () => {
                 activity.value.data.length !== 0
               ) {
                 const richCard = activity.value.data;
+                console.log("richCard", richCard);
                 return (
-                  <div className=" w-full">
+                  <div className="w-full">
                     {activity?.value?.sender === "user" ? (
                       <></>
                     ) : (
                       // <UserMessageCard content={activity?.text} />
-                      <BotMessageCard
-                        title={richCard.title}
-                        contentArray={richCard.description}
-                        imageSrc={richCard.imageURL}
-                        botIcon={richCard.botIcon}
-                      />
+                      richCard.map((richCard: any, index: number) => {
+                        return (
+                          <BotMessageCard
+                            title={richCard.title}
+                            contentArray={richCard.description}
+                            imageSrc={richCard.imageURL}
+                            botIcon={richCard.botIcon}
+                            key={index}
+                          />
+                        );
+                      })
                     )}
                   </div>
                 );
@@ -529,9 +538,9 @@ const Home = () => {
                 activity.value.data.length !== 0
               ) {
                 const iconQuickReplyCard = activity.value.data;
-
+                console.log("iconQuickReplyCard", iconQuickReplyCard);
                 return (
-                  <div className=" w-full">
+                  <div className=" w-[266px]">
                     {activity?.value?.sender === "user" ? (
                       <></>
                     ) : (
@@ -550,34 +559,40 @@ const Home = () => {
                     {activity?.value?.sender === "user" ? (
                       <></>
                     ) : (
-                      <BotMessageCard
-                        title=""
-                        contentArray={[
-                          <div> {summaryCard.topText}</div>,
-                          <SummaryCard
-                            className="w-full mt-3"
-                            image={
-                              <img
-                                src="/images/onion.svg"
-                                alt=""
-                                className="h-[60px] w-[60px] rounded-md"
-                              />
-                            }
-                            priceList={summaryCard.price}
-                            subtitle={summaryCard.subtitle}
-                            title={summaryCard.title}
-                            totalAmount={summaryCard.totalAmount}
-                            totaltitle={summaryCard.totaltitle}
-                          />,
-                          <Text
-                            type="body"
-                            size="md"
-                            className="font-semibold mt-3 mb-1"
-                          >
-                            {summaryCard.bottomText}
-                          </Text>,
-                        ]}
-                      />
+                      summaryCard.map((summaryCard: any, index: number) => {
+                        return (
+                          <BotMessageCard
+                            key={index}
+                            title=""
+                            contentArray={[
+                              <div> {summaryCard.topText}</div>,
+
+                              <SummaryCard
+                                className="w-full mt-3"
+                                image={
+                                  <img
+                                    src="/images/onion.svg"
+                                    alt=""
+                                    className="h-[60px] w-[60px] rounded-md"
+                                  />
+                                }
+                                priceList={summaryCard.price}
+                                subtitle={summaryCard.subtitle}
+                                title={summaryCard.title}
+                                totalAmount={summaryCard.totalAmount}
+                                totaltitle={summaryCard.totaltitle}
+                              />,
+                              <Text
+                                type="body"
+                                size="md"
+                                className="font-semibold mt-3 mb-1"
+                              >
+                                {summaryCard.bottomText}
+                              </Text>,
+                            ]}
+                          />
+                        );
+                      })
                     )}
                   </div>
                 );
@@ -841,6 +856,7 @@ const Home = () => {
     // dispatch(setChatArray([...data]))
   };
   const timelineRef = useRef<any>();
+  console.log("ChatComponentArray", ChatComponentArray);
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"

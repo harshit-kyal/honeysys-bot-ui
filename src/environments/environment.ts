@@ -10,7 +10,7 @@ export const environment = {
 
   // directlineURL: "https://lenskits.polynomial.ai",
   // directlineURL: 'https://cca3-2405-201-200b-5087-9803-24e3-3b6b-274.ngrok-free.app',
-  directlineURL: "https://89d3-49-36-83-110.ngrok-free.app",
+  directlineURL: `${process.env.REACT_APP_DIRECTLINE_URL}`,
   // directlineURL: "http://localhost:8000",
   // directlineURL: "https://polynomial-directline.herokuapp.com",
   apiURLAzure:
