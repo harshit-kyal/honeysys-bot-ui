@@ -73,6 +73,12 @@ export const HomeSlice = createSlice({
         ChatArray: action.payload,
       };
     },
+    addToChatArray(state, action) {
+      return {
+        ...state,
+        ChatArray: [...state.ChatArray, action.payload],
+      };
+    },
     setLocationPermission(state, action) {
       return {
         ...state,
@@ -148,9 +154,128 @@ export const {
   setOtp,
   setUserId,
   setChatArray,
+  addToChatArray,
   setLocationPermission,
   setLocationModal,
   setDeniedModal,
   setUiUpdate,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;
+// useEffect(() => {
+//   ChatArray.forEach((activity: any, index: number) => {
+//     activity.forEach((activity: any, index: number) => {
+//       if (
+//         activity.type === "message" &&
+//         activity.text ===
+//           "It seems you have to login first to access the above service. Please provide your mobile number"
+//       ) {
+//         dispatch(setUiUpdate(true));
+//       } else if (
+//         activity.type === "message" &&
+//         activity.text === "Come back later"
+//       ) {
+//         dispatch(setUiUpdate(false));
+//       } else if (activity.type === "message" && activity.text !== "") {
+//         setArray(
+//           <ChatWrapper
+//             type={activity?.value?.sender === "user" ? "user" : "bot"}
+//             key={new Date().getTime() + index}
+//           >
+//             <div className="chatWrapper">
+//               {activity?.value?.sender === "user" ? (
+//                 <UserMessageCard content={activity?.text} />
+//               ) : (
+//                 <BotMessageCard title={activity?.text} />
+//               )}
+//             </div>
+//           </ChatWrapper>
+//         );
+//       } else if (
+//         activity.type === "richCard" &&
+//         activity.value.data.length !== 0
+//       ) {
+//         const richCard = activity.value.data;
+//         console.log("activity", richCard.botIcon);
+//         setArray(
+//           <ChatWrapper
+//             type={activity?.value?.sender === "user" ? "user" : "bot"}
+//             key={new Date().getTime() + index}
+//           >
+//             <div className="chatWrapper">
+//               {activity?.value?.sender === "user" ? (
+//                 <></>
+//               ) : (
+//                 // <UserMessageCard content={activity?.text} />
+//                 <BotMessageCard
+//                   title={richCard.title}
+//                   contentArray={richCard.description}
+//                   imageSrc={richCard.imageURL}
+//                   botIcon={richCard.botIcon}
+//                 />
+//               )}
+//             </div>
+//           </ChatWrapper>
+//         );
+//       } else if (
+//         activity.type === "iconQuickReply" &&
+//         activity.value.data.length !== 0
+//       ) {
+//         const iconQuickReplyCard = activity.value.data;
+//         console.log("activity", iconQuickReplyCard);
+//         setArray(
+//           <ChatWrapper
+//             type={activity?.value?.sender === "user" ? "user" : "bot"}
+//             // key={new Date().getTime() + index}
+//           >
+//             <div className="chatWrapper w-full">
+//               {activity?.value?.sender === "user" ? (
+//                 <></>
+//               ) : (
+//                 <BotMessageCard actionDataArray={iconQuickReplyCard} />
+//               )}
+//             </div>
+//           </ChatWrapper>
+//         );
+//       }
+//       // type paragraph
+//       else if (activity.type === "paragraph" && activity.value.text) {
+//         let text = activity.value.text;
+//         text.replace("<p>", "");
+//         text.replace("</p>", "");
+//         setArray(
+//           <ChatWrapper
+//             type={activity.value?.sender === "user" ? "user" : "bot"}
+//             key={new Date().getTime() + index}
+//           >
+//             <div className="chatWrapper">
+//               {activity.value.sender === "user" ? (
+//                 <UserMessageCard content={activity.text} />
+//               ) : (
+//                 <BotMessageCard title={text} />
+//               )}
+//             </div>
+//           </ChatWrapper>
+//         );
+//       }
+//       // else if (
+//       //   activity.type === "plainQuickReply" &&
+//       //   activity.value.data.length !== 0
+//       // ) {
+//       //   setArray(
+//       //     <ChatWrapper
+//       //       type={activity?.value?.sender === "user" ? "user" : "bot"}
+//       //       key={new Date().getTime() + index}
+//       //     >
+//       //       <div className="chatWrapper">
+//       //         {activity?.value?.sender === "user" ? (
+//       //           <UserMessageCard content={activity.value.data} />
+//       //         ) : (
+//       //           <BotMessageCard contentArray={activity.value.data} />
+//       //         )}
+//       //       </div>
+//       //     </ChatWrapper>
+//       //   );
+//       // }
+//     });
+//   });
+// }, [ChatArray]);

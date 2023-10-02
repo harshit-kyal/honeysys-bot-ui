@@ -1,19 +1,13 @@
 import React from "react";
-import { Text } from "@polynomialai/alpha-react";
+import { Button, Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import MyMapComponent from "../../components/MyMapComponent";
+import GoogleMapReact from "google-map-react";
 
 const Address = () => {
   const navigate = useNavigate();
 
-  const render = (status: Status): React.ReactElement => {
-    if (status === Status.FAILURE) return <div>Error</div>;
-    return <div>Loading ...</div>;
-  };
-
-  const center = { lat: -34.397, lng: 150.644 };
-  const zoom = 4;
+  const center = { lat: 21.1588329, lng: 72.7688111 };
+  const zoom = 16;
 
   return (
     <div className="h-screen">
@@ -42,13 +36,33 @@ const Address = () => {
           Select Your Location
         </Text>
       </div>
-      <div className="bg-slate-100" style={{ height: "calc(100% - 40px)" }}>
-        <Wrapper
-          apiKey={"AIzaSyAUWdjoeM1tSvhlkB9LPywwsWCli2lQxxY"}
-          render={render}
-        >
-          <MyMapComponent center={center} zoom={zoom} />
-        </Wrapper>
+      <div
+        className="bg-slate-100 relative"
+        style={{ height: "calc(100% - 190px)" }}
+      >
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c" }}
+          defaultCenter={center}
+          defaultZoom={zoom}
+          options={{
+            zoomControl: false,
+            streetViewControl: false,
+            mapTypeControlOptions: false,
+            fullscreenControl: false,
+          }}
+        />
+        <div className="absolute top-[50%] left-[50%]">
+          <img src="/images/mapMarker.svg" height="30px" width="30px"></img>
+        </div>
+      </div>
+      <div className="px-[20px] py-[10px] ">
+        <div className="text-[#505050] text-[10px]">Your Location</div>
+        <div className="mt-[10px] mb-5">
+          <img src="/images/location1.svg" height="24px" width="24px"></img>
+        </div>
+        <Button className=" bg-[#09215B] text-white text-xs text-center w-full py-3">
+          Enter Complete Address
+        </Button>
       </div>
     </div>
   );

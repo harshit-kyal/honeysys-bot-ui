@@ -5,7 +5,12 @@ import { environment } from "../../environments/environment";
 import { setBotInfo, setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
-import { getChatData, setChatArray, setUiUpdate } from "../../slices/homeSlice";
+import {
+  getChatData,
+  setChatArray,
+  addToChatArray,
+  setUiUpdate,
+} from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
 import LocationPermission from "../../components/Modal/LocationPermission";
@@ -36,6 +41,7 @@ const Home = () => {
   const botType = useAppSelector((state) => state.bot.botType);
   const loading = useAppSelector((state) => state.home.loading);
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
+  const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
 
   const userId = useAppSelector((state) => state.home.userId);
   const [ChatComponentArray, setChatComponentArray] = useState<JSX.Element[]>(
@@ -119,13 +125,13 @@ const Home = () => {
             {
               text: "EXPLORE",
               iconUrl:
-                "https://quiltstorageaccount.blob.core.windows.net/uiassest/Property View.png",
+                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
               value: "EXPLORE",
             },
             {
               text: "ABOUT US",
               iconUrl:
-                "https://quiltstorageaccount.blob.core.windows.net/uiassest/About.png",
+                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
               value: "ABOUT COLIVE",
             },
             {
@@ -320,7 +326,6 @@ const Home = () => {
         top: scrollRef.current.scrollHeight,
         behavior: "smooth",
       });
-      console.log("scrollRef.current", scrollRef.current.scrollHeight);
     }
   };
 
@@ -330,7 +335,7 @@ const Home = () => {
   const replyFunction = (data: any) => {
     if (data.activities) {
       const activities: any[] = data.activities;
-      dispatch(setChatArray([[...activities]]));
+      dispatch(addToChatArray(activities));
     }
   };
   useEffect(() => {
@@ -404,14 +409,21 @@ const Home = () => {
   }, [title, greetingMessage, botIcon]);
 
   useEffect(() => {
-    if (!reviewToken && ChatComponentArray.length === 0) {
-      setChatComponentArray([
-        ...ChatComponentArray,
-        <GetStart
-          setChatArray={setChatComponentArray}
-          key={new Date().getTime()}
-        />,
-      ]);
+    if (!reviewToken && ChatArray.length === 0) {
+      dispatch(
+        addToChatArray([
+          {
+            type: "get start",
+          },
+        ])
+      );
+      // setChatComponentArray([
+      //   ...ChatComponentArray,
+      //   <GetStart
+      //     setChatArray={setChatComponentArray}
+      //     key={new Date().getTime()}
+      //   />,
+      // ]);
     }
     if (!reviewToken && botType === "") {
       // dispatch(setChatArray([...chat]));
@@ -420,7 +432,6 @@ const Home = () => {
       //     dispatch(setBotInfo(data.data.data[0]));
       //     const botInfo = data.data.data[0];
       if (convId) {
-        console.log(convId);
       } else {
         let botType = "e-comm";
         // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
@@ -441,24 +452,30 @@ const Home = () => {
               text: "init",
               voiceFlag: false,
             };
-            dispatch(getChatData({ newData, botType }));
+            dispatch(getChatData({ newData, botType }))
+              .then(() => {})
+              .catch(() => {
+                // dispatch(setChatArray([...chat]));
+              });
             socket.on("sendMessage", (message) => {
-              if (message.data.isUpdated === true) {
-                dispatch(setUiUpdate(true));
-              } else {
-                dispatch(setUiUpdate(false));
-              }
+              // if (message.data.isUpdated === true) {
+              //   dispatch(setUiUpdate(true));
+              // } else {
+              //   dispatch(setUiUpdate(false));
+              // }
               if (message.data && message.data !== "") {
                 let data = message.data;
                 replyFunction(data);
               }
             });
             socket.on("error", (error) => {
-              console.log(error);
+              console.log("soket", error);
+              // dispatch(setChatArray([...chat]));
             });
           })
           .catch((error) => {
-            console.log(error);
+            console.log("socket", error);
+            // dispatch(setChatArray([...chat]));
           });
       }
       // })
@@ -472,264 +489,154 @@ const Home = () => {
     };
   }, []);
   useEffect(() => {
-    console.log("ChatArray", ChatArray);
-    ChatArray.map((activity: any, index: number) => {
-      setArray(
-        <ChatWrapper
-          type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
-          key={new Date().getTime() + index}
-        >
-          <div className="chatWrapper">
-            {activity.map((activity: any, index: number) => {
-              if (
-                activity.type === "message" &&
-                activity.text ===
-                  "It seems you have to login first to access the above service. Please provide your mobile number"
-              ) {
-                return dispatch(setUiUpdate(true));
-              }
-              if (
-                activity.type === "message" &&
-                activity.text === "Come back later"
-              ) {
-                return dispatch(setUiUpdate(false));
-              }
-              if (activity.type === "message" && activity.text !== "") {
-                console.log("text", activity.text);
-                if (
-                  activity.text ===
-                  "Sorry an error occured while processing the request"
-                ) {
-                  dispatch(setUiUpdate(true));
-                } else {
-                  dispatch(setUiUpdate(false));
+    console.log("get start Data", ChatComponentArray);
+    setChatComponentArray(
+      ChatArray.map((activity: any, index: number) => {
+        return (
+          <ChatWrapper
+            type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
+            key={new Date().getTime() + index}
+          >
+            <div className="chatWrapper">
+              {activity.map((activity: any, index: number) => {
+                if (activity.type === "get start") {
+                  // console.log("get start",activity.type);
+                  // {activity.data}
+                  return (
+                    <GetStart
+                      setChatArray={setChatComponentArray}
+                      key={new Date().getTime()}
+                    />
+                  );
                 }
+                // if (
+                //   activity.type === "message" &&
+                //   activity.text ===
+                //     "It seems you have to login first to access the above service. Please provide your mobile number"
+                // ) {
+                //   return dispatch(setUiUpdate(true));
+                // }
+                // if (
+                //   activity.type === "message" &&
+                //   activity.text === "Come back later"
+                // ) {
+                //   return dispatch(setUiUpdate(false));
+                // }
+                if (activity.type === "message" && activity.text !== "") {
+                  if (activity.updateUI === true) {
+                    dispatch(setUiUpdate(true));
+                    // ChatArray.splice(1, ChatArray.length);
+                    // dispatch(setChatArray([]));
+                  } else {
+                    dispatch(setUiUpdate(false));
+                  }
 
-                return (
-                  <div className="w-full">
-                    {activity?.value?.sender === "user" ? (
-                      <UserMessageCard content={activity?.text} />
-                    ) : (
-                      <BotMessageCard title={activity?.text} />
-                    )}
-                  </div>
-                );
-              }
-              if (
-                activity.type === "richCard" &&
-                activity.value.data.length !== 0
-              ) {
-                const richCard = activity.value.data;
-                console.log("richCard", richCard);
-                return (
-                  <div className="w-full">
-                    {activity?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      // <UserMessageCard content={activity?.text} />
-                      richCard.map((richCard: any, index: number) => {
-                        return (
-                          <BotMessageCard
-                            title={richCard.title}
-                            contentArray={richCard.description}
-                            imageSrc={richCard.imageURL}
-                            botIcon={richCard.botIcon}
-                            key={index}
-                          />
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              }
-              if (
-                activity.type === "iconQuickReply" &&
-                activity.value.data.length !== 0
-              ) {
-                const iconQuickReplyCard = activity.value.data;
-                console.log("iconQuickReplyCard", iconQuickReplyCard);
-                return (
-                  <div className=" w-[266px]">
-                    {activity?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      <BotMessageCard actionDataArray={iconQuickReplyCard} />
-                    )}
-                  </div>
-                );
-              }
-              if (
-                activity.type === "summaryCard" &&
-                activity.value.data.length !== 0
-              ) {
-                const summaryCard: any = activity.value.data;
-                return (
-                  <div className=" w-full">
-                    {activity?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      summaryCard.map((summaryCard: any, index: number) => {
-                        return (
-                          <BotMessageCard
-                            key={index}
-                            title=""
-                            contentArray={[
-                              <div> {summaryCard.topText}</div>,
+                  return (
+                    <div className="w-full">
+                      {activity?.value?.sender === "user" ? (
+                        <UserMessageCard content={activity?.text} />
+                      ) : (
+                        <BotMessageCard title={activity?.text} />
+                      )}
+                    </div>
+                  );
+                }
+                if (
+                  activity.type === "richCard" &&
+                  activity.value.data.length !== 0
+                ) {
+                  const richCard = activity.value.data;
+                  return (
+                    <div className="w-full">
+                      {activity?.value?.sender === "user" ? (
+                        <></>
+                      ) : (
+                        // <UserMessageCard content={activity?.text} />
+                        richCard.map((richCard: any, index: number) => {
+                          return (
+                            <BotMessageCard
+                              title={richCard.title}
+                              contentArray={richCard.description}
+                              imageSrc={richCard.imageURL}
+                              botIcon={richCard.botIcon}
+                              key={index}
+                            />
+                          );
+                        })
+                      )}
+                    </div>
+                  );
+                }
+                if (
+                  activity.type === "iconQuickReply" &&
+                  activity.value.data.length !== 0
+                ) {
+                  const iconQuickReplyCard = activity.value.data;
+                  return (
+                    <div className=" w-[266px]">
+                      {activity?.value?.sender === "user" ? (
+                        <></>
+                      ) : (
+                        <BotMessageCard actionDataArray={iconQuickReplyCard} />
+                      )}
+                    </div>
+                  );
+                }
+                if (
+                  activity.type === "summaryCard" &&
+                  activity.value.data.length !== 0
+                ) {
+                  const summaryCard: any = activity.value.data;
+                  return (
+                    <div className=" w-full">
+                      {activity?.value?.sender === "user" ? (
+                        <></>
+                      ) : (
+                        summaryCard.map((summaryCard: any, index: number) => {
+                          return (
+                            <BotMessageCard
+                              key={index}
+                              title=""
+                              contentArray={[
+                                <div> {summaryCard.topText}</div>,
 
-                              <SummaryCard
-                                className="w-full mt-3"
-                                image={
-                                  <img
-                                    src="/images/onion.svg"
-                                    alt=""
-                                    className="h-[60px] w-[60px] rounded-md"
-                                  />
-                                }
-                                priceList={summaryCard.price}
-                                subtitle={summaryCard.subtitle}
-                                title={summaryCard.title}
-                                totalAmount={summaryCard.totalAmount}
-                                totaltitle={summaryCard.totaltitle}
-                              />,
-                              <Text
-                                type="body"
-                                size="md"
-                                className="font-semibold mt-3 mb-1"
-                              >
-                                {summaryCard.bottomText}
-                              </Text>,
-                            ]}
-                          />
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              }
-            })}
-          </div>
-        </ChatWrapper>
-      );
-    });
+                                <SummaryCard
+                                  className="w-full mt-3"
+                                  image={
+                                    <img
+                                      src="/images/onion.svg"
+                                      alt=""
+                                      className="h-[60px] w-[60px] rounded-md"
+                                    />
+                                  }
+                                  priceList={summaryCard.price}
+                                  subtitle={summaryCard.subtitle}
+                                  title={summaryCard.title}
+                                  totalAmount={summaryCard.totalAmount}
+                                  totaltitle={summaryCard.totaltitle}
+                                />,
+                                <Text
+                                  type="body"
+                                  size="md"
+                                  className="font-semibold mt-3 mb-1"
+                                >
+                                  {summaryCard.bottomText}
+                                </Text>,
+                              ]}
+                            />
+                          );
+                        })
+                      )}
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          </ChatWrapper>
+        );
+      })
+    );
   }, [ChatArray]);
-  // useEffect(() => {
-  //   ChatArray.forEach((activity: any, index: number) => {
-  //     activity.forEach((activity: any, index: number) => {
-  //       if (
-  //         activity.type === "message" &&
-  //         activity.text ===
-  //           "It seems you have to login first to access the above service. Please provide your mobile number"
-  //       ) {
-  //         dispatch(setUiUpdate(true));
-  //       } else if (
-  //         activity.type === "message" &&
-  //         activity.text === "Come back later"
-  //       ) {
-  //         dispatch(setUiUpdate(false));
-  //       } else if (activity.type === "message" && activity.text !== "") {
-  //         setArray(
-  //           <ChatWrapper
-  //             type={activity?.value?.sender === "user" ? "user" : "bot"}
-  //             key={new Date().getTime() + index}
-  //           >
-  //             <div className="chatWrapper">
-  //               {activity?.value?.sender === "user" ? (
-  //                 <UserMessageCard content={activity?.text} />
-  //               ) : (
-  //                 <BotMessageCard title={activity?.text} />
-  //               )}
-  //             </div>
-  //           </ChatWrapper>
-  //         );
-  //       } else if (
-  //         activity.type === "richCard" &&
-  //         activity.value.data.length !== 0
-  //       ) {
-  //         const richCard = activity.value.data;
-  //         console.log("activity", richCard.botIcon);
-  //         setArray(
-  //           <ChatWrapper
-  //             type={activity?.value?.sender === "user" ? "user" : "bot"}
-  //             key={new Date().getTime() + index}
-  //           >
-  //             <div className="chatWrapper">
-  //               {activity?.value?.sender === "user" ? (
-  //                 <></>
-  //               ) : (
-  //                 // <UserMessageCard content={activity?.text} />
-  //                 <BotMessageCard
-  //                   title={richCard.title}
-  //                   contentArray={richCard.description}
-  //                   imageSrc={richCard.imageURL}
-  //                   botIcon={richCard.botIcon}
-  //                 />
-  //               )}
-  //             </div>
-  //           </ChatWrapper>
-  //         );
-  //       } else if (
-  //         activity.type === "iconQuickReply" &&
-  //         activity.value.data.length !== 0
-  //       ) {
-  //         const iconQuickReplyCard = activity.value.data;
-  //         console.log("activity", iconQuickReplyCard);
-  //         setArray(
-  //           <ChatWrapper
-  //             type={activity?.value?.sender === "user" ? "user" : "bot"}
-  //             // key={new Date().getTime() + index}
-  //           >
-  //             <div className="chatWrapper w-full">
-  //               {activity?.value?.sender === "user" ? (
-  //                 <></>
-  //               ) : (
-  //                 <BotMessageCard actionDataArray={iconQuickReplyCard} />
-  //               )}
-  //             </div>
-  //           </ChatWrapper>
-  //         );
-  //       }
-  //       // type paragraph
-  //       else if (activity.type === "paragraph" && activity.value.text) {
-  //         let text = activity.value.text;
-  //         text.replace("<p>", "");
-  //         text.replace("</p>", "");
-  //         setArray(
-  //           <ChatWrapper
-  //             type={activity.value?.sender === "user" ? "user" : "bot"}
-  //             key={new Date().getTime() + index}
-  //           >
-  //             <div className="chatWrapper">
-  //               {activity.value.sender === "user" ? (
-  //                 <UserMessageCard content={activity.text} />
-  //               ) : (
-  //                 <BotMessageCard title={text} />
-  //               )}
-  //             </div>
-  //           </ChatWrapper>
-  //         );
-  //       }
-  //       // else if (
-  //       //   activity.type === "plainQuickReply" &&
-  //       //   activity.value.data.length !== 0
-  //       // ) {
-  //       //   setArray(
-  //       //     <ChatWrapper
-  //       //       type={activity?.value?.sender === "user" ? "user" : "bot"}
-  //       //       key={new Date().getTime() + index}
-  //       //     >
-  //       //       <div className="chatWrapper">
-  //       //         {activity?.value?.sender === "user" ? (
-  //       //           <UserMessageCard content={activity.value.data} />
-  //       //         ) : (
-  //       //           <BotMessageCard contentArray={activity.value.data} />
-  //       //         )}
-  //       //       </div>
-  //       //     </ChatWrapper>
-  //       //   );
-  //       // }
-  //     });
-  //   });
-  // }, [ChatArray]);
 
   useEffect(() => {
     scroll();
@@ -738,7 +645,6 @@ const Home = () => {
   const fetchData = () => {
     setTimeout(() => {
       let data = paginationChat.slice(pageNumber, 2);
-      console.log("pageNumber", pageNumber, ":", "data", data);
       data.map((activity: any, index: number) => {
         setArray(
           <ChatWrapper
@@ -747,19 +653,19 @@ const Home = () => {
           >
             <div className="w-full">
               {activity.map((activity: any, index: number) => {
-                if (
-                  activity.type === "message" &&
-                  activity.text ===
-                    "It seems you have to login first to access the above service. Please provide your mobile number"
-                ) {
-                  return dispatch(setUiUpdate(true));
-                }
-                if (
-                  activity.type === "message" &&
-                  activity.text === "Come back later"
-                ) {
-                  return dispatch(setUiUpdate(false));
-                }
+                // if (
+                //   activity.type === "message" &&
+                //   activity.text ===
+                //     "It seems you have to login first to access the above service. Please provide your mobile number"
+                // ) {
+                //   return dispatch(setUiUpdate(true));
+                // }
+                // if (
+                //   activity.type === "message" &&
+                //   activity.text === "Come back later"
+                // ) {
+                //   return dispatch(setUiUpdate(false));
+                // }
                 if (activity.type === "message" && activity.text !== "") {
                   return (
                     <div className="chatWrapper">
@@ -865,7 +771,6 @@ const Home = () => {
     // dispatch(setChatArray([...data]))
   };
   const timelineRef = useRef<any>();
-  console.log("ChatComponentArray", ChatComponentArray);
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
@@ -909,12 +814,16 @@ const Home = () => {
             text: inputText,
             voiceFlag: false,
           };
-          dispatch(getChatData({ newData, botType }));
+          dispatch(getChatData({ newData, botType }))
+            .then(() => {})
+            .catch(() => {
+              dispatch(setChatArray([...chat]));
+            });
         }}
       />
       <LocationPermission />
       <DeniedModal />
-      <FloatingButton />
+      {UiUpdate && <FloatingButton />}
     </div>
   );
 };

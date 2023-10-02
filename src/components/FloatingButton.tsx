@@ -1,7 +1,10 @@
 import { getTheme } from "../api";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setUiUpdate } from "../slices/homeSlice";
 import { setTheme } from "../slices/rootSlice";
+import MessagePopup from "./Resuable/MessagePopup";
+import toast, { Toaster } from "react-hot-toast";
 
 const FloatingButton = () => {
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
@@ -36,9 +39,24 @@ const FloatingButton = () => {
   document.body.addEventListener("drop", drop, false);
 
   const dispatch = useAppDispatch();
-
+  const [displayPopup, setDisplayPopup] = useState<boolean>(false);
   const updateUI = () => {
     getTheme().then((response) => {
+      console.log("floting", response);
+      // toast("UI is updated", {
+      //   style: {
+      //     padding: " 16px 10px",
+      //     borderRadius: "8px",
+      //     background: "#C25E5E",
+      //     color: "#FFF",
+      //   },
+      // });
+      alert("UI is updated");
+      // setDisplayPopup(true);
+      // setTimeout(() => {
+      //   setDisplayPopup(false);
+      // }, 3000);
+      dispatch(setUiUpdate(false));
       dispatch(
         setTheme({
           overallThemeUI: response.overallThemeUI,
@@ -51,21 +69,33 @@ const FloatingButton = () => {
       dispatch(setUiUpdate(false));
     });
   };
-
+  console.log("uiiii", UiUpdate);
   return (
-    <div
-      className="absolute right-[2.5px] bottom-[70px] bg-primary rounded-full flex justify-center items-center"
-      draggable="true"
-      id="dragme"
-      style={{ display: UiUpdate ? "block" : "none" }}
-      onClick={updateUI}
-    >
-      <img
-        src="/images/refresh-arrow-white.png"
-        alt="refresh"
-        className="h-10 w-10 p-3"
-      />
-    </div>
+    <>
+      {UiUpdate ? (
+        <div
+          className="absolute right-[2.5px] bottom-[70px] bg-primary rounded-full flex justify-center items-center"
+          draggable="true"
+          id="dragme"
+          style={{ display: UiUpdate ? "block" : "none" }}
+          onClick={updateUI}
+        >
+          <img
+            src="/images/refresh-arrow-white.png"
+            alt="refresh"
+            className="h-10 w-10 p-3"
+          />
+          <Toaster />
+          {/* <MessagePopup
+        display={displayPopup}
+        setDisplay={displayPopup}
+        content="UI is updated"
+      /> */}
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

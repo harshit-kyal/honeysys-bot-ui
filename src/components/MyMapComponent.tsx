@@ -16,7 +16,7 @@ const MyMapComponent = ({
     });
   });
 
-  return <div ref={ref} id="map" />;
+  return <div ref={ref} id="map" style={{ height: "100%" }} />;
 };
 
 export default MyMapComponent;

@@ -63,7 +63,6 @@
 }
 
 @keyframes bounce {
-
   0%,
   60%,
   100% {
@@ -103,6 +102,17 @@
 
 .mobileInput input:focus {
   --tw-ring-opacity: 0;
-  --tw-ring-color: rgb(30 27 46/var(--tw-ring-opacity));
+  --tw-ring-color: rgb(30 27 46 / var(--tw-ring-opacity));
   --tw-ring-inset: white;
+}
+.message-popup {
+  position: absolute;
+  top: 50px;
+  right: 14px;
+  background: rgb(197 252 234);
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: darkgreen;
+  display: flex;
 }

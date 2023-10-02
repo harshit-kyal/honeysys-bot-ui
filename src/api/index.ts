@@ -28,7 +28,7 @@ export const botApi = async (body: any) => {
 export const getTheme = async () => {
   try {
     const response = await axios
-      .post("https://botcyadminpanel.onrender.com/getTheme", {
+      .post(`${process.env.REACT_APP_GET_THEME_URL}`, {
         clientName: "honeySys",
       })
       .then((response) => {

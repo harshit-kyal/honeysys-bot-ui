@@ -155,47 +155,47 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                       src="/images/location.svg"
                       text="Provide Location"
                       onClick={() => {
-                        // navigate("/address");
-                        // navigator.permissions
-                        //   .query({ name: "geolocation" })
-                        //   .then(function (result) {
-                        //     if (result.state === "granted") {
-                        //       alert("granted");
-                        //       navigator.geolocation.getCurrentPosition(
-                        //         function (position) {
-                        //           console.log(
-                        //             "Latitude is :",
-                        //             position.coords.latitude
-                        //           );
-                        //           console.log(
-                        //             "Longitude is :",
-                        //             position.coords.longitude
-                        //           );
-                        //         }
-                        //       );
-                        //     } else if (result.state === "prompt") {
-                        //       // dispatch(setLocationModal(true));
-                        //       alert("prompt");
-                        //       navigator.geolocation.getCurrentPosition(
-                        //         function (position) {
-                        //           console.log(
-                        //             "Latitude is :",
-                        //             position.coords.latitude
-                        //           );
-                        //           console.log(
-                        //             "Longitude is :",
-                        //             position.coords.longitude
-                        //           );
-                        //         }
-                        //       );
-                        //     } else if (result.state === "denied") {
-                        //       // dispatch(setDeniedModal(true));
-                        //       alert("denied");
-                        //     }
-                        //     result.onchange = function () {
-                        //       console.log(result.state);
-                        //     };
-                        //   });
+                        navigate("/address");
+                        navigator.permissions
+                          .query({ name: "geolocation" })
+                          .then(function (result) {
+                            if (result.state === "granted") {
+                              alert("granted");
+                              navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                  console.log(
+                                    "Latitude is :",
+                                    position.coords.latitude
+                                  );
+                                  console.log(
+                                    "Longitude is :",
+                                    position.coords.longitude
+                                  );
+                                }
+                              );
+                            } else if (result.state === "prompt") {
+                              // dispatch(setLocationModal(true));
+                              alert("prompt");
+                              navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                  console.log(
+                                    "Latitude is :",
+                                    position.coords.latitude
+                                  );
+                                  console.log(
+                                    "Longitude is :",
+                                    position.coords.longitude
+                                  );
+                                }
+                              );
+                            } else if (result.state === "denied") {
+                              // dispatch(setDeniedModal(true));
+                              alert("denied");
+                            }
+                            result.onchange = function () {
+                              console.log(result.state);
+                            };
+                          });
 
                         botApi({
                           pincode: "500081",

@@ -27,7 +27,9 @@ const BotMessageCard = ({
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
-  const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
+  // const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
+  const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
+  const bot = overallThemeUI.botIcons;
   if (actionDataArray && actionDataArray.length !== 0) {
     {
       actionDataArray.map((data: any, index) => (
@@ -89,7 +91,7 @@ const BotMessageCard = ({
               onClick={() => {
                 const newData = {
                   conversationId: convId,
-                  text: data.text.slice(2),
+                  text: data.value,
                   voiceFlag: false,
                 };
                 dispatch(getChatData({ newData, botType }));

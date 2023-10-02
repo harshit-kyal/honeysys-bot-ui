@@ -116,13 +116,13 @@ export const LeafyVegetables: any = {
     {
       id: "1",
       imageSrc: "/images/onion.svg",
-      title: "Leafy Vegetables",
+      title: "Fresh Cauliflower",
     },
     {
-      id: "1",
+      id: "2",
       imageSrc: "/images/onion.svg",
-      title: "tomatoes",
+      title: "Fresh Cabbage",
     },
-    { id: "1", imageSrc: "/images/onion.svg", title: "Edibles Roots" },
+    { id: "3", imageSrc: "/images/onion.svg", title: "Fresh Spinach" },
   ],
 };
