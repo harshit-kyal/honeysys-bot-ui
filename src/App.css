@@ -116,3 +116,12 @@
   color: darkgreen;
   display: flex;
 }
+
+
+/* addresspage */
+.search:placeholder-shown {
+  background-image: url("../public/images/searchBlack.svg");
+  background-repeat: no-repeat;
+  text-indent: 24px;
+  background-position: 9px 7px;
+}

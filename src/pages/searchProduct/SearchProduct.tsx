@@ -29,6 +29,7 @@ const SearchProduct = () => {
           <input
             name="search"
             id="search"
+            className="search-product"
             placeholder="What are you looking for?"
             onInput={(e: any) => {
               setSearchStr(e?.target?.value);

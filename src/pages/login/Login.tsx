@@ -71,7 +71,7 @@ const Login = () => {
           name="phoneno"
           id="phoneno"
           placeholder="Enter your mobile number"
-          className="ml-2 sm:w-full md:w-52 !text-sm"
+          className="ml-2 w-full !text-sm"
           required
           value={Mobile}
           onChange={(e) => {

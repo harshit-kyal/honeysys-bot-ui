@@ -13,6 +13,8 @@ import Cart from "../pages/cart/Cart";
 import Address from "../pages/address/Address";
 import SearchProduct from "../pages/searchProduct/SearchProduct";
 import PDP from "../pages/PDP/PDP";
+import ContactDetails from "../pages/contactDetails/ContactDetails";
+import AddressDetails from "../pages/addressDetails/AddressDetails";
 
 const Routing = () => {
   return (
@@ -30,6 +32,8 @@ const Routing = () => {
         <Route path="/pdp/:id" element={<PDP />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/address" element={<Address />} />
+        <Route path="/contactDetails" element={<ContactDetails />} />
+        <Route path="/addressDetails" element={<AddressDetails />} />
         <Route path="/search" element={<SearchProduct />} />
       </Route>
     </Routes>

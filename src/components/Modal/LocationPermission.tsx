@@ -1,13 +1,14 @@
 import { AddDialog, Button, Text } from "@polynomialai/alpha-react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setLocationPermission } from "../../slices/homeSlice";
+import { useNavigate } from "react-router-dom";
 
 const LocationPermission = () => {
   const dispatch = useAppDispatch();
   const locationPermission = useAppSelector(
     (state) => state.home.locationPermission
   );
-
+  const navigate = useNavigate();
   return (
     <AddDialog
       title=""
@@ -46,23 +47,24 @@ const LocationPermission = () => {
                   navigator.permissions
                     .query({ name: "geolocation" })
                     .then(function (result) {
+                      navigate("/address")
+                      dispatch(setLocationPermission(false));
                       if (result.state === "granted") {
                         alert("granted");
                         navigator.geolocation.getCurrentPosition(function (
                           position
                         ) {
+                        
                         });
                       } else if (result.state === "prompt") {
                         navigator.geolocation.getCurrentPosition(function (
                           position
-                        ) {
-                        });
+                        ) {});
                         alert("prompt");
                       } else if (result.state === "denied") {
                         alert("denied");
                       }
-                      result.onchange = function () {
-                      };
+                      result.onchange = function () {};
                     });
                 } else {
                   alert("Sorry Not available!");

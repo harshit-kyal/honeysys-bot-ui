@@ -4,10 +4,10 @@ import ActionButton from "./Resuable/ActionButton";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BotMessageCard from "./Resuable/BotMessageCard";
 import ReplyMessageCard from "./Resuable/ReplyMessageCard";
-import { ReplyCard, RichCard, Text } from "@polynomialai/alpha-react";
+import { Button, ReplyCard, RichCard, Text } from "@polynomialai/alpha-react";
 import CartReplyCard from "./Resuable/CartReplyCard";
 import OrderSummaryCard from "./Resuable/OrderSummaryCard";
-import { getStoreData } from "../slices/homeSlice";
+import { getStoreData, setLocationPermission } from "../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { botApi } from "../api";
@@ -16,7 +16,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const conversationUI = useAppSelector((state) => state.root.conversationUI);
-
+  const [modal, setModal] = useState(false);
   const handleTrackMyOrder = () => {
     return (
       <>
@@ -155,57 +155,58 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                       src="/images/location.svg"
                       text="Provide Location"
                       onClick={() => {
-                        navigate("/address");
-                        navigator.permissions
-                          .query({ name: "geolocation" })
-                          .then(function (result) {
-                            if (result.state === "granted") {
-                              alert("granted");
-                              navigator.geolocation.getCurrentPosition(
-                                function (position) {
-                                  console.log(
-                                    "Latitude is :",
-                                    position.coords.latitude
-                                  );
-                                  console.log(
-                                    "Longitude is :",
-                                    position.coords.longitude
-                                  );
-                                }
-                              );
-                            } else if (result.state === "prompt") {
-                              // dispatch(setLocationModal(true));
-                              alert("prompt");
-                              navigator.geolocation.getCurrentPosition(
-                                function (position) {
-                                  console.log(
-                                    "Latitude is :",
-                                    position.coords.latitude
-                                  );
-                                  console.log(
-                                    "Longitude is :",
-                                    position.coords.longitude
-                                  );
-                                }
-                              );
-                            } else if (result.state === "denied") {
-                              // dispatch(setDeniedModal(true));
-                              alert("denied");
-                            }
-                            result.onchange = function () {
-                              console.log(result.state);
-                            };
-                          });
+                        dispatch(setLocationPermission(true))
+                        // navigate("/address");
+                        // navigator.permissions
+                        //   .query({ name: "geolocation" })
+                        //   .then(function (result) {
+                        //     if (result.state === "granted") {
+                        //       alert("granted");
+                        //       navigator.geolocation.getCurrentPosition(
+                        //         function (position) {
+                        //           console.log(
+                        //             "Latitude is :",
+                        //             position.coords.latitude
+                        //           );
+                        //           console.log(
+                        //             "Longitude is :",
+                        //             position.coords.longitude
+                        //           );
+                        //         }
+                        //       );
+                        //     } else if (result.state === "prompt") {
+                        //       // dispatch(setLocationModal(true));
+                        //       alert("prompt");
+                        //       navigator.geolocation.getCurrentPosition(
+                        //         function (position) {
+                        //           console.log(
+                        //             "Latitude is :",
+                        //             position.coords.latitude
+                        //           );
+                        //           console.log(
+                        //             "Longitude is :",
+                        //             position.coords.longitude
+                        //           );
+                        //         }
+                        //       );
+                        //     } else if (result.state === "denied") {
+                        //       // dispatch(setDeniedModal(true));
+                        //       alert("denied");
+                        //     }
+                        //     result.onchange = function () {
+                        //       console.log(result.state);
+                        //     };
+                        //   });
 
-                        botApi({
-                          pincode: "500081",
-                          type: "location",
-                          action: "getStores",
-                          clientName: "honeySys",
-                        }).then((response) => {
-                          if (response.data?.code === 200) {
-                          }
-                        });
+                        // botApi({
+                        //   pincode: "500081",
+                        //   type: "location",
+                        //   action: "getStores",
+                        //   clientName: "honeySys",
+                        // }).then((response) => {
+                        //   if (response.data?.code === 200) {
+                        //   }
+                        // });
 
                         setChatArray((array: any) => [
                           ...array,
@@ -422,6 +423,35 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
           />
         </div>
       </ChatWrapper>
+      {/* {modal ? (
+        <div
+          className="absolute top-[50%] left-[50%] w-[80%] bg-white p-5 z-50"
+          style={{ transform: " translate(-50%, -50%)" }}
+        >
+          <div className="flex align-middle items-center justify-center w-full mb-5">
+            <img
+              src="/images/location-pink.svg"
+              height="40px"
+              width="28px"
+            ></img>
+          </div>
+          <div className="text-[14px] text-center text-black font-medium">
+            Allow “Honeysys Bot” to access this device’s location?
+          </div>
+          <div className="text-[12px] text-center text-black font-normal mt-2">
+            Let us access the location of this device to show products available
+            near you.
+          </div>
+          <div className="flex mt-5 justify-evenly">
+            <Button className="text-[red] bg-white border border-[red] px-7">
+              Deny
+            </Button>
+            <Button className="text-white bg-[#09215B] px-7">Allow</Button>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )} */}
     </>
   );
 };
