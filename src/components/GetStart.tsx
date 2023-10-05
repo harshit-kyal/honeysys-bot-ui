@@ -9,14 +9,12 @@ import CartReplyCard from "./Resuable/CartReplyCard";
 import OrderSummaryCard from "./Resuable/OrderSummaryCard";
 import { getStoreData, setLocationPermission } from "../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { useEffect, useState } from "react";
-import { botApi } from "../api";
+import { useState } from "react";
 
 const GetStart = ({ setChatArray }: { setChatArray: any }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const conversationUI = useAppSelector((state) => state.root.conversationUI);
-  const [modal, setModal] = useState(false);
   const handleTrackMyOrder = () => {
     return (
       <>
@@ -155,7 +153,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
                       src="/images/location.svg"
                       text="Provide Location"
                       onClick={() => {
-                        dispatch(setLocationPermission(true))
+                        dispatch(setLocationPermission(true));
                         // navigate("/address");
                         // navigator.permissions
                         //   .query({ name: "geolocation" })
@@ -423,35 +421,6 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
           />
         </div>
       </ChatWrapper>
-      {/* {modal ? (
-        <div
-          className="absolute top-[50%] left-[50%] w-[80%] bg-white p-5 z-50"
-          style={{ transform: " translate(-50%, -50%)" }}
-        >
-          <div className="flex align-middle items-center justify-center w-full mb-5">
-            <img
-              src="/images/location-pink.svg"
-              height="40px"
-              width="28px"
-            ></img>
-          </div>
-          <div className="text-[14px] text-center text-black font-medium">
-            Allow “Honeysys Bot” to access this device’s location?
-          </div>
-          <div className="text-[12px] text-center text-black font-normal mt-2">
-            Let us access the location of this device to show products available
-            near you.
-          </div>
-          <div className="flex mt-5 justify-evenly">
-            <Button className="text-[red] bg-white border border-[red] px-7">
-              Deny
-            </Button>
-            <Button className="text-white bg-[#09215B] px-7">Allow</Button>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )} */}
     </>
   );
 };

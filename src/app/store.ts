@@ -12,19 +12,25 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import {
-  combineReducers,
-  getDefaultMiddleware,
-} from '@reduxjs/toolkit';
+import { combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import rootSlice from "../slices/rootSlice";
 const persistConfig = {
   key: "persist-key",
   storage,
 };
-const persist = persistReducer(persistConfig, RootSlice);
+const botpersistConfig = {
+  key: "bot-persist-key",
+  storage,
+};
+const homepersistConfig = {
+  key: "home-persist-key",
+  storage,
+};
+const rootPersist = persistReducer(persistConfig, RootSlice);
+const homePersist = persistReducer(homepersistConfig, homeSlice);
+const botPersist = persistReducer(botpersistConfig, botSlice);
 export const store = configureStore({
-  reducer: { root: persist, home: homeSlice, bot: botSlice },
+  reducer: { root: rootPersist, home: homePersist, bot: botPersist },
   middleware: getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

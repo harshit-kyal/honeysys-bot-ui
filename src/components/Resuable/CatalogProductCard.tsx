@@ -17,9 +17,9 @@ const CatalogProductCard = ({
   imageSrc,
   price,
   title,
-  // titleCn,
-  // priceCn,
-}: cardProps) => {
+}: // titleCn,
+// priceCn,
+cardProps) => {
   const navigate = useNavigate();
   const priceCopy: string = `₹ ${price.toLocaleString("en-IN")}`;
   // const likeSectionTemplate = useAppSelector(
@@ -32,10 +32,11 @@ const CatalogProductCard = ({
       }}
     >
       <ProductCard
-      className="mb-2"
+        className="mb-2"
         image={
           <img
             src={imageSrc}
+            className="h-[60px] w-[60px]"
             // className="border border-catalogImageBorderColor"
             alt=""
           />
@@ -49,10 +50,8 @@ const CatalogProductCard = ({
         }
         price={priceCopy}
         title={title}
-        priceCn={ `!font-catalogPriceWeight !text-catalogPriceColor`
-        }
-        titleCn={ `!font-catalogTitleWeight !text-catalogTitleColor`
-        }
+        priceCn={`!font-catalogPriceWeight !text-catalogPriceColor`}
+        titleCn={`!font-catalogTitleWeight !text-catalogTitleColor`}
       />
       <Divider />
     </div>

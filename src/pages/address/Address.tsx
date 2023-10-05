@@ -17,7 +17,7 @@ const Address = () => {
   const [formattedShortAdd, setFormattedShortAdd] = useState<string>("");
   const [address, setAddress] = useState<any>({
     pincode: "",
-    // address: "",
+    address: "",
     landMark: "",
     city: "",
     state: "",
@@ -77,7 +77,6 @@ const Address = () => {
     if (isLoaded) {
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ location: latLng }, (results: any, status: any) => {
-        console.log("result", results[0]);
         setFormattedAdd(results[0].formatted_address);
         if (status === "OK") {
           if (results.length > 0) {
@@ -117,7 +116,6 @@ const Address = () => {
           lng: newCenter.lng(),
         });
       }
-      console.log(typeof newCenter.lat(), newCenter.lng());
     }
   };
   const geocodeAddress = (address: any, geocoder: any) => {
@@ -153,7 +151,7 @@ const Address = () => {
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">
         <div className="inline-block">
           <div
-            className="flex"
+            className="flex cursor-pointer"
             onClick={() => {
               navigate(-1);
             }}

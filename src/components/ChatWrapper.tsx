@@ -4,7 +4,6 @@ interface ChatWrapperProps {
 }
 
 const ChatWrapper = ({ type, children }: ChatWrapperProps) => {
-  console.log("type",type);
   return (
     <div
       className="w-full flex px-5 py-2"

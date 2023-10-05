@@ -7,11 +7,16 @@ import { CategorieData } from "../../constants/HomeConst";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCatalogUI } from "../../slices/rootSlice";
+import { pageData } from "../../api";
+import { useAppSelector } from "../../app/hooks";
 
 const Catalog = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [productTemplate, setProductTemplate] = useState<any>("");
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
+  const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
+  const [productCatalog, setProductCatalog] = useState<any>([]);
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const params: any = searchParams.get("catalogData");
@@ -32,9 +37,37 @@ const Catalog = () => {
       );
     }
   }, [window.location.search]);
-
+  const catalogData = () => {
+    const categoryData = {
+      conversationId: convId,
+      text: "viewCategoryCatalog",
+      voiceFlag: false,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      pageData(categoryData, botType).then((data) => {
+        if (data?.data?.activities[0]?.type === "viewCategoryCatalog") {
+          setCategoriesCatalog(data?.data?.activities[0]?.value?.data);
+        }
+      });
+    }
+    const productData = {
+      conversationId: convId,
+      text: "viewProductCatalog",
+      voiceFlag: false,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      pageData(productData, botType).then((data) => {
+        if (data?.data?.activities[0]?.type === "viewProductCatalog") {
+          setProductCatalog(data?.data?.activities[0]?.value?.data);
+        }
+      });
+    }
+  };
+  useEffect(() => {
+    catalogData();
+  }, []);
   return (
-    <div className="h-screen pt-[60px]">
+    <div className="h-screen pt-[47px]">
       <PageHeader title="Catalog" />
       <OverlayWrapperCard
         className="w-full h-auto rounded-none"
@@ -74,7 +107,7 @@ const Catalog = () => {
         </div>
 
         <div className="flex overflow-x-auto gap-4">
-          {CategorieData.map((item: any, index: number) => (
+          {categoriesCatalog.map((item: any, index: number) => (
             <div
               onClick={() => {
                 navigate(`/categories/${item.id}`);
@@ -84,8 +117,8 @@ const Catalog = () => {
               <OverlayWrapperCard
                 key={index}
                 className=" w-[90px] h-[92px] min-[350px]:!w-[100px] flex-shrink-0"
-                imageSrc="/images/vegetables.svg"
-                title="Fruits & Vegetables"
+                imageSrc={item?.imageSrc ? item?.imageSrc : ""}
+                title={item?.title ? item?.title : ""}
               />
             </div>
           ))}
@@ -105,13 +138,13 @@ const Catalog = () => {
         </div>
 
         <div className="flex w-full flex-wrap overflow-y-auto gap-3">
-          {Array.from({ length: 10 }, (_, index) => (
+          {productCatalog.map((data: any, index: number) => (
             <div className="w-full sm:w-[50%] flex-shrink-0 basis-full sm:basis-[49%]">
               <CatalogProductCard
-                id="1"
-                imageSrc="/images/shirt.svg"
-                price={3500}
-                title="Denim T-shirt Sandstorm Color (XL)"
+                id={data?.id ? data?.id : ""}
+                imageSrc={data?.imageSrc ? data?.imageSrc : ""}
+                price={data?.price ? data?.price : ""}
+                title={data?.title ? data?.title : ""}
               />
             </div>
           ))}

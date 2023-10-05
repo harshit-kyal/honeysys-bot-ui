@@ -489,7 +489,6 @@ const Home = () => {
     };
   }, []);
   useEffect(() => {
-    console.log("get start Data", ChatComponentArray);
     setChatComponentArray(
       ChatArray.map((activity: any, index: number) => {
         return (

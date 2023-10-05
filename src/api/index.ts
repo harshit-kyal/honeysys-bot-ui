@@ -3,6 +3,7 @@ import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
 import { encrypt } from "../services/aes";
 import { setTheme } from "../slices/rootSlice";
+import axiosInstanceForpage from "../lib/axiosInstanceForPage";
 
 export const botApi = async (body: any) => {
   const accessToken =
@@ -24,7 +25,21 @@ export const botApi = async (body: any) => {
     throw error; // Rethrow the error so that the caller can handle it
   }
 };
-
+export const pageData = async (body: any, botType: any) => {
+  try {
+    const response: any = await axiosInstance.post(
+      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`,
+      body
+    );
+    return { data: response.data };
+  } catch (error: any) {
+    if (error && error.response) {
+      console.log("error", error);
+      return { data: error.response.data };
+    }
+    throw error;
+  }
+};
 export const getTheme = async () => {
   try {
     const response = await axios
@@ -103,7 +118,6 @@ export const getChatApi = async ({
     return { data: response.data };
   } catch (error: any) {
     if (error && error.response) {
-      console.log("error", error);
       return { data: error.response.data };
     }
     throw error;

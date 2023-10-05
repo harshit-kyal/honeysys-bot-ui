@@ -125,3 +125,17 @@
   text-indent: 24px;
   background-position: 9px 7px;
 }
+
+
+.blur {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 100%;
+  overflow: hidden;
+  backdrop-filter: invert(40%);
+  opacity: 0.7;
+  position: absolute;
+  background-size: cover;
+}

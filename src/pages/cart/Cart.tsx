@@ -2,13 +2,16 @@ import { Button, CartCard, Text } from "@polynomialai/alpha-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
-import { json } from "stream/consumers";
 import { useDispatch } from "react-redux";
 import { setCartUI } from "../../slices/rootSlice";
+import { pageData } from "../../api";
+import { useAppSelector } from "../../app/hooks";
 
 const Cart = () => {
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
   const navigate = useNavigate();
-  const [cartList, setCartListValue] = useState({
+  const dummy = {
     estimatedCost: "₹1200.00",
     gst: "₹12.00",
     totalAmount: "₹1212.00",
@@ -50,7 +53,27 @@ const Cart = () => {
         quantity: 2,
       },
     ],
-  });
+  };
+  const [cartList, setCartList] = useState<any>([]);
+  const cartData = () => {
+    const newData = {
+      conversationId: convId,
+      text: "viewCart",
+      voiceFlag: false,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      pageData(newData, botType)
+        .then((data) => {
+          if (data && data?.data?.activities[0]?.type === "viewCart") {
+            setCartList(data?.data?.activities[0]?.value.data[0]);
+          }
+        })
+        .catch((error) => console.log("error", error));
+    }
+  };
+  useEffect(() => {
+    cartData();
+  }, []);
 
   const handleIncrement = (index: number, type: string) => {
     switch (type) {
@@ -64,14 +87,14 @@ const Cart = () => {
         }
         break;
     }
-    setCartListValue({ ...cartList });
+    setCartList({ ...cartList });
   };
   const dispatch = useDispatch();
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const cartTemplate: any = searchParams.get("cartTemplate");
     const data = JSON.parse(decodeURIComponent(cartTemplate));
-    if(cartTemplate){
+    if (cartTemplate) {
       dispatch(
         setCartUI({
           imageBorderColor: data?.imageBorderColor,
@@ -103,7 +126,7 @@ const Cart = () => {
               </button>
             </div>
             <div className="max-h-72  overflow-x-hidden overflow-y-scroll mt-4">
-              {cartList.itemList.map((items: any, index: number) => (
+              {cartList?.itemList?.map((items: any, index: number) => (
                 <CartCard
                   key={index}
                   className="text-"

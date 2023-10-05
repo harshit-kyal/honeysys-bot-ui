@@ -14,7 +14,6 @@ const MessagePopup = ({
   //       setDisplay(false);
   //     }
   //   }, [display]);
-  console.log("content", content);
   return display ? (
     <div
       className="message-popup"

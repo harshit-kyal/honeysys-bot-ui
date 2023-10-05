@@ -42,7 +42,6 @@ const FloatingButton = () => {
   const [displayPopup, setDisplayPopup] = useState<boolean>(false);
   const updateUI = () => {
     getTheme().then((response) => {
-      console.log("floting", response);
       // toast("UI is updated", {
       //   style: {
       //     padding: " 16px 10px",
@@ -69,7 +68,6 @@ const FloatingButton = () => {
       dispatch(setUiUpdate(false));
     });
   };
-  console.log("uiiii", UiUpdate);
   return (
     <>
       {UiUpdate ? (

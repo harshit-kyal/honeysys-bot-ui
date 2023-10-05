@@ -1,12 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import { LeafyVegetables } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
+import { pageData } from "../../api";
+import { useAppSelector } from "../../app/hooks";
 
 const ViewProduct = () => {
   const [Modal, setModal] = useState<boolean>(false);
-
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
+  const [productData, setProductData] = useState([]);
+  const catalogData = () => {
+    const productData = {
+      conversationId: convId,
+      text: "viewProduct",
+      voiceFlag: false,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      pageData(productData, botType)
+        .then((data) => {
+          console.log("dta", data?.data?.activities[0]?.value?.data);
+          if (data?.data?.activities[0]?.type === "viewProduct") {
+            setProductData(data?.data?.activities[0]?.value?.data);
+          }
+        })
+        .catch(() => {});
+    }
+  };
+  useEffect(() => {
+    catalogData();
+  }, []);
   const ProductData: { imageSrc: string; title: string; pricing: any[] } = {
     imageSrc: "/images/onion.svg",
     title: "Fresh Cauliflower",
@@ -53,29 +77,32 @@ const ViewProduct = () => {
       </div>
     );
   };
-
   return (
     <div className="h-screen pt-[60px]">
-      {/* header */}
-      <PageHeader title={`Leafy Vegetables`} />
-      {/* Detail Section */}
-      <div className="pb-12">
-        {Array.from({ length: 5 }).map(() => (
-          <ProductCard
-            addBtn={<AddBtn />}
-            className="w-full my-[6px] mb-3 px-5"
-            image={
-              <img
-                src={LeafyVegetables.imageSrc}
-                className="object-cover rounded-lg w-[60px] h-[60px]"
-                alt=""
+      {productData.map((detail: any, index: number) => (
+        <>
+          <PageHeader title={detail?.title} />
+          {/* Detail Section */}
+          <div className="pb-12">
+            {detail.products.map((data: any, index: number) => (
+              <ProductCard
+                key={index}
+                addBtn={<AddBtn />}
+                className="w-full my-[6px] mb-3 px-5"
+                image={
+                  <img
+                    src={data?.imageSrc}
+                    className="object-cover rounded-lg w-[60px] h-[60px]"
+                    alt=""
+                  />
+                }
+                onClick={() => {}}
+                title={data?.title}
               />
-            }
-            onClick={() => {}}
-            title={LeafyVegetables.title}
-          />
-        ))}
-      </div>
+            ))}
+          </div>
+        </>
+      ))}
       <div className="flex w-full px-5 py-2 bg-[#F1F1F1] gap-3 fixed bottom-0 overflow-x-auto">
         <BadgeCard text="Back to category selection" active={false} />
         <BadgeCard text="Electronics for you" active={false} />

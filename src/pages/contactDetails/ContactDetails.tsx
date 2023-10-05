@@ -5,29 +5,33 @@ import { useLocation, useNavigate } from "react-router-dom";
 const ContactDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const adressData = location.state.address;
-  const [name, setName] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
+  const nameData = location?.state?.name;
+  const mobileNumberData = location?.state?.mobileNumber;
+  const adressData = location?.state?.address;
+  const [name, setName] = useState(nameData ? nameData : "");
+  const [mobileNumber, setMobileNumber] = useState(
+    mobileNumberData ? mobileNumberData : ""
+  );
   const [pincode, setPincode] = useState(
     adressData?.pincode ? adressData?.pincode : ""
   );
-  const [address, setAddress] = useState(""
-    // adressData?.address ? adressData?.address : ""
+  const [address, setAddress] = useState(
+    adressData?.address ? adressData?.address : ""
   );
   const [landmark, setLandmark] = useState(
-    adressData?.landmark ? adressData?.landmark : ""
+    adressData?.landMark ? adressData?.landMark : ""
   );
   const [city, setCity] = useState(adressData?.city ? adressData?.city : "");
   const [state, setState] = useState(
     adressData?.state ? adressData?.state : ""
   );
-
+  console.log("adressData",nameData,mobileNumberData);
   return (
     <div className="">
       <div className="sticky top-0 w-full z-50">
         <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[10px]">
           <div
-            className="flex"
+            className="flex cursor-pointer"
             onClick={() => {
               navigate(-1);
             }}
@@ -62,7 +66,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none px-5 w-full text-xs"
               placeholder="Enter your name"
               value={name}
-              onChange={(e: any) => setName(e)}
+              onChange={(e: any) => setName(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -78,7 +82,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none w-full text-xs"
               placeholder="Enter your mobile number"
               value={mobileNumber}
-              onChange={(e: any) => setMobileNumber(e)}
+              onChange={(e: any) => setMobileNumber(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -86,7 +90,7 @@ const ContactDetails = () => {
               }}
             ></input>
           </div>
-          <div className="mt-5 mb-4 border-b-[1px] border-[#E6E6E6]"></div>
+          <div className="mt-5 mb-3 border-b-[1px] border-[#E6E6E6]"></div>
           <div className="text-black text-base font-medium px-5">
             Address Details
           </div>
@@ -98,7 +102,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none px-5 w-full text-xs"
               placeholder="Enter pincode"
               value={pincode}
-              onChange={(e: any) => setPincode(e)}
+              onChange={(e: any) => setPincode(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -114,7 +118,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none w-full text-xs "
               placeholder="Enter your address"
               value={address}
-              onChange={(e: any) => setAddress(e)}
+              onChange={(e: any) => setAddress(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -130,7 +134,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none w-full text-xs"
               placeholder="Enter landmark"
               value={landmark}
-              onChange={(e: any) => setLandmark(e)}
+              onChange={(e: any) => setLandmark(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -146,7 +150,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none w-full text-xs"
               placeholder="Enter city"
               value={city}
-              onChange={(e: any) => setCity(e)}
+              onChange={(e: any) => setCity(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -162,7 +166,7 @@ const ContactDetails = () => {
               className="border-0 !p-0 shadow-none w-full text-xs"
               placeholder="Enter state"
               value={state}
-              onChange={(e: any) => setState(e)}
+              onChange={(e: any) => setState(e.target.value)}
               style={{
                 borderBottom: "1px solid #0D1282",
                 borderRadius: "0px",
@@ -171,7 +175,7 @@ const ContactDetails = () => {
             ></input>
           </div>
           <Button
-            className=" bg-[#09215B] text-white text-xs mx-5 w-[-webkit-fill-available] text-center py-[10px] mt-4 "
+            className=" bg-[#09215B] text-white text-xs mx-5 w-[-webkit-fill-available] text-center py-[8px] mt-3 "
             onClick={() => navigate("/addressDetails")}
           >
             Save & Send Address
