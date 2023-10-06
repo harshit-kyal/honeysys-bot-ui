@@ -7,13 +7,13 @@ import { fruitsVegetables } from "../../constants/HomeConst";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCategoriesUI } from "../../slices/rootSlice";
-import { useAppSelector } from "../../app/hooks";
-import { pageData } from "../../api";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getChatData } from "../../slices/homeSlice";
 
 const Categories = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
@@ -36,27 +36,29 @@ const Categories = () => {
     }
   }, [window.location.search]);
   const catalogData = () => {
-    const categoryData = {
+    let newData = {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
     };
     if (convId && botType && convId !== "" && botType !== "") {
-      pageData(categoryData, botType).then((data) => {
-        if (data?.data?.activities[0]?.type === "viewCategoryCatalog") {
-          setCategoriesCatalog(data?.data?.activities[0]?.value?.data);
+      dispatch(getChatData({ newData, botType })).then((data) => {
+        if (
+          data?.payload?.data?.activities[0]?.type === "viewCategoryCatalog"
+        ) {
+          setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
     }
-    const subCategoryData = {
+    newData = {
       conversationId: convId,
       text: "viewCategory",
       voiceFlag: false,
     };
     if (convId && botType && convId !== "" && botType !== "") {
-      pageData(subCategoryData, botType).then((data) => {
-        if (data?.data?.activities[0]?.type === "viewCategory") {
-          setSubCategories(data?.data?.activities[0]?.value?.data);
+      dispatch(getChatData({ newData, botType })).then((data) => {
+        if (data?.payload?.data?.activities[0]?.type === "viewCategory") {
+          setSubCategories(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
     }
@@ -64,59 +66,68 @@ const Categories = () => {
   useEffect(() => {
     catalogData();
   }, []);
-
+  const loading = useAppSelector((state) => state.home.loading);
+  const error = useAppSelector((state) => state.home.error);
   return (
-    <div className="h-screen pt-[60px]">
+    <div className="h-screen pt-[47px]">
       <PageHeader title="Categories" />
-      <div className="flex gap-[10px] px-5 py-[10px] overflow-auto">
-        {categoriesCatalog.map((item: any, index: number) => (
-          <div
-            key={index}
-            onClick={() => {
-              navigate(`/categories/${item?.id}`);
-            }}
-          >
-            <BadgeCard text={item?.title} active={id === item?.id} />
+      {!loading && !error ? (
+        <>
+          <div className="flex gap-[10px] px-5 py-[10px] overflow-auto">
+            {categoriesCatalog.map((item: any, index: number) => (
+              <div
+                key={index}
+                onClick={() => {
+                  navigate(`/categories/${item?.id}`);
+                }}
+              >
+                <BadgeCard text={item?.title} active={id === item?.id} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        {subCategories.map((item: any, index: number) => (
-          <ProductDropDown
-            key={index}
-            buttonCN="w-[100%]"
-            buttonTextCN={
-              "!font-categoriesTitleWeight text-categoriesTitleColor"
-            }
-            displayItem={{
-              image: (
-                <img
-                  src={item?.imageSrc}
-                  className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
-                  alt=""
-                />
-              ),
-              title: item?.title,
-            }}
-            optionTextCN="!font-categoriesTitleWeight text-categoriesTitleColor"
-            options={item.products.map((i: any, index: number) => ({
-              image: (
-                <img
-                  key={index}
-                  src={i?.imageSrc}
-                  className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
-                  alt=""
-                />
-              ),
-              title: i?.title,
-              onClick: () => {
-                navigate(`/viewProduct/${i?.id}`);
-              },
-            }))}
-            optionsContainerCN="w-[100%]"
-          />
-        ))}
-      </div>
+          <div>
+            {subCategories.map((item: any, index: number) => (
+              <ProductDropDown
+                key={index}
+                buttonCN="w-[100%]"
+                buttonTextCN={
+                  "!font-categoriesTitleWeight text-categoriesTitleColor"
+                }
+                displayItem={{
+                  image: (
+                    <img
+                      src={item?.imageSrc}
+                      className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
+                      alt=""
+                    />
+                  ),
+                  title: item?.title,
+                }}
+                optionTextCN="!font-categoriesTitleWeight text-categoriesTitleColor"
+                options={item.products.map((i: any, index: number) => ({
+                  image: (
+                    <img
+                      key={index}
+                      src={i?.imageSrc}
+                      className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
+                      alt=""
+                    />
+                  ),
+                  title: i?.title,
+                  onClick: () => {
+                    navigate(`/viewProduct/${i?.id}`);
+                  },
+                }))}
+                optionsContainerCN="w-[100%]"
+              />
+            ))}
+          </div>
+        </>
+      ) : loading && !error ? (
+        <div className="px-2 pt-2">Loading...</div>
+      ) : (
+        <div className="px-2 pt-2">something went wrong</div>
+      )}
     </div>
   );
 };

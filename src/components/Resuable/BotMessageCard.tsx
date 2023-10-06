@@ -19,7 +19,7 @@ const BotMessageCard = ({
   children,
   imageSrc,
   time,
-  title,
+  title="",
   contentArray,
   botIcon,
   actionDataArray,
@@ -30,18 +30,18 @@ const BotMessageCard = ({
   // const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
   const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
   const bot = overallThemeUI.botIcons;
-  if (actionDataArray && actionDataArray.length !== 0) {
-    {
-      actionDataArray.map((data: any, index) => (
-        <ActionButton
-          key={index}
-          src={data.iconUrl}
-          text="poojan"
-          onClick={() => {}}
-        />
-      ));
-    }
-  }
+  // if (actionDataArray && actionDataArray.length !== 0) {
+  //   {
+  //     actionDataArray.map((data: any, index) => (
+  //       <ActionButton
+  //         key={index}
+  //         src={data.iconUrl}
+  //         text="poojan"
+  //         onClick={() => {}}
+  //       />
+  //     ));
+  //   }
+  // }
   if (imageSrc) {
     return (
       <RichCard
@@ -82,22 +82,24 @@ const BotMessageCard = ({
     <>
       {actionDataArray && actionDataArray.length !== 0 ? (
         <>
+            <div>
           {actionDataArray.map((data: any, index) => (
-            <ActionButton
-              className="w-full"
-              key={index}
-              src={data.iconUrl}
-              text={data.text}
-              onClick={() => {
-                const newData = {
-                  conversationId: convId,
-                  text: data.value,
-                  voiceFlag: false,
-                };
-                dispatch(getChatData({ newData, botType }));
-              }}
-            />
-          ))}
+              <ActionButton
+                className="w-full"
+                key={index}
+                src={data.iconUrl}
+                text={data.text}
+                onClick={() => {
+                  const newData = {
+                    conversationId: convId,
+                    text: data.value,
+                    voiceFlag: false,
+                  };
+                  dispatch(getChatData({ newData, botType }));
+                }}
+              />
+              ))}
+              </div>
         </>
       ) : (
         <RichCard
@@ -107,7 +109,7 @@ const BotMessageCard = ({
           contentCN={"!font-conversationFontStyle"}
           timeCN={"!font-timeStampFontStyle"}
         >
-          <div className="my-2">
+          <div className="my-2 w-full">
             {contentArray && typeof contentArray === "string" ? (
               <Text type="body" size="md" className="font-normal mb-1">
                 {contentArray}
