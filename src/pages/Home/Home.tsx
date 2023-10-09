@@ -33,6 +33,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import axiosInstance from "../../lib/axiosInstance";
 import axios from "axios";
+import CartReplyCard from "../../components/Resuable/CartReplyCard";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -57,70 +58,96 @@ const Home = () => {
   const loadingDelayTimeout = useRef<number | undefined>(undefined);
 
   const chat = [
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your SHONA. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
+    // [
+    //   {
+    //     type: "cartReplyCard",
+    //     value: {
+    //       data: [
+    //         {
+    //           imageSrc:
+    //             "https://fuchsna.wpenginepowered.com/wp-content/uploads/2020/01/AdobeStock_221818930-1-1024x683.jpeg",
+    //           totalAmount: 3500,
+    //           totalItems: 6,
+    //         },
+    //       ],
+    //       sender: "user",
+    //       status: "Talking with Bot",
+    //     },
+    //     timestamp: "2023-09-22T11:03:34.323Z",
+    //   },
+    // ],
+    // [
+    //   {
+    //     type: "message",
+    //     text: "Hi! I'm your SHONA. Welcome to Colive",
+    //     value: {
+    //       sender: "bot",
+    //       status: "Talking with Bot",
+    //     },
+    //     id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+    //     timestamp: "2023-09-25T13:17:38.182Z",
+    //     channelId: "directline",
+    //     from: {
+    //       id: "polynomial-coco-solution-dev",
+    //       name: "polynomial-coco-solution-dev",
+    //     },
+    //     conversation: {
+    //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+    //     },
+    //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+    //   },
+    // ],
+    // [
+    //   {
+    //     type: "message",
+    //     text: "Check out our services!",
+    //     value: {
+    //       sender: "bot",
+    //       status: "Talking with Bot",
+    //     },
+    //     id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+    //     timestamp: "2023-09-25T13:17:38.183Z",
+    //     channelId: "directline",
+    //     from: {
+    //       id: "polynomial-coco-solution-dev",
+    //       name: "polynomial-coco-solution-dev",
+    //     },
+    //     conversation: {
+    //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+    //     },
+    //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+    //   },
+    // ],
     [
       {
         type: "richCard",
         value: {
           data: [
             {
-              title: "hii",
-              imageURL:
-                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+              title: "👋 Got you!",
               description: [
-                "Welcome to HoneySys Bot powered e-commerce experience.",
-                "I will assist you in shopping for your product discovery, cart management and checkout experiences.",
-                "Provide your location to help us show the products available near you.",
+                "Your address is “Jiya Sharma, Ocean View Apartment, D-302, Test Lane, Street 3, 12th Street, Custom Lane, Tested Street, Custom Tested sector",
               ],
-              botIcon:
-                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695209051/sie7cwqzpqovkpu67a2k.png",
             },
           ],
 
           sender: "bot",
           status: "Talking with Bot",
         },
+        // quickReplay: [
+        //   {
+        //     text: "View Catalog",
+        //     iconUrl:
+        //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+        //     value: "",
+        //   },
+        //   {
+        //     text: "Change Location",
+        //     iconUrl:
+        //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+        //     value: "",
+        //   },
+        // ],
         timestamp: "2023-09-22T11:03:34.323Z",
       },
       {
@@ -128,74 +155,64 @@ const Home = () => {
         value: {
           data: [
             {
-              text: "EXPLORE",
+              text: "1",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "EXPLORE",
+              value: "",
             },
             {
-              text: "ABOUT US",
+              text: "2",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "ABOUT COLIVE",
+              value: "",
             },
             {
-              text: "RAISE AN ISSUE",
+              text: "3",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "RAISE AN ISSUE",
+              value: "",
             },
           ],
           sender: "bot",
           status: "Talking with Bot",
         },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
         timestamp: "2023-09-25T13:17:38.184Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
       },
     ],
-    [
-      {
-        type: "summaryCard",
-        value: {
-          data: [
-            {
-              imageURL:
-                "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-              quantity: "",
-              price: [
-                {
-                  price: "₹ 316.00",
-                  title: "Estimated Price",
-                },
-                {
-                  price: "₹ 20.00",
-                  title: "Delivery Charges",
-                },
-              ],
-              subtitle: "Quantity 6",
-              title: "Fresh onions (500gm), Tomatoes (500gm)",
-              totalAmount: "₹ 314.00",
-              totaltitle: "Total Amount",
-              topText: "Great! The total payable amount for this order is. 👇",
-              bottomText: " Hurry, order now before the products sell out.",
-            },
-          ],
+    // [
+    //   {
+    //     type: "summaryCard",
+    //     value: {
+    //       data: [
+    //         {
+    //           imageURL:
+    //             "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+    //           quantity: "",
+    //           price: [
+    //             {
+    //               price: "₹ 316.00",
+    //               title: "Estimated Price",
+    //             },
+    //             {
+    //               price: "₹ 20.00",
+    //               title: "Delivery Charges",
+    //             },
+    //           ],
+    //           subtitle: "Quantity 6",
+    //           title: "Fresh onions (500gm), Tomatoes (500gm)",
+    //           totalAmount: "₹ 314.00",
+    //           totaltitle: "Total Amount",
+    //           topText: "Great! The total payable amount for this order is. 👇",
+    //           bottomText: " Hurry, order now before the products sell out.",
+    //         },
+    //       ],
 
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        timestamp: "2023-09-22T11:03:34.323Z",
-      },
-    ],
+    //       sender: "bot",
+    //       status: "Talking with Bot",
+    //     },
+    //     timestamp: "2023-09-22T11:03:34.323Z",
+    //   },
+    // ],
   ];
   const paginationChat = [
     [
@@ -415,13 +432,13 @@ const Home = () => {
 
   useEffect(() => {
     if (!reviewToken && ChatArray.length === 0) {
-      dispatch(
-        addToChatArray([
-          {
-            type: "get start",
-          },
-        ])
-      );
+      // dispatch(
+      //   addToChatArray([
+      //     {
+      //       type: "get start",
+      //     },
+      //   ])
+      // );
       // setChatComponentArray([
       //   ...ChatComponentArray,
       //   <GetStart
@@ -431,7 +448,7 @@ const Home = () => {
       // ]);
     }
     if (!reviewToken && botType === "") {
-      // dispatch(setChatArray([...chat]));
+      dispatch(setChatArray([...chat]));
       // fetchBot(environment.botType)
       //   .then((data) => {
       //     dispatch(setBotInfo(data.data.data[0]));
@@ -448,10 +465,9 @@ const Home = () => {
             dispatch(setBotType(data?.data?.botType));
             const endpoint = environment.directlineURL;
             const socket = io(endpoint, {
-              query: { conversationId: data.data.conversationId },
+              query: { conversationId: convId },
               path: "/socket.io",
             });
-            // init message
             const newData = {
               conversationId: data?.data?.conversationId,
               text: "init",
@@ -460,258 +476,312 @@ const Home = () => {
             dispatch(getChatData({ newData, botType }))
               .then(() => {})
               .catch(() => {
-                // dispatch(setChatArray([...chat]));
+                dispatch(setChatArray([...chat]));
               });
             socket.on("sendMessage", (message) => {
-              // if (message.data.isUpdated === true) {
-              //   dispatch(setUiUpdate(true));
-              // } else {
-              //   dispatch(setUiUpdate(false));
-              // }
               if (message.data && message.data !== "") {
                 let data = message.data;
+
                 replyFunction(data);
               }
             });
-            socket.on("error", (error) => {
-              console.log("soket", error);
-              // dispatch(setChatArray([...chat]));
-            });
+            socket.on("error", (error) => {});
           })
-          .catch((error) => {
-            console.log("socket", error);
-            // dispatch(setChatArray([...chat]));
-          });
+          .catch((error) => {});
       }
       // })
       // .catch((error) => {
-      //   console.log(error);
+      //
       // });
+    }
+    if (botType !== "" && convId) {
+      const endpoint = environment.directlineURL;
+      const socket = io(endpoint, {
+        query: { conversationId: convId },
+        path: "/socket.io",
+      });
+      // init message
+      socket.on("sendMessage", (message) => {
+        if (message.data && message.data !== "") {
+          let data = message.data;
+
+          replyFunction(data);
+        }
+      });
+      socket.on("error", (error) => {
+        // dispatch(setChatArray([...chat]));
+      });
     }
 
     return () => {
       setChatComponentArray([]);
     };
   }, []);
-  useEffect(() => {
-    console.log("track", ChatArray);
-    setChatComponentArray(
-      ChatArray.map((activity: any, index: number) => {
-        return (
-          <ChatWrapper
-            type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
-            key={new Date().getTime() + index}
-          >
-            <div className="chatWrapper">
-              {activity.map((activity: any, index: number) => {
-                if (activity.type === "get start") {
-                  // console.log("get start",activity.type);
-                  // {activity.data}
-                  return (
+
+  const ChatDataSetter = (activity: any[], i: number, j: number) => {
+    return (
+      <ChatWrapper
+        type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
+        key={new Date().getTime()}
+      >
+        <div className="chatWrapper">
+          {activity.map((ac: any, index: number) => {
+            if (index >= i && index < j) {
+              if (ac["sub_type"] && ac["sub_type"] === "screen") {
+              } else if (ac.type === "get start") {
+                return (
+                  <div className="w-full">
                     <GetStart
                       setChatArray={setChatComponentArray}
                       key={new Date().getTime()}
                     />
-                  );
+                  </div>
+                );
+              } else if (ac.type === "message" && ac.text !== "") {
+                if (ac.updateUI === true) {
+                  dispatch(setUiUpdate(true));
+                } else {
+                  dispatch(setUiUpdate(false));
                 }
-                if (activity.type === "message" && activity.text !== "") {
-                  if (activity.updateUI === true) {
-                    dispatch(setUiUpdate(true));
-                  } else {
-                    dispatch(setUiUpdate(false));
-                  }
 
-                  return (
-                    <div className="w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <UserMessageCard content={activity?.text} />
-                      ) : (
-                        <BotMessageCard title={activity?.text} />
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "richCard" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const richCard = activity.value.data;
-                  return (
-                    <div className="w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        richCard.map((richCard: any, index: number) => {
-                          return (
-                            <BotMessageCard
-                              title={richCard.title}
-                              contentArray={richCard.description}
-                              imageSrc={richCard.imageURL}
-                              botIcon={richCard.botIcon}
-                              key={index}
-                            />
-                          );
-                        })
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "iconQuickReply" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const iconQuickReplyCard = activity.value.data;
-                  return (
-                    <div className=" w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        <BotMessageCard actionDataArray={iconQuickReplyCard} />
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "summaryCard" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const summaryCard: any = activity.value.data;
-                  return (
-                    <div className=" w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        summaryCard.map((summaryCard: any, index: number) => {
-                          return (
-                            <BotMessageCard
-                              key={index}
-                              title=""
-                              contentArray={[
-                                <div> {summaryCard.topText}</div>,
+                return (
+                  <div className="w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <UserMessageCard content={ac?.text} />
+                    ) : (
+                      <BotMessageCard title={ac?.text} />
+                    )}
+                  </div>
+                );
+              } else if (ac.type === "richCard" && ac.value.data.length !== 0) {
+                const richCard = ac.value.data;
+                return (
+                  <div className="w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <></>
+                    ) : (
+                      richCard.map((richCard: any, index: number) => {
+                        return (
+                          <BotMessageCard
+                            title={richCard.title}
+                            contentArray={richCard.description}
+                            imageSrc={richCard.imageURL}
+                            botIcon={richCard.botIcon}
+                            key={index}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                );
+              } else if (
+                ac.type === "iconQuickReply" &&
+                ac.value.data.length !== 0
+              ) {
+                const iconQuickReplyCard = ac.value.data;
+                return (
+                  <div className=" w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <></>
+                    ) : (
+                      <BotMessageCard actionDataArray={iconQuickReplyCard} />
+                    )}
+                  </div>
+                );
+              } else if (
+                ac.type === "summaryCard" &&
+                ac.value.data.length !== 0
+              ) {
+                const summaryCard: any = ac.value.data;
+                return (
+                  <div className=" w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <></>
+                    ) : (
+                      summaryCard.map((summaryCard: any, index: number) => {
+                        return (
+                          <BotMessageCard
+                            key={index}
+                            title=""
+                            contentArray={[
+                              <div> {summaryCard.topText}</div>,
 
-                                <SummaryCard
-                                  className="w-full mt-3"
-                                  image={
-                                    <img
-                                      src="/images/onion.svg"
-                                      alt=""
-                                      className="h-[60px] w-[60px] rounded-md"
-                                    />
-                                  }
-                                  priceList={summaryCard.price}
-                                  subtitle={summaryCard.subtitle}
-                                  title={summaryCard.title}
-                                  totalAmount={summaryCard.totalAmount}
-                                  totaltitle={summaryCard.totaltitle}
-                                />,
-                                <Text
-                                  type="body"
-                                  size="md"
-                                  className="font-semibold mt-3 mb-1"
-                                >
-                                  {summaryCard.bottomText}
-                                </Text>,
-                              ]}
-                            />
-                          );
-                        })
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "trackOrder" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const trackOrderCard = activity.value.data;
-                  return (
-                    <div className="w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        trackOrderCard.map(
-                          (trackOrderCard: any, index: number) => {
-                            return (
-                              <RichCard>
-                                <>
-                                  <div className="relative">
-                                    <ReplyCard
-                                      className="w-full"
-                                      title="Honeysys Bot"
-                                      titleCN="text-primary"
-                                    >
-                                      <div className="flex flex-col justify-evenly w-full">
-                                        <Text
-                                          type="body"
-                                          size="sm"
-                                          className="text-[#505050]"
-                                        >
-                                          {`🛒 Order ${trackOrderCard.orderId}`}
-                                        </Text>
-                                        <Text
-                                          type="label"
-                                          size="lg"
-                                          className="text-[#505050]"
-                                        >
-                                          {`Total ${trackOrderCard.totalItems} items ₹ ${trackOrderCard.totalAmount} `}
-                                        </Text>
-                                        <img
-                                          src="/images/vegetables.svg"
-                                          height={50}
-                                          alt="vegetable"
-                                          className="max-w-[54px] rounded-md absolute right-1 bottom-1"
-                                        />
-                                      </div>
-                                    </ReplyCard>
-                                  </div>
-                                  <div className="text-[14px] font-normal">
-                                    {`${trackOrderCard.orderNo}`}{" "}
-                                    <span className="font-semibold">
-                                      {`${trackOrderCard.deliveryDate}`}
-                                    </span>
-                                    {`- ${trackOrderCard.items} -`}
-                                    <span className="font-semibold">
-                                      {` ₹ ${trackOrderCard.totalAmount}`}
-                                    </span>{" "}
-                                    - Delivered
-                                  </div>
-                                </>
-                              </RichCard>
-                            );
-                          }
-                        )
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "replyMessage" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const replyMessageCard = activity.value.data;
-                  console.log(
-                    "replyMessageCard",
-                    replyMessageCard,
-                    activity?.value?.sender
-                  );
-                  return (
-                    <div className="w-full">
-                      {replyMessageCard?.map(
-                        (replyMessageCard: any, index: number) => {
+                              <SummaryCard
+                                className="w-full mt-3"
+                                image={
+                                  <img
+                                    src="/images/onion.svg"
+                                    alt=""
+                                    className="h-[60px] w-[60px] rounded-md"
+                                  />
+                                }
+                                priceList={summaryCard.price}
+                                subtitle={summaryCard.subtitle}
+                                title={summaryCard.title}
+                                totalAmount={summaryCard.totalAmount}
+                                totaltitle={summaryCard.totaltitle}
+                              />,
+                              <Text
+                                type="body"
+                                size="md"
+                                className="font-semibold mt-3 mb-1"
+                              >
+                                {summaryCard.bottomText}
+                              </Text>,
+                            ]}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                );
+              } else if (
+                ac.type === "trackOrder" &&
+                ac.value.data.length !== 0
+              ) {
+                const trackOrderCard = ac.value.data;
+                return (
+                  <div className="w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <></>
+                    ) : (
+                      trackOrderCard.map(
+                        (trackOrderCard: any, index: number) => {
                           return (
-                            <ReplyMessageCard
-                              content={`${replyMessageCard?.content}`}
-                              replyArray={replyMessageCard?.replayArray}
-                            />
+                            <RichCard>
+                              <>
+                                <div className="relative">
+                                  <ReplyCard
+                                    className="w-full"
+                                    title="Honeysys Bot"
+                                    titleCN="text-primary"
+                                  >
+                                    <div className="flex flex-col justify-evenly w-full">
+                                      <Text
+                                        type="body"
+                                        size="sm"
+                                        className="text-[#505050]"
+                                      >
+                                        {`🛒 Order ${trackOrderCard.orderId}`}
+                                      </Text>
+                                      <Text
+                                        type="label"
+                                        size="lg"
+                                        className="text-[#505050]"
+                                      >
+                                        {`Total ${trackOrderCard.totalItems} items ₹ ${trackOrderCard.totalAmount} `}
+                                      </Text>
+                                      <img
+                                        src="/images/vegetables.svg"
+                                        height={50}
+                                        alt="vegetable"
+                                        className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                                      />
+                                    </div>
+                                  </ReplyCard>
+                                </div>
+                                <div className="text-[14px] font-normal">
+                                  {`${trackOrderCard.orderNo}`}{" "}
+                                  <span className="font-semibold">
+                                    {`${trackOrderCard.deliveryDate}`}
+                                  </span>
+                                  {`- ${trackOrderCard.items} -`}
+                                  <span className="font-semibold">
+                                    {` ₹ ${trackOrderCard.totalAmount}`}
+                                  </span>{" "}
+                                  - Delivered
+                                </div>
+                              </>
+                            </RichCard>
                           );
                         }
-                      )}
-                    </div>
-                  );
+                      )
+                    )}
+                  </div>
+                );
+              } else if (
+                ac.type === "replyMessage" &&
+                ac.value.data.length !== 0
+              ) {
+                const replyMessageCard = ac.value.data;
+                return (
+                  <div className="w-full">
+                    {replyMessageCard?.map(
+                      (replyMessageCard: any, index: number) => {
+                        return (
+                          <ReplyMessageCard
+                            content={`${replyMessageCard?.content}`}
+                            replyArray={replyMessageCard?.replayArray}
+                          />
+                        );
+                      }
+                    )}
+                  </div>
+                );
+              } else if (
+                ac.type === "cartReplyCard" &&
+                ac.value.data.length !== 0
+              ) {
+                const cartReplyCard = ac.value.data;
+                return (
+                  <div className="w-full">
+                    {ac?.value?.sender === "bot" ? (
+                      <></>
+                    ) : (
+                      cartReplyCard.map((cartReplyCard: any, index: number) => {
+                        return (
+                          <CartReplyCard
+                            imageSrc={cartReplyCard?.imageSrc}
+                            price={cartReplyCard?.totalAmount}
+                            items={cartReplyCard?.totalItems}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                );
+              }
+            }
+          })}
+        </div>
+      </ChatWrapper>
+    );
+  };
+
+  useEffect(() => {
+    setChatComponentArray(
+      ChatArray.map((activity: any, index: number) => {
+        if (
+          activity.length === 1 &&
+          activity[0].sub_type &&
+          activity[0].sub_type === "screen"
+        ) {
+          return <></>;
+        }
+        return (
+          <>
+            {(() => {
+              let i = 0;
+              let j = 0;
+              console.log("activity", activity);
+
+              let ComponentArray = [];
+
+              while (i < activity.length && j < activity.length) {
+                if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
+                  j++;
+                } else {
+                  console.log("activity here");
+                  let Iindex = i;
+                  i = j;
+                  console.log("i ", i, " Iindex ", Iindex, " j ", j);
+                  ComponentArray.push(ChatDataSetter(activity, Iindex, j));
                 }
-              })}
-            </div>
-          </ChatWrapper>
+              }
+              ComponentArray.push(ChatDataSetter(activity, i, j));
+              return ComponentArray;
+            })()}
+          </>
         );
       })
     );
@@ -842,7 +912,7 @@ const Home = () => {
       });
       setPageNumber(pageNumber + 1);
     }, 500);
-    // console.log("data", data);
+
     // const fetchDataApi=async()=>{
     //   const res=await axios();
     // }

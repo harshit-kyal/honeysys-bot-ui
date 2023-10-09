@@ -118,7 +118,7 @@ const Cart = () => {
         <>
           {cartList ? (
             <>
-              <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
+              <div className="px-2 min-[264.5px]:pt-[70px] max-[264.5px]:pt-[60px]">
                 <div className="flex justify-between items-center">
                   <span className="text-[12px] font-semibold">
                     Total 6 items
@@ -188,7 +188,15 @@ const Cart = () => {
                 <button
                   className="bg-primary text-white text-[12px] py-2 font-light w-full my-3 rounded-md"
                   onClick={() => {
-                    navigate("/catalog");
+                    navigate("/");
+                    const newData = {
+                      conversationId: convId,
+                      text: "cartAction",
+                      voiceFlag: false,
+                    };
+                    dispatch(getChatData({ newData, botType }))
+                      .then(() => {})
+                      .catch(() => {});
                   }}
                 >
                   Send To Business

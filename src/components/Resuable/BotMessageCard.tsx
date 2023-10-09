@@ -19,7 +19,7 @@ const BotMessageCard = ({
   children,
   imageSrc,
   time,
-  title="",
+  title = "",
   contentArray,
   botIcon,
   actionDataArray,
@@ -79,27 +79,27 @@ const BotMessageCard = ({
     );
   }
   return (
-    <>
+    <div>
       {actionDataArray && actionDataArray.length !== 0 ? (
         <>
-            <div>
-          {actionDataArray.map((data: any, index) => (
-              <ActionButton
-                className="w-full"
-                key={index}
-                src={data.iconUrl}
-                text={data.text}
-                onClick={() => {
-                  const newData = {
-                    conversationId: convId,
-                    text: data.value,
-                    voiceFlag: false,
-                  };
-                  dispatch(getChatData({ newData, botType }));
-                }}
-              />
-              ))}
-              </div>
+          <div className="flex flex-wrap">
+            {actionDataArray.map((data: any, index) => (
+                <ActionButton
+                  className="w-full"
+                  key={index}
+                  src={data.iconUrl}
+                  text={data.text}
+                  onClick={() => {
+                    const newData = {
+                      conversationId: convId,
+                      text: data.value,
+                      voiceFlag: false,
+                    };
+                    dispatch(getChatData({ newData, botType }));
+                  }}
+                />
+            ))}
+          </div>
         </>
       ) : (
         <RichCard
@@ -129,7 +129,7 @@ const BotMessageCard = ({
           </div>
         </RichCard>
       )}
-    </>
+    </div>
   );
 };
 

@@ -139,7 +139,17 @@ export function RadioButtonGroup(props: any) {
           ))}
           <Button
             className=" bg-[#09215B] text-white text-xs mx-5 w-[-webkit-fill-available] text-center py-[8px] mt-3 fixed bottom-3 "
-            onClick={() => navigate("/addressDetails")}
+            onClick={() => {
+              navigate("/");
+              const newData = {
+                conversationId: convId,
+                text: "addressAction",
+                voiceFlag: false,
+              };
+              dispatch(getChatData({ newData, botType }))
+                .then(() => {})
+                .catch(() => {});
+            }}
           >
             Save
           </Button>

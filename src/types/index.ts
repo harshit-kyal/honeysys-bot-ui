@@ -66,6 +66,8 @@ export interface HomeSliceType {
   deniedModal: boolean;
   storeData: any;
   UiUpdate: boolean;
+  cart:any[];
+  totalQuantity:number
 }
 
 export interface BotSliceType {

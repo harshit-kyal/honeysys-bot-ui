@@ -69,7 +69,7 @@ const Categories = () => {
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   return (
-    <div className="h-screen pt-[47px]">
+    <div className="h-screen pt-[60px]">
       <PageHeader title="Categories" />
       {!loading && !error ? (
         <>

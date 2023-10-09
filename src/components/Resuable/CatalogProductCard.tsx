@@ -1,7 +1,9 @@
 import { Divider, ProductCard } from "@polynomialai/alpha-react";
 import PlusButton from "../Button/PlusButton";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useDispatch } from "react-redux";
+import { addToCartArray } from "../../slices/homeSlice";
 
 interface cardProps {
   id: string;
@@ -25,10 +27,11 @@ cardProps) => {
   // const likeSectionTemplate = useAppSelector(
   //   (state) => state.root.CatalogUI.youmayLike
   // );
+  const dispatch = useAppDispatch();
   return (
     <div
       onClick={() => {
-        navigate(`/pdp/${id}`);
+        // navigate(`/pdp/${id}`);
       }}
     >
       <ProductCard
@@ -44,7 +47,11 @@ cardProps) => {
         addBtn={
           <PlusButton
             onClick={() => {
-              alert("Hello");
+              let data = {
+                id: id,
+                quantity: 1,
+              };
+              dispatch(addToCartArray(data));
             }}
           />
         }
@@ -59,3 +66,4 @@ cardProps) => {
 };
 
 export default CatalogProductCard;
+

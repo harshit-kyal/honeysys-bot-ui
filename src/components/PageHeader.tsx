@@ -1,6 +1,7 @@
 import { Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
+import { useAppSelector } from "../app/hooks";
 const PageHeader = ({
   title,
   isDisableSearch = false,
@@ -14,9 +15,10 @@ const PageHeader = ({
     navigate(route);
   };
   const reviewToken = localStorage.getItem("reviewToken");
+  const cartQuantity = useAppSelector((state) => state.home.totalQuantity);
   return (
     <div className="fixed top-0 w-full z-50">
-      <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[10px]">
+      <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[16.5px]">
         <div
           className="flex"
           onClick={() => {
@@ -48,16 +50,23 @@ const PageHeader = ({
               onClick={() => hadnleNavigation("/search")}
             />
           )}
-          <img
-            src="/images/shopping.svg"
-            className="header-btn"
-            alt="shopping"
-            width={24}
-            height={24}
-            onClick={() => {
-              hadnleNavigation("/cart");
-            }}
-          />
+          <div>
+            <img
+              src="/images/shopping.svg"
+              alt="shopping"
+              className="header-btn"
+              onClick={() => {
+                hadnleNavigation("/cart");
+              }}
+            />
+            {cartQuantity > 0 ? (
+              <div className="absolute top-[14px] ms-3 rounded-full bg-white text-primary h-[14px] w-[14px] flex justify-center items-center text-[10px]">
+                {cartQuantity}
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           <img
             src="/images/logout.svg"
             className="header-btn-logout"
