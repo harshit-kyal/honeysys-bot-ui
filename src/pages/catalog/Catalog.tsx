@@ -15,6 +15,7 @@ const Catalog = () => {
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const pincode = useAppSelector((state) => state.home.userPincode);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [productCatalog, setProductCatalog] = useState<any>([]);
   useEffect(() => {
@@ -70,22 +71,26 @@ const Catalog = () => {
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
+  console.log("pincode", pincode);
   return (
-    <div className="h-screen pt-[60px]">
+    <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />
       {!loading && !error ? (
         <>
           <OverlayWrapperCard
             className="w-full h-auto rounded-none"
-            imageSrc="/images/Welcome.svg"
+            imageSrc="/images/store.jpg"
             contentTitle="Welcome!!"
             content="Our intuitive platform ensures that you find exactly what you're looking for, making your shopping experience delightful and efficient."
           />
           <div className="p-3 min-[350px]:!p-5 flex gap-3 border">
             <img src="/images/location.svg" alt="location" height={24} />
-            <div className="flex flex-col">
+            <div
+              className="flex flex-col"
+              onClick={() => navigate("/addressDetails")}
+            >
               <Text type="body" size="md" className="font-medium">
-                Deliver to 560103
+                {`Deliver to ${pincode ? pincode : "...."}`}
               </Text>
               <Text
                 type="label"

@@ -19,7 +19,7 @@ const ActionButton = ({
       {src && (
         <img src={src} alt="" height={20} style={{ objectFit: "contain" }} />
       )}
-      <Text type="body" size="md" className="font-normal">
+      <Text type="body" size="md" className="font-normal flex-shrink-0">
         {text}
       </Text>
     </button>

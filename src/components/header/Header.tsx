@@ -18,7 +18,7 @@ const HeaderBar = () => {
   };
   return (
     <Header
-      className="max-[350px]:px-3 min-[350px]:px-5 py-[10px] bg-primary"
+      className="max-[350px]:px-2 min-[350px]:px-4 py-[10px] bg-primary"
       logo={
         <div className="flex items-center">
           <img
@@ -57,7 +57,7 @@ const HeaderBar = () => {
               }}
             />
             {cartQuantity > 0 ? (
-              <div className="absolute top-[14px] ms-3 rounded-full bg-white text-primary h-[14px] w-[14px] flex justify-center items-center text-[10px]">
+              <div className="absolute top-[14px] max-[350px]:ms-2 min-[350px]:ms-3 rounded-full bg-white text-primary max-[350px]:h-[10px] min-[350px]:h-[14px] max-[350px]:w-[10px] min-[350px]:w-[14px] flex justify-center items-center  max-[350px]:text-[8px] min-[350px]:text-[10px]">
                 {cartQuantity}
               </div>
             ) : (

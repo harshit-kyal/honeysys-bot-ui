@@ -59,15 +59,16 @@ export interface HomeSliceType {
   error: string;
   mobileNo: string;
   otp: number;
-  userId:string;
+  userId: string;
+  userPincode: number;
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
   deniedModal: boolean;
   storeData: any;
   UiUpdate: boolean;
-  cart:any[];
-  totalQuantity:number
+  cart: any[];
+  totalQuantity: number;
 }
 
 export interface BotSliceType {

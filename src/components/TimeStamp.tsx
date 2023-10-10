@@ -8,9 +8,9 @@ const TimeStamp = ({ date }: { date: string }) => {
       month: "long",
       day: "2-digit",
       year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
+      // hour: "numeric",
+      // minute: "numeric",
+      // hour12: true,
     })
     .replace(" at", "");
 
@@ -31,6 +31,13 @@ export default TimeStamp;
 
 export const currentTime = (): string => {
   return new Date().toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "numeric",
+    hour12: true,
+  });
+};
+export const chatTime = (data:any): string => {
+  return new Date(data).toLocaleString("en-US", {
     hour: "2-digit",
     minute: "numeric",
     hour12: true,

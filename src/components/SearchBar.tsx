@@ -19,7 +19,7 @@ const SearchBar = ({ onClick }: { onClick: (inputText: string) => void }) => {
           id="search"
           type="text"
           value={inputText}
-          className="h-[45px] text-sm placeholder:text-xs active:outline-none hover:outline-none focus:outline-none placeholder:text-[#969696] placeholder:font-normal ps-5"
+          className="h-[45px] text-sm placeholder:text-xs active:outline-none hover:outline-none focus:outline-none placeholder:text-[#969696] placeholder:font-normal ps-3"
           placeholder='Try searching "Laptops & Electronics"'
           style={{ width: "calc(100vw - 45px)" }}
           onChange={(e) => {

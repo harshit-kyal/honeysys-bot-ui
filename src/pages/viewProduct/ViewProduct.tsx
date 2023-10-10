@@ -5,6 +5,7 @@ import { LeafyVegetables } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData } from "../../slices/homeSlice";
+import { useNavigate } from "react-router-dom";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ const ViewProduct = () => {
   const botType = useAppSelector((state) => state.bot.botType);
   const [productData, setProductData] = useState<any>([]);
   const [productDetail, setProductDetail] = useState<any>({});
+  const navigate = useNavigate();
   const category = () => {
     let newData = {
       conversationId: convId,
@@ -149,6 +151,7 @@ const ViewProduct = () => {
                       src={productDetail?.imageSrc}
                       alt="Product_Image"
                       className="h-[60px] w-[60px] !rounded-md mb-1"
+                      onClick={() => navigate("/PDP/1")}
                     />
                   }
                   title={`${productDetail?.title} - ${item?.option}`}

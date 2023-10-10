@@ -2,7 +2,7 @@ import { Button } from "@polynomialai/alpha-react";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getChatData } from "../../slices/homeSlice";
+import { getChatData, setUserPincode } from "../../slices/homeSlice";
 
 const AddressDetails = () => {
   const navigate = useNavigate();
@@ -68,6 +68,7 @@ export function RadioButtonGroup(props: any) {
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [addressArray, setAddressArray] = useState([]);
+  const [selectedAddress, setSelectedAdress] = useState({});
   const cartData = () => {
     const newData = {
       conversationId: convId,
@@ -78,6 +79,7 @@ export function RadioButtonGroup(props: any) {
       dispatch(getChatData({ newData, botType })).then((data) => {
         if (data && data?.payload?.data?.activities[0]?.type === "address") {
           setAddressArray(data?.payload?.data?.activities[0]?.value?.data);
+          setSelectedAdress(data?.payload?.data?.activities[0]?.value?.data[0]);
         }
       });
     }
@@ -85,6 +87,7 @@ export function RadioButtonGroup(props: any) {
   useEffect(() => {
     cartData();
   }, []);
+  console.log(selectedAddress);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   return (
@@ -101,6 +104,11 @@ export function RadioButtonGroup(props: any) {
                   checked={
                     props?.selectedOption && props?.selectedOption == index
                   }
+                  onClick={() => {
+                    console.log("hiiiiiiii");
+                    setSelectedAdress(item);
+                    dispatch(setUserPincode(item?.address?.pincode));
+                  }}
                   onChange={props?.handleChange && props?.handleChange}
                   style={{ opacity: "1" }}
                 />

@@ -1,6 +1,6 @@
 import { ProductCard, RichCard } from "@polynomialai/alpha-react";
 import React from "react";
-import { currentTime } from "../TimeStamp";
+import { chatTime, currentTime } from "../TimeStamp";
 import { useAppSelector } from "../../app/hooks";
 import ActionButton from "./ActionButton";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ const CartReplyCard = ({ imageSrc = "", time, items, price }: CardProp) => {
     <>
       <RichCard
         className="bg-primary"
-        time={currentTime()}
+        time={time ? chatTime(time) : currentTime()}
         timeCN={`font-[${Conversations.timeStampFontStyle}] font-normal text-white`}
       >
         <ProductCard

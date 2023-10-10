@@ -1,6 +1,6 @@
 import { ReplyCard, RichCard } from "@polynomialai/alpha-react";
 import { useAppSelector } from "../../app/hooks";
-import { currentTime } from "../TimeStamp";
+import { chatTime, currentTime } from "../TimeStamp";
 
 interface CardProp {
   time?: string;
@@ -20,7 +20,7 @@ const ReplyMessageCard = ({
   return (
     <RichCard
       className="w-full bg-primary text-white"
-      time={currentTime()}
+      time={time ? chatTime(time) : currentTime()}
       content={content}
       timeCN={`font-[${Conversations.timeStampFontStyle}] text-white`}
     >
@@ -36,4 +36,3 @@ const ReplyMessageCard = ({
 };
 
 export default ReplyMessageCard;
-

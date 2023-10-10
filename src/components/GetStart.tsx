@@ -114,7 +114,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
 
   return (
     <>
-      <TimeStamp date={new Date().toISOString()} />
+      {/* <TimeStamp date={new Date().toISOString()} /> */}
       <ChatWrapper type="bot">
         <div className="flex flex-col chatWrapper">
           <BotMessageCard

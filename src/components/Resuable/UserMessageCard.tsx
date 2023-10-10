@@ -1,5 +1,5 @@
 import { RichCard } from "@polynomialai/alpha-react";
-import { currentTime } from "../TimeStamp";
+import { chatTime, currentTime } from "../TimeStamp";
 import { useAppSelector } from "../../app/hooks";
 
 interface CardProp {
@@ -13,7 +13,7 @@ const UserMessageCard = ({ time, content }: CardProp) => {
   return (
     <RichCard
       className="bg-primary text-white"
-      time={currentTime()}
+      time={time ? chatTime(time) : currentTime()}
       content={content}
       contentCN="text-sm mb-2"
       timeCN={`text-white font-[${Conversations.timeStampFontStyle}px]`}

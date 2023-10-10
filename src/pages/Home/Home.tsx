@@ -97,27 +97,90 @@ const Home = () => {
     //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
     //   },
     // ],
-    // [
-    //   {
-    //     type: "message",
-    //     text: "Check out our services!",
-    //     value: {
-    //       sender: "bot",
-    //       status: "Talking with Bot",
-    //     },
-    //     id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-    //     timestamp: "2023-09-25T13:17:38.183Z",
-    //     channelId: "directline",
-    //     from: {
-    //       id: "polynomial-coco-solution-dev",
-    //       name: "polynomial-coco-solution-dev",
-    //     },
-    //     conversation: {
-    //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-    //     },
-    //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-    //   },
-    // ],
+    [
+      {
+        type: "message",
+        text: "Check out our services!",
+        value: {
+          sender: "user",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-09-25T13:17:38.183Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
+    [
+      {
+        type: "message",
+        text: "Check out our services!",
+        value: {
+          sender: "bot",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-09-25T13:17:38.183Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
+    [
+      {
+        type: "message",
+        text: "Check out our services!",
+        value: {
+          sender: "user",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-10-25T13:17:38.183Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
+    [
+      {
+        type: "message",
+        text: "Check out our services!",
+        value: {
+          sender: "bot",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-10-25T13:17:38.183Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
     [
       {
         type: "richCard",
@@ -158,19 +221,19 @@ const Home = () => {
               text: "1",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "",
+              value: "viewCatalog",
+            },
+            {
+              text: "Provide location",
+              iconUrl:
+                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+              value: "provideLocation",
             },
             {
               text: "2",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "",
-            },
-            {
-              text: "3",
-              iconUrl:
-                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "",
+              value: "changeLocation",
             },
           ],
           sender: "bot",
@@ -344,10 +407,13 @@ const Home = () => {
 
   const scroll = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      // scrollRef.current.scrollTo({
+      //   top: scrollRef.current.scrollHeight,
+      //   // behavior:"auto"
+      //   behavior:'instant'
+      //   // behavior: "smooth",
+      // });
     }
   };
 
@@ -355,6 +421,7 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
+    console.log("dataaa", data);
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(addToChatArray(activities));
@@ -436,6 +503,7 @@ const Home = () => {
       //   addToChatArray([
       //     {
       //       type: "get start",
+      //       timestamp: "2023-09-25T13:17:38.182Z",
       //     },
       //   ])
       // );
@@ -481,7 +549,7 @@ const Home = () => {
             socket.on("sendMessage", (message) => {
               if (message.data && message.data !== "") {
                 let data = message.data;
-
+                console.log("dataaa", data);
                 replyFunction(data);
               }
             });
@@ -547,9 +615,12 @@ const Home = () => {
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "user" ? (
-                      <UserMessageCard content={ac?.text} />
+                      <UserMessageCard
+                        content={ac?.text}
+                        time={ac?.timestamp}
+                      />
                     ) : (
-                      <BotMessageCard title={ac?.text} />
+                      <BotMessageCard title={ac?.text} time={ac?.timestamp} />
                     )}
                   </div>
                 );
@@ -563,10 +634,11 @@ const Home = () => {
                       richCard.map((richCard: any, index: number) => {
                         return (
                           <BotMessageCard
-                            title={richCard.title}
-                            contentArray={richCard.description}
-                            imageSrc={richCard.imageURL}
-                            botIcon={richCard.botIcon}
+                            title={richCard?.title}
+                            time={ac?.timestamp}
+                            contentArray={richCard?.description}
+                            imageSrc={richCard?.imageURL}
+                            botIcon={richCard?.botIcon}
                             key={index}
                           />
                         );
@@ -710,6 +782,7 @@ const Home = () => {
                       (replyMessageCard: any, index: number) => {
                         return (
                           <ReplyMessageCard
+                            time={ac?.timestamp}
                             content={`${replyMessageCard?.content}`}
                             replyArray={replyMessageCard?.replayArray}
                           />
@@ -731,6 +804,7 @@ const Home = () => {
                       cartReplyCard.map((cartReplyCard: any, index: number) => {
                         return (
                           <CartReplyCard
+                            time={ac?.timestamp}
                             imageSrc={cartReplyCard?.imageSrc}
                             price={cartReplyCard?.totalAmount}
                             items={cartReplyCard?.totalItems}
@@ -747,7 +821,19 @@ const Home = () => {
       </ChatWrapper>
     );
   };
-
+  const formatedDate = (data: any) => {
+    let date = new Date(data);
+    const formattedDate = date.toLocaleString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+      // hour: "numeric",
+      // minute: "numeric",
+      // hour12: true,
+    });
+    // .replace(" at", "");
+    return formattedDate;
+  };
   useEffect(() => {
     setChatComponentArray(
       ChatArray.map((activity: any, index: number) => {
@@ -760,21 +846,33 @@ const Home = () => {
         }
         return (
           <>
+            {/* <TimeStamp date={new Date().toISOString()} /> */}
+
             {(() => {
               let i = 0;
               let j = 0;
-              console.log("activity", activity);
 
               let ComponentArray = [];
+
+              if (index < ChatArray.length) {
+                let date = ChatArray[index][0]?.timestamp;
+                let date1 =
+                  index - 1 >= 0
+                    ? ChatArray[index - 1][0]?.timestamp
+                    : "January 1, 1570";
+                let dateTime1 = formatedDate(date);
+                let dateTime2 = formatedDate(date1);
+                if (dateTime1 !== dateTime2) {
+                  ComponentArray.push(<TimeStamp date={date} />);
+                }
+              }
 
               while (i < activity.length && j < activity.length) {
                 if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
                   j++;
                 } else {
-                  console.log("activity here");
                   let Iindex = i;
                   i = j;
-                  console.log("i ", i, " Iindex ", Iindex, " j ", j);
                   ComponentArray.push(ChatDataSetter(activity, Iindex, j));
                 }
               }

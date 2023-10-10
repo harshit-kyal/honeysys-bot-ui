@@ -8,6 +8,7 @@ const initialState: HomeSliceType = {
   mobileNo: "",
   otp: 0,
   userId: "",
+  userPincode:0,
   ChatArray: [],
   locationPermission: false,
   deniedModal: false,
@@ -67,6 +68,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         userId: action.payload,
+      };
+    },
+    setUserPincode(state, action) {
+      return {
+        ...state,
+        userPincode: action.payload,
       };
     },
     setChatArray(state, action) {
@@ -179,5 +186,6 @@ export const {
   setDeniedModal,
   setUiUpdate,
   addToCartArray,
+  setUserPincode
 } = HomeSlice.actions;
 export default HomeSlice.reducer;
