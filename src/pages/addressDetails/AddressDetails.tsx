@@ -87,7 +87,6 @@ export function RadioButtonGroup(props: any) {
   useEffect(() => {
     cartData();
   }, []);
-  console.log(selectedAddress);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   return (
@@ -105,7 +104,6 @@ export function RadioButtonGroup(props: any) {
                     props?.selectedOption && props?.selectedOption == index
                   }
                   onClick={() => {
-                    console.log("hiiiiiiii");
                     setSelectedAdress(item);
                     dispatch(setUserPincode(item?.address?.pincode));
                   }}
@@ -127,8 +125,8 @@ export function RadioButtonGroup(props: any) {
                   >
                     <img
                       src="/images/edit.svg"
-                      height="12px"
-                      width="12px"
+                      height="16px"
+                      width="16px"
                     ></img>
                   </div>
                   <div className="text-black text-sm font-medium">
@@ -145,22 +143,24 @@ export function RadioButtonGroup(props: any) {
               <div className=" border-b-[1px] border-[#E6E6E6]"></div>
             </>
           ))}
-          <Button
-            className=" bg-[#09215B] text-white text-xs mx-5 w-[-webkit-fill-available] text-center py-[8px] mt-3 fixed bottom-3 "
-            onClick={() => {
-              navigate("/");
-              const newData = {
-                conversationId: convId,
-                text: "addressAction",
-                voiceFlag: false,
-              };
-              dispatch(getChatData({ newData, botType }))
-                .then(() => {})
-                .catch(() => {});
-            }}
-          >
-            Save
-          </Button>
+          <div className="fixed bottom-3 flex items-center justify-center w-full">
+            <Button
+              className=" bg-[#09215B] text-white text-xs mx-5 max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[20%] text-center py-[8px] mt-3  "
+              onClick={() => {
+                navigate("/");
+                const newData = {
+                  conversationId: convId,
+                  text: "addressAction",
+                  voiceFlag: false,
+                };
+                dispatch(getChatData({ newData, botType }))
+                  .then(() => {})
+                  .catch(() => {});
+              }}
+            >
+              Save
+            </Button>
+          </div>
         </div>
       ) : loading && !error ? (
         <div className="mx-2 mt-2">Loading...</div>

@@ -87,8 +87,9 @@ const BotMessageCard = ({
           <div className="flex flex-wrap">
             {actionDataArray.map((data: any, index) => (
               <ActionButton
+              // className="w-full"
                 className={`flex-grow flex-shrink-0 py-[10x] px-[36px] ${
-                  data.text.length < 15 ? "basis-1/2" : "basis-full"
+                  data.text.length < 10 ? "basis-1/2" : "basis-full"
                 }`}
                 key={index}
                 src={data.iconUrl}

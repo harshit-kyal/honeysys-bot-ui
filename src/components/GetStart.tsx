@@ -116,7 +116,7 @@ const GetStart = ({ setChatArray }: { setChatArray: any }) => {
     <>
       {/* <TimeStamp date={new Date().toISOString()} /> */}
       <ChatWrapper type="bot">
-        <div className="flex flex-col chatWrapper">
+        <div className="flex flex-col">
           <BotMessageCard
             title={conversationUI.greetingMessage}
             contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"

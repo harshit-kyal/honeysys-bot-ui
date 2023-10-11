@@ -61,9 +61,9 @@ const LocationPermission = () => {
                           navigator.geolocation.getCurrentPosition(function (
                             position
                           ) {});
-                          alert("prompt");
+                          // alert("prompt");
                         } else if (result.state === "denied") {
-                          alert("denied");
+                          // alert("denied");
                         }
                         result.onchange = function () {};
                       });

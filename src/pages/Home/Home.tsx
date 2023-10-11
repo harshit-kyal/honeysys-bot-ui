@@ -123,11 +123,32 @@ const Home = () => {
         type: "message",
         text: "Check out our services!",
         value: {
+          sender: "user",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-09-25T14:17:38.183Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
+    [
+      {
+        type: "message",
+        text: "Check out our services!",
+        value: {
           sender: "bot",
           status: "Talking with Bot",
         },
         id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.183Z",
+        timestamp: "2023-09-26T13:17:38.183Z",
         channelId: "directline",
         from: {
           id: "polynomial-coco-solution-dev",
@@ -223,17 +244,18 @@ const Home = () => {
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
               value: "viewCatalog",
             },
-            {
-              text: "Provide location",
-              iconUrl:
-                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "provideLocation",
-            },
+
             {
               text: "2",
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
               value: "changeLocation",
+            },
+            {
+              text: "Provide location",
+              iconUrl:
+                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+              value: "provideLocation",
             },
           ],
           sender: "bot",
@@ -288,6 +310,27 @@ const Home = () => {
         },
         id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
         timestamp: "2023-09-25T13:17:38.182Z",
+        channelId: "directline",
+        from: {
+          id: "polynomial-coco-solution-dev",
+          name: "polynomial-coco-solution-dev",
+        },
+        conversation: {
+          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+        },
+        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+      },
+    ],
+    [
+      {
+        type: "message",
+        text: "Hi! I'm your dhruvil. Welcome to Colive",
+        value: {
+          sender: "bot",
+          status: "Talking with Bot",
+        },
+        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+        timestamp: "2023-09-25T14:17:38.182Z",
         channelId: "directline",
         from: {
           id: "polynomial-coco-solution-dev",
@@ -421,7 +464,7 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
-    console.log("dataaa", data);
+    console.log("data", data);
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(addToChatArray(activities));

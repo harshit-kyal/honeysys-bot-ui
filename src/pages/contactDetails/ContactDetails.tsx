@@ -174,12 +174,14 @@ const ContactDetails = () => {
               }}
             ></input>
           </div>
+          <div className="flex justify-center items-center">
           <Button
-            className=" bg-[#09215B] text-white text-xs mx-5 w-[-webkit-fill-available] text-center py-[8px] mt-3 "
+            className=" bg-[#09215B] text-white text-xs mx-5 max-[500px]:w-[70%] min-[500px]:w-[35%] min-[1024px]:w-[20%] text-center py-[10px] mt-5"
             onClick={() => navigate("/addressDetails")}
           >
             Save & Send Address
           </Button>
+          </div>
         </form>
       </div>
     </div>

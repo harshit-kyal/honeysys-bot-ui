@@ -182,10 +182,10 @@ const Address = () => {
             <input
               onBlur={btnClick}
               ref={destinationRef}
-              className="search border absolute top-[0%] left-[0%] z-10 mt-[10px] mx-5 text-[10px] p-[10px] rounded-lg border-[#969696]"
+              className="search border absolute top-[0%] left-[0%] z-10 max-[500px]:w-[-webkit-fill-available] min-[500px]:w-[417px] mt-[10px] mx-5 text-[10px] p-[10px] rounded-lg border-[#969696]"
               type="text"
               placeholder="Search for your location"
-              style={{ width: "-webkit-fill-available" }}
+              // style={{ width: "-webkit-fill-available" }}
             />
           </Autocomplete>
         )}
@@ -207,14 +207,17 @@ const Address = () => {
         ) : (
           <div>Loading...</div>
         )}
-        <div className="absolute top-[50%] left-[50%]">
+        <div
+          className="absolute top-[50%] left-[50%]"
+          style={{ transform: "translate(-50%, -50%)" }}
+        >
           <div className="relative flex flex-col items-center group">
             <img
               src="/images/mapMarker.svg"
               alt="marker"
               height="30px"
               width="30px"
-              style={{ transform: "translate(-15px, -20px)" }}
+              // style={{ transform: "translate(-15px, -20px)" }}
             ></img>
             <div className="absolute bottom-9 topflex flex-col items-center hidden mb-6 group-hover:flex">
               <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap w-[150px] bg-black shadow-lg">
@@ -225,18 +228,19 @@ const Address = () => {
           </div>
         </div>
         {/* <div className="absolute top-[50%] left-[50%] rounded-full h-[50%] w-[80%] translate-x-[-50%] translate-y-[-40%] flex justify-center items-center bg-[#1EA4D3] opacity-40"></div> */}
-        <div
-          className=" text-center absolute bottom-[0%] left-[0%] bg-white mb-[10px] text-[12px] text-[#09215B] py-[10px] border border-black mx-24 rounded-xl flex items-center justify-center"
-          style={{ width: "-webkit-fill-available" }}
-          onClick={getCurrentLocation}
-        >
-          <img
-            src="/images/location_searching.svg"
-            height="20px"
-            width="20px"
-            className="me-2"
-          ></img>{" "}
-          Use Current Location
+        <div className="absolute bottom-0 left-0 w-full flex justify-center items-center">
+          <div
+            className=" text-center bg-white mb-[10px] max-[500px]:w-[70%] min-[500px]:w-[35%] min-[1024px]:w-[20%] text-[12px] text-[#09215B] py-[10px] border border-black  rounded-xl flex items-center justify-center"
+            onClick={getCurrentLocation}
+          >
+            <img
+              src="/images/location_searching.svg"
+              height="20px"
+              width="20px"
+              className="me-2"
+            ></img>{" "}
+            Use Current Location
+          </div>
         </div>
       </div>
       <div className="px-[20px] py-[10px] relative">
@@ -268,12 +272,9 @@ const Address = () => {
             </div>
           </div>
         </div>
-        <div
-          className="fixed bottom-3 left-5 me-5"
-          style={{ width: "-webkit-fill-available" }}
-        >
+        <div className="fixed bottom-3 left-0 w-full flex justify-center items-center">
           <Button
-            className=" bg-[#09215B] text-white text-xs w-full text-center py-3 "
+            className=" bg-[#09215B] max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-3 "
             onClick={() =>
               navigate("/contactDetails", { state: { address: address } })
             }

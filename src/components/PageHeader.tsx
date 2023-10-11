@@ -20,14 +20,14 @@ const PageHeader = ({
     <div className="fixed top-0 w-full z-50">
       <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[16.5px]">
         <div
-          className="flex"
+          className="flex "
           onClick={() => {
             if (!reviewToken) {
               navigate(-1);
             }
           }}
         >
-          <img src="/images/white_back.svg" alt="back" height={24} width={24} />
+          <img src="/images/white_back.svg" className="cursor-pointer" alt="back" height={24} width={24} />
           {/* <Text type="body" size="lg" className="inline-block text-white ml-2"> */}
           <div
             className=" whitespace-nowrap text-ellipsis overflow-hidden max-[350px]:text-[0.875rem] min-[350px]:text-[1.125rem] inline-block text-white ml-2"
