@@ -78,7 +78,7 @@ const Catalog = () => {
       {!loading && !error ? (
         <>
           <OverlayWrapperCard
-            className="w-full h-auto rounded-none"
+            className="w-full h-[50%] md:h-[60%] rounded-none"
             imageSrc="/images/store.jpg"
             contentTitle="Welcome!!"
             content="Our intuitive platform ensures that you find exactly what you're looking for, making your shopping experience delightful and efficient."

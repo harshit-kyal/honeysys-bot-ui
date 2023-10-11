@@ -89,61 +89,64 @@ export function RadioButtonGroup(props: any) {
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
+
   return (
     <>
       {!error && !loading ? (
         <div>
-          {addressArray.map((item: any, index: any) => (
-            <>
-              <label className="flex items-start mt-2 mb-3 px-5" key={index}>
-                <input
-                  type="radio"
-                  className="mt-4"
-                  value={index}
-                  checked={
-                    props?.selectedOption && props?.selectedOption == index
-                  }
-                  onClick={() => {
-                    setSelectedAdress(item);
-                    dispatch(setUserPincode(item?.address?.pincode));
-                  }}
-                  onChange={props?.handleChange && props?.handleChange}
-                  style={{ opacity: "1" }}
-                />
-                <div className="ms-2 w-full">
-                  <div
-                    className="flex justify-end"
-                    onClick={() =>
-                      navigate("/contactDetails", {
-                        state: {
-                          address: item.address,
-                          name: item.name,
-                          mobileNumber: item.mobileNumber,
-                        },
-                      })
+          <div className="h-[calc(100vh-150px)] md:h-[calc(100vh-153px)] overflow-auto">
+            {addressArray.map((item: any, index: any) => (
+              <>
+                <label className="flex items-start mt-2 mb-3 px-5" key={index}>
+                  <input
+                    type="radio"
+                    className="mt-[22px]"
+                    value={index}
+                    checked={
+                      props?.selectedOption && props?.selectedOption == index
                     }
-                  >
-                    <img
-                      src="/images/edit.svg"
-                      height="16px"
-                      width="16px"
-                    ></img>
+                    onClick={() => {
+                      setSelectedAdress(item);
+                      dispatch(setUserPincode(item?.address?.pincode));
+                    }}
+                    onChange={props?.handleChange && props?.handleChange}
+                    style={{ opacity: "1" }}
+                  />
+                  <div className="ms-2 w-full">
+                    <div
+                      className="flex justify-end"
+                      onClick={() =>
+                        navigate("/contactDetails", {
+                          state: {
+                            address: item.address,
+                            name: item.name,
+                            mobileNumber: item.mobileNumber,
+                          },
+                        })
+                      }
+                    >
+                      <img
+                        src="/images/edit.svg"
+                        height="16px"
+                        width="16px"
+                      ></img>
+                    </div>
+                    <div className="text-black text-sm font-medium">
+                      {item.name}
+                    </div>
+                    <div className="text-black text-sm font-normal">
+                      {item.mobileNumber}
+                    </div>
+                    <div className="text-black text-sm font-normal mt-3">
+                      {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`}
+                    </div>
                   </div>
-                  <div className="text-black text-sm font-medium">
-                    {item.Name}
-                  </div>
-                  <div className="text-black text-sm font-normal">
-                    {item.mobileNumber}
-                  </div>
-                  <div className="text-black text-sm font-normal mt-3">
-                    {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`}
-                  </div>
-                </div>
-              </label>
-              <div className=" border-b-[1px] border-[#E6E6E6]"></div>
-            </>
-          ))}
-          <div className="fixed bottom-3 flex items-center justify-center w-full">
+                </label>
+                <div className=" border-b-[1px] border-[#E6E6E6]"></div>
+              </>
+            ))}
+          </div>
+          <div className="flex items-center justify-center w-full">
             <Button
               className=" bg-[#09215B] text-white text-xs mx-5 max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[20%] text-center py-[8px] mt-3  "
               onClick={() => {

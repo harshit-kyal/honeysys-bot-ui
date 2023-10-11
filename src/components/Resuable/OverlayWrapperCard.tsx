@@ -23,7 +23,7 @@ const OverlayWrapperCard = ({
     <OverlayCard
       className={className}
       image={
-        <img src={imageSrc} alt="" className="w-full h-full object-contain" />
+        <img src={imageSrc} alt="" className="w-full h-full" />
       }
       overlay={ Catalog.categoryBackDrop}
       titleCn={title ? "justify-end" : ""}
@@ -34,12 +34,12 @@ const OverlayWrapperCard = ({
         ) : (
           <>
             {contentTitle && (
-              <Text className="font-semibold" size="lg" type="title">
+              <div className="font-semibold text-2xl sm:text-3xl md:text-5xl">
                 {contentTitle}
-              </Text>
+              </div>
             )}
             {content && (
-              <span className="px-7 mt-2 text-justify">{content}</span>
+              <span className="px-7 mt-2 text-center text-sm sm:text-lg md:text-xl">{content}</span>
             )}
           </>
         )}

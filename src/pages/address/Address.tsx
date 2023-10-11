@@ -178,16 +178,18 @@ const Address = () => {
         style={{ height: "calc(100% - 190px)" }}
       >
         {isLoaded && (
-          <Autocomplete>
-            <input
-              onBlur={btnClick}
-              ref={destinationRef}
-              className="search border absolute top-[0%] left-[0%] z-10 max-[500px]:w-[-webkit-fill-available] min-[500px]:w-[417px] mt-[10px] mx-5 text-[10px] p-[10px] rounded-lg border-[#969696]"
-              type="text"
-              placeholder="Search for your location"
-              // style={{ width: "-webkit-fill-available" }}
-            />
-          </Autocomplete>
+          <div className="absolute top-[0%] left-[0%] flex justify-center w-full items-center z-10">
+            <Autocomplete className="max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%]">
+              <input
+                onBlur={btnClick}
+                ref={destinationRef}
+                className="search border w-full mt-[12px]  text-[10px] p-[10px] rounded-lg border-[#969696]"
+                type="text"
+                placeholder="Search for your location"
+                // style={{ width: "-webkit-fill-available" }}
+              />
+            </Autocomplete>
+          </div>
         )}
         {isLoaded ? (
           <GoogleMap
@@ -217,7 +219,6 @@ const Address = () => {
               alt="marker"
               height="30px"
               width="30px"
-              // style={{ transform: "translate(-15px, -20px)" }}
             ></img>
             <div className="absolute bottom-9 topflex flex-col items-center hidden mb-6 group-hover:flex">
               <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap w-[150px] bg-black shadow-lg">
@@ -244,7 +245,9 @@ const Address = () => {
         </div>
       </div>
       <div className="px-[20px] py-[10px] relative">
-        <div className="text-[#505050] text-[10px]">Your Location</div>
+        <div className="text-[#505050] max-[425px]:text-[10px] min-[425px]:!text-[14px]">
+          Your Location
+        </div>
         <div className="mt-[10px] mb-5 flex">
           <img src="/images/location1.svg" height="24px" width="24px"></img>
           <div className="ms-2">
@@ -274,7 +277,7 @@ const Address = () => {
         </div>
         <div className="fixed bottom-3 left-0 w-full flex justify-center items-center">
           <Button
-            className=" bg-[#09215B] max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-3 "
+            className=" bg-[#09215B] max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-[10px] "
             onClick={() =>
               navigate("/contactDetails", { state: { address: address } })
             }

@@ -542,14 +542,14 @@ const Home = () => {
 
   useEffect(() => {
     if (!reviewToken && ChatArray.length === 0) {
-      // dispatch(
-      //   addToChatArray([
-      //     {
-      //       type: "get start",
-      //       timestamp: "2023-09-25T13:17:38.182Z",
-      //     },
-      //   ])
-      // );
+      dispatch(
+        addToChatArray([
+          {
+            type: "get start",
+            timestamp: "2023-09-25T13:17:38.182Z",
+          },
+        ])
+      );
       // setChatComponentArray([
       //   ...ChatComponentArray,
       //   <GetStart
@@ -559,7 +559,7 @@ const Home = () => {
       // ]);
     }
     if (!reviewToken && botType === "") {
-      dispatch(setChatArray([...chat]));
+      // dispatch(setChatArray([...chat]));
       // fetchBot(environment.botType)
       //   .then((data) => {
       //     dispatch(setBotInfo(data.data.data[0]));
@@ -646,7 +646,7 @@ const Home = () => {
                       setChatArray={setChatComponentArray}
                       key={new Date().getTime()}
                     />
-                  </div>
+                 </div>
                 );
               } else if (ac.type === "message" && ac.text !== "") {
                 if (ac.updateUI === true) {

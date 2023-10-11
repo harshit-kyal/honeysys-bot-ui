@@ -19,7 +19,7 @@ const LocationPermission = () => {
           <div className="blur"></div>
           <div
             id="loading"
-            className="absolute top-[50%] left-[50%] w-[88%] bg-white p-5 z-50 blurcss"
+            className="absolute top-[50%] left-[50%] w-[88%] md:w-[50%] lg:w-[40%] bg-white p-5 md:p-7 z-50 blurcss"
             style={{ transform: " translate(-50%, -50%)" }}
           >
             <div className="flex align-middle items-center justify-center w-full mb-5">
