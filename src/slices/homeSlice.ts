@@ -8,12 +8,13 @@ const initialState: HomeSliceType = {
   mobileNo: "",
   otp: 0,
   userId: "",
-  userPincode:0,
+  storId: "",
+  userPincode: 0,
   ChatArray: [],
   locationPermission: false,
   deniedModal: false,
   locationModal: false,
-  storeData: {},
+  // storeData: {},
   UiUpdate: false,
   cart: [],
   totalQuantity: 0,
@@ -74,6 +75,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         userPincode: action.payload,
+      };
+    },
+    setStoreId(state, action) {
+      return {
+        ...state,
+        storeId: action.payload,
       };
     },
     setChatArray(state, action) {
@@ -138,19 +145,19 @@ export const HomeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getStoreData.pending, (state) => {
-        // state.loading = true;
-      })
-      .addCase(getStoreData.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.storeData = action.payload.data;
-        }
-        state.error = "";
-      })
-      .addCase(getStoreData.rejected, (state, action) => {
-        // state.loading = false;
-        state.error = action.error.message || "Something went wrong.";
-      })
+      // .addCase(getStoreData.pending, (state) => {
+      //   // state.loading = true;
+      // })
+      // .addCase(getStoreData.fulfilled, (state, action) => {
+      //   if (action.payload) {
+      //     state.storeData = action.payload.data;
+      //   }
+      //   state.error = "";
+      // })
+      // .addCase(getStoreData.rejected, (state, action) => {
+      //   // state.loading = false;
+      //   state.error = action.error.message || "Something went wrong.";
+      // })
 
       .addCase(getChatData.pending, (state) => {
         state.loading = true;
@@ -186,6 +193,7 @@ export const {
   setDeniedModal,
   setUiUpdate,
   addToCartArray,
-  setUserPincode
+  setUserPincode,
+  setStoreId,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

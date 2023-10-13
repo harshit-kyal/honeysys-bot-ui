@@ -15,6 +15,7 @@ import SearchProduct from "../pages/searchProduct/SearchProduct";
 import PDP from "../pages/PDP/PDP";
 import ContactDetails from "../pages/contactDetails/ContactDetails";
 import AddressDetails from "../pages/addressDetails/AddressDetails";
+import ServiceableArea from "../pages/serviceableArea/ServiceableArea";
 
 const Routing = () => {
   return (
@@ -23,6 +24,7 @@ const Routing = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<OTP />} />
       <Route path="/success" element={<Success />} />
+      <Route path="/serviceableArea" element={<ServiceableArea />} />
       <Route path="/" element={<ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="/catalog" element={<Catalog />} />

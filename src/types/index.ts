@@ -60,12 +60,13 @@ export interface HomeSliceType {
   mobileNo: string;
   otp: number;
   userId: string;
+  storId: string;
   userPincode: number;
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
   deniedModal: boolean;
-  storeData: any;
+  // storeData: any;
   UiUpdate: boolean;
   cart: any[];
   totalQuantity: number;

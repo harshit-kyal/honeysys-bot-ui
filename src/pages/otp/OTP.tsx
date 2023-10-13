@@ -7,6 +7,12 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { botApi } from "../../api";
 import { setTheme } from "../../slices/rootSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { useJsApiLoader } from "@react-google-maps/api";
+import {
+  getChatData,
+  setStoreId,
+  setUserPincode,
+} from "../../slices/homeSlice";
 
 const OTP = () => {
   const dispatch = useAppDispatch();
@@ -16,6 +22,10 @@ const OTP = () => {
   const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(30);
+  const [latLng, setLatLng] = useState<any>({
+    lat: 0,
+    lng: 0,
+  });
   const navigate = useNavigate();
   const CorrectOTP = useAppSelector((state) => state.home.otp);
 
@@ -50,6 +60,88 @@ const OTP = () => {
       clearInterval(interval);
     };
   }, [seconds]);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
+    libraries: ["places"],
+  });
+  useEffect(() => {
+    if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
+      console.log("latLng", latLng);
+      const geocoder = new google.maps.Geocoder();
+      geocoder
+        .geocode({ location: latLng }, (results: any, status: any) => {
+          if (status === "OK" && results) {
+            if (results?.length > 0) {
+              const addressComponents = results[0]?.address_components;
+              const postalCode = addressComponents.find((component: any) =>
+                component?.types?.includes("postal_code")
+              );
+              if (postalCode) {
+                const pincode = postalCode?.long_name;
+                let botType = "e-comm";
+                let convId = 12389;
+                const newData = {
+                  conversationId: convId,
+                  text: "findstores",
+                  voiceFlag: false,
+                  data: {
+                    // pincode: "500084",
+                    // lat: "17.469857630687827",
+                    // lag: "78.35782449692486",
+                    pincode: pincode,
+                    lat: latLng?.lat,
+                    lag: latLng?.lng,
+                    type: "location",
+                  },
+                };
+                if (convId && botType) {
+                  dispatch(getChatData({ newData, botType })).then((data) => {
+                    if (
+                      data &&
+                      data?.payload?.data?.activities[0]?.type === "storeCheck"
+                    ) {
+                      if (
+                        data?.payload?.data?.activities[0]?.value?.data[0]
+                          ?.status_code === 500
+                      ) {
+                        navigate("/serviceableArea");
+                      } else if (
+                        data?.payload?.data?.activities[0]?.value?.data[0]
+                          ?.status_code === 200
+                      ) {
+                        dispatch(
+                          setStoreId(
+                            data?.payload?.data?.activities[0]?.value?.data[0]
+                              ?.store_id
+                          )
+                        );
+                        // dispatch(setUserPincode(500084));
+                        dispatch(setUserPincode(pincode));
+                        navigate("/success");
+                        console.log(
+                          "data",
+                          data?.payload?.data?.activities[0]?.value?.data[0]
+                            ?.status_code
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+              console.error("ress123", postalCode);
+            } else {
+              console.error("ress", results);
+            }
+          } else {
+            console.error("Geocoder failed due to: " + status);
+          }
+        })
+        .catch(() => {
+          console.log("not found");
+        });
+    }
+  }, [latLng]);
 
   return (
     <div className="w-screen h-screen px-5 py-3">
@@ -103,7 +195,31 @@ const OTP = () => {
                       response.data?.data.access_token
                     );
                     dispatch(setTheme(response.data.data.customiseUI));
-                    navigate("/success");
+                    if (navigator.geolocation) {
+                      navigator.permissions
+                        .query({ name: "geolocation" })
+                        .then(function (result) {
+                          if (result.state === "granted") {
+                            navigator.geolocation.getCurrentPosition(function (
+                              position
+                            ) {
+                              const latLng = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                              };
+                              setLatLng(latLng);
+                            });
+                          } else if (result.state === "prompt") {
+                          } else if (result.state === "denied") {
+                            navigate("/address");
+                          }
+                          result.onchange = function () {};
+                        });
+                    } else {
+                      alert("Sorry Not available!");
+                    }
+
+                    // navigate("/success");
                     setLoading(false);
                   }
                 })

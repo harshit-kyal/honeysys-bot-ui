@@ -34,6 +34,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axiosInstance from "../../lib/axiosInstance";
 import axios from "axios";
 import CartReplyCard from "../../components/Resuable/CartReplyCard";
+import LocationModal from "../../components/Modal/LocationModal";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");

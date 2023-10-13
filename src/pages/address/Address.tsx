@@ -6,13 +6,19 @@ import {
   GoogleMap,
   Autocomplete,
 } from "@react-google-maps/api";
+import {
+  getChatData,
+  setStoreId,
+  setUserPincode,
+} from "../../slices/homeSlice";
+import { useAppDispatch } from "../../app/hooks";
 const Address = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [latLng, setLatLng] = useState<any>({
-    lat: 21.1588329,
-    lng: 72.7688111,
+    lat: 0,
+    lng: 0,
   });
+  const dispatch = useAppDispatch();
   const [formattedAdd, setFormattedAdd] = useState<string>("");
   const [formattedShortAdd, setFormattedShortAdd] = useState<string>("");
   const [address, setAddress] = useState<any>({
@@ -74,22 +80,28 @@ const Address = () => {
     libraries: ["places"],
   });
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: latLng }, (results: any, status: any) => {
-        setFormattedAdd(results[0].formatted_address);
-        if (status === "OK") {
-          if (results.length > 0) {
-            const addressComponents = results[0].address_components;
-            const formattedAddress = formatCustomAddress(addressComponents);
-            setFormattedShortAdd(formattedAddress);
+      geocoder
+        .geocode({ location: latLng }, (results: any, status: any) => {
+          if (status === "OK" && results) {
+            if (results?.length > 0) {
+              setFormattedAdd(results[0]?.formatted_address);
+              const addressComponents = results[0]?.address_components;
+              const formattedAddress = formatCustomAddress(addressComponents);
+              setFormattedShortAdd(formattedAddress);
+            } else {
+              console.error("No results found");
+            }
           } else {
-            console.error("No results found");
+            setFormattedShortAdd("");
+            setFormattedAdd("");
+            console.error("Geocoder failed due to: " + status);
           }
-        } else {
-          console.error("Geocoder failed due to: " + status);
-        }
-      });
+        })
+        .catch(() => {
+          console.log("not found");
+        });
     }
   }, [latLng]);
   const [mapref, setMapRef] = React.useState<any>(null);
@@ -104,6 +116,7 @@ const Address = () => {
     }
   };
   const handleOnLoad = (map: any) => {
+    console.log("hii");
     setMapRef(map);
     getCurrentLocation();
   };
@@ -145,7 +158,58 @@ const Address = () => {
         });
     }
   };
-
+  const saveHandler = () => {
+    console.log("address", address);
+    if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
+      let botType = "e-comm";
+      let convId = 12389;
+      const newData = {
+        conversationId: convId,
+        text: "findstores",
+        voiceFlag: false,
+        data: {
+          // pincode: "500084",
+          // lat: "17.469857630687827",
+          // lag: "78.35782449692486",
+          pincode: address?.pincode,
+          lat: latLng?.lat,
+          lag: latLng?.lng,
+          type: "location",
+        },
+      };
+      if (convId && botType) {
+        dispatch(getChatData({ newData, botType })).then((data) => {
+          console.log("apiData", data?.payload?.data?.activities[0]?.value);
+          if (
+            data &&
+            data?.payload?.data?.activities[0]?.type === "storeCheck"
+          ) {
+            if (
+              data?.payload?.data?.activities[0]?.value?.data[0]
+                ?.status_code === 500
+            ) {
+              alert("not found");
+            } else if (
+              data?.payload?.data?.activities[0]?.value?.data[0]
+                ?.status_code === 200
+            ) {
+              dispatch(
+                setStoreId(
+                  data?.payload?.data?.activities[0]?.value?.data[0]?.store_id
+                )
+              );
+              dispatch(setUserPincode(address?.pincode));
+              navigate("/contactDetails", { state: { address: address } });
+              console.log(
+                "data",
+                data?.payload?.data?.activities[0]?.value?.data[0]?.status_code
+              );
+            }
+          }
+        });
+      }
+    }
+  };
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">
@@ -231,7 +295,7 @@ const Address = () => {
         {/* <div className="absolute top-[50%] left-[50%] rounded-full h-[50%] w-[80%] translate-x-[-50%] translate-y-[-40%] flex justify-center items-center bg-[#1EA4D3] opacity-40"></div> */}
         <div className="absolute bottom-0 left-0 w-full flex justify-center items-center">
           <div
-            className=" text-center bg-white mb-[10px] max-[500px]:w-[70%] min-[500px]:w-[35%] min-[1024px]:w-[20%] text-[12px] text-[#09215B] py-[10px] border border-black  rounded-xl flex items-center justify-center"
+            className=" text-center bg-white mb-[10px] max-[500px]:w-[70%] min-[500px]:w-[35%] min-[1024px]:w-[20%] text-[12px] text-primary py-[10px] border border-black  rounded-xl flex items-center justify-center"
             onClick={getCurrentLocation}
           >
             <img
@@ -277,10 +341,10 @@ const Address = () => {
         </div>
         <div className="fixed bottom-3 left-0 w-full flex justify-center items-center">
           <Button
-            className=" bg-[#09215B] max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-[10px] "
-            onClick={() =>
-              navigate("/contactDetails", { state: { address: address } })
-            }
+            className=" !bg-primary max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-[10px] "
+            onClick={() => {
+              saveHandler();
+            }}
           >
             Enter Complete Address
           </Button>

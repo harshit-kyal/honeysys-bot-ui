@@ -117,7 +117,6 @@
   display: flex;
 }
 
-
 /* addresspage */
 .search:placeholder-shown {
   background-image: url("../public/images/searchBlack.svg");
@@ -125,7 +124,6 @@
   text-indent: 24px;
   background-position: 9px 7px;
 }
-
 
 .blur {
   top: 0px;
@@ -138,4 +136,8 @@
   opacity: 0.7;
   position: absolute;
   background-size: cover;
+}
+
+.error-field::placeholder {
+  color: red !important;
 }

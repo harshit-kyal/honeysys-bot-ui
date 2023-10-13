@@ -40,7 +40,7 @@ const AddressDetails = () => {
       </div>
 
       <div
-        className="text-sm text-[#0D1282] font-normal flex mx-4 my-3"
+        className="text-sm text-primary font-normal flex mx-4 my-3"
         onClick={() => navigate("/address")}
       >
         <img
@@ -94,7 +94,7 @@ export function RadioButtonGroup(props: any) {
     <>
       {!error && !loading ? (
         <div>
-          <div className="h-[calc(100vh-150px)] md:h-[calc(100vh-153px)] overflow-auto">
+          <div className="h-[calc(100vh-159px)] md:h-[calc(100vh-164px)] overflow-auto">
             {addressArray.map((item: any, index: any) => (
               <>
                 <label className="flex items-start mt-2 mb-3 px-5" key={index}>
@@ -146,9 +146,9 @@ export function RadioButtonGroup(props: any) {
               </>
             ))}
           </div>
-          <div className="flex items-center justify-center w-full">
+          <div className=" w-full h-[43px] flex justify-end items-center flex-col mt-[10px]">
             <Button
-              className=" bg-[#09215B] text-white text-xs mx-5 max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[20%] text-center py-[8px] mt-3  "
+              className=" !bg-primary text-white text-xs mx-5 max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[20%] text-center py-[10px]  "
               onClick={() => {
                 navigate("/");
                 const newData = {

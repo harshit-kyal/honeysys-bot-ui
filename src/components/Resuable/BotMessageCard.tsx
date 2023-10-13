@@ -2,7 +2,7 @@ import { RichCard, Text } from "@polynomialai/alpha-react";
 import { chatTime, currentTime } from "../TimeStamp";
 import { useEffect } from "react";
 import ActionButton from "./ActionButton";
-import { getChatData } from "../../slices/homeSlice";
+import { getChatData, setLocationPermission } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,6 @@ const BotMessageCard = ({
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
-  // const bot = localStorage.getItem("botIcons") || "/public/images/Logo.svg";
   const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
   const bot = overallThemeUI.botIcons;
   const navigate = useNavigate();
@@ -87,7 +86,7 @@ const BotMessageCard = ({
           <div className="flex flex-wrap">
             {actionDataArray.map((data: any, index) => (
               <ActionButton
-              // className="w-full"
+                // className="w-full"
                 className={`flex-grow flex-shrink-0 py-[10x] px-[36px] ${
                   data.text.length < 10 ? "basis-1/2" : "basis-full"
                 }`}
@@ -96,21 +95,7 @@ const BotMessageCard = ({
                 text={data.text}
                 onClick={() => {
                   if (data.value === "provideLocation") {
-                    const newData = {
-                      conversationId: convId,
-                      text: "address",
-                      voiceFlag: false,
-                    };
-                    dispatch(getChatData({ newData, botType })).then((res) => {
-                      if (
-                        res?.payload?.data?.activities[0]?.value?.data
-                          ?.length !== 0
-                      ) {
-                        navigate("/addressDetails");
-                      } else {
-                        navigate("/address");
-                      }
-                    });
+                    dispatch(setLocationPermission(true));
                   } else if (data.value === "viewCatalog") {
                     navigate("/catalog");
                   } else if (data.value === "changeLocation") {

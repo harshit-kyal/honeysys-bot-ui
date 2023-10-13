@@ -1,17 +1,21 @@
 import { AddDialog, Button, Text } from "@polynomialai/alpha-react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setLocationPermission } from "../../slices/homeSlice";
+import {
+  getChatData,
+  setDeniedModal,
+  setLocationPermission,
+} from "../../slices/homeSlice";
 import { useNavigate } from "react-router-dom";
 
 const LocationPermission = () => {
   const dispatch = useAppDispatch();
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
   const locationPermission = useAppSelector(
     (state) => state.home.locationPermission
   );
   const navigate = useNavigate();
-  const onCloseModal = () => {
-    dispatch(setLocationPermission(false));
-  };
+
   return (
     <>
       {locationPermission ? (
@@ -44,26 +48,42 @@ const LocationPermission = () => {
                 Deny
               </Button>
               <Button
-                className="text-white bg-[#09215B] px-7"
+                className="text-white !bg-primary px-7"
                 onClick={() => {
                   if (navigator.geolocation) {
                     navigator.permissions
                       .query({ name: "geolocation" })
                       .then(function (result) {
-                        navigate("/address");
                         dispatch(setLocationPermission(false));
                         if (result.state === "granted") {
-                          // alert("granted");
-                          navigator.geolocation.getCurrentPosition(function (
-                            position
-                          ) {});
+                          // const newData = {
+                          //   conversationId: convId,
+                          //   text: "address",
+                          //   voiceFlag: false,
+                          // };
+                          // dispatch(getChatData({ newData, botType })).then((res) => {
+                          //   if (
+                          //     res?.payload?.data?.activities[0]?.value?.data
+                          //       ?.length !== 0
+                          //   ) {
+                          //     navigate("/addressDetails");
+                          //   } else {
+                          //     navigate("/address");
+                          //   }
+                          // });
+                          navigate("/address");
+                          // navigator.geolocation.getCurrentPosition(function (
+                          //   position
+                          // ) {});
                         } else if (result.state === "prompt") {
-                          navigator.geolocation.getCurrentPosition(function (
-                            position
-                          ) {});
-                          // alert("prompt");
+                          navigate("/address", {
+                            state: { page: "contactDetails" },
+                          });
+                          // navigator.geolocation.getCurrentPosition(function (
+                          //   position
+                          // ) {});
                         } else if (result.state === "denied") {
-                          // alert("denied");
+                          dispatch(setDeniedModal(true));
                         }
                         result.onchange = function () {};
                       });
