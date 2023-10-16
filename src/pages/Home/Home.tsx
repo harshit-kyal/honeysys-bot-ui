@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { fetchBot, getConversationId } from "../../services";
+import {  getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { environment } from "../../environments/environment";
-import { setBotInfo, setBotType, setConvId } from "../../slices/botSlice";
+import {  setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
 import {
@@ -34,7 +34,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axiosInstance from "../../lib/axiosInstance";
 import axios from "axios";
 import CartReplyCard from "../../components/Resuable/CartReplyCard";
-import LocationModal from "../../components/Modal/LocationModal";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -465,7 +464,6 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
-    console.log("data", data);
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(addToChatArray(activities));
@@ -566,6 +564,7 @@ const Home = () => {
       //     dispatch(setBotInfo(data.data.data[0]));
       //     const botInfo = data.data.data[0];
       if (convId) {
+
       } else {
         let botType = "e-comm";
         // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
@@ -593,7 +592,6 @@ const Home = () => {
             socket.on("sendMessage", (message) => {
               if (message.data && message.data !== "") {
                 let data = message.data;
-                console.log("dataaa", data);
                 replyFunction(data);
               }
             });
@@ -612,7 +610,6 @@ const Home = () => {
         query: { conversationId: convId },
         path: "/socket.io",
       });
-      // init message
       socket.on("sendMessage", (message) => {
         if (message.data && message.data !== "") {
           let data = message.data;

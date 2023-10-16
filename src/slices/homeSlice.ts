@@ -8,7 +8,7 @@ const initialState: HomeSliceType = {
   mobileNo: "",
   otp: 0,
   userId: "",
-  storId: "",
+  storeId: "",
   userPincode: 0,
   ChatArray: [],
   locationPermission: false,

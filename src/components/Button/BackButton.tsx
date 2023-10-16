@@ -13,6 +13,7 @@ const BackButton = (noTitle?:any) => {
         <img
           src="/images/keyboard_backspace.svg"
           alt="back"
+          className="cursor-pointer"
           color="black"
           height={24}
           width={24}

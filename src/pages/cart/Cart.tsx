@@ -71,7 +71,7 @@ const Cart = () => {
             setCartList(data?.payload?.data?.activities[0]?.value.data[0]);
           }
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => {});
     }
   };
   useEffect(() => {
@@ -110,7 +110,6 @@ const Cart = () => {
       );
     }
   }, [window.location.search]);
-  console.log("error", error, loading);
   return (
     <div className="h-screen sticky">
       <PageHeader title="Your Cart" isDisableSearch={false} />

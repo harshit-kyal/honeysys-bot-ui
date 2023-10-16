@@ -70,12 +70,15 @@ export function RadioButtonGroup(props: any) {
   const [addressArray, setAddressArray] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState({});
   const cartData = () => {
+    let botType = "e-comm";
+    let convId = 12389;
     const newData = {
       conversationId: convId,
       text: "address",
       voiceFlag: false,
     };
-    if (convId && botType && convId !== "" && botType !== "") {
+    // if (convId && botType && convId !== "" && botType !== "") {
+    if (convId && botType && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
         if (data && data?.payload?.data?.activities[0]?.type === "address") {
           setAddressArray(data?.payload?.data?.activities[0]?.value?.data);

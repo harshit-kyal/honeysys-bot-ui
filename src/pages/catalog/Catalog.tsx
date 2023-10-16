@@ -14,6 +14,7 @@ const Catalog = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
+  const storeId = useAppSelector((state) => state.home.storeId);
   const botType = useAppSelector((state) => state.bot.botType);
   const pincode = useAppSelector((state) => state.home.userPincode);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
@@ -43,11 +44,14 @@ const Catalog = () => {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
+      data: {
+        store_id: storeId,
+      },
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
         if (
-          data?.payload?.data?.activities[0]?.type === "viewCategoryCatalog"
+          data?.payload?.data?.activities[0]?.type === "storeCheck"
         ) {
           setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
@@ -57,6 +61,9 @@ const Catalog = () => {
       conversationId: convId,
       text: "viewProductCatalog",
       voiceFlag: false,
+      data: {
+        store_id: storeId,
+      },
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {

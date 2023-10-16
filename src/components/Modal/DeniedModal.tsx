@@ -1,7 +1,6 @@
 import { AddDialog, Button, Text } from "@polynomialai/alpha-react";
 import { setDeniedModal } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useState } from "react";
 
 const DeniedModal = () => {
   const dispatch = useAppDispatch();
@@ -21,9 +20,9 @@ const DeniedModal = () => {
                 <Text
                   type="body"
                   size="lg"
-                  className="font-semibold text-black"
+                  className="font-semibold text-[red]"
                 >
-                  Steps to Enable Location
+                  Location permissions is not Granted
                 </Text>
                 <img
                   onClick={() => dispatch(setDeniedModal(false))}
@@ -32,8 +31,9 @@ const DeniedModal = () => {
                   width="15px"
                 ></img>
               </div>
+              <div className="mt-1 ms-1 text-base text-black font-medium">Steps to Enable Location</div>
               <Text>
-                <ul className="px-5 py-2" style={{ listStyleType: "disc" }}>
+                <ul className="px-5 py-2 text-black font-normal" style={{ listStyleType: "disc" }}>
                   <li>Turn on Location</li>
                   <li>Open this link {document.URL} in browser</li>
                   <li>Click on ⋮ (menu) and open settings</li>

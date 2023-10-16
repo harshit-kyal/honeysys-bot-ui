@@ -67,7 +67,6 @@ const OTP = () => {
   });
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
-      console.log("latLng", latLng);
       const geocoder = new google.maps.Geocoder();
       geocoder
         .geocode({ location: latLng }, (results: any, status: any) => {
@@ -86,12 +85,12 @@ const OTP = () => {
                   text: "findstores",
                   voiceFlag: false,
                   data: {
-                    // pincode: "500084",
-                    // lat: "17.469857630687827",
-                    // lag: "78.35782449692486",
-                    pincode: pincode,
-                    lat: latLng?.lat,
-                    lag: latLng?.lng,
+                    pincode: "500084",
+                    lat: "17.469857630687827",
+                    lag: "78.35782449692486",
+                    // pincode: pincode,
+                    // lat: latLng?.lat,
+                    // lag: latLng?.lng,
                     type: "location",
                   },
                 };
@@ -119,17 +118,11 @@ const OTP = () => {
                         // dispatch(setUserPincode(500084));
                         dispatch(setUserPincode(pincode));
                         navigate("/success");
-                        console.log(
-                          "data",
-                          data?.payload?.data?.activities[0]?.value?.data[0]
-                            ?.status_code
-                        );
                       }
                     }
                   });
                 }
               }
-              console.error("ress123", postalCode);
             } else {
               console.error("ress", results);
             }
@@ -137,9 +130,7 @@ const OTP = () => {
             console.error("Geocoder failed due to: " + status);
           }
         })
-        .catch(() => {
-          console.log("not found");
-        });
+        .catch(() => {});
     }
   }, [latLng]);
 
@@ -210,8 +201,22 @@ const OTP = () => {
                               setLatLng(latLng);
                             });
                           } else if (result.state === "prompt") {
+                            navigator.geolocation.getCurrentPosition(function (
+                              position
+                            ) {
+                              console.log(
+                                "Latitude is :",
+                                position.coords.latitude
+                              );
+                              console.log(
+                                "Longitude is :",
+                                position.coords.longitude
+                              );
+                            });
                           } else if (result.state === "denied") {
-                            navigate("/address");
+                            navigate("/address", {
+                              state: { navigate: "home" },
+                            });
                           }
                           result.onchange = function () {};
                         });

@@ -24,6 +24,7 @@ const Routing = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<OTP />} />
       <Route path="/success" element={<Success />} />
+      <Route path="/address" element={<Address />} />
       <Route path="/serviceableArea" element={<ServiceableArea />} />
       <Route path="/" element={<ProtectedRoute />}>
         <Route index element={<Home />} />
@@ -33,7 +34,6 @@ const Routing = () => {
         <Route path="/viewProduct/:id" element={<ViewProduct />} />
         <Route path="/pdp/:id" element={<PDP />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/address" element={<Address />} />
         <Route path="/contactDetails" element={<ContactDetails />} />
         <Route path="/addressDetails" element={<AddressDetails />} />
         <Route path="/search" element={<SearchProduct />} />

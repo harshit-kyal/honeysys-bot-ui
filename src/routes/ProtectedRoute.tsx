@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import HeaderBar from "../components/header/Header";
+import { useAppSelector } from "../app/hooks";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("accessToken");
+  const storeId = useAppSelector((state) => state.home.storeId);
   const reviewToken = localStorage.getItem("reviewToken");
 
   const [isHeader, setIsHeader] = useState<boolean>(false);
@@ -15,7 +17,7 @@ const ProtectedRoute = () => {
     } else {
       setIsHeader(false);
     }
-  }, [location.pathname, localStorage.getItem("reviewToken")]);
+  }, [location.pathname, reviewToken]);
   const [render, setrender] = useState(false);
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -28,7 +30,7 @@ const ProtectedRoute = () => {
     }, 500);
   }, []);
   return render ? (
-    token || reviewToken ? (
+    (token && storeId) || reviewToken ? (
       <div className="">
         {isHeader && <HeaderBar />}
         <Outlet />

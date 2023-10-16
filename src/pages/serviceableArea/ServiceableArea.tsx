@@ -1,5 +1,4 @@
 import { Button } from "@polynomialai/alpha-react";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ServiceableArea = () => {
@@ -108,7 +107,12 @@ const ServiceableArea = () => {
           onClick={() => navigate(-1)}
         />
         <div className="flex items-center justify-center flex-col">
-          <img src="/images/not_serviceable.png" height={120} width={120}></img>
+          <img
+            src="/images/not_serviceable.png"
+            alt=""
+            height={120}
+            width={120}
+          ></img>
           <div className="text-center">Sorry, This area is not serviceable</div>
           <div className="text-center text-xs mt-2 mx-5">
             We are working to bring the seemless online shooping experience to
@@ -128,7 +132,12 @@ const ServiceableArea = () => {
             >
               {storeData.map((items: any, index: number) => (
                 <div className="flex border-b-2 pb-2 mt-1" key={index}>
-                  <img src="/images/location1.svg" height={35} width={27}></img>
+                  <img
+                    src="/images/location1.svg"
+                    alt=""
+                    height={35}
+                    width={27}
+                  ></img>
                   <div className="ms-3">
                     <div className="text-base">{items?.locationName}</div>
                     <div className="text-xs text-[gray]">

@@ -5,11 +5,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 const ContactDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const navigateData = location?.state?.navigate;
   const nameData = location?.state?.name;
   const mobileNumberData = location?.state?.mobileNumber;
   const adressData = location?.state?.address;
   const [name, setName] = useState(nameData ? nameData : "");
-  const [error, setError] = useState("");
   const [errorField, setErrorField] = useState("");
   const [errorLabel, setErrorLabel] = useState<any>({});
   const [mobileNumber, setMobileNumber] = useState(
@@ -72,7 +72,9 @@ const ContactDetails = () => {
       error.city === "" &&
       error.state === ""
     ) {
-      navigate("/addressDetails");
+      navigateData && navigateData === "home"
+        ? navigate("/")
+        : navigate("/addressDetails");
     }
     setErrorLabel(error);
 

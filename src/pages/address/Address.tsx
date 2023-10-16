@@ -8,10 +8,13 @@ import {
 } from "@react-google-maps/api";
 import {
   getChatData,
+  setDeniedModal,
   setStoreId,
   setUserPincode,
 } from "../../slices/homeSlice";
 import { useAppDispatch } from "../../app/hooks";
+import DeniedModal from "../../components/Modal/DeniedModal";
+import toast, { Toaster } from "react-hot-toast";
 const Address = () => {
   const navigate = useNavigate();
   const [latLng, setLatLng] = useState<any>({
@@ -30,7 +33,14 @@ const Address = () => {
   });
   const destinationRef = useRef<any | null>();
   const zoom = 16;
-
+  const location = useLocation();
+  const navigateData =
+    location && location?.state?.navigate ? location?.state?.navigate : "";
+  console.log(
+    "navigateData",
+    navigateData,
+    navigateData && navigateData !== ""
+  );
   const formatCustomAddress = (addressComponents: any) => {
     let formattedAddress = "";
     const streetNumber = addressComponents.find((component: any) =>
@@ -79,6 +89,16 @@ const Address = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries: ["places"],
   });
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
@@ -91,21 +111,17 @@ const Address = () => {
               const formattedAddress = formatCustomAddress(addressComponents);
               setFormattedShortAdd(formattedAddress);
             } else {
-              console.error("No results found");
             }
           } else {
             setFormattedShortAdd("");
             setFormattedAdd("");
-            console.error("Geocoder failed due to: " + status);
           }
         })
-        .catch(() => {
-          console.log("not found");
-        });
+        .catch(() => {});
     }
   }, [latLng]);
   const [mapref, setMapRef] = React.useState<any>(null);
-  const getCurrentLocation = () => {
+  const getCurrentLocationOnLoad = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         setLatLng({
@@ -115,10 +131,36 @@ const Address = () => {
       });
     }
   };
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then(function (result) {
+          if (result.state === "granted") {
+            navigator.geolocation.getCurrentPosition(function (position) {
+              const latLng = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+              setLatLng(latLng);
+            });
+          } else if (result.state === "prompt") {
+            navigator.geolocation.getCurrentPosition(function (position) {
+              console.log("Latitude is :", position.coords.latitude);
+              console.log("Longitude is :", position.coords.longitude);
+            });
+          } else if (result.state === "denied") {
+            dispatch(setDeniedModal(true));
+          }
+          result.onchange = function () {};
+        });
+    } else {
+      alert("Sorry Not available!");
+    }
+  };
   const handleOnLoad = (map: any) => {
-    console.log("hii");
     setMapRef(map);
-    getCurrentLocation();
+    getCurrentLocationOnLoad();
   };
   const handleCenterChanged = () => {
     if (mapref && isLoaded) {
@@ -153,13 +195,10 @@ const Address = () => {
         .then((coords) => {
           setLatLng(coords);
         })
-        .catch((error) => {
-          console.error("Geocoding error:", error);
-        });
+        .catch((error) => {});
     }
   };
   const saveHandler = () => {
-    console.log("address", address);
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
       let botType = "e-comm";
       let convId = 12389;
@@ -179,7 +218,6 @@ const Address = () => {
       };
       if (convId && botType) {
         dispatch(getChatData({ newData, botType })).then((data) => {
-          console.log("apiData", data?.payload?.data?.activities[0]?.value);
           if (
             data &&
             data?.payload?.data?.activities[0]?.type === "storeCheck"
@@ -188,7 +226,7 @@ const Address = () => {
               data?.payload?.data?.activities[0]?.value?.data[0]
                 ?.status_code === 500
             ) {
-              alert("not found");
+              toastModal({ text: "Not found" });
             } else if (
               data?.payload?.data?.activities[0]?.value?.data[0]
                 ?.status_code === 200
@@ -199,17 +237,24 @@ const Address = () => {
                 )
               );
               dispatch(setUserPincode(address?.pincode));
-              navigate("/contactDetails", { state: { address: address } });
-              console.log(
-                "data",
-                data?.payload?.data?.activities[0]?.value?.data[0]?.status_code
-              );
+              {
+                navigateData && navigateData !== ""
+                  ? navigate("/contactDetails", {
+                      state: { address: address, navigate: "home" },
+                    })
+                  : navigate("/contactDetails", {
+                      state: { address: address },
+                    });
+              }
             }
           }
         });
       }
+    } else {
+      toastModal({ text: "Please enter the address" });
     }
   };
+
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">
@@ -358,6 +403,8 @@ const Address = () => {
           <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
         </div>
       </div>
+      <Toaster />
+      <DeniedModal />
     </div>
   );
 };

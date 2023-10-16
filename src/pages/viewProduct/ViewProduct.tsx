@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
-import { LeafyVegetables } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData } from "../../slices/homeSlice";
@@ -27,10 +26,6 @@ const ViewProduct = () => {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           if (data?.payload?.data?.activities[0]?.type === "viewProduct") {
-            console.log(
-              "raju",
-              data?.payload?.data?.activities[0]?.value?.data[0]
-            );
             setProductData(data?.payload?.data?.activities[0]?.value?.data[0]);
           }
         })
@@ -46,10 +41,6 @@ const ViewProduct = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          console.log(
-            "ramji",
-            data?.payload?.data?.activities[0]?.value?.data[0]
-          );
           if (data?.payload?.data?.activities[0]?.type === "productPrice") {
             setProductDetail(
               data?.payload?.data?.activities[0]?.value?.data[0]
@@ -62,16 +53,16 @@ const ViewProduct = () => {
   useEffect(() => {
     category();
   }, []);
-  const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
-    imageSrc: "/images/onion.svg",
-    title: "Fresh Cauliflower",
-    pricing: [
-      { id: "1", option: "500 g", price: 60 },
-      { id: "2", option: "1 kg", price: 120 },
-      { id: "3", option: "2 kg", price: 240 },
-      { id: "4", option: "5 kg", price: 600 },
-    ],
-  };
+  // const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
+  //   imageSrc: "/images/onion.svg",
+  //   title: "Fresh Cauliflower",
+  //   pricing: [
+  //     { id: "1", option: "500 g", price: 60 },
+  //     { id: "2", option: "1 kg", price: 120 },
+  //     { id: "3", option: "2 kg", price: 240 },
+  //     { id: "4", option: "5 kg", price: 600 },
+  //   ],
+  // };
 
   const AddBtn = () => {
     return (

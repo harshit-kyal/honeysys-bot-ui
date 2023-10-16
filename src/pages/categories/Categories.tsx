@@ -1,11 +1,8 @@
 import PageHeader from "../../components/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { CategorieData } from "../../constants/HomeConst";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { ProductDropDown } from "@polynomialai/alpha-react";
-import { fruitsVegetables } from "../../constants/HomeConst";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { setCategoriesUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData } from "../../slices/homeSlice";
@@ -14,6 +11,7 @@ const Categories = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
@@ -40,12 +38,13 @@ const Categories = () => {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
+      data: {
+        store_id: storeId,
+      },
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
-        if (
-          data?.payload?.data?.activities[0]?.type === "viewCategoryCatalog"
-        ) {
+        if (data?.payload?.data?.activities[0]?.type === "storeCheck") {
           setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
@@ -54,6 +53,9 @@ const Categories = () => {
       conversationId: convId,
       text: "viewCategory",
       voiceFlag: false,
+      data: {
+        store_id: storeId,
+      },
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
