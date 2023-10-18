@@ -14,6 +14,9 @@ const Categories = () => {
   const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  // const storeId = "62df787e6c6e1169d7465ef6";
+  // const convId = 12389;
+  // const botType = "e-comm";
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
   useEffect(() => {
@@ -39,44 +42,48 @@ const Categories = () => {
       text: "viewCategoryCatalog",
       voiceFlag: false,
       data: {
-        store_id: storeId,
+        storeId: storeId,
       },
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data?.payload?.data?.activities[0]?.type === "storeCheck") {
+        if (data && data?.payload?.data?.activities[0]?.type === "storeCheck") {
           setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
     }
-    newData = {
-      conversationId: convId,
-      text: "viewCategory",
-      voiceFlag: false,
-      data: {
-        store_id: storeId,
-      },
-    };
-    if (convId && botType && convId !== "" && botType !== "") {
-      dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data?.payload?.data?.activities[0]?.type === "viewCategory") {
-          setSubCategories(data?.payload?.data?.activities[0]?.value?.data);
-        }
-      });
-    }
+    //   newData = {
+    //     conversationId: convId,
+    //     text: "viewCategory",
+    //     voiceFlag: false,
+    //     data: {
+    //       store_id: storeId,
+    //     },
+    //   };
+    //   if (convId && botType && convId !== "" && botType !== "") {
+    //     dispatch(getChatData({ newData, botType })).then((data) => {
+    //       if (data?.payload?.data?.activities[0]?.type === "viewCategory") {
+    //         setSubCategories(data?.payload?.data?.activities[0]?.value?.data);
+    //       }
+    //     });
+    //   }
   };
   useEffect(() => {
     catalogData();
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
+  useEffect(() => {
+    const foundItem = categoriesCatalog.find((item: any) => item.id === id);
+    setSubCategories(foundItem?.subCategory);
+  }, [id, categoriesCatalog]);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Categories" />
       {!loading && !error ? (
         <>
           <div className="flex gap-[10px] px-5 py-[10px] overflow-auto">
-            {categoriesCatalog.map((item: any, index: number) => (
+            {categoriesCatalog?.map((item: any, index: number) => (
               <div
                 key={index}
                 onClick={() => {
@@ -88,7 +95,7 @@ const Categories = () => {
             ))}
           </div>
           <div>
-            {subCategories.map((item: any, index: number) => (
+            {subCategories?.map((item: any, index: number) => (
               <ProductDropDown
                 key={index}
                 buttonCN="w-[100%]"
@@ -106,20 +113,30 @@ const Categories = () => {
                   title: item?.title,
                 }}
                 optionTextCN="!font-categoriesTitleWeight text-categoriesTitleColor"
-                options={item.products.map((i: any, index: number) => ({
-                  image: (
-                    <img
-                      key={index}
-                      src={i?.imageSrc}
-                      className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
-                      alt=""
-                    />
-                  ),
-                  title: i?.title,
-                  onClick: () => {
-                    navigate(`/viewProduct/${i?.id}`);
-                  },
-                }))}
+                options={subCategories
+                  .filter((i: any) => item.id === i.id)
+                  .map((i: any, index: number) => {
+                    return {
+                      image: (
+                        <img
+                          key={index}
+                          src={i?.imageSrc}
+                          className="h-[60px] w-[60px] rounded-md border border-categoriesImageBorderColor"
+                          alt=""
+                        />
+                      ),
+                      title: i?.title,
+                      onClick: () => {
+                        navigate(`/viewProduct/${i?.id}`, {
+                          state: {
+                            categoryIds: [id],
+                            subcategoryIds: [i?.id],
+                            title: i?.title,
+                          },
+                        });
+                      },
+                    };
+                  })}
                 optionsContainerCN="w-[100%]"
               />
             ))}

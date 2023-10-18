@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, SearchInput, Text } from "@polynomialai/alpha-react";
+import { Button, Text } from "@polynomialai/alpha-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   useJsApiLoader,
@@ -9,6 +9,7 @@ import {
 import {
   getChatData,
   setDeniedModal,
+  setStoreData,
   setStoreId,
   setUserPincode,
 } from "../../slices/homeSlice";
@@ -207,48 +208,57 @@ const Address = () => {
         text: "findstores",
         voiceFlag: false,
         data: {
-          // pincode: "500084",
-          // lat: "17.469857630687827",
-          // lag: "78.35782449692486",
-          pincode: address?.pincode,
-          lat: latLng?.lat,
-          lag: latLng?.lng,
+          pincode: "500084",
+          lat: "17.469857630687827",
+          lag: "78.35782449692486",
+          // pincode: address?.pincode,
+          // lat: latLng?.lat,
+          // lag: latLng?.lng,
           type: "location",
         },
       };
       if (convId && botType) {
-        dispatch(getChatData({ newData, botType })).then((data) => {
-          if (
-            data &&
-            data?.payload?.data?.activities[0]?.type === "storeCheck"
-          ) {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
             if (
-              data?.payload?.data?.activities[0]?.value?.data[0]
-                ?.status_code === 500
+              data &&
+              data?.payload?.data?.activities[0]?.type === "storeCheck"
             ) {
-              toastModal({ text: "Not found" });
-            } else if (
-              data?.payload?.data?.activities[0]?.value?.data[0]
-                ?.status_code === 200
-            ) {
-              dispatch(
-                setStoreId(
-                  data?.payload?.data?.activities[0]?.value?.data[0]?.store_id
-                )
-              );
-              dispatch(setUserPincode(address?.pincode));
-              {
-                navigateData && navigateData !== ""
-                  ? navigate("/contactDetails", {
-                      state: { address: address, navigate: "home" },
-                    })
-                  : navigate("/contactDetails", {
-                      state: { address: address },
-                    });
+              if (
+                data?.payload?.data?.activities[0]?.value?.data[0]
+                  ?.status_code === 500
+              ) {
+                toastModal({ text: "Not found" });
+              } else if (
+                data?.payload?.data?.activities[0]?.value?.data[0]
+                  ?.status_code === 200
+              ) {
+                dispatch(
+                  setStoreData(
+                    data?.payload?.data?.activities[0]?.value?.data[0]
+                  )
+                );
+                dispatch(
+                  setStoreId(
+                    data?.payload?.data?.activities[0]?.value?.data[0]?.id
+                  )
+                );
+                dispatch(setUserPincode(500084));
+
+                // dispatch(setUserPincode(address?.pincode));
+                {
+                  navigateData && navigateData !== ""
+                    ? navigate("/contactDetails", {
+                        state: { address: address, navigate: "home" },
+                      })
+                    : navigate("/contactDetails", {
+                        state: { address: address },
+                      });
+                }
               }
             }
-          }
-        });
+          })
+          .catch(() => {});
       }
     } else {
       toastModal({ text: "Please enter the address" });

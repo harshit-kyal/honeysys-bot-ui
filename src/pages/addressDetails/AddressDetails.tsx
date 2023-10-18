@@ -67,6 +67,7 @@ export function RadioButtonGroup(props: any) {
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const storeId = useAppSelector((state) => state.home.storeId);
   const [addressArray, setAddressArray] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState({});
   const cartData = () => {
@@ -74,17 +75,24 @@ export function RadioButtonGroup(props: any) {
     let convId = 12389;
     const newData = {
       conversationId: convId,
-      text: "address",
+      text: "getAddress",
       voiceFlag: false,
+      data: {
+        storeId: storeId,
+      },
     };
     // if (convId && botType && convId !== "" && botType !== "") {
     if (convId && botType && botType !== "") {
-      dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data && data?.payload?.data?.activities[0]?.type === "address") {
-          setAddressArray(data?.payload?.data?.activities[0]?.value?.data);
-          setSelectedAdress(data?.payload?.data?.activities[0]?.value?.data[0]);
-        }
-      });
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          if (data && data?.payload?.data?.activities[0]?.type === "address") {
+            setAddressArray(data?.payload?.data?.activities[0]?.value?.data);
+            setSelectedAdress(
+              data?.payload?.data?.activities[0]?.value?.data[0]
+            );
+          }
+        })
+        .catch(() => {});
     }
   };
   useEffect(() => {

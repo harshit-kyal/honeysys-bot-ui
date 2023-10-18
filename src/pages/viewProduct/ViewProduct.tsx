@@ -4,10 +4,11 @@ import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData } from "../../slices/homeSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
+  const storeId = useAppSelector((state) => state.home.storeId);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   const [Modal, setModal] = useState<boolean>(false);
@@ -15,27 +16,44 @@ const ViewProduct = () => {
   const botType = useAppSelector((state) => state.bot.botType);
   const [productData, setProductData] = useState<any>([]);
   const [productDetail, setProductDetail] = useState<any>({});
+  const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const categoryIds = location?.state?.categoryIds;
+  const subcategoryIds = location?.state?.subcategoryIds;
+  const subCategoryTitle = location?.state?.title;
+  console.log("store", storeId, categoryIds, subcategoryIds);
   const category = () => {
     let newData = {
       conversationId: convId,
       text: "viewProduct",
       voiceFlag: false,
+      data: {
+        storeId: storeId,
+        categoryIds: categoryIds,
+        subcategoryIds: subcategoryIds,
+      },
     };
+
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           if (data?.payload?.data?.activities[0]?.type === "viewProduct") {
-            setProductData(data?.payload?.data?.activities[0]?.value?.data[0]);
+            setProductData(data?.payload?.data?.activities[0]?.value?.data);
           }
         })
         .catch(() => {});
     }
-
-    newData = {
+  };
+  const product = () => {
+    let newData = {
       conversationId: convId,
       text: "productPrice",
       voiceFlag: false,
+      data: {
+        store_id: storeId,
+        
+      },
     };
 
     if (convId && botType && convId !== "" && botType !== "") {
@@ -50,8 +68,27 @@ const ViewProduct = () => {
         .catch(() => {});
     }
   };
+  const categoryCatalog = () => {
+    let newData = {
+      conversationId: convId,
+      text: "viewCategoryCatalog",
+      voiceFlag: false,
+      data: {
+        store_id: storeId,
+      },
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType })).then((data) => {
+        if (data && data?.payload?.data?.activities[0]?.type === "storeCheck") {
+          setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
+        }
+      });
+    }
+  };
   useEffect(() => {
     category();
+    product();
+    categoryCatalog();
   }, []);
   // const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
   //   imageSrc: "/images/onion.svg",
@@ -63,12 +100,14 @@ const ViewProduct = () => {
   //     { id: "4", option: "5 kg", price: 600 },
   //   ],
   // };
+  const [p, setp] = useState<any>([]);
 
-  const AddBtn = () => {
+  const AddBtn = (subCategory: any) => {
     return (
       <div
         className="flex flex-col items-center"
         onClick={() => {
+          setp(subCategory?.subCategory);
           setModal(true);
         }}
       >
@@ -99,16 +138,17 @@ const ViewProduct = () => {
       </div>
     );
   };
+  console.log("subCategoryTitle", subCategoryTitle);
   return (
     <div className="h-screen pt-[60px]">
-      <PageHeader title={productData?.title ? productData?.title : "..."} />
+      <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
       {!loading && !error ? (
         <>
           <div className="pb-12">
-            {productData?.products?.map((data: any, index: number) => (
+            {productData?.map((data: any, index: number) => (
               <ProductCard
                 key={index}
-                addBtn={<AddBtn />}
+                addBtn={<AddBtn subCategory={data?.variants} />}
                 className="w-full my-[6px] mb-3 px-5"
                 image={
                   <img
@@ -117,16 +157,29 @@ const ViewProduct = () => {
                     alt=""
                   />
                 }
-                onClick={() => {}}
+                onClick={() => {
+                  // console.log("p",data?.variants);
+                }}
                 title={data?.title}
               />
             ))}
           </div>
-
           <div className="flex w-full px-5 py-2 bg-[#F1F1F1] gap-3 fixed bottom-0 overflow-x-auto">
+            {categoriesCatalog?.map((item: any, index: number) => (
+              <div
+                key={index}
+                onClick={() => {
+                  navigate(`/categories/${item?.id}`);
+                }}
+              >
+                <BadgeCard text={item?.title} active={false} />
+              </div>
+            ))}
+          </div>
+          {/* <div className="flex w-full px-5 py-2 bg-[#F1F1F1] gap-3 fixed bottom-0 overflow-x-auto">
             <BadgeCard text="Back to category selection" active={false} />
             <BadgeCard text="Electronics for you" active={false} />
-          </div>
+          </div> */}
           <DrawerModal
             isOpen={Modal}
             onClose={() => {
@@ -134,18 +187,19 @@ const ViewProduct = () => {
             }}
           >
             <div>
-              {productDetail?.pricing?.map((item: any, index: number) => (
+              {p?.map((item: any, index: number) => (
                 <ProductCard
                   key={index}
                   image={
                     <img
-                      src={productDetail?.imageSrc}
-                      alt="Product_Image"
+                      src={item?.imageSrc}
+                      alt=""
                       className="h-[60px] w-[60px] !rounded-md mb-1"
                       onClick={() => navigate("/PDP/1")}
                     />
                   }
-                  title={`${productDetail?.title} - ${item?.option}`}
+                  title={`${item?.productName} - ${item?.value} ${item?.unitName}`}
+                  // title={`${productDetail?.title} - ${item?.option}`}
                   price={`₹ ${item?.price}`}
                   className="gap-[10%]"
                   addBtn={

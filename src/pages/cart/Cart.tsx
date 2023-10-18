@@ -205,8 +205,8 @@ const Cart = () => {
           ) : (
             <>
               <div
-                style={{ height: "calc(100vh - 60px)" }}
-                className="flex flex-col justify-center items-center gap-5 px-5"
+                style={{ height: "calc(100vh)" }}
+                className="flex flex-col justify-center items-center gap-5 px-5 align-middle mt-2"
               >
                 <img
                   src="/images/Cart.svg"

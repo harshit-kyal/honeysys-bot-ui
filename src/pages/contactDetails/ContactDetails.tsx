@@ -1,9 +1,12 @@
-import { Button, Input } from "@polynomialai/alpha-react";
-import React, { useState } from "react";
+import { Button } from "@polynomialai/alpha-react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getChatData } from "../../slices/homeSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 const ContactDetails = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigateData = location?.state?.navigate;
   const nameData = location?.state?.name;
@@ -15,9 +18,11 @@ const ContactDetails = () => {
   const [mobileNumber, setMobileNumber] = useState(
     mobileNumberData ? mobileNumberData : ""
   );
-  const [pincode, setPincode] = useState(
-    adressData?.pincode ? adressData?.pincode : ""
-  );
+  const pincode = useAppSelector((state) => state.home.userPincode);
+  const storeInfo = useAppSelector((state) => state.home.storeData);
+  // const [pincode, setPincode] = useState(
+  //   adressData?.pincode ? adressData?.pincode : pincodeData
+  // );
   const [address, setAddress] = useState(
     adressData?.address ? adressData?.address : ""
   );
@@ -28,6 +33,7 @@ const ContactDetails = () => {
   const [state, setState] = useState(
     adressData?.state ? adressData?.state : ""
   );
+  console.log("storeData", storeInfo?.location);
   const saveHandler = () => {
     let error = {
       userName: "",
@@ -46,11 +52,11 @@ const ContactDetails = () => {
     } else if (mobileNumber.length !== 10) {
       error.mobileNumber = "Please enter valid mobile number";
     }
-    if (pincode === "") {
-      error.pincode = "Please enter pincode";
-    } else if (pincode.length !== 6) {
-      error.pincode = "Please enter valid pincode";
-    }
+    // if (pincode === "") {
+    //   error.pincode = "Please enter pincode";
+    // } else if (pincode.length !== 6) {
+    //   error.pincode = "Please enter valid pincode";
+    // }
     if (address === "") {
       error.address = "Please enter address";
     }
@@ -66,12 +72,48 @@ const ContactDetails = () => {
     if (
       error.userName === "" &&
       error.mobileNumber === "" &&
-      error.pincode === "" &&
+      // error.pincode === "" &&
       error.address === "" &&
       error.landmark === "" &&
       error.city === "" &&
       error.state === ""
     ) {
+      let botType = "e-comm";
+      let convId = 12389;
+      const newData = {
+        conversationId: convId,
+        text: "addAdress",
+        voiceFlag: false,
+        data: {
+          addressId: 0, //0 for new,
+          address1: address,
+          address2: "",
+          addressName: "Home",
+          defaultAddress: false,
+          latitude: storeInfo?.location?.longitude,
+          longitude: storeInfo?.location?.longitude,
+          pincode: pincode,
+          buildingName: "",
+          city: city,
+          cityId: storeInfo?.location?.cityId,
+          email: "",
+          flatNo: "",
+          landmark: landmark,
+          locality: "",
+          localityId: storeInfo?.location?.localityId,
+          mobile: mobileNumber,
+          name: name,
+          state: state,
+          stateId: storeInfo?.location?.stateId,
+        },
+      };
+      if (convId && botType) {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            console.log(data);
+          })
+          .catch(() => {});
+      }
       navigateData && navigateData === "home"
         ? navigate("/")
         : navigate("/addressDetails");
@@ -334,7 +376,6 @@ const ContactDetails = () => {
             )}
           </div>
           <div className=" w-full h-[37px] flex justify-end items-center flex-col mt-[10px]">
-            {/* <div className="text-[red] mb-1">{error}</div> */}
             <Button
               className=" !bg-primary text-white text-xs mx-5 max-[500px]:w-[70%] min-[500px]:w-[35%] min-[1024px]:w-[20%] py-[10px] text-center"
               onClick={() => saveHandler()}

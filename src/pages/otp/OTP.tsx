@@ -10,6 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useJsApiLoader } from "@react-google-maps/api";
 import {
   getChatData,
+  setStoreData,
   setStoreId,
   setUserPincode,
 } from "../../slices/homeSlice";
@@ -95,32 +96,40 @@ const OTP = () => {
                   },
                 };
                 if (convId && botType) {
-                  dispatch(getChatData({ newData, botType })).then((data) => {
-                    if (
-                      data &&
-                      data?.payload?.data?.activities[0]?.type === "storeCheck"
-                    ) {
+                  dispatch(getChatData({ newData, botType }))
+                    .then((data) => {
                       if (
-                        data?.payload?.data?.activities[0]?.value?.data[0]
-                          ?.status_code === 500
+                        data &&
+                        data?.payload?.data?.activities[0]?.type ===
+                          "storeCheck"
                       ) {
-                        navigate("/serviceableArea");
-                      } else if (
-                        data?.payload?.data?.activities[0]?.value?.data[0]
-                          ?.status_code === 200
-                      ) {
-                        dispatch(
-                          setStoreId(
-                            data?.payload?.data?.activities[0]?.value?.data[0]
-                              ?.store_id
-                          )
-                        );
-                        // dispatch(setUserPincode(500084));
-                        dispatch(setUserPincode(pincode));
-                        navigate("/success");
+                        if (
+                          data?.payload?.data?.activities[0]?.value?.data[0]
+                            ?.status_code === 500
+                        ) {
+                          navigate("/serviceableArea");
+                        } else if (
+                          data?.payload?.data?.activities[0]?.value?.data[0]
+                            ?.status_code === 200
+                        ) {
+                          dispatch(
+                            setStoreData(
+                              data?.payload?.data?.activities[0]?.value?.data[0]
+                            )
+                          );
+                          dispatch(
+                            setStoreId(
+                              data?.payload?.data?.activities[0]?.value?.data[0]
+                                ?.id
+                            )
+                          );
+                          dispatch(setUserPincode(500084));
+                          // dispatch(setUserPincode(pincode));
+                          navigate("/success");
+                        }
                       }
-                    }
-                  });
+                    })
+                    .catch(() => {});
                 }
               }
             } else {
@@ -133,7 +142,6 @@ const OTP = () => {
         .catch(() => {});
     }
   }, [latLng]);
-
   return (
     <div className="w-screen h-screen px-5 py-3">
       <BackButton />
@@ -180,6 +188,7 @@ const OTP = () => {
                 clientName: "honeySys",
               })
                 .then((response) => {
+                  console.log("latLng1", response);
                   if (response.data?.code === 200) {
                     localStorage.setItem(
                       "accessToken",

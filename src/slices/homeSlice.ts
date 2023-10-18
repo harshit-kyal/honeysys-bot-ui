@@ -14,7 +14,7 @@ const initialState: HomeSliceType = {
   locationPermission: false,
   deniedModal: false,
   locationModal: false,
-  // storeData: {},
+  storeData: {},
   UiUpdate: false,
   cart: [],
   totalQuantity: 0,
@@ -195,5 +195,6 @@ export const {
   addToCartArray,
   setUserPincode,
   setStoreId,
+  setStoreData,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

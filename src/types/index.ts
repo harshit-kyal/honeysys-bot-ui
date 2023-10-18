@@ -66,7 +66,7 @@ export interface HomeSliceType {
   locationPermission: boolean;
   locationModal: boolean;
   deniedModal: boolean;
-  // storeData: any;
+  storeData: any;
   UiUpdate: boolean;
   cart: any[];
   totalQuantity: number;
