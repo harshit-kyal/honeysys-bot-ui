@@ -9,6 +9,7 @@ const initialState: HomeSliceType = {
   otp: 0,
   userId: "",
   storeId: "",
+  cartId: "",
   userPincode: 0,
   ChatArray: [],
   locationPermission: false,
@@ -71,6 +72,12 @@ export const HomeSlice = createSlice({
         userId: action.payload,
       };
     },
+    setCartId(state, action) {
+      return {
+        ...state,
+        cartId: action.payload,
+      };
+    },
     setUserPincode(state, action) {
       return {
         ...state,
@@ -96,22 +103,35 @@ export const HomeSlice = createSlice({
       };
     },
     addToCartArray(state, action) {
-      let find = state.cart.findIndex(
-        (item: any) => item.id === action.payload.id
-      );
-      if (find >= 0) {
-        state.cart[find].quantity += 1;
-      } else {
-        state.cart.push(action.payload);
+      if (action?.payload?.quantity > 0) {
+        let find = state.cart.findIndex(
+          (item: any) =>
+            item?.productId === action?.payload?.productId &&
+            item?.varientId === action?.payload?.varientId
+        );
+        if (find != -1) {
+          state.cart[find].quantity = action?.payload?.quantity;
+        } else {
+          state.cart.push(action.payload);
+          state.totalQuantity = state.totalQuantity += 1;
+        }
       }
-      state.totalQuantity = state.totalQuantity += 1;
     },
-    // minusToCartArray(state, action) {
-    //   return {
-    //     ...state,
-    //     ChatArray: [...state.ChatArray, action.payload],
-    //   };
-    // },
+    minusToCartArray(state, action) {
+      let find = state.cart.findIndex(
+        (item: any) =>
+          item?.productId === action?.payload?.productId &&
+          item?.varientId === action?.payload?.varientId
+      );
+      if (find != -1) {
+        if (action?.payload?.quantity > 0) {
+          state.cart[find].quantity = action?.payload?.quantity;
+        } else {
+          state.totalQuantity = state.totalQuantity -= 1;
+          state.cart.splice(find, 1);
+        }
+      }
+    },
     setLocationPermission(state, action) {
       return {
         ...state,
@@ -188,6 +208,7 @@ export const {
   setUserId,
   setChatArray,
   addToChatArray,
+  minusToCartArray,
   setLocationPermission,
   setLocationModal,
   setDeniedModal,
@@ -196,5 +217,6 @@ export const {
   setUserPincode,
   setStoreId,
   setStoreData,
+  setCartId,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

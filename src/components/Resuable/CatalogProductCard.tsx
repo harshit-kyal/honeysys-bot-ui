@@ -47,11 +47,11 @@ cardProps) => {
         addBtn={
           <PlusButton
             onClick={() => {
-              let data = {
-                id: id,
-                quantity: 1,
-              };
-              dispatch(addToCartArray(data));
+              // let data = {
+              //   id: id,
+              //   quantity: 1,
+              // };
+              // dispatch(addToCartArray(data));
             }}
           />
         }

@@ -19,6 +19,7 @@ const Categories = () => {
   // const botType = "e-comm";
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
+  const [selected, setSelected] = useState("");
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const headerParams: any = searchParams.get("categoriesData");
@@ -48,6 +49,8 @@ const Categories = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType })).then((data) => {
         if (data && data?.payload?.data?.activities[0]?.type === "storeCheck") {
+          const id1 = data?.payload?.data?.activities[0]?.value?.data[0]?.id;
+          setSelected(id === "home" ? id1 : id);
           setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
@@ -57,7 +60,7 @@ const Categories = () => {
     //     text: "viewCategory",
     //     voiceFlag: false,
     //     data: {
-    //       store_id: storeId,
+    //       storeId: storeId,
     //     },
     //   };
     //   if (convId && botType && convId !== "" && botType !== "") {
@@ -74,9 +77,16 @@ const Categories = () => {
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   useEffect(() => {
-    const foundItem = categoriesCatalog.find((item: any) => item.id === id);
+    const id1 = categoriesCatalog[0]?.id;
+    setSelected(id === "home" ? id1 : id);
+  }, [id]);
+
+  useEffect(() => {
+    const foundItem = categoriesCatalog.find(
+      (item: any) => item.id === selected
+    );
     setSubCategories(foundItem?.subCategory);
-  }, [id, categoriesCatalog]);
+  }, [selected, categoriesCatalog]);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title="Categories" />
@@ -90,7 +100,7 @@ const Categories = () => {
                   navigate(`/categories/${item?.id}`);
                 }}
               >
-                <BadgeCard text={item?.title} active={id === item?.id} />
+                <BadgeCard text={item?.title} active={selected === item?.id} />
               </div>
             ))}
           </div>

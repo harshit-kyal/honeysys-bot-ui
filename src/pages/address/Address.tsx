@@ -13,7 +13,7 @@ import {
   setStoreId,
   setUserPincode,
 } from "../../slices/homeSlice";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DeniedModal from "../../components/Modal/DeniedModal";
 import toast, { Toaster } from "react-hot-toast";
 const Address = () => {
@@ -26,13 +26,34 @@ const Address = () => {
   const [formattedAdd, setFormattedAdd] = useState<string>("");
   const [formattedShortAdd, setFormattedShortAdd] = useState<string>("");
   const [address, setAddress] = useState<any>({
-    pincode: "",
-    address: "",
-    landMark: "",
-    city: "",
+    id: "",
+    customerId: "",
+    addressId: 0,
+    name: "",
+    mobile: "",
+    email: "",
+    addressName: "",
+    flatNo: "",
+    buildingName: "",
+    address1: "",
+    address2: "",
+    countryId: "",
+    country: "",
+    stateId: "",
     state: "",
+    cityId: "",
+    city: "",
+    locality: "",
+    localityId: "",
+    landmark: "",
+    pincode: "",
+    latitude: "",
+    longitude: "",
+    defaultAddress: false,
+    societyId: "",
   });
   const destinationRef = useRef<any | null>();
+  const storeId = useAppSelector((state) => state.home.storeId);
   const zoom = 16;
   const location = useLocation();
   const navigateData =
@@ -70,8 +91,28 @@ const Address = () => {
     // if (state) formattedAddress += state.short_name + " ";
     // if (postalCode) formattedAddress += postalCode.long_name;
     setAddress({
+      id: "",
+      customerId: "",
+      addressId: 0,
+      name: "",
+      mobile: "",
+      email: "",
+      addressName: "",
+      flatNo: "",
+      buildingName: "",
+      address2: "",
+      countryId: "",
+      country: "",
+      stateId: "",
+      cityId: "",
+      locality: "",
+      localityId: "",
+      latitude: "",
+      longitude: "",
+      defaultAddress: false,
+      societyId: "",
       pincode: postalCode ? postalCode.long_name : "",
-      address:
+      address1:
         streetNumber && route
           ? `${streetNumber.long_name},${route.long_name}`
           : streetNumber
@@ -79,7 +120,7 @@ const Address = () => {
           : route
           ? route.long_name
           : "",
-      landMark: landMark ? landMark.long_name : "",
+      landmark: landMark ? landMark.long_name : "",
       city: city ? city.long_name : "",
       state: state ? state.long_name : "",
     });
@@ -199,6 +240,34 @@ const Address = () => {
         .catch((error) => {});
     }
   };
+  useEffect(() => {
+    if (storeId) {
+      let botType = "e-comm";
+      let convId = 12389;
+      const newData = {
+        conversationId: convId,
+        text: "getcartid",
+        voiceFlag: false,
+        data: {
+          storeId: storeId,
+        },
+      };
+
+      if (convId && botType) {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            if (
+              data &&
+              data?.payload?.data?.activities[0]?.type === "storeId"
+            ) {
+              // dispatch(setStoreId())
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [storeId]);
+
   const saveHandler = () => {
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
       let botType = "e-comm";
@@ -217,6 +286,7 @@ const Address = () => {
           type: "location",
         },
       };
+
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {

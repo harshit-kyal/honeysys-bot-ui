@@ -19,6 +19,7 @@ const OTP = () => {
   const dispatch = useAppDispatch();
 
   const Mobile = useAppSelector((state) => state.home.mobileNo);
+  const storeId = useAppSelector((state) => state.home.storeId);
   const [OTP, setOTP] = useState<string>("");
   const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
@@ -66,6 +67,34 @@ const OTP = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries: ["places"],
   });
+  useEffect(() => {
+    if (storeId) {
+      let botType = "e-comm";
+      let convId = 12389;
+      const newData = {
+        conversationId: convId,
+        text: "getcartid",
+        voiceFlag: false,
+        data: {
+          storeId: storeId,
+        },
+      };
+
+      if (convId && botType) {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            console.log("data", data);
+            if (
+              data &&
+              data?.payload?.data?.activities[0]?.type === "storeId"
+            ) {
+              // dispatch(setStoreId())
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [storeId]);
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();

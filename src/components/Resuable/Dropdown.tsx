@@ -4,10 +4,12 @@ const Dropdown = ({
   option,
   selected,
   onChange,
+  optionWidth,
 }: {
   option: any;
   selected: string;
   onChange: (value: string) => void;
+  optionWidth?: any;
 }) => {
   return (
     <DropDown
@@ -16,7 +18,9 @@ const Dropdown = ({
       onChange={onChange}
       options={option}
       selected={selected}
-      optionsContainerCN="w-[150px]"
+      optionsContainerCN={`${
+        optionWidth ? ` w-[${optionWidth}]` : "w-[150px]"
+      }`}
     />
   );
 };

@@ -60,6 +60,7 @@ export interface HomeSliceType {
   mobileNo: string;
   otp: number;
   userId: string;
+  cartId: any;
   storeId: string;
   userPincode: number;
   ChatArray: any[];

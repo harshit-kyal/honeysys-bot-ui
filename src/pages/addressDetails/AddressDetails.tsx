@@ -1,6 +1,6 @@
 import { Button } from "@polynomialai/alpha-react";
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData, setUserPincode } from "../../slices/homeSlice";
 
@@ -85,7 +85,11 @@ export function RadioButtonGroup(props: any) {
     if (convId && botType && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data && data?.payload?.data?.activities[0]?.type === "address") {
+          console.log("data", data?.payload?.data?.activities[0]?.type);
+          if (
+            data &&
+            data?.payload?.data?.activities[0]?.type === "getaddress"
+          ) {
             setAddressArray(data?.payload?.data?.activities[0]?.value?.data);
             setSelectedAdress(
               data?.payload?.data?.activities[0]?.value?.data[0]
@@ -100,7 +104,7 @@ export function RadioButtonGroup(props: any) {
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
-
+  console.log("ss", selectedAddress);
   return (
     <>
       {!error && !loading ? (
@@ -129,9 +133,7 @@ export function RadioButtonGroup(props: any) {
                       onClick={() =>
                         navigate("/contactDetails", {
                           state: {
-                            address: item.address,
-                            name: item.name,
-                            mobileNumber: item.mobileNumber,
+                            address: item,
                           },
                         })
                       }
@@ -143,13 +145,20 @@ export function RadioButtonGroup(props: any) {
                       ></img>
                     </div>
                     <div className="text-black text-sm font-medium">
-                      {item.name}
+                      {item?.name}
                     </div>
                     <div className="text-black text-sm font-normal">
-                      {item.mobileNumber}
+                      {item?.mobile}
                     </div>
                     <div className="text-black text-sm font-normal mt-3">
-                      {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`}
+                      {`${item?.buildingName ? item?.buildingName + "/" : ""}${
+                        item?.flatNo ? item?.flatNo + "," : ""
+                      }${item?.address1 ? item?.address1 + "," : ""} ${
+                        item?.locality ? item?.locality + "," : ""
+                      } ${item?.city ? item?.city + "," : ""} ${
+                        item?.state ? item?.state + "," : ""
+                      } ${item?.pincode ? item?.pincode : ""}`}
+                      {/* {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`} */}
                     </div>
                   </div>
                 </label>
@@ -164,8 +173,9 @@ export function RadioButtonGroup(props: any) {
                 navigate("/");
                 const newData = {
                   conversationId: convId,
-                  text: "addressAction",
+                  text: "saveaddress",
                   voiceFlag: false,
+                  data: selectedAddress,
                 };
                 dispatch(getChatData({ newData, botType }))
                   .then(() => {})

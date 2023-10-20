@@ -9,31 +9,25 @@ const ContactDetails = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigateData = location?.state?.navigate;
-  const nameData = location?.state?.name;
-  const mobileNumberData = location?.state?.mobileNumber;
-  const adressData = location?.state?.address;
-  const [name, setName] = useState(nameData ? nameData : "");
-  const [errorField, setErrorField] = useState("");
+
   const [errorLabel, setErrorLabel] = useState<any>({});
-  const [mobileNumber, setMobileNumber] = useState(
-    mobileNumberData ? mobileNumberData : ""
-  );
   const pincode = useAppSelector((state) => state.home.userPincode);
+  const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const storeInfo = useAppSelector((state) => state.home.storeData);
-  // const [pincode, setPincode] = useState(
-  //   adressData?.pincode ? adressData?.pincode : pincodeData
-  // );
+  const addressData = location?.state?.address;
+
+  const [name, setName] = useState(addressData?.name ? addressData?.name : "");
+
   const [address, setAddress] = useState(
-    adressData?.address ? adressData?.address : ""
+    addressData?.address1 ? addressData?.address1 : ""
   );
   const [landmark, setLandmark] = useState(
-    adressData?.landMark ? adressData?.landMark : ""
+    addressData?.landmark ? addressData?.landmark : ""
   );
-  const [city, setCity] = useState(adressData?.city ? adressData?.city : "");
+  const [city, setCity] = useState(addressData?.city ? addressData?.city : "");
   const [state, setState] = useState(
-    adressData?.state ? adressData?.state : ""
+    addressData?.state ? addressData?.state : ""
   );
-  console.log("storeData", storeInfo?.location);
   const saveHandler = () => {
     let error = {
       userName: "",
@@ -47,11 +41,11 @@ const ContactDetails = () => {
     if (name === "") {
       error.userName = "Please enter name";
     }
-    if (mobileNumber === "") {
-      error.mobileNumber = "Please enter mobile number";
-    } else if (mobileNumber.length !== 10) {
-      error.mobileNumber = "Please enter valid mobile number";
-    }
+    // if (mobileNumber === "") {
+    //   error.mobileNumber = "Please enter mobile number";
+    // } else if (mobileNumber.length !== 10) {
+    //   error.mobileNumber = "Please enter valid mobile number";
+    // }
     // if (pincode === "") {
     //   error.pincode = "Please enter pincode";
     // } else if (pincode.length !== 6) {
@@ -63,36 +57,36 @@ const ContactDetails = () => {
     if (landmark === "") {
       error.landmark = "Please enter landMark";
     }
-    if (city == "") {
-      error.city = "Please enter city";
-    }
-    if (state === "") {
-      error.state = "Please enter state";
-    }
+    // if (city == "") {
+    //   error.city = "Please enter city";
+    // }
+    // if (state === "") {
+    //   error.state = "Please enter state";
+    // }
     if (
       error.userName === "" &&
-      error.mobileNumber === "" &&
+      // error.mobileNumber === "" &&
       // error.pincode === "" &&
       error.address === "" &&
-      error.landmark === "" &&
-      error.city === "" &&
-      error.state === ""
+      error.landmark === ""
+      // error.city === "" &&
+      // error.state === ""
     ) {
       let botType = "e-comm";
       let convId = 12389;
       const newData = {
         conversationId: convId,
-        text: "addAdress",
+        text: "addAddress",
         voiceFlag: false,
         data: {
-          addressId: 0, //0 for new,
+          addressId: addressData?.addressId ? addressData?.addressId : 0, //0 for new,
           address1: address,
           address2: "",
           addressName: "Home",
           defaultAddress: false,
           latitude: storeInfo?.location?.longitude,
           longitude: storeInfo?.location?.longitude,
-          pincode: pincode,
+          pincode: pincode.toString(),
           buildingName: "",
           city: city,
           cityId: storeInfo?.location?.cityId,
@@ -110,39 +104,19 @@ const ContactDetails = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
-            console.log(data);
+            if (
+              data &&
+              data?.payload?.data?.activities[0]?.type === "addaddress"
+            ) {
+              navigateData && navigateData === "home"
+                ? navigate("/")
+                : navigate("/addressDetails");
+            }
           })
           .catch(() => {});
       }
-      navigateData && navigateData === "home"
-        ? navigate("/")
-        : navigate("/addressDetails");
     }
     setErrorLabel(error);
-
-    // if (name === "") {
-    //   setErrorField("name");
-    //   setError("Please enter name");
-    // } else if (mobileNumber === "") {
-    //   setErrorField("mobileNumber");
-    //   setError("Please enter mobile number");
-    // } else if (mobileNumber.length !== 10) {
-    //   setError("Please enter Valid Mobile number");
-    // } else if (pincode === "") {
-    //   setError("Please enter pincode");
-    // } else if (pincode.length !== 6) {
-    //   setError("Please enter Valid pincode");
-    // } else if (address === "") {
-    //   setError("Please enter address");
-    // } else if (landmark === "") {
-    //   setError("Please enter landMark");
-    // } else if (city == "") {
-    //   setError("Please enter city");
-    // } else if (state === "") {
-    //   setError("Please enter state");
-    // } else {
-    //   navigate("/addressDetails");
-    // }
   };
   const submitHandler = () => {};
   return (
@@ -184,9 +158,9 @@ const ContactDetails = () => {
             <div className="px-5">
               <input
                 type="text"
-                className={`border-0 !p-0 shadow-none px-5 w-full text-xs ${
-                  errorField === "name" ? "error-field" : ""
-                }`}
+                className={`border-0 !p-0 shadow-none px-5 w-full text-xs
+                
+                `}
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e: any) => setName(e.target.value)}
@@ -213,22 +187,21 @@ const ContactDetails = () => {
             <div className="px-5">
               <input
                 type="number"
-                className={`border-0 !p-0 shadow-none px-5 w-full text-xs ${
-                  errorField === "mobileNumber" ? "error-field" : ""
-                }`}
+                disabled
+                className={`border-0 !p-0 shadow-none px-5 w-full text-xs`}
                 placeholder="Enter your mobile number"
                 value={mobileNumber}
-                onChange={(e: any) => {
-                  if (mobileNumber.length <= 9) {
-                    setMobileNumber(e.target.value);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (mobileNumber.length === 10 && e.key === "Backspace") {
-                    e.preventDefault();
-                    setMobileNumber(mobileNumber.slice(0, -1));
-                  }
-                }}
+                // onChange={(e: any) => {
+                //   if (mobileNumber.length <= 9) {
+                //     setMobileNumber(e.target.value);
+                //   }
+                // }}
+                // onKeyDown={(e) => {
+                //   if (mobileNumber.length === 10 && e.key === "Backspace") {
+                //     e.preventDefault();
+                //     setMobileNumber(mobileNumber.slice(0, -1));
+                //   }
+                // }}
                 style={{
                   borderBottom: "1px solid #0D1282",
                   borderRadius: "0px",
@@ -339,6 +312,7 @@ const ContactDetails = () => {
                 className="border-0 !p-0 shadow-none w-full text-xs"
                 placeholder="Enter city"
                 value={city}
+                disabled
                 onChange={(e: any) => setCity(e.target.value)}
                 style={{
                   borderBottom: "1px solid #0D1282",
@@ -362,6 +336,7 @@ const ContactDetails = () => {
                 placeholder="Enter state"
                 value={state}
                 onChange={(e: any) => setState(e.target.value)}
+                disabled
                 style={{
                   borderBottom: "1px solid #0D1282",
                   borderRadius: "0px",

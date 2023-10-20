@@ -4,11 +4,17 @@ import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
 import { setCartUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getChatData } from "../../slices/homeSlice";
+import {
+  addToCartArray,
+  getChatData,
+  minusToCartArray,
+} from "../../slices/homeSlice";
 
 const Cart = () => {
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const storeId = useAppSelector((state) => state.home.storeId);
+  const storeData = useAppSelector((state) => state.home.storeData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const dummy = {
@@ -54,43 +60,138 @@ const Cart = () => {
       },
     ],
   };
-  const [cartList, setCartList] = useState<any>([]);
-  const loading = useAppSelector((state) => state.home.loading);
+  const [cartList, setCartList] = useState<any>({});
+  const [Loading, setLoading] = useState(false);
+  const [amountLoader, setAmountLoader] = useState(false);
   const error = useAppSelector((state) => state.home.error);
-  const cartData = () => {
+  const cartData = async () => {
+    // setLoading(true);
     const newData = {
       conversationId: convId,
       text: "viewCart",
       voiceFlag: false,
+      data: {
+        storeId: storeId,
+      },
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      await dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          if (data && data?.payload?.data?.activities[0]?.type === "viewCart") {
+            setCartList(data?.payload?.data?.activities[0]?.value.data);
+            // setLoading(false);
+          }
+        })
+        .catch((error) => {
+          // setLoading(false);
+        });
+    }
+  };
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        Promise.all([cartData()]).then((res) => {
+          setLoading(false);
+        });
+      } catch (error) {
+        setLoading(false);
+        console.error("Error in fetchData:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const addApi = (data: any) => {
+    setAmountLoader(true);
+    let newData = {
+      conversationId: convId,
+      text: "addtocart",
+      voiceFlag: false,
+      data: data,
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          // console.log("pp",data.payload)
-          if (data && data?.payload?.data?.activities[0]?.type === "viewCart") {
-            setCartList(data?.payload?.data?.activities[0]?.value.data[0]);
-          }
+          cartData();
+          setAmountLoader(false);
         })
-        .catch((error) => {});
+        .catch(() => {
+          setAmountLoader(false);
+        });
     }
   };
-  useEffect(() => {
-    cartData();
-  }, []);
-
+  const removeApi = (data: any) => {
+    setAmountLoader(true);
+    setLoading(true);
+    let newData = {
+      conversationId: convId,
+      text: "removefromcart",
+      voiceFlag: false,
+      data: data,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          cartData();
+          setAmountLoader(false);
+          setLoading(false);
+        })
+        .catch(() => {
+          setAmountLoader(false);
+          setLoading(false);
+        });
+    }
+  };
   const handleIncrement = (index: number, type: string) => {
+    let cartCopy = JSON.parse(JSON.stringify(cartList));
     switch (type) {
       case "increment":
-        cartList.itemList[index].quantity += 1;
+        {
+          let cartItem = {
+            productId: cartCopy.cartProduct[index].variants[0].productId,
+            varientId: cartCopy.cartProduct[index].variants[0]._id,
+            storeId: storeId,
+            productVariantIndex:
+              cartCopy.cartProduct[index].variants[0].productVariantIndex,
+            quantity: cartCopy.cartProduct[index].quantity + 1,
+            cartId: "64f9ad9255836c22aef860f6",
+          };
+          dispatch(addToCartArray(cartItem));
+          addApi(cartItem);
+          cartCopy.cartProduct[index].quantity += 1;
+        }
         break;
 
       case "decrement":
-        if (cartList.itemList[index].quantity !== 0) {
-          cartList.itemList[index].quantity -= 1;
+        {
+          let cartItem = {
+            productId: cartCopy.cartProduct[index].variants[0].productId,
+            varientId: cartCopy.cartProduct[index].variants[0]._id,
+            storeId: storeId,
+            productVariantIndex:
+              cartCopy.cartProduct[index].variants[0].productVariantIndex,
+            quantity: cartCopy.cartProduct[index].quantity - 1,
+            cartId: "64f9ad9255836c22aef860f6",
+          };
+          dispatch(minusToCartArray(cartItem));
+          if (cartCopy.cartProduct[index].quantity > 1) {
+            addApi(cartItem);
+          } else {
+            let cartItem = {
+              productId: cartCopy.cartProduct[index].variants[0].productId,
+              storeId: storeId,
+              productVariantIndex:
+                cartCopy.cartProduct[index].variants[0].productVariantIndex,
+              cartId: "64f9ad9255836c22aef860f6",
+            };
+            removeApi(cartItem);
+          }
+          cartCopy.cartProduct[index].quantity -= 1;
         }
         break;
     }
-    setCartList({ ...cartList });
+    setCartList({ ...cartCopy });
   };
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -110,17 +211,18 @@ const Cart = () => {
       );
     }
   }, [window.location.search]);
+
   return (
     <div className="h-screen sticky">
       <PageHeader title="Your Cart" isDisableSearch={false} />
-      {!loading && !error ? (
+      {!Loading && !error ? (
         <>
-          {cartList ? (
+          {cartList?.cartProduct && cartList?.cartProduct?.length > 0 ? (
             <>
               <div className="px-2 min-[264.5px]:pt-[70px] max-[264.5px]:pt-[60px]">
                 <div className="flex justify-between items-center">
                   <span className="text-[12px] font-semibold">
-                    Total 6 items
+                    {`Total ${cartList?.cartCalculation?.totalCartProductCount} items`}
                   </span>
                   <button
                     className="border-primary border-2 bg-white text-primary rounded-md px-2 py-1 min-[264.5px]:text-[11px] max-[264.5px]:text-[10px] font-medium"
@@ -132,22 +234,30 @@ const Cart = () => {
                   </button>
                 </div>
                 <div className="max-h-72  overflow-x-hidden overflow-y-scroll mt-4">
-                  {cartList?.itemList?.map((items: any, index: number) => (
+                  {cartList?.cartProduct?.map((items: any, index: number) => (
                     <CartCard
                       key={index}
                       className="text-"
                       image={
                         <img
-                          src={items.imageSrc}
+                          src={
+                            items?.variants[0]?.images
+                              ? items?.variants[0]?.images
+                              : ""
+                          }
                           className={
-                            "border-5 rounded-lg border object-cover !border-cartImageBorderColor h-full"
+                            "border-5 rounded-lg border h-[60px] w-[60px] object-cover !border-cartImageBorderColor"
                           }
                           alt=""
                         />
                       }
-                      price={items.price}
-                      quantity={items.quantity}
-                      title={items.title}
+                      price={
+                        items?.variants[0]?.price
+                          ? items?.variants[0]?.price
+                          : ""
+                      }
+                      quantity={items?.quantity ? items?.quantity : 0}
+                      title={items?.productName ? items?.productName : ""}
                       titleCn={"!font-cartTitleWeight !text-cartTitleColor"}
                       priceCn={
                         "!text-cartPriceColor !font-cartPriceWeight"
@@ -169,15 +279,34 @@ const Cart = () => {
                     <span>GST</span>
                   </div>
                   <div className="text-end">
-                    <span>{cartList.estimatedCost}</span>
+                    <span>
+                      {amountLoader
+                        ? "-"
+                        : cartList?.cartCalculation?.totalAmount
+                        ? cartList?.cartCalculation?.totalAmount
+                        : 0}
+                    </span>
                     <br />
-                    <span>{cartList.gst}</span>
+                    <span>
+                      {" "}
+                      {amountLoader
+                        ? "-"
+                        : cartList?.cartCalculation?.totalTax
+                        ? cartList?.cartCalculation?.totalTax
+                        : 0}
+                    </span>
                   </div>
                 </div>
                 <hr className="border-1 border-gray-950 mt-2" />
                 <div className="flex justify-between text-[14px] font-semibold mt-2">
                   <span>Total Amount</span>
-                  <span>{cartList.totalAmount}</span>
+                  <span>
+                    {amountLoader
+                      ? "-"
+                      : cartList?.cartCalculation?.finalAmount
+                      ? cartList?.cartCalculation?.finalAmount
+                      : 0}
+                  </span>
                 </div>
                 <div className="min-[264.5px]:text-[12px] max-[264.5px]:text-[11px] text-secondaryFontColor font-light mt-2">
                   By continuing, you agree to share your cart and phone number
@@ -192,6 +321,14 @@ const Cart = () => {
                       conversationId: convId,
                       text: "cartAction",
                       voiceFlag: false,
+                      data: {
+                        deliveryType: "[Normal, Express]",
+                        location: storeData?.location?.pincode,
+                        lat: storeData?.location?.latitude,
+                        lag: storeData?.location?.longitude,
+                        stotreId: storeData?.id,
+                        cartId: "64f9ad9255836c22aef860f6",
+                      },
                     };
                     dispatch(getChatData({ newData, botType }))
                       .then(() => {})
@@ -236,7 +373,7 @@ const Cart = () => {
             </>
           )}
         </>
-      ) : loading && !error ? (
+      ) : Loading && !error ? (
         <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
           Loading...
         </div>

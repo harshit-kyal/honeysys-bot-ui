@@ -3,27 +3,26 @@ import PageHeader from "../../components/PageHeader";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getChatData } from "../../slices/homeSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { addToCartArray, getChatData } from "../../slices/homeSlice";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
   const storeId = useAppSelector((state) => state.home.storeId);
-  const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
   const [Modal, setModal] = useState<boolean>(false);
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [productData, setProductData] = useState<any>([]);
-  const [productDetail, setProductDetail] = useState<any>({});
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
+  const [cartItem, setCartItem] = useState<any>({});
+  const [Loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const categoryIds = location?.state?.categoryIds;
   const subcategoryIds = location?.state?.subcategoryIds;
   const subCategoryTitle = location?.state?.title;
-  console.log("store", storeId, categoryIds, subcategoryIds);
-  const category = () => {
+  const category = async () => {
     let newData = {
       conversationId: convId,
       text: "viewProduct",
@@ -36,7 +35,7 @@ const ViewProduct = () => {
     };
 
     if (convId && botType && convId !== "" && botType !== "") {
-      dispatch(getChatData({ newData, botType }))
+      await dispatch(getChatData({ newData, botType }))
         .then((data) => {
           if (data?.payload?.data?.activities[0]?.type === "viewProduct") {
             setProductData(data?.payload?.data?.activities[0]?.value?.data);
@@ -45,51 +44,54 @@ const ViewProduct = () => {
         .catch(() => {});
     }
   };
-  const product = () => {
-    let newData = {
-      conversationId: convId,
-      text: "productPrice",
-      voiceFlag: false,
-      data: {
-        store_id: storeId,
-        
-      },
-    };
 
-    if (convId && botType && convId !== "" && botType !== "") {
-      dispatch(getChatData({ newData, botType }))
-        .then((data) => {
-          if (data?.payload?.data?.activities[0]?.type === "productPrice") {
-            setProductDetail(
-              data?.payload?.data?.activities[0]?.value?.data[0]
-            );
-          }
-        })
-        .catch(() => {});
-    }
-  };
-  const categoryCatalog = () => {
+  const categoryCatalog = async () => {
     let newData = {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
       data: {
-        store_id: storeId,
+        storeId: storeId,
       },
     };
     if (convId && botType && convId !== "" && botType !== "") {
-      dispatch(getChatData({ newData, botType })).then((data) => {
+      await dispatch(getChatData({ newData, botType })).then((data) => {
         if (data && data?.payload?.data?.activities[0]?.type === "storeCheck") {
           setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
         }
       });
     }
   };
+  const api = (data: any) => {
+    let newData = {
+      conversationId: convId,
+      text: "addtocart",
+      voiceFlag: false,
+      data: data,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          console.log(data);
+        })
+        .catch(() => {});
+    }
+  };
   useEffect(() => {
-    category();
-    product();
-    categoryCatalog();
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        Promise.all([category(), categoryCatalog()]).then((res) => {
+          setLoading(false);
+        });
+      } catch (error) {
+        setLoading(false);
+        console.error("Error in fetchData:", error);
+      }
+    };
+    fetchData();
   }, []);
+
   // const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
   //   imageSrc: "/images/onion.svg",
   //   title: "Fresh Cauliflower",
@@ -100,14 +102,14 @@ const ViewProduct = () => {
   //     { id: "4", option: "5 kg", price: 600 },
   //   ],
   // };
-  const [p, setp] = useState<any>([]);
+  const [varient, setVarient] = useState<any>([]);
 
   const AddBtn = (subCategory: any) => {
     return (
       <div
         className="flex flex-col items-center"
         onClick={() => {
-          setp(subCategory?.subCategory);
+          setVarient(subCategory?.subCategory);
           setModal(true);
         }}
       >
@@ -138,11 +140,10 @@ const ViewProduct = () => {
       </div>
     );
   };
-  console.log("subCategoryTitle", subCategoryTitle);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
-      {!loading && !error ? (
+      {!Loading && !error ? (
         <>
           <div className="pb-12">
             {productData?.map((data: any, index: number) => (
@@ -172,7 +173,10 @@ const ViewProduct = () => {
                   navigate(`/categories/${item?.id}`);
                 }}
               >
-                <BadgeCard text={item?.title} active={false} />
+                <BadgeCard
+                  text={item?.title}
+                  active={item?.id == categoryIds}
+                />
               </div>
             ))}
           </div>
@@ -187,7 +191,7 @@ const ViewProduct = () => {
             }}
           >
             <div>
-              {p?.map((item: any, index: number) => (
+              {varient?.map((item: any, index: number) => (
                 <ProductCard
                   key={index}
                   image={
@@ -195,8 +199,9 @@ const ViewProduct = () => {
                       src={item?.imageSrc}
                       alt=""
                       className="h-[60px] w-[60px] !rounded-md mb-1"
-                      onClick={() => navigate("/PDP/1")}
+                      onClick={() => navigate(`/PDP/${item?.productId}`)}
                     />
+                    // ${item?.productId}
                   }
                   title={`${item?.productName} - ${item?.value} ${item?.unitName}`}
                   // title={`${productDetail?.title} - ${item?.option}`}
@@ -209,7 +214,17 @@ const ViewProduct = () => {
                       name="fav_language"
                       value="HTML"
                       className="w-[24px] h-[24px] border-2 bg-[#505050] !opacity-100 shadow-none focus-visible:outline-none checked:bg-primary checked:hover:bg-primary checked:active:bg-primary checked:focus:bg-primary focus:bg-primary focus:outline-none focus:ring-primary"
-                      onClick={() => {}}
+                      onClick={() => {
+                        console.log("item", item);
+                        setCartItem({
+                          productId: item?.productId,
+                          varientId: item?.id,
+                          storeId: storeId,
+                          productVariantIndex: item?.productVariantIndex,
+                          quantity: 1,
+                          cartId: "64f9ad9255836c22aef860f6",
+                        });
+                      }}
                     />
                   }
                 />
@@ -219,19 +234,36 @@ const ViewProduct = () => {
                   type="secondary"
                   className="border-[#C90303] text-[#C90303] py-4 w-full"
                   onClick={() => {
+                    setCartItem({});
                     setModal(false);
                   }}
                 >
                   Cancel
                 </Button>
-                <Button className="!bg-primary text-white py-4 w-full">
+                <Button
+                  className="!bg-primary text-white py-4 w-full"
+                  onClick={() => {
+                    if (
+                      cartItem?.productId &&
+                      cartItem?.varientId &&
+                      cartItem?.productId !== "" &&
+                      cartItem?.varientId !== ""
+                    ) {
+                      api(cartItem);
+                      dispatch(addToCartArray(cartItem));
+                      setModal(false);
+                    } else {
+                      alert("please select product");
+                    }
+                  }}
+                >
                   Add item
                 </Button>
               </div>
             </div>
           </DrawerModal>
         </>
-      ) : loading && !error ? (
+      ) : Loading && !error ? (
         <div className="px-2 pt-2">Loading...</div>
       ) : (
         <div className="px-2 pt-2">something went wrong</div>

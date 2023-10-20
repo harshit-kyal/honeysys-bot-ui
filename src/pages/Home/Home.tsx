@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import {  getConversationId } from "../../services";
+import { getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { environment } from "../../environments/environment";
-import {  setBotType, setConvId } from "../../slices/botSlice";
+import { setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
 import {
@@ -564,7 +564,6 @@ const Home = () => {
       //     dispatch(setBotInfo(data.data.data[0]));
       //     const botInfo = data.data.data[0];
       if (convId) {
-
       } else {
         let botType = "e-comm";
         // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
@@ -637,17 +636,17 @@ const Home = () => {
           {activity.map((ac: any, index: number) => {
             if (index >= i && index < j) {
               if (ac["sub_type"] && ac["sub_type"] === "screen") {
-              } else if (ac.type === "get start") {
+              } else if (ac?.type === "get start") {
                 return (
                   <div className="w-full">
                     <GetStart
                       setChatArray={setChatComponentArray}
                       key={new Date().getTime()}
                     />
-                 </div>
+                  </div>
                 );
-              } else if (ac.type === "message" && ac.text !== "") {
-                if (ac.updateUI === true) {
+              } else if (ac?.type === "message" && ac?.text !== "") {
+                if (ac?.updateUI === true) {
                   dispatch(setUiUpdate(true));
                 } else {
                   dispatch(setUiUpdate(false));
@@ -665,14 +664,17 @@ const Home = () => {
                     )}
                   </div>
                 );
-              } else if (ac.type === "richCard" && ac.value.data.length !== 0) {
+              } else if (
+                ac?.type === "richCard" &&
+                ac?.value?.data?.length !== 0
+              ) {
                 const richCard = ac.value.data;
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
-                      richCard.map((richCard: any, index: number) => {
+                      richCard?.map((richCard: any, index: number) => {
                         return (
                           <BotMessageCard
                             title={richCard?.title}
@@ -688,10 +690,11 @@ const Home = () => {
                   </div>
                 );
               } else if (
-                ac.type === "iconQuickReply" &&
-                ac.value.data.length !== 0
+                ac?.type === "iconQuickReply" &&
+                ac?.value?.data?.length !== 0
               ) {
-                const iconQuickReplyCard = ac.value.data;
+                const iconQuickReplyCard = ac?.value?.data;
+                console.log("raj",activity[index - 1]);
                 return (
                   <div className=" w-full">
                     {ac?.value?.sender === "user" ? (
@@ -702,16 +705,16 @@ const Home = () => {
                   </div>
                 );
               } else if (
-                ac.type === "summaryCard" &&
-                ac.value.data.length !== 0
+                ac?.type === "summaryCard" &&
+                ac?.value?.data?.length !== 0
               ) {
-                const summaryCard: any = ac.value.data;
+                const summaryCard: any = ac?.value?.data;
                 return (
                   <div className=" w-full">
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
-                      summaryCard.map((summaryCard: any, index: number) => {
+                      summaryCard?.map((summaryCard: any, index: number) => {
                         return (
                           <BotMessageCard
                             key={index}
@@ -749,16 +752,16 @@ const Home = () => {
                   </div>
                 );
               } else if (
-                ac.type === "trackOrder" &&
-                ac.value.data.length !== 0
+                ac?.type === "trackOrder" &&
+                ac?.value?.data?.length !== 0
               ) {
-                const trackOrderCard = ac.value.data;
+                const trackOrderCard = ac?.value?.data;
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
-                      trackOrderCard.map(
+                      trackOrderCard?.map(
                         (trackOrderCard: any, index: number) => {
                           return (
                             <RichCard>
@@ -813,8 +816,8 @@ const Home = () => {
                   </div>
                 );
               } else if (
-                ac.type === "replyMessage" &&
-                ac.value.data.length !== 0
+                ac?.type === "replyMessage" &&
+                ac?.value?.data?.length !== 0
               ) {
                 const replyMessageCard = ac.value.data;
                 return (
@@ -833,10 +836,10 @@ const Home = () => {
                   </div>
                 );
               } else if (
-                ac.type === "cartReplyCard" &&
-                ac.value.data.length !== 0
+                ac?.type === "cartReplyCard" &&
+                ac?.value?.data?.length !== 0
               ) {
-                const cartReplyCard = ac.value.data;
+                const cartReplyCard = ac?.value?.data;
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "bot" ? (

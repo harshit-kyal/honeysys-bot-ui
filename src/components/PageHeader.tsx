@@ -1,7 +1,10 @@
 import { Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { resetHome } from "../slices/homeSlice";
+import { resetBot } from "../slices/botSlice";
+import { resetRoot } from "../slices/rootSlice";
 const PageHeader = ({
   title,
   isDisableSearch = false,
@@ -10,7 +13,7 @@ const PageHeader = ({
   isDisableSearch?: boolean;
 }) => {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const hadnleNavigation = (route: string) => {
     navigate(route);
   };
@@ -27,7 +30,13 @@ const PageHeader = ({
             }
           }}
         >
-          <img src="/images/white_back.svg" className="cursor-pointer" alt="back" height={24} width={24} />
+          <img
+            src="/images/white_back.svg"
+            className="cursor-pointer"
+            alt="back"
+            height={24}
+            width={24}
+          />
           {/* <Text type="body" size="lg" className="inline-block text-white ml-2"> */}
           <div
             className=" whitespace-nowrap text-ellipsis overflow-hidden max-[350px]:text-[0.875rem] min-[350px]:text-[1.125rem] inline-block text-white ml-2"
@@ -74,8 +83,13 @@ const PageHeader = ({
             width={20}
             height={20}
             onClick={() => {
-              localStorage.clear();
-              hadnleNavigation("/splash");
+              if (!reviewToken) {
+                localStorage.clear();
+                dispatch(resetHome());
+                dispatch(resetBot());
+                dispatch(resetRoot());
+                hadnleNavigation("/splash");
+              }
             }}
           />
         </div>
