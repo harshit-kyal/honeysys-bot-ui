@@ -8,6 +8,7 @@ import {
   addToCartArray,
   getChatData,
   minusToCartArray,
+  setCartTotalAmount,
 } from "../../slices/homeSlice";
 
 const Cart = () => {
@@ -316,6 +317,9 @@ const Cart = () => {
                 <button
                   className="bg-primary text-white text-[12px] py-2 font-light w-full my-3 rounded-md"
                   onClick={() => {
+                    dispatch(
+                      setCartTotalAmount(cartList?.cartCalculation?.finalAmount)
+                    );
                     navigate("/");
                     const newData = {
                       conversationId: convId,
@@ -326,7 +330,7 @@ const Cart = () => {
                         location: storeData?.location?.pincode,
                         lat: storeData?.location?.latitude,
                         lag: storeData?.location?.longitude,
-                        stotreId: storeData?.id,
+                        storeId: storeData?.id,
                         cartId: "64f9ad9255836c22aef860f6",
                       },
                     };
@@ -374,9 +378,11 @@ const Cart = () => {
           )}
         </>
       ) : Loading && !error ? (
-        <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
-          Loading...
-        </div>
+        <>
+          <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
+            Loading...
+          </div>
+        </>
       ) : (
         <div className="px-2 min-[264.5px]:pt-16 max-[264.5px]:pt-[67px]">
           something went wrong

@@ -68,6 +68,7 @@ const OTP = () => {
     libraries: ["places"],
   });
   useEffect(() => {
+    console.log("poooo");
     if (storeId) {
       let botType = "e-comm";
       let convId = 12389;
@@ -83,7 +84,10 @@ const OTP = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
-            console.log("data", data);
+            console.log(
+              "dataaaaaaaa",
+              data?.payload?.data?.activities[0]?.type
+            );
             if (
               data &&
               data?.payload?.data?.activities[0]?.type === "storeId"
@@ -152,6 +156,43 @@ const OTP = () => {
                                 ?.id
                             )
                           );
+
+                          if (
+                            data?.payload?.data?.activities[0]?.value?.data[0]
+                              ?.id
+                          ) {
+                            let botType = "e-comm";
+                            let convId = 12389;
+                            const newData = {
+                              conversationId: convId,
+                              text: "getcartid",
+                              voiceFlag: false,
+                              data: {
+                                storeId:
+                                  data?.payload?.data?.activities[0]?.value
+                                    ?.data[0]?.id,
+                              },
+                            };
+
+                            if (convId && botType) {
+                              dispatch(getChatData({ newData, botType }))
+                                .then((data) => {
+                                  console.log(
+                                    "dataaaaaaaa",
+                                    data?.payload?.data?.activities[0]?.type
+                                  );
+                                  if (
+                                    data &&
+                                    data?.payload?.data?.activities[0]?.type ===
+                                      "storeId"
+                                  ) {
+                                    // dispatch(setStoreId())
+                                  }
+                                })
+                                .catch(() => {});
+                            }
+                          }
+
                           dispatch(setUserPincode(500084));
                           // dispatch(setUserPincode(pincode));
                           navigate("/success");

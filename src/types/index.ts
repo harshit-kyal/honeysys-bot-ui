@@ -61,6 +61,7 @@ export interface HomeSliceType {
   otp: number;
   userId: string;
   cartId: any;
+  cartTotalAmount: any;
   storeId: string;
   userPincode: number;
   ChatArray: any[];

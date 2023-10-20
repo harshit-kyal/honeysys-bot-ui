@@ -1,8 +1,11 @@
 import { RichCard, Text } from "@polynomialai/alpha-react";
 import { chatTime, currentTime } from "../TimeStamp";
-import { useEffect } from "react";
 import ActionButton from "./ActionButton";
-import { getChatData, setLocationPermission } from "../../slices/homeSlice";
+import {
+  addToChatArray,
+  getChatData,
+  setLocationPermission,
+} from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +15,7 @@ interface CardProp {
   botIcon?: string | null;
   time?: string;
   title?: string;
+  buttonContent?: [];
   contentArray?: string | (string | JSX.Element)[];
   actionDataArray?: [] | (string | JSX.Element)[];
 }
@@ -24,25 +28,17 @@ const BotMessageCard = ({
   contentArray,
   botIcon,
   actionDataArray,
+  buttonContent,
 }: CardProp) => {
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
+  const cartTotalAmount = useAppSelector((state) => state.home.cartTotalAmount);
   const bot = overallThemeUI.botIcons;
   const navigate = useNavigate();
-  // if (actionDataArray && actionDataArray.length !== 0) {
-  //   {
-  //     actionDataArray.map((data: any, index) => (
-  //       <ActionButton
-  //         key={index}
-  //         src={data.iconUrl}
-  //         text="poojan"
-  //         onClick={() => {}}
-  //       />
-  //     ));
-  //   }
-  // }
+  const cartData = useAppSelector((state) => state.home.storeData);
+  console.log("cartData123", cartData);
   if (imageSrc) {
     return (
       <RichCard
@@ -91,20 +87,53 @@ const BotMessageCard = ({
                   data.text.length < 10 ? "basis-1/2" : "basis-full"
                 }`}
                 key={index}
-                src={data.iconUrl}
-                text={data.text}
+                src={data?.iconUrl}
+                text={data?.text}
                 onClick={() => {
-                  if (data.value === "provideLocation") {
+                  if (data?.value === "provideLocation") {
                     dispatch(setLocationPermission(true));
-                  } else if (data.value === "viewCatalog") {
+                  } else if (data?.value === "viewCatalog") {
                     navigate("/catalog");
-                  } else if (data.value === "changeLocation") {
+                  } else if (data?.value === "changeLocation") {
                     navigate("/addressDetails");
                   } else {
+                    console.log("aaa", buttonContent);
+                    if (buttonContent && buttonContent.length > 0) {
+                      console.log("addddddd");
+                      const replyCard = [
+                        {
+                          type: "replyMessage",
+
+                          value: {
+                            data: [
+                              {
+                                content: data?.text,
+                                replayArray: buttonContent,
+                              },
+                            ],
+                            sender: "user",
+                            status: "Talking with Bot",
+                          },
+                          timestamp: new Date(),
+                        },
+                      ];
+
+                      dispatch(addToChatArray(replyCard));
+                    }
                     const newData = {
                       conversationId: convId,
                       text: data.value,
                       voiceFlag: false,
+                      sourceAction: "button",
+                      payload: {
+                        lat: cartData?.location?.latitude,
+                        lag: cartData?.location?.longitude,
+                        location: cartData?.location?.pincode,
+                        deliveryType: "[Normal, Express]",
+                        storeId: cartData?.id,
+                        cartId: "64f9ad9255836c22aef860f6",
+                        totalAmount: cartTotalAmount,
+                      },
                     };
                     dispatch(getChatData({ newData, botType }));
                   }

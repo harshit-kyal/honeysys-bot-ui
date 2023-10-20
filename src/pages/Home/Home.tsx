@@ -236,6 +236,7 @@ const Home = () => {
       },
       {
         type: "iconQuickReply",
+
         value: {
           data: [
             {
@@ -464,6 +465,7 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
+    console.log("dubey", data);
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(addToChatArray(activities));
@@ -694,13 +696,15 @@ const Home = () => {
                 ac?.value?.data?.length !== 0
               ) {
                 const iconQuickReplyCard = ac?.value?.data;
-                console.log("raj",activity[index - 1]);
                 return (
                   <div className=" w-full">
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
-                      <BotMessageCard actionDataArray={iconQuickReplyCard} />
+                      <BotMessageCard
+                        actionDataArray={iconQuickReplyCard}
+                        buttonContent={ac?.value?.content}
+                      />
                     )}
                   </div>
                 );
@@ -820,6 +824,7 @@ const Home = () => {
                 ac?.value?.data?.length !== 0
               ) {
                 const replyMessageCard = ac.value.data;
+                console.log("replyMessageCard", replyMessageCard);
                 return (
                   <div className="w-full">
                     {replyMessageCard?.map(
@@ -839,7 +844,7 @@ const Home = () => {
                 ac?.type === "cartReplyCard" &&
                 ac?.value?.data?.length !== 0
               ) {
-                const cartReplyCard = ac?.value?.data;
+                const cartReplyCard = [ac?.value?.data];
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "bot" ? (
@@ -879,6 +884,7 @@ const Home = () => {
     return formattedDate;
   };
   useEffect(() => {
+    console.log("ChatArray", ChatArray);
     setChatComponentArray(
       ChatArray.map((activity: any, index: number) => {
         if (
