@@ -8,6 +8,7 @@ import {
 } from "@react-google-maps/api";
 import {
   getChatData,
+  setCartId,
   setDeniedModal,
   setStoreData,
   setStoreId,
@@ -58,11 +59,6 @@ const Address = () => {
   const location = useLocation();
   const navigateData =
     location && location?.state?.navigate ? location?.state?.navigate : "";
-  console.log(
-    "navigateData",
-    navigateData,
-    navigateData && navigateData !== ""
-  );
   const formatCustomAddress = (addressComponents: any) => {
     let formattedAddress = "";
     const streetNumber = addressComponents.find((component: any) =>
@@ -188,8 +184,6 @@ const Address = () => {
             });
           } else if (result.state === "prompt") {
             navigator.geolocation.getCurrentPosition(function (position) {
-              console.log("Latitude is :", position.coords.latitude);
-              console.log("Longitude is :", position.coords.longitude);
             });
           } else if (result.state === "denied") {
             dispatch(setDeniedModal(true));
@@ -240,33 +234,6 @@ const Address = () => {
         .catch((error) => {});
     }
   };
-  useEffect(() => {
-    if (storeId) {
-      let botType = "e-comm";
-      let convId = 12389;
-      const newData = {
-        conversationId: convId,
-        text: "getcartid",
-        voiceFlag: false,
-        data: {
-          storeId: storeId,
-        },
-      };
-
-      if (convId && botType) {
-        dispatch(getChatData({ newData, botType }))
-          .then((data) => {
-            if (
-              data &&
-              data?.payload?.data?.activities[0]?.type === "storeId"
-            ) {
-              // dispatch(setStoreId())
-            }
-          })
-          .catch(() => {});
-      }
-    }
-  }, [storeId]);
 
   const saveHandler = () => {
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
@@ -313,6 +280,38 @@ const Address = () => {
                     data?.payload?.data?.activities[0]?.value?.data[0]?.id
                   )
                 );
+                let storeIds =
+                  data?.payload?.data?.activities[0]?.value?.data[0]?.id;
+                if (storeIds) {
+                  let botType = "e-comm";
+                  let convId = 12389;
+                  const newData = {
+                    conversationId: convId,
+                    text: "getcartid",
+                    voiceFlag: false,
+                    data: {
+                      storeId: storeIds,
+                    },
+                  };
+
+                  if (convId && botType) {
+                    dispatch(getChatData({ newData, botType }))
+                      .then((data) => {
+                        if (
+                          data &&
+                          data?.payload?.data?.activities[0]?.type ===
+                            "storeCheck"
+                        ) {
+                          let cartId =
+                            data?.payload?.data?.activities[0]?.value?.data
+                              ?.cartId;
+                          dispatch(setCartId(cartId));
+                        }
+                      })
+                      .catch(() => {});
+                  }
+                }
+
                 dispatch(setUserPincode(500084));
 
                 // dispatch(setUserPincode(address?.pincode));

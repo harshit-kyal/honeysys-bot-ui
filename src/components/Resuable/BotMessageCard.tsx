@@ -38,7 +38,7 @@ const BotMessageCard = ({
   const bot = overallThemeUI.botIcons;
   const navigate = useNavigate();
   const cartData = useAppSelector((state) => state.home.storeData);
-  console.log("cartData123", cartData);
+  const cartId = useAppSelector((state) => state.home.cartId);
   if (imageSrc) {
     return (
       <RichCard
@@ -97,9 +97,7 @@ const BotMessageCard = ({
                   } else if (data?.value === "changeLocation") {
                     navigate("/addressDetails");
                   } else {
-                    console.log("aaa", buttonContent);
                     if (buttonContent && buttonContent.length > 0) {
-                      console.log("addddddd");
                       const replyCard = [
                         {
                           type: "replyMessage",
@@ -131,7 +129,7 @@ const BotMessageCard = ({
                         location: cartData?.location?.pincode,
                         deliveryType: "[Normal, Express]",
                         storeId: cartData?.id,
-                        cartId: "64f9ad9255836c22aef860f6",
+                        cartId: cartId,
                         totalAmount: cartTotalAmount,
                       },
                     };

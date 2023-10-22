@@ -17,6 +17,7 @@ const PDP = () => {
   const error = useAppSelector((state) => state.home.error);
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const cartId = useAppSelector((state) => state.home.cartId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>({});
@@ -26,6 +27,7 @@ const PDP = () => {
   const cart = useAppSelector((state) => state.home.cart);
   const [Error, setError] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const [qtyLoading, setQtyLoading] = useState(false);
 
   const categoryCatalog = async () => {
     let newData = {
@@ -70,20 +72,9 @@ const PDP = () => {
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    if (product) {
-      let find = cart.findIndex(
-        (item: any) =>
-          item?.productId === product?.productId &&
-          item?.varientId === product?.id
-      );
-      console.log("pp", find, cart, product?.productId, product?.id, product);
-    }
-  }, []);
 
   useEffect(() => {
     if (id && product && product?.variants?.length > 0) {
-      console.log("first");
       !activePrice && setActivePrice(product?.variants[0]);
       setDropdownOption([
         ...product?.variants?.map((item: any) => item.option),
@@ -111,6 +102,7 @@ const PDP = () => {
     setActivePrice(pricing);
   };
   const addApi = (data: any) => {
+    setQtyLoading(true);
     let newData = {
       conversationId: convId,
       text: "addtocart",
@@ -120,12 +112,16 @@ const PDP = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          console.log(data);
+          setQtyLoading(false);
         })
-        .catch((error) => setError(true));
+        .catch((error) => {
+          setError(true);
+          setQtyLoading(false);
+        });
     }
   };
   const removeApi = (data: any) => {
+    setQtyLoading(true);
     let newData = {
       conversationId: convId,
       text: "removefromcart",
@@ -134,8 +130,11 @@ const PDP = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {})
+        .then((data) => {
+          setQtyLoading(false);
+        })
         .catch(() => {
+          setQtyLoading(false);
           setError(true);
         });
     }
@@ -145,7 +144,6 @@ const PDP = () => {
     let pricingCopy: any[] = [...DataCopy.variants];
 
     pricingCopy = pricingCopy?.map((item: any) => {
-      console.log("first", item);
       if (item.id === activePrice?.id) {
         // setActivePrice(item);
         setQuantity((cur) => cur + 1);
@@ -155,7 +153,7 @@ const PDP = () => {
           storeId: storeId,
           productVariantIndex: item?.productVariantIndex,
           quantity: quantity + 1,
-          cartId: "64f9ad9255836c22aef860f6",
+          cartId: cartId,
         };
 
         dispatch(addToCartArray(cartItem));
@@ -181,7 +179,7 @@ const PDP = () => {
           storeId: storeId,
           productVariantIndex: item?.productVariantIndex,
           quantity: quantity - 1,
-          cartId: "64f9ad9255836c22aef860f6",
+          cartId: cartId,
         };
         dispatch(minusToCartArray(cartItem));
         if (quantity > 1) {
@@ -191,7 +189,7 @@ const PDP = () => {
             productId: product?.productId,
             storeId: storeId,
             productVariantIndex: item?.productVariantIndex,
-            cartId: "64f9ad9255836c22aef860f6",
+            cartId: cartId,
           };
           removeApi(cartItem);
         }
@@ -201,7 +199,7 @@ const PDP = () => {
     DataCopy.variants = pricingCopy;
     setProduct(DataCopy);
   };
-  console.log("cartpro", product);
+
   return (
     <div className="h-screen pt-[60px]">
       {/* header */}
@@ -306,6 +304,11 @@ const PDP = () => {
             </div>
             {/* </div> */}
           </div>
+          {qtyLoading && (
+            <div className="cartLoader">
+              <div className="cartLoader-text">Loading...</div>
+            </div>
+          )}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

@@ -10,6 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useJsApiLoader } from "@react-google-maps/api";
 import {
   getChatData,
+  setCartId,
   setStoreData,
   setStoreId,
   setUserPincode,
@@ -68,7 +69,6 @@ const OTP = () => {
     libraries: ["places"],
   });
   useEffect(() => {
-    console.log("poooo");
     if (storeId) {
       let botType = "e-comm";
       let convId = 12389;
@@ -84,10 +84,7 @@ const OTP = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
-            console.log(
-              "dataaaaaaaa",
-              data?.payload?.data?.activities[0]?.type
-            );
+       
             if (
               data &&
               data?.payload?.data?.activities[0]?.type === "storeId"
@@ -156,11 +153,10 @@ const OTP = () => {
                                 ?.id
                             )
                           );
-
-                          if (
+                          let storeIds =
                             data?.payload?.data?.activities[0]?.value?.data[0]
-                              ?.id
-                          ) {
+                              ?.id;
+                          if (storeIds) {
                             let botType = "e-comm";
                             let convId = 12389;
                             const newData = {
@@ -168,25 +164,22 @@ const OTP = () => {
                               text: "getcartid",
                               voiceFlag: false,
                               data: {
-                                storeId:
-                                  data?.payload?.data?.activities[0]?.value
-                                    ?.data[0]?.id,
+                                storeId: storeIds,
                               },
                             };
 
                             if (convId && botType) {
                               dispatch(getChatData({ newData, botType }))
                                 .then((data) => {
-                                  console.log(
-                                    "dataaaaaaaa",
-                                    data?.payload?.data?.activities[0]?.type
-                                  );
                                   if (
                                     data &&
                                     data?.payload?.data?.activities[0]?.type ===
-                                      "storeId"
+                                      "storeCheck"
                                   ) {
-                                    // dispatch(setStoreId())
+                                    let cartId =
+                                      data?.payload?.data?.activities[0]?.value
+                                        ?.data?.cartId;
+                                    dispatch(setCartId(cartId));
                                   }
                                 })
                                 .catch(() => {});
@@ -258,7 +251,6 @@ const OTP = () => {
                 clientName: "honeySys",
               })
                 .then((response) => {
-                  console.log("latLng1", response);
                   if (response.data?.code === 200) {
                     localStorage.setItem(
                       "accessToken",
@@ -283,14 +275,6 @@ const OTP = () => {
                             navigator.geolocation.getCurrentPosition(function (
                               position
                             ) {
-                              console.log(
-                                "Latitude is :",
-                                position.coords.latitude
-                              );
-                              console.log(
-                                "Longitude is :",
-                                position.coords.longitude
-                              );
                             });
                           } else if (result.state === "denied") {
                             navigate("/address", {

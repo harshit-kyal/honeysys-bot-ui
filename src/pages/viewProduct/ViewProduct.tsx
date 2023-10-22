@@ -12,6 +12,7 @@ const ViewProduct = () => {
   const error = useAppSelector((state) => state.home.error);
   const [Modal, setModal] = useState<boolean>(false);
   const convId = useAppSelector((state) => state.bot.convId);
+  const cartId = useAppSelector((state) => state.home.cartId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [productData, setProductData] = useState<any>([]);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
@@ -72,7 +73,6 @@ const ViewProduct = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          console.log(data);
         })
         .catch(() => {});
     }
@@ -159,7 +159,6 @@ const ViewProduct = () => {
                   />
                 }
                 onClick={() => {
-                  // console.log("p",data?.variants);
                 }}
                 title={data?.title}
               />
@@ -215,14 +214,13 @@ const ViewProduct = () => {
                       value="HTML"
                       className="w-[24px] h-[24px] border-2 bg-[#505050] !opacity-100 shadow-none focus-visible:outline-none checked:bg-primary checked:hover:bg-primary checked:active:bg-primary checked:focus:bg-primary focus:bg-primary focus:outline-none focus:ring-primary"
                       onClick={() => {
-                        console.log("item", item);
                         setCartItem({
                           productId: item?.productId,
                           varientId: item?.id,
                           storeId: storeId,
                           productVariantIndex: item?.productVariantIndex,
                           quantity: 1,
-                          cartId: "64f9ad9255836c22aef860f6",
+                          cartId: cartId,
                         });
                       }}
                     />

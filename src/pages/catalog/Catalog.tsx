@@ -90,7 +90,6 @@ const Catalog = () => {
   }, []);
 
   const error = useAppSelector((state) => state.home.error);
-  console.log("pro", categoriesCatalog);
   return (
     <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />

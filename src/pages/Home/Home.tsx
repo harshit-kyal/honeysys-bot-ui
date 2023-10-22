@@ -118,90 +118,7 @@ const Home = () => {
         replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
       },
     ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "user",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T14:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-26T13:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "user",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-10-25T13:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-10-25T13:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
+
     [
       {
         type: "richCard",
@@ -238,6 +155,10 @@ const Home = () => {
         type: "iconQuickReply",
 
         value: {
+          content: [
+            "Welcome to HoneySys Bot powered e-commerce experience.",
+            "  I will assist you in shopping for your product discovery, cart management and checkout experiences.",
+          ],
           data: [
             {
               text: "1",
@@ -257,6 +178,28 @@ const Home = () => {
               iconUrl:
                 "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
               value: "provideLocation",
+            },
+          ],
+          sender: "bot",
+          status: "Talking with Bot",
+        },
+        timestamp: "2023-09-25T13:17:38.184Z",
+      },
+    ],
+    [
+      {
+        type: "paymentCard",
+        value: {
+          data: [
+            {
+              orderId: "#532612378",
+              totalAmount: 450,
+              totalItems: 2,
+              content: [
+                "Thank you for Jiya for shopping with us at Honeysys Ecommerce.",
+                "Here’s a quick update on your order with order ID #532612378.Total amount: ₹ 310.00",
+                "While we are preparing your order, please take a moment to share your feedback with us.",
+              ],
             },
           ],
           sender: "bot",
@@ -465,7 +408,6 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
-    console.log("dubey", data);
     if (data.activities) {
       const activities: any[] = data.activities;
       dispatch(addToChatArray(activities));
@@ -542,7 +484,9 @@ const Home = () => {
   }, [title, greetingMessage, botIcon]);
 
   useEffect(() => {
-    if (!reviewToken && ChatArray.length === 0) {
+    // if (!reviewToken && ChatArray.length === 0) {
+    if (!reviewToken) {
+      console.log("rammmm");
       dispatch(
         addToChatArray([
           {
@@ -801,13 +745,13 @@ const Home = () => {
                                   </ReplyCard>
                                 </div>
                                 <div className="text-[14px] font-normal">
-                                  {`${trackOrderCard.orderNo}`}{" "}
+                                  {`${trackOrderCard?.orderNo}`}{" "}
                                   <span className="font-semibold">
-                                    {`${trackOrderCard.deliveryDate}`}
+                                    {`${trackOrderCard?.deliveryDate}`}
                                   </span>
-                                  {`- ${trackOrderCard.items} -`}
+                                  {`- ${trackOrderCard?.items} -`}
                                   <span className="font-semibold">
-                                    {` ₹ ${trackOrderCard.totalAmount}`}
+                                    {` ₹ ${trackOrderCard?.totalAmount}`}
                                   </span>{" "}
                                   - Delivered
                                 </div>
@@ -819,12 +763,86 @@ const Home = () => {
                     )}
                   </div>
                 );
+              }
+              if (ac?.type === "paymentCard" && ac?.value?.data?.length !== 0) {
+                const paymentCard = ac?.value?.data;
+                return (
+                  <div className="w-full">
+                    {ac?.value?.sender === "user" ? (
+                      <></>
+                    ) : (
+                      paymentCard?.map((paymentCard: any, index: number) => {
+                        return (
+                          <RichCard>
+                            <>
+                              <div className="relative">
+                                <ReplyCard
+                                  className="w-full"
+                                  title="Honeysys Bot"
+                                  titleCN="text-primary"
+                                >
+                                  <div className="flex flex-col justify-evenly w-full">
+                                    <Text
+                                      type="body"
+                                      size="sm"
+                                      className="text-[#505050]"
+                                    >
+                                      {`🛒 Order ${paymentCard.orderId}`}
+                                    </Text>
+                                    <Text
+                                      type="label"
+                                      size="lg"
+                                      className="text-[#505050]"
+                                    >
+                                      {`Total ${paymentCard.totalItems} items ₹ ${paymentCard.totalAmount} `}
+                                    </Text>
+                                    <img
+                                      src="/images/vegetables.svg"
+                                      height={50}
+                                      alt="vegetable"
+                                      className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                                    />
+                                  </div>
+                                </ReplyCard>
+                              </div>
+                              <div className="flex ms-1 align-middle">
+                                <img
+                                  src="/images/rupee.svg"
+                                  height="24"
+                                  width="24"
+                                  alt=""
+                                ></img>
+                                <div className="m-2 ">
+                                  <div className="text-[14px] text-[black] flex">
+                                    <div className="font-normal me-1">
+                                      Payment to
+                                    </div>{" "}
+                                    Honeysys
+                                  </div>
+                                  <div className="text-[#075E54] text-[12px] font-normal">
+                                    Successful
+                                  </div>
+                                </div>
+                              </div>
+                              {paymentCard?.content?.map(
+                                (item: string, index: number) => (
+                                  <div className="text-[14px] font-normal">
+                                    {item}
+                                  </div>
+                                )
+                              )}
+                            </>
+                          </RichCard>
+                        );
+                      })
+                    )}
+                  </div>
+                );
               } else if (
                 ac?.type === "replyMessage" &&
                 ac?.value?.data?.length !== 0
               ) {
                 const replyMessageCard = ac.value.data;
-                console.log("replyMessageCard", replyMessageCard);
                 return (
                   <div className="w-full">
                     {replyMessageCard?.map(
@@ -884,7 +902,6 @@ const Home = () => {
     return formattedDate;
   };
   useEffect(() => {
-    console.log("ChatArray", ChatArray);
     setChatComponentArray(
       ChatArray.map((activity: any, index: number) => {
         if (

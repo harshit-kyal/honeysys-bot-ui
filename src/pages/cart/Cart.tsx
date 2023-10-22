@@ -16,6 +16,7 @@ const Cart = () => {
   const botType = useAppSelector((state) => state.bot.botType);
   const storeId = useAppSelector((state) => state.home.storeId);
   const storeData = useAppSelector((state) => state.home.storeData);
+  const cartId = useAppSelector((state) => state.home.cartId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const dummy = {
@@ -67,6 +68,7 @@ const Cart = () => {
   const error = useAppSelector((state) => state.home.error);
   const cartData = async () => {
     // setLoading(true);
+    setAmountLoader(true);
     const newData = {
       conversationId: convId,
       text: "viewCart",
@@ -81,10 +83,12 @@ const Cart = () => {
           if (data && data?.payload?.data?.activities[0]?.type === "viewCart") {
             setCartList(data?.payload?.data?.activities[0]?.value.data);
             // setLoading(false);
+            setAmountLoader(false);
           }
         })
         .catch((error) => {
           // setLoading(false);
+          setAmountLoader(false);
         });
     }
   };
@@ -115,10 +119,10 @@ const Cart = () => {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           cartData();
-          setAmountLoader(false);
+          // setAmountLoader(false);
         })
         .catch(() => {
-          setAmountLoader(false);
+          // setAmountLoader(false);
         });
     }
   };
@@ -135,11 +139,11 @@ const Cart = () => {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           cartData();
-          setAmountLoader(false);
+          // setAmountLoader(false);
           setLoading(false);
         })
         .catch(() => {
-          setAmountLoader(false);
+          // setAmountLoader(false);
           setLoading(false);
         });
     }
@@ -156,7 +160,7 @@ const Cart = () => {
             productVariantIndex:
               cartCopy.cartProduct[index].variants[0].productVariantIndex,
             quantity: cartCopy.cartProduct[index].quantity + 1,
-            cartId: "64f9ad9255836c22aef860f6",
+            cartId: cartId,
           };
           dispatch(addToCartArray(cartItem));
           addApi(cartItem);
@@ -173,7 +177,7 @@ const Cart = () => {
             productVariantIndex:
               cartCopy.cartProduct[index].variants[0].productVariantIndex,
             quantity: cartCopy.cartProduct[index].quantity - 1,
-            cartId: "64f9ad9255836c22aef860f6",
+            cartId: cartId,
           };
           dispatch(minusToCartArray(cartItem));
           if (cartCopy.cartProduct[index].quantity > 1) {
@@ -184,7 +188,7 @@ const Cart = () => {
               storeId: storeId,
               productVariantIndex:
                 cartCopy.cartProduct[index].variants[0].productVariantIndex,
-              cartId: "64f9ad9255836c22aef860f6",
+              cartId: cartId,
             };
             removeApi(cartItem);
           }
@@ -331,7 +335,7 @@ const Cart = () => {
                         lat: storeData?.location?.latitude,
                         lag: storeData?.location?.longitude,
                         storeId: storeData?.id,
-                        cartId: "64f9ad9255836c22aef860f6",
+                        cartId: cartId,
                       },
                     };
                     dispatch(getChatData({ newData, botType }))
@@ -342,6 +346,11 @@ const Cart = () => {
                   Send To Business
                 </button>
               </div>
+              {amountLoader && (
+                <div className="cartLoader">
+                  <div className="cartLoader-text">Loading...</div>
+                </div>
+              )}
             </>
           ) : (
             <>

@@ -85,7 +85,6 @@ export function RadioButtonGroup(props: any) {
     if (convId && botType && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          console.log("data", data?.payload?.data?.activities[0]?.type);
           if (
             data &&
             data?.payload?.data?.activities[0]?.type === "getaddress"
@@ -104,7 +103,6 @@ export function RadioButtonGroup(props: any) {
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
-  console.log("ss", selectedAddress);
   return (
     <>
       {!error && !loading ? (
