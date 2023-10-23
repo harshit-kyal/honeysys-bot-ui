@@ -72,6 +72,7 @@ export interface HomeSliceType {
   UiUpdate: boolean;
   cart: any[];
   totalQuantity: number;
+  orderProduct:any[]
 }
 
 export interface BotSliceType {

@@ -8,6 +8,7 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface CardProp {
   children?: JSX.Element;
@@ -39,6 +40,9 @@ const BotMessageCard = ({
   const navigate = useNavigate();
   const cartData = useAppSelector((state) => state.home.storeData);
   const cartId = useAppSelector((state) => state.home.cartId);
+  const mobileNumber = useAppSelector((state) => state.home.mobileNo);
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const orderProduct = useAppSelector((state) => state.home.orderProduct);
   if (imageSrc) {
     return (
       <RichCard
@@ -97,6 +101,9 @@ const BotMessageCard = ({
                   } else if (data?.value === "changeLocation") {
                     navigate("/addressDetails");
                   } else {
+                    if (data?.date) {
+                      setDeliveryDate(data?.date);
+                    }
                     if (buttonContent && buttonContent.length > 0) {
                       const replyCard = [
                         {
@@ -127,10 +134,16 @@ const BotMessageCard = ({
                         lat: cartData?.location?.latitude,
                         lag: cartData?.location?.longitude,
                         location: cartData?.location?.pincode,
-                        deliveryType: "[Normal, Express]",
+                        deliveryType: data?.deliveryType
+                          ? data?.deliveryType
+                          : ["Normal", "Express"],
                         storeId: cartData?.id,
                         cartId: cartId,
                         totalAmount: cartTotalAmount,
+                        deliveryDate: deliveryDate,
+                        mobileNumber: mobileNumber,
+                        appliedPromoCode: false,
+                        orderProduct: orderProduct,
                       },
                     };
                     dispatch(getChatData({ newData, botType }));

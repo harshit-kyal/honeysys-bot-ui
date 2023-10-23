@@ -19,6 +19,7 @@ const initialState: HomeSliceType = {
   storeData: {},
   UiUpdate: false,
   cart: [],
+  orderProduct: [],
   totalQuantity: 0,
 };
 
@@ -107,6 +108,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         ChatArray: [...state.ChatArray, action.payload],
+      };
+    },
+    addToOrderList(state, action) {
+      return {
+        ...state,
+        orderProduct: [...state.orderProduct, action.payload],
       };
     },
     addToCartArray(state, action) {
@@ -226,5 +233,6 @@ export const {
   setStoreData,
   setCartId,
   setCartTotalAmount,
+  addToOrderList,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

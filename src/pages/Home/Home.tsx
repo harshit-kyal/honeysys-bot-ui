@@ -484,9 +484,8 @@ const Home = () => {
   }, [title, greetingMessage, botIcon]);
 
   useEffect(() => {
-    // if (!reviewToken && ChatArray.length === 0) {
-    if (!reviewToken) {
-      console.log("rammmm");
+    if (!reviewToken && ChatArray.length === 0) {
+      // if (!reviewToken) {
       dispatch(
         addToChatArray([
           {
@@ -647,7 +646,7 @@ const Home = () => {
                     ) : (
                       <BotMessageCard
                         actionDataArray={iconQuickReplyCard}
-                        buttonContent={ac?.value?.content}
+                        buttonContent={ac?.value?.contant}
                       />
                     )}
                   </div>
@@ -862,7 +861,7 @@ const Home = () => {
                 ac?.type === "cartReplyCard" &&
                 ac?.value?.data?.length !== 0
               ) {
-                const cartReplyCard = [ac?.value?.data];
+                const cartReplyCard = ac?.value?.data;
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "bot" ? (

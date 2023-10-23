@@ -6,6 +6,7 @@ import { setCartUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addToCartArray,
+  addToOrderList,
   getChatData,
   minusToCartArray,
   setCartTotalAmount,
@@ -216,6 +217,17 @@ const Cart = () => {
       );
     }
   }, [window.location.search]);
+  useEffect(() => {
+    cartList?.cartProduct?.map((item: any) => {
+      console.log("item", item);
+      let orederData = {
+        productId: item?.productId,
+        productVariantIndex: item?.productVariantIndex,
+        quantity: item?.quantity,
+      };
+      dispatch(addToOrderList(orederData));
+    });
+  }, [cartList]);
 
   return (
     <div className="h-screen sticky">
@@ -330,7 +342,7 @@ const Cart = () => {
                       text: "cartAction",
                       voiceFlag: false,
                       data: {
-                        deliveryType: "[Normal, Express]",
+                        deliveryType: ["Normal", "Express"],
                         location: storeData?.location?.pincode,
                         lat: storeData?.location?.latitude,
                         lag: storeData?.location?.longitude,

@@ -139,8 +139,9 @@ const Categories = () => {
                       onClick: () => {
                         navigate(`/viewProduct/${i?.id}`, {
                           state: {
-                            categoryIds: [id],
-                            subcategoryIds: [i?.id],
+                            categoryIds:
+                              id === "home" ? categoriesCatalog[0]?.id : id,
+                            subcategoryIds: i?.id,
                             title: i?.title,
                           },
                         });
