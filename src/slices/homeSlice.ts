@@ -21,6 +21,11 @@ const initialState: HomeSliceType = {
   cart: [],
   orderProduct: [],
   totalQuantity: 0,
+  deliveryType: "",
+  deliveryDate: "",
+  startTime: "",
+  endTime: "",
+  slotIndex: "",
 };
 
 const log = async (data: any) => {};
@@ -74,6 +79,36 @@ export const HomeSlice = createSlice({
         userId: action.payload,
       };
     },
+    setDeliveryType(state, action) {
+      return {
+        ...state,
+        deliveryType: action.payload,
+      };
+    },
+    setStartTime(state, action) {
+      return {
+        ...state,
+        startTime: action.payload,
+      };
+    },
+    setEndTime(state, action) {
+      return {
+        ...state,
+        endTime: action.payload,
+      };
+    },
+    setDeliveryDate(state, action) {
+      return {
+        ...state,
+        deliveryDate: action.payload,
+      };
+    },
+    setSlotIndex(state, action) {
+      return {
+        ...state,
+        slotIndex: action.payload,
+      };
+    },
     setCartId(state, action) {
       return {
         ...state,
@@ -114,6 +149,18 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         orderProduct: [...state.orderProduct, action.payload],
+      };
+    },
+    setCart(state, action) {
+      return {
+        ...state,
+        cart: action.payload,
+      };
+    },
+    setTotalQuantity(state, action) {
+      return {
+        ...state,
+        totalQuantity: action.payload,
       };
     },
     addToCartArray(state, action) {
@@ -234,5 +281,12 @@ export const {
   setCartId,
   setCartTotalAmount,
   addToOrderList,
+  setDeliveryDate,
+  setDeliveryType,
+  setStartTime,
+  setEndTime,
+  setSlotIndex,
+  setCart,
+  setTotalQuantity
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

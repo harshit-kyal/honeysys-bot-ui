@@ -27,6 +27,7 @@ const ViewProduct = () => {
     let newData = {
       conversationId: convId,
       text: "viewProduct",
+      isCahtVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,
@@ -51,6 +52,7 @@ const ViewProduct = () => {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
+      isCahtVisible: false,
       data: {
         storeId: storeId,
       },
@@ -68,6 +70,7 @@ const ViewProduct = () => {
       conversationId: convId,
       text: "addtocart",
       voiceFlag: false,
+      isCahtVisible: false,
       data: data,
     };
     if (convId && botType && convId !== "" && botType !== "") {

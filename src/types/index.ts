@@ -62,17 +62,22 @@ export interface HomeSliceType {
   userId: string;
   cartId: any;
   cartTotalAmount: any;
+  deliveryType: any;
+  deliveryDate: any;
+  storeData: any;
+  startTime: any;
+  endTime: any;
+  slotIndex:any;
   storeId: string;
   userPincode: number;
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
   deniedModal: boolean;
-  storeData: any;
   UiUpdate: boolean;
   cart: any[];
   totalQuantity: number;
-  orderProduct:any[]
+  orderProduct: any[];
 }
 
 export interface BotSliceType {

@@ -42,6 +42,7 @@ const Catalog = () => {
     let newData = {
       conversationId: convId,
       text: "viewCategoryCatalog",
+      isCahtVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,
@@ -60,6 +61,7 @@ const Catalog = () => {
       conversationId: convId,
       text: "viewProductCatalog",
       voiceFlag: false,
+      isCahtVisible: false,
       data: {
         storeId: storeId,
       },

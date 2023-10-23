@@ -33,6 +33,7 @@ const PDP = () => {
     let newData = {
       conversationId: convId,
       text: "productdetails",
+      isCahtVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,
@@ -107,6 +108,7 @@ const PDP = () => {
       conversationId: convId,
       text: "addtocart",
       voiceFlag: false,
+      isCahtVisible: false,
       data: data,
     };
     if (convId && botType && convId !== "" && botType !== "") {
@@ -124,6 +126,7 @@ const PDP = () => {
     setQtyLoading(true);
     let newData = {
       conversationId: convId,
+      isCahtVisible: false,
       text: "removefromcart",
       voiceFlag: false,
       data: data,

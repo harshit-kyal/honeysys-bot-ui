@@ -183,8 +183,7 @@ const Address = () => {
               setLatLng(latLng);
             });
           } else if (result.state === "prompt") {
-            navigator.geolocation.getCurrentPosition(function (position) {
-            });
+            navigator.geolocation.getCurrentPosition(function (position) {});
           } else if (result.state === "denied") {
             dispatch(setDeniedModal(true));
           }
@@ -243,6 +242,7 @@ const Address = () => {
         conversationId: convId,
         text: "findstores",
         voiceFlag: false,
+        isCahtVisible: false,
         data: {
           pincode: "500084",
           lat: "17.469857630687827",
@@ -289,6 +289,7 @@ const Address = () => {
                     conversationId: convId,
                     text: "getcartid",
                     voiceFlag: false,
+                    isCahtVisible: false,
                     data: {
                       storeId: storeIds,
                     },

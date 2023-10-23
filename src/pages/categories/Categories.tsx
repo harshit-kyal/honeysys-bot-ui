@@ -41,6 +41,7 @@ const Categories = () => {
     let newData = {
       conversationId: convId,
       text: "viewCategoryCatalog",
+      isCahtVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,

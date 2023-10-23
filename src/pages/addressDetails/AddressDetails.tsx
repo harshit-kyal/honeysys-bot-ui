@@ -77,6 +77,7 @@ export function RadioButtonGroup(props: any) {
       conversationId: convId,
       text: "getAddress",
       voiceFlag: false,
+      isCahtVisible: false,
       data: {
         storeId: storeId,
       },
@@ -173,6 +174,7 @@ export function RadioButtonGroup(props: any) {
                   conversationId: convId,
                   text: "saveaddress",
                   voiceFlag: false,
+                  isCahtVisible: false,
                   data: selectedAddress,
                 };
                 dispatch(getChatData({ newData, botType }))

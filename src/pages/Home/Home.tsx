@@ -10,6 +10,8 @@ import {
   setChatArray,
   addToChatArray,
   setUiUpdate,
+  setCart,
+  setTotalQuantity,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -484,7 +486,7 @@ const Home = () => {
   }, [title, greetingMessage, botIcon]);
 
   useEffect(() => {
-    if (!reviewToken && ChatArray.length === 0) {
+    if (!reviewToken && ChatComponentArray.length === 0) {
       // if (!reviewToken) {
       dispatch(
         addToChatArray([
@@ -765,6 +767,12 @@ const Home = () => {
               }
               if (ac?.type === "paymentCard" && ac?.value?.data?.length !== 0) {
                 const paymentCard = ac?.value?.data;
+
+                if (paymentCard[0]?.isOrderPlaced === true) {
+                  dispatch(setCart([]));
+                  dispatch(setTotalQuantity(0))
+                }
+
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "user" ? (

@@ -74,6 +74,7 @@ const Cart = () => {
       conversationId: convId,
       text: "viewCart",
       voiceFlag: false,
+      isCahtVisible: false,
       data: {
         storeId: storeId,
       },
@@ -113,6 +114,7 @@ const Cart = () => {
     let newData = {
       conversationId: convId,
       text: "addtocart",
+      isCahtVisible: false,
       voiceFlag: false,
       data: data,
     };
@@ -133,6 +135,7 @@ const Cart = () => {
     let newData = {
       conversationId: convId,
       text: "removefromcart",
+      isCahtVisible: false,
       voiceFlag: false,
       data: data,
     };
@@ -341,6 +344,7 @@ const Cart = () => {
                       conversationId: convId,
                       text: "cartAction",
                       voiceFlag: false,
+                      isCahtVisible: false,
                       data: {
                         deliveryType: ["Normal", "Express"],
                         location: storeData?.location?.pincode,

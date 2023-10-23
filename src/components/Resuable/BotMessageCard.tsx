@@ -4,7 +4,12 @@ import ActionButton from "./ActionButton";
 import {
   addToChatArray,
   getChatData,
+  setCart,
+  setDeliveryDate,
+  setDeliveryType,
+  setEndTime,
   setLocationPermission,
+  setStartTime,
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
@@ -41,8 +46,12 @@ const BotMessageCard = ({
   const cartData = useAppSelector((state) => state.home.storeData);
   const cartId = useAppSelector((state) => state.home.cartId);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
-  const [deliveryDate, setDeliveryDate] = useState("");
+  const deliveryDate = useAppSelector((state) => state.home.deliveryDate);
+  const deliveryType = useAppSelector((state) => state.home.deliveryType);
   const orderProduct = useAppSelector((state) => state.home.orderProduct);
+  const startTime = useAppSelector((state) => state.home.startTime);
+  const slotIndex = useAppSelector((state) => state.home.slotIndex);
+  const endTime = useAppSelector((state) => state.home.endTime);
   if (imageSrc) {
     return (
       <RichCard
@@ -79,6 +88,7 @@ const BotMessageCard = ({
       </RichCard>
     );
   }
+  console.log("deliveryDate", deliveryDate);
   return (
     <div>
       {actionDataArray && actionDataArray.length !== 0 ? (
@@ -101,8 +111,18 @@ const BotMessageCard = ({
                   } else if (data?.value === "changeLocation") {
                     navigate("/addressDetails");
                   } else {
+              
                     if (data?.date) {
-                      setDeliveryDate(data?.date);
+                      dispatch(setDeliveryDate(data?.date));
+                    }
+                    if (data?.deliveryType) {
+                      dispatch(setDeliveryType(data?.deliveryType));
+                    }
+                    if (data?.startTime) {
+                      dispatch(setStartTime(data?.startTime));
+                    }
+                    if (data?.deliveryType) {
+                      dispatch(setEndTime(data?.endTime));
                     }
                     if (buttonContent && buttonContent.length > 0) {
                       const replyCard = [
@@ -129,18 +149,39 @@ const BotMessageCard = ({
                       conversationId: convId,
                       text: data.value,
                       voiceFlag: false,
-                      sourceAction: "button",
+                      isCahtVisible: false,
                       payload: {
                         lat: cartData?.location?.latitude,
                         lag: cartData?.location?.longitude,
                         location: cartData?.location?.pincode,
-                        deliveryType: data?.deliveryType
+                        deliveryType: deliveryType
+                          ? deliveryType
+                          : data?.deliveryType
                           ? data?.deliveryType
                           : ["Normal", "Express"],
+                        slotIndex: slotIndex
+                          ? slotIndex
+                          : data?.slotIndex
+                          ? data?.slotIndex
+                          : "",
                         storeId: cartData?.id,
                         cartId: cartId,
                         totalAmount: cartTotalAmount,
-                        deliveryDate: deliveryDate,
+                        startTime: startTime
+                          ? startTime
+                          : data?.startTime
+                          ? data?.startTime
+                          : "",
+                        endTime: endTime
+                          ? endTime
+                          : data?.endTime
+                          ? data?.endTime
+                          : "",
+                        deliveryDate: deliveryDate
+                          ? deliveryDate
+                          : data?.date
+                          ? data?.date
+                          : "",
                         mobileNumber: mobileNumber,
                         appliedPromoCode: false,
                         orderProduct: orderProduct,

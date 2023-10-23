@@ -75,6 +75,7 @@ const OTP = () => {
       const newData = {
         conversationId: convId,
         text: "getcartid",
+        isCahtVisible: false,
         voiceFlag: false,
         data: {
           storeId: storeId,
@@ -84,7 +85,6 @@ const OTP = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
-       
             if (
               data &&
               data?.payload?.data?.activities[0]?.type === "storeId"
@@ -115,6 +115,7 @@ const OTP = () => {
                   conversationId: convId,
                   text: "findstores",
                   voiceFlag: false,
+                  isCahtVisible: false,
                   data: {
                     pincode: "500084",
                     lat: "17.469857630687827",
@@ -163,6 +164,7 @@ const OTP = () => {
                               conversationId: convId,
                               text: "getcartid",
                               voiceFlag: false,
+                              isCahtVisible: false,
                               data: {
                                 storeId: storeIds,
                               },
@@ -274,8 +276,7 @@ const OTP = () => {
                           } else if (result.state === "prompt") {
                             navigator.geolocation.getCurrentPosition(function (
                               position
-                            ) {
-                            });
+                            ) {});
                           } else if (result.state === "denied") {
                             navigate("/address", {
                               state: { navigate: "home" },
