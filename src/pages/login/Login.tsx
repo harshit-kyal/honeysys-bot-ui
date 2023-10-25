@@ -45,8 +45,8 @@ const Login = () => {
       }).then((response) => {
         setLoading(false);
         if (response.data?.code === 200) {
-          dispatch(setUserId(response?.data?.data?.id));
-          dispatch(setConvId(response?.data?.data?.id));
+          dispatch(setUserId(response?.data?.data?.userId));
+          dispatch(setConvId(response?.data?.data?.userId));
           dispatch(setBotType(encrypt("e-comm")));
           dispatch(setOtp(response?.data?.data?.otp));
           toast.success(`OTP : ${response?.data?.data?.otp}`);

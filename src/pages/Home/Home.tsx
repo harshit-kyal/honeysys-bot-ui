@@ -640,7 +640,7 @@ const Home = () => {
         key={new Date().getTime()}
       >
         <div className="chatWrapper">
-          {activity.map((ac: any, index: number) => {
+          {activity?.map((ac: any, index: number) => {
             if (index >= i && index < j) {
               if (ac["sub_type"] && ac["sub_type"] === "screen") {
               } else if (ac?.type === "get start") {
@@ -675,12 +675,13 @@ const Home = () => {
                 ac?.type === "richCard" &&
                 ac?.value?.data?.length !== 0
               ) {
-                const richCard = ac.value.data;
+                const richCard = ac?.value?.data;
                 return (
                   <div className="w-full">
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
+                      Array.isArray(richCard) &&
                       richCard?.map((richCard: any, index: number) => {
                         return (
                           <BotMessageCard
@@ -707,7 +708,11 @@ const Home = () => {
                       <></>
                     ) : (
                       <BotMessageCard
-                        actionDataArray={iconQuickReplyCard}
+                        actionDataArray={
+                          Array.isArray(iconQuickReplyCard)
+                            ? iconQuickReplyCard
+                            : []
+                        }
                         buttonContent={ac?.value?.contant}
                       />
                     )}
@@ -723,6 +728,7 @@ const Home = () => {
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
+                      Array.isArray(summaryCard) &&
                       summaryCard?.map((summaryCard: any, index: number) => {
                         return (
                           <BotMessageCard
@@ -770,6 +776,7 @@ const Home = () => {
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
+                      Array.isArray(trackOrderCard) &&
                       trackOrderCard?.map(
                         (trackOrderCard: any, index: number) => {
                           return (
@@ -838,6 +845,7 @@ const Home = () => {
                     {ac?.value?.sender === "user" ? (
                       <></>
                     ) : (
+                      Array.isArray(paymentCard) &&
                       paymentCard?.map((paymentCard: any, index: number) => {
                         return (
                           <RichCard>
@@ -912,17 +920,18 @@ const Home = () => {
                 const replyMessageCard = ac.value.data;
                 return (
                   <div className="w-full">
-                    {replyMessageCard?.map(
-                      (replyMessageCard: any, index: number) => {
-                        return (
-                          <ReplyMessageCard
-                            time={ac?.timestamp}
-                            content={`${replyMessageCard?.content}`}
-                            replyArray={replyMessageCard?.replayArray}
-                          />
-                        );
-                      }
-                    )}
+                    {Array.isArray(replyMessageCard) &&
+                      replyMessageCard?.map(
+                        (replyMessageCard: any, index: number) => {
+                          return (
+                            <ReplyMessageCard
+                              time={ac?.timestamp}
+                              content={`${replyMessageCard?.content}`}
+                              replyArray={replyMessageCard?.replayArray}
+                            />
+                          );
+                        }
+                      )}
                   </div>
                 );
               } else if (
@@ -935,16 +944,19 @@ const Home = () => {
                     {ac?.value?.sender === "bot" ? (
                       <></>
                     ) : (
-                      cartReplyCard.map((cartReplyCard: any, index: number) => {
-                        return (
-                          <CartReplyCard
-                            time={ac?.timestamp}
-                            imageSrc={cartReplyCard?.imageSrc}
-                            price={cartReplyCard?.totalAmount}
-                            items={cartReplyCard?.totalItems}
-                          />
-                        );
-                      })
+                      Array.isArray(cartReplyCard) &&
+                      cartReplyCard?.map(
+                        (cartReplyCard: any, index: number) => {
+                          return (
+                            <CartReplyCard
+                              time={ac?.timestamp}
+                              imageSrc={cartReplyCard?.imageSrc}
+                              price={cartReplyCard?.totalAmount}
+                              items={cartReplyCard?.totalItems}
+                            />
+                          );
+                        }
+                      )
                     )}
                   </div>
                 );
@@ -970,7 +982,7 @@ const Home = () => {
   };
   useEffect(() => {
     setChatComponentArray(
-      ChatArray.map((activity: any, index: number) => {
+      ChatArray?.map((activity: any, index: number) => {
         if (
           activity.length === 1 &&
           activity[0].sub_type &&
@@ -1023,134 +1035,134 @@ const Home = () => {
     scroll();
   }, [ChatComponentArray, isLoadingVisible]);
   const [pageNumber, setPageNumber] = useState(0);
-  const fetchData = () => {
-    setTimeout(() => {
-      let data = paginationChat.slice(pageNumber, 2);
-      data.map((activity: any, index: number) => {
-        setArray(
-          <ChatWrapper
-            type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
-            key={new Date().getTime() + index}
-          >
-            <div className="w-full">
-              {activity.map((activity: any, index: number) => {
-                // if (
-                //   activity.type === "message" &&
-                //   activity.text ===
-                //     "It seems you have to login first to access the above service. Please provide your mobile number"
-                // ) {
-                //   return dispatch(setUiUpdate(true));
-                // }
-                // if (
-                //   activity.type === "message" &&
-                //   activity.text === "Come back later"
-                // ) {
-                //   return dispatch(setUiUpdate(false));
-                // }
-                if (activity.type === "message" && activity.text !== "") {
-                  return (
-                    <div className="chatWrapper">
-                      {activity?.value?.sender === "user" ? (
-                        <UserMessageCard content={activity?.text} />
-                      ) : (
-                        <BotMessageCard title={activity?.text} />
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "richCard" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const richCard = activity.value.data;
-                  return (
-                    <div className="chatWrapper">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        // <UserMessageCard content={activity?.text} />
-                        <BotMessageCard
-                          title={richCard.title}
-                          contentArray={richCard.description}
-                          imageSrc={richCard.imageURL}
-                          botIcon={richCard.botIcon}
-                        />
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "iconQuickReply" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const iconQuickReplyCard = activity.value.data;
+  // const fetchData = () => {
+  //   setTimeout(() => {
+  //     let data = paginationChat.slice(pageNumber, 2);
+  //     data?.map((activity: any, index: number) => {
+  //       setArray(
+  //         <ChatWrapper
+  //           type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
+  //           key={new Date().getTime() + index}
+  //         >
+  //           <div className="w-full">
+  //             {activity?.map((activity: any, index: number) => {
+  //               // if (
+  //               //   activity.type === "message" &&
+  //               //   activity.text ===
+  //               //     "It seems you have to login first to access the above service. Please provide your mobile number"
+  //               // ) {
+  //               //   return dispatch(setUiUpdate(true));
+  //               // }
+  //               // if (
+  //               //   activity.type === "message" &&
+  //               //   activity.text === "Come back later"
+  //               // ) {
+  //               //   return dispatch(setUiUpdate(false));
+  //               // }
+  //               if (activity.type === "message" && activity.text !== "") {
+  //                 return (
+  //                   <div className="chatWrapper">
+  //                     {activity?.value?.sender === "user" ? (
+  //                       <UserMessageCard content={activity?.text} />
+  //                     ) : (
+  //                       <BotMessageCard title={activity?.text} />
+  //                     )}
+  //                   </div>
+  //                 );
+  //               }
+  //               if (
+  //                 activity.type === "richCard" &&
+  //                 activity.value.data.length !== 0
+  //               ) {
+  //                 const richCard = activity?.value?.data;
+  //                 return (
+  //                   <div className="chatWrapper">
+  //                     {activity?.value?.sender === "user" ? (
+  //                       <></>
+  //                     ) : (
+  //                       // <UserMessageCard content={activity?.text} />
+  //                       <BotMessageCard
+  //                         title={richCard.title}
+  //                         contentArray={richCard.description}
+  //                         imageSrc={richCard.imageURL}
+  //                         botIcon={richCard.botIcon}
+  //                       />
+  //                     )}
+  //                   </div>
+  //                 );
+  //               }
+  //               if (
+  //                 activity.type === "iconQuickReply" &&
+  //                 activity.value.data.length !== 0
+  //               ) {
+  //                 const iconQuickReplyCard = activity.value.data;
 
-                  return (
-                    <div className="chatWrapper w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        <BotMessageCard actionDataArray={iconQuickReplyCard} />
-                      )}
-                    </div>
-                  );
-                }
-                if (
-                  activity.type === "summaryCard" &&
-                  activity.value.data.length !== 0
-                ) {
-                  const summaryCard: any = activity.value.data;
-                  return (
-                    <div className="chatWrapper w-full">
-                      {activity?.value?.sender === "user" ? (
-                        <></>
-                      ) : (
-                        <BotMessageCard
-                          title=""
-                          contentArray={[
-                            <div> {summaryCard.topText}</div>,
-                            <SummaryCard
-                              className="w-full mt-3"
-                              image={
-                                <img
-                                  src="/images/onion.svg"
-                                  alt=""
-                                  className="h-[60px] w-[60px] rounded-md"
-                                />
-                              }
-                              priceList={summaryCard.price}
-                              subtitle={summaryCard.subtitle}
-                              title={summaryCard.title}
-                              totalAmount={summaryCard.totalAmount}
-                              totaltitle={summaryCard.totaltitle}
-                            />,
-                            <Text
-                              type="body"
-                              size="md"
-                              className="font-semibold mt-3 mb-1"
-                            >
-                              {summaryCard.bottomText}
-                            </Text>,
-                          ]}
-                        />
-                      )}
-                    </div>
-                  );
-                }
-              })}
-            </div>
-          </ChatWrapper>
-        );
-      });
-      setPageNumber(pageNumber + 1);
-    }, 500);
+  //                 return (
+  //                   <div className="chatWrapper w-full">
+  //                     {activity?.value?.sender === "user" ? (
+  //                       <></>
+  //                     ) : (
+  //                       <BotMessageCard actionDataArray={iconQuickReplyCard} />
+  //                     )}
+  //                   </div>
+  //                 );
+  //               }
+  //               if (
+  //                 activity.type === "summaryCard" &&
+  //                 activity.value.data.length !== 0
+  //               ) {
+  //                 const summaryCard: any = activity.value.data;
+  //                 return (
+  //                   <div className="chatWrapper w-full">
+  //                     {activity?.value?.sender === "user" ? (
+  //                       <></>
+  //                     ) : (
+  //                       <BotMessageCard
+  //                         title=""
+  //                         contentArray={[
+  //                           <div> {summaryCard.topText}</div>,
+  //                           <SummaryCard
+  //                             className="w-full mt-3"
+  //                             image={
+  //                               <img
+  //                                 src="/images/onion.svg"
+  //                                 alt=""
+  //                                 className="h-[60px] w-[60px] rounded-md"
+  //                               />
+  //                             }
+  //                             priceList={summaryCard.price}
+  //                             subtitle={summaryCard.subtitle}
+  //                             title={summaryCard.title}
+  //                             totalAmount={summaryCard.totalAmount}
+  //                             totaltitle={summaryCard.totaltitle}
+  //                           />,
+  //                           <Text
+  //                             type="body"
+  //                             size="md"
+  //                             className="font-semibold mt-3 mb-1"
+  //                           >
+  //                             {summaryCard.bottomText}
+  //                           </Text>,
+  //                         ]}
+  //                       />
+  //                     )}
+  //                   </div>
+  //                 );
+  //               }
+  //             })}
+  //           </div>
+  //         </ChatWrapper>
+  //       );
+  //     });
+  //     setPageNumber(pageNumber + 1);
+  //   }, 500);
 
-    // const fetchDataApi=async()=>{
-    //   const res=await axios();
-    // }
-    // fetchDataApi();
-    // dispatch(setChatArray([...data]))
-  };
+  //   // const fetchDataApi=async()=>{
+  //   //   const res=await axios();
+  //   // }
+  //   // fetchDataApi();
+  //   // dispatch(setChatArray([...data]))
+  // };
   const timelineRef = useRef<any>();
 
   return (
