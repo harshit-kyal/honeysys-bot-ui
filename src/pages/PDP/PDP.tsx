@@ -73,7 +73,61 @@ const PDP = () => {
     };
     fetchData();
   }, []);
-
+  const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
+  const handleAddApi = (data: any) => {
+    setQtyLoading(true);
+    const newData = {
+      conversationId: convId,
+      text: "addtocart",
+      isCahtVisible: false,
+      voiceFlag: false,
+      data: data,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          setQtyLoading(false);
+        })
+        .catch(() => {
+          setQtyLoading(false);
+        });
+    }
+  };
+  const debounceAddApi = (data: any) => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+    const timeoutId = setTimeout(() => {
+      handleAddApi(data);
+    }, 800);
+    setDebounceTimeout(timeoutId);
+  };
+  useEffect(() => {
+    if (quantity !== 0) {
+      let changedData = {
+        productId: product?.productId,
+        varientId: product?.variants[0]._id,
+        storeId: storeId,
+        productVariantIndex: product?.variants[0].productVariantIndex,
+        quantity: quantity,
+        cartId: cartId,
+      };
+      debounceAddApi(changedData);
+    }
+    else {
+      clearTimeout(debounceTimeout);
+    }
+  }, [quantity]);
+  // const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
+  //   imageSrc: "/images/onion.svg",
+  //   title: "Fresh Cauliflower",
+  //   pricing: [
+  //     { id: "1", option: "500 g", price: 60 },
+  //     { id: "2", option: "1 kg", price: 120 },
+  //     { id: "3", option: "2 kg", price: 240 },
+  //     { id: "4", option: "5 kg", price: 600 },
+  //   ],
+  // };
   useEffect(() => {
     if (id && product && product?.variants?.length > 0) {
       !activePrice && setActivePrice(product?.variants[0]);
@@ -160,12 +214,12 @@ const PDP = () => {
         };
 
         dispatch(addToCartArray(cartItem));
-        addApi(cartItem);
+        // addApi(cartItem);
       }
       return item;
     });
     DataCopy.variants = pricingCopy;
-    setProduct(DataCopy);
+    setProduct({ ...DataCopy });
   };
 
   const removeItem = () => {
@@ -186,7 +240,7 @@ const PDP = () => {
         };
         dispatch(minusToCartArray(cartItem));
         if (quantity > 1) {
-          addApi(cartItem);
+          // addApi(cartItem);
         } else {
           let cartItem = {
             productId: product?.productId,
@@ -202,7 +256,6 @@ const PDP = () => {
     DataCopy.variants = pricingCopy;
     setProduct(DataCopy);
   };
-
   return (
     <div className="h-screen pt-[60px]">
       {/* header */}

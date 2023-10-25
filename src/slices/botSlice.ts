@@ -1,4 +1,4 @@
-import {createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { BotSliceType } from "../types";
 
 const initialState: BotSliceType = {
@@ -7,6 +7,7 @@ const initialState: BotSliceType = {
   botInfo: {},
   convId: "",
   botType: "",
+  clientName: "",
 };
 
 export const BotSlice = createSlice({
@@ -32,8 +33,15 @@ export const BotSlice = createSlice({
         botType: action.payload,
       };
     },
+    setClientName(state, action) {
+      return {
+        ...state,
+        clientName: action.payload,
+      };
+    },
   },
 });
 
-export const { resetBot, setBotInfo, setConvId, setBotType } = BotSlice.actions;
+export const { resetBot, setBotInfo, setConvId, setBotType, setClientName } =
+  BotSlice.actions;
 export default BotSlice.reducer;

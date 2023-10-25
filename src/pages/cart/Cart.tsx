@@ -66,6 +66,7 @@ const Cart = () => {
   const [cartList, setCartList] = useState<any>({});
   const [Loading, setLoading] = useState(false);
   const [amountLoader, setAmountLoader] = useState(false);
+  const [Index, setIndex] = useState(-1);
   const error = useAppSelector((state) => state.home.error);
   const cartData = async () => {
     // setLoading(true);
@@ -109,9 +110,10 @@ const Cart = () => {
     fetchData();
   }, []);
 
-  const addApi = (data: any) => {
+  const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
+  const handleAddApi = (data: any) => {
     setAmountLoader(true);
-    let newData = {
+    const newData = {
       conversationId: convId,
       text: "addtocart",
       isCahtVisible: false,
@@ -129,6 +131,35 @@ const Cart = () => {
         });
     }
   };
+  const debounceAddApi = (data: any) => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+    const timeoutId = setTimeout(() => {
+      handleAddApi(data);
+    }, 800);
+    setDebounceTimeout(timeoutId);
+  };
+  useEffect(() => {
+    if (Index !== -1) {
+      console.log("pp");
+      let findData = cartList?.cartProduct[Index];
+      let changedData = {
+        productId: findData?.productId,
+        varientId: findData?.variants[0]._id,
+        storeId: storeId,
+        productVariantIndex: findData?.variants[0].productVariantIndex,
+        quantity: findData?.quantity,
+        cartId: cartId,
+      };
+      if (findData?.quantity > 1) {
+        debounceAddApi(changedData);
+        setIndex(-1);
+      } else {
+        clearTimeout(debounceTimeout);
+      }
+    }
+  }, [Index]);
   const removeApi = (data: any) => {
     setAmountLoader(true);
     setLoading(true);
@@ -167,7 +198,9 @@ const Cart = () => {
             cartId: cartId,
           };
           dispatch(addToCartArray(cartItem));
-          addApi(cartItem);
+          // addApi(cartItem);
+          setIndex(index);
+
           cartCopy.cartProduct[index].quantity += 1;
         }
         break;
@@ -185,7 +218,8 @@ const Cart = () => {
           };
           dispatch(minusToCartArray(cartItem));
           if (cartCopy.cartProduct[index].quantity > 1) {
-            addApi(cartItem);
+            // addApi(cartItem);
+            setIndex(index);
           } else {
             let cartItem = {
               productId: cartCopy.cartProduct[index].variants[0].productId,
@@ -266,7 +300,7 @@ const Cart = () => {
                               : ""
                           }
                           className={
-                            "border-5 rounded-lg border h-[60px] w-[60px] object-cover !border-cartImageBorderColor"
+                            "border-5 rounded-lg border h-[60px] !w-[60px] object-cover !border-cartImageBorderColor"
                           }
                           alt=""
                         />

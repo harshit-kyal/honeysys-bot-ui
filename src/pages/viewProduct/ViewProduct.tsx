@@ -94,17 +94,6 @@ const ViewProduct = () => {
     };
     fetchData();
   }, []);
-
-  // const ProductData1: { imageSrc: string; title: string; pricing: any[] } = {
-  //   imageSrc: "/images/onion.svg",
-  //   title: "Fresh Cauliflower",
-  //   pricing: [
-  //     { id: "1", option: "500 g", price: 60 },
-  //     { id: "2", option: "1 kg", price: 120 },
-  //     { id: "3", option: "2 kg", price: 240 },
-  //     { id: "4", option: "5 kg", price: 600 },
-  //   ],
-  // };
   const [varient, setVarient] = useState<any>([]);
 
   const AddBtn = (subCategory: any) => {

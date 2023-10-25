@@ -54,7 +54,7 @@ const Address = () => {
     societyId: "",
   });
   const destinationRef = useRef<any | null>();
-  const storeId = useAppSelector((state) => state.home.storeId);
+  const convId = useAppSelector((state) => state.bot.convId);
   const zoom = 16;
   const location = useLocation();
   const navigateData =
@@ -237,7 +237,6 @@ const Address = () => {
   const saveHandler = () => {
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
       let botType = "e-comm";
-      let convId = 12389;
       const newData = {
         conversationId: convId,
         text: "findstores",
@@ -284,7 +283,6 @@ const Address = () => {
                   data?.payload?.data?.activities[0]?.value?.data[0]?.id;
                 if (storeIds) {
                   let botType = "e-comm";
-                  let convId = 12389;
                   const newData = {
                     conversationId: convId,
                     text: "getcartid",

@@ -1,4 +1,4 @@
-import { Header, Text } from "@polynomialai/alpha-react";
+import { Header } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { resetRoot } from "../../slices/rootSlice";

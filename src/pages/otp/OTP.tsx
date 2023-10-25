@@ -21,6 +21,7 @@ const OTP = () => {
 
   const Mobile = useAppSelector((state) => state.home.mobileNo);
   const storeId = useAppSelector((state) => state.home.storeId);
+  const convId = useAppSelector((state) => state.bot.convId);
   const [OTP, setOTP] = useState<string>("");
   const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
@@ -71,7 +72,6 @@ const OTP = () => {
   useEffect(() => {
     if (storeId) {
       let botType = "e-comm";
-      let convId = 12389;
       const newData = {
         conversationId: convId,
         text: "getcartid",
@@ -110,7 +110,6 @@ const OTP = () => {
               if (postalCode) {
                 const pincode = postalCode?.long_name;
                 let botType = "e-comm";
-                let convId = 12389;
                 const newData = {
                   conversationId: convId,
                   text: "findstores",
@@ -159,7 +158,6 @@ const OTP = () => {
                               ?.id;
                           if (storeIds) {
                             let botType = "e-comm";
-                            let convId = 12389;
                             const newData = {
                               conversationId: convId,
                               text: "getcartid",

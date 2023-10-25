@@ -14,6 +14,7 @@ const ContactDetails = () => {
   const pincode = useAppSelector((state) => state.home.userPincode);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const storeInfo = useAppSelector((state) => state.home.storeData);
+  const convId = useAppSelector((state) => state.bot.convId);
   const addressData = location?.state?.address;
 
   const [name, setName] = useState(addressData?.name ? addressData?.name : "");
@@ -73,7 +74,6 @@ const ContactDetails = () => {
       // error.state === ""
     ) {
       let botType = "e-comm";
-      let convId = 12389;
       const newData = {
         conversationId: convId,
         text: "addAddress",

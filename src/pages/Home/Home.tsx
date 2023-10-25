@@ -519,7 +519,7 @@ const Home = () => {
             // dispatch(setConvId(userId));
             dispatch(setConvId(data?.data?.conversationId));
             // dispatch(setChatArray(data?.data?.chats));
-            dispatch(setBotType(data?.data?.botType));
+            // dispatch(setBotType(data?.data?.botType));
             const endpoint = environment.directlineURL;
             const socket = io(endpoint, {
               query: { conversationId: convId },

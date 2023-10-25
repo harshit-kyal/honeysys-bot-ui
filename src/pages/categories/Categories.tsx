@@ -14,9 +14,6 @@ const Categories = () => {
   const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
-  // const storeId = "62df787e6c6e1169d7465ef6";
-  // const convId = 12389;
-  // const botType = "e-comm";
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
   const [selected, setSelected] = useState("");

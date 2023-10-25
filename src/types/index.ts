@@ -67,7 +67,7 @@ export interface HomeSliceType {
   storeData: any;
   startTime: any;
   endTime: any;
-  slotIndex:any;
+  slotIndex: any;
   storeId: string;
   userPincode: number;
   ChatArray: any[];
@@ -86,4 +86,5 @@ export interface BotSliceType {
   botInfo: any;
   convId: string;
   botType: string;
+  clientName: string;
 }

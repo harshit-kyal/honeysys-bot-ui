@@ -72,7 +72,6 @@ export function RadioButtonGroup(props: any) {
   const [selectedAddress, setSelectedAdress] = useState({});
   const cartData = () => {
     let botType = "e-comm";
-    let convId = 12389;
     const newData = {
       conversationId: convId,
       text: "getAddress",

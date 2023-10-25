@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setMobileNo, setOtp, setUserId } from "../../slices/homeSlice";
 import { useAppSelector } from "../../app/hooks";
 import toast, { Toaster } from "react-hot-toast";
+import { setBotType, setClientName, setConvId } from "../../slices/botSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -43,9 +44,11 @@ const Login = () => {
       }).then((response) => {
         setLoading(false);
         if (response.data?.code === 200) {
-          dispatch(setUserId(response.data?.data?.id));
-          dispatch(setOtp(response.data?.data?.otp));
-          toast.success(`OTP : ${response.data?.data?.otp}`);
+          dispatch(setUserId(response?.data?.data?.id));
+          dispatch(setConvId(12389))
+          dispatch(setBotType("e-comm"))
+          dispatch(setOtp(response?.data?.data?.otp));
+          toast.success(`OTP : ${response?.data?.data?.otp}`);
           setTimeout(() => {
             navigation("/otp");
           }, 2000);
