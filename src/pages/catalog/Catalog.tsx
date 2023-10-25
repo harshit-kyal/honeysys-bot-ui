@@ -23,7 +23,6 @@ const Catalog = () => {
     const params: any = searchParams.get("catalogData");
     const Data = JSON.parse(decodeURIComponent(params));
     const backDrop: any = searchParams.get("categoryBackDrop");
-    // console.log('rrrp',botType)
     if (backDrop && params) {
       dispatch(
         setCatalogUI({
@@ -82,7 +81,6 @@ const Catalog = () => {
         setLoading(true);
         Promise.all([categoryCatalogData(), productCatalogData()]).then(
           (res) => {
-            console.log("hii",res)
             setLoading(false);
           }
         );
@@ -95,7 +93,6 @@ const Catalog = () => {
   }, []);
 
   const error = useAppSelector((state) => state.home.error);
-  console.log("con",convId)
   return (
     <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />

@@ -142,7 +142,6 @@ const Cart = () => {
   };
   useEffect(() => {
     if (Index !== -1) {
-      console.log("pp");
       let findData = cartList?.cartProduct[Index];
       let changedData = {
         productId: findData?.productId,
@@ -152,17 +151,13 @@ const Cart = () => {
         quantity: findData?.quantity,
         cartId: cartId,
       };
-      if (findData?.quantity > 1) {
-        debounceAddApi(changedData);
-        setIndex(-1);
-      } else {
-        clearTimeout(debounceTimeout);
-      }
+      debounceAddApi(changedData);
+      setIndex(-1);
     }
   }, [Index]);
   const removeApi = (data: any) => {
+    clearTimeout(debounceTimeout);
     setAmountLoader(true);
-    setLoading(true);
     let newData = {
       conversationId: convId,
       text: "removefromcart",
@@ -175,11 +170,9 @@ const Cart = () => {
         .then((data) => {
           cartData();
           // setAmountLoader(false);
-          setLoading(false);
         })
         .catch(() => {
           // setAmountLoader(false);
-          setLoading(false);
         });
     }
   };
@@ -188,36 +181,60 @@ const Cart = () => {
     switch (type) {
       case "increment":
         {
-          let cartItem = {
-            productId: cartCopy.cartProduct[index].variants[0].productId,
-            varientId: cartCopy.cartProduct[index].variants[0]._id,
-            storeId: storeId,
-            productVariantIndex:
-              cartCopy.cartProduct[index].variants[0].productVariantIndex,
-            quantity: cartCopy.cartProduct[index].quantity + 1,
-            cartId: cartId,
-          };
-          dispatch(addToCartArray(cartItem));
-          // addApi(cartItem);
-          setIndex(index);
+          let qua = cartCopy.cartProduct[index].quantity + 1;
+          let minPurchaseLimit =
+            cartCopy?.cartProduct[index]?.variants[0]?.minPurchaseLimit;
+          let stockBalance =
+            cartCopy?.cartProduct[index]?.variants[0]?.stockBalance;
+          let purchaseLimit =
+            cartCopy?.cartProduct[index]?.variants[0]?.purchaseLimit;
+          if (minPurchaseLimit > qua) {
+            qua = minPurchaseLimit;
+          }
+          if (
+            stockBalance < qua ||
+            (purchaseLimit != 0 && qua > purchaseLimit)
+          ) {
+            alert("This product stock is limited");
+            return;
+          } else {
+            let cartItem = {
+              productId: cartCopy.cartProduct[index].variants[0].productId,
+              varientId: cartCopy.cartProduct[index].variants[0]._id,
+              storeId: storeId,
+              productVariantIndex:
+                cartCopy.cartProduct[index].variants[0].productVariantIndex,
+              quantity: qua,
+              cartId: cartId,
+            };
+            dispatch(addToCartArray(cartItem));
+            // addApi(cartItem);
+            setIndex(index);
 
-          cartCopy.cartProduct[index].quantity += 1;
+            cartCopy.cartProduct[index].quantity = qua;
+          }
         }
         break;
 
       case "decrement":
         {
+          let qua = cartCopy.cartProduct[index].quantity - 1;
+          let minPurchaseLimit =
+            cartCopy?.cartProduct[index]?.variants[0]?.minPurchaseLimit;
+          if (minPurchaseLimit > qua) {
+            qua = 0;
+          }
           let cartItem = {
             productId: cartCopy.cartProduct[index].variants[0].productId,
             varientId: cartCopy.cartProduct[index].variants[0]._id,
             storeId: storeId,
             productVariantIndex:
               cartCopy.cartProduct[index].variants[0].productVariantIndex,
-            quantity: cartCopy.cartProduct[index].quantity - 1,
+            quantity: qua,
             cartId: cartId,
           };
           dispatch(minusToCartArray(cartItem));
-          if (cartCopy.cartProduct[index].quantity > 1) {
+          if (qua >= 1) {
             // addApi(cartItem);
             setIndex(index);
           } else {
@@ -230,7 +247,7 @@ const Cart = () => {
             };
             removeApi(cartItem);
           }
-          cartCopy.cartProduct[index].quantity -= 1;
+          cartCopy.cartProduct[index].quantity = qua;
         }
         break;
     }
@@ -256,7 +273,6 @@ const Cart = () => {
   }, [window.location.search]);
   useEffect(() => {
     cartList?.cartProduct?.map((item: any) => {
-      console.log("item", item);
       let orederData = {
         productId: item?.productId,
         productVariantIndex: item?.productVariantIndex,
@@ -276,7 +292,7 @@ const Cart = () => {
               <div className="px-2 min-[264.5px]:pt-[70px] max-[264.5px]:pt-[60px]">
                 <div className="flex justify-between items-center">
                   <span className="text-[12px] font-semibold">
-                    {`Total ${cartList?.cartCalculation?.totalCartProductCount} items`}
+                    {`Total ${cartList?.cartProduct?.length} items`}
                   </span>
                   <button
                     className="border-primary border-2 bg-white text-primary rounded-md px-2 py-1 min-[264.5px]:text-[11px] max-[264.5px]:text-[10px] font-medium"

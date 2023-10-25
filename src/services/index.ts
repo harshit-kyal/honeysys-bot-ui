@@ -1,13 +1,12 @@
 import { environment } from "../environments/environment";
 import axiosInstance from "../lib/axiosInstance";
-
 export const fetchBot = async (botType: string) => {
   return await axiosInstance.get(
     `${environment.apiURLAzure_new}/bot/fetchOneBotInfo?botType=${botType}`
   );
 };
 
-export const getConversationId = async (botType: string) => {
+export const getConversationId = async (botType: string, convId: any) => {
   let headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -17,7 +16,9 @@ export const getConversationId = async (botType: string) => {
   };
   return await axiosInstance.post(
     `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/initConversation/?botType=${botType}`,
-    {},
+    {
+      conversationId: convId,
+    },
     { headers }
   );
 };

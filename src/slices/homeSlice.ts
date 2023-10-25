@@ -26,6 +26,7 @@ const initialState: HomeSliceType = {
   startTime: "",
   endTime: "",
   slotIndex: "",
+  getStartDisplay: false,
 };
 
 const log = async (data: any) => {};
@@ -211,6 +212,12 @@ export const HomeSlice = createSlice({
         deniedModal: action.payload,
       };
     },
+    setGetStartDisplay(state, action) {
+      return {
+        ...state,
+        getStartDisplay: action.payload,
+      };
+    },
     setStoreData(state, action) {
       return {
         ...state,
@@ -287,6 +294,7 @@ export const {
   setEndTime,
   setSlotIndex,
   setCart,
-  setTotalQuantity
+  setTotalQuantity,
+  setGetStartDisplay,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

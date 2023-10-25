@@ -88,7 +88,6 @@ const BotMessageCard = ({
       </RichCard>
     );
   }
-  console.log("deliveryDate", deliveryDate);
   return (
     <div>
       {actionDataArray && actionDataArray.length !== 0 ? (

@@ -113,8 +113,7 @@ const PDP = () => {
         cartId: cartId,
       };
       debounceAddApi(changedData);
-    }
-    else {
+    } else {
       clearTimeout(debounceTimeout);
     }
   }, [quantity]);
@@ -156,27 +155,28 @@ const PDP = () => {
     );
     setActivePrice(pricing);
   };
-  const addApi = (data: any) => {
-    setQtyLoading(true);
-    let newData = {
-      conversationId: convId,
-      text: "addtocart",
-      voiceFlag: false,
-      isCahtVisible: false,
-      data: data,
-    };
-    if (convId && botType && convId !== "" && botType !== "") {
-      dispatch(getChatData({ newData, botType }))
-        .then((data) => {
-          setQtyLoading(false);
-        })
-        .catch((error) => {
-          setError(true);
-          setQtyLoading(false);
-        });
-    }
-  };
+  // const addApi = (data: any) => {
+  //   setQtyLoading(true);
+  //   let newData = {
+  //     conversationId: convId,
+  //     text: "addtocart",
+  //     voiceFlag: false,
+  //     isCahtVisible: false,
+  //     data: data,
+  //   };
+  //   if (convId && botType && convId !== "" && botType !== "") {
+  //     dispatch(getChatData({ newData, botType }))
+  //       .then((data) => {
+  //         setQtyLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         setError(true);
+  //         setQtyLoading(false);
+  //       });
+  //   }
+  // };
   const removeApi = (data: any) => {
+    clearTimeout(debounceTimeout);
     setQtyLoading(true);
     let newData = {
       conversationId: convId,
@@ -197,49 +197,63 @@ const PDP = () => {
     }
   };
   const addItem = () => {
-    let DataCopy: any = JSON.parse(JSON.stringify(product));
-    let pricingCopy: any[] = [...DataCopy.variants];
+    // let DataCopy: any = JSON.parse(JSON.stringify(product));
+    // let pricingCopy: any[] = [...DataCopy.variants];
 
-    pricingCopy = pricingCopy?.map((item: any) => {
+    // pricingCopy = pricingCopy?.map((item: any) => {
+    product?.variants?.map((item: any) => {
       if (item.id === activePrice?.id) {
-        // setActivePrice(item);
-        setQuantity((cur) => cur + 1);
-        let cartItem = {
-          productId: product?.productId,
-          varientId: item?.id,
-          storeId: storeId,
-          productVariantIndex: item?.productVariantIndex,
-          quantity: quantity + 1,
-          cartId: cartId,
-        };
-
-        dispatch(addToCartArray(cartItem));
-        // addApi(cartItem);
+        let qua = quantity + 1;
+        if (item?.minPurchaseLimit > qua) {
+          qua = item?.minPurchaseLimit;
+        }
+        if (
+          item?.stockBalance < qua ||
+          (item?.purchaseLimit != 0 && qua > item?.purchaseLimit)
+        ) {
+          alert("This product stock is limited");
+          return;
+        } else {
+          let cartItem = {
+            productId: product?.productId,
+            varientId: item?.id,
+            storeId: storeId,
+            productVariantIndex: item?.productVariantIndex,
+            quantity: qua,
+            cartId: cartId,
+          };
+          dispatch(addToCartArray(cartItem));
+          // addApi(cartItem);
+          setQuantity(qua);
+        }
       }
       return item;
     });
-    DataCopy.variants = pricingCopy;
-    setProduct({ ...DataCopy });
+    // DataCopy.variants = pricingCopy;
+    // setProduct({ ...DataCopy });
   };
-
   const removeItem = () => {
-    let DataCopy: any = JSON.parse(JSON.stringify(product));
-    let pricingCopy: any[] = [...DataCopy.variants];
+    // let DataCopy: any = JSON.parse(JSON.stringify(product));
+    // let pricingCopy: any[] = [...DataCopy.variants];
 
-    pricingCopy = pricingCopy?.map((item: any) => {
+    product?.variants?.map((item: any) => {
       if (item.id === activePrice?.id) {
         // setActivePrice(item);
-        setQuantity((cur) => cur - 1);
+        let qua = quantity - 1;
+        if (item?.minPurchaseLimit > qua) {
+          qua = 0;
+        }
         let cartItem = {
           productId: product?.productId,
           varientId: item?.id,
           storeId: storeId,
           productVariantIndex: item?.productVariantIndex,
-          quantity: quantity - 1,
+          quantity: qua,
           cartId: cartId,
         };
         dispatch(minusToCartArray(cartItem));
-        if (quantity > 1) {
+        setQuantity(qua);
+        if (qua >= 1) {
           // addApi(cartItem);
         } else {
           let cartItem = {
@@ -253,8 +267,8 @@ const PDP = () => {
       }
       return item;
     });
-    DataCopy.variants = pricingCopy;
-    setProduct(DataCopy);
+    // DataCopy.variants = pricingCopy;
+    // setProduct(DataCopy);
   };
   return (
     <div className="h-screen pt-[60px]">

@@ -12,6 +12,7 @@ import {
   setUiUpdate,
   setCart,
   setTotalQuantity,
+  setGetStartDisplay,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -43,6 +44,7 @@ const Home = () => {
   const conversationUI = useAppSelector((state) => state.root.conversationUI);
   const greetingMessage = conversationUI.greetingMessage;
   const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
+  const getStartDisplay = useAppSelector((state) => state.home.getStartDisplay);
   const botIcon = overallThemeUI.botIcons;
 
   const convId = useAppSelector((state) => state.bot.convId);
@@ -50,8 +52,6 @@ const Home = () => {
   const loading = useAppSelector((state) => state.home.loading);
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
-
-  const userId = useAppSelector((state) => state.home.userId);
   const [ChatComponentArray, setChatComponentArray] = useState<JSX.Element[]>(
     []
   );
@@ -485,89 +485,149 @@ const Home = () => {
     }
   }, [title, greetingMessage, botIcon]);
 
+  // useEffect(() => {
+  //   if (!reviewToken && ChatComponentArray.length === 0) {
+  //     // if (!reviewToken) {
+  //     // dispatch(
+  //     //   addToChatArray([
+  //     //     {
+  //     //       type: "get start",
+  //     //       timestamp: "2023-09-25T13:17:38.182Z",
+  //     //     },
+  //     //   ])
+  //     // );
+  //     // setChatComponentArray([
+  //     //   ...ChatComponentArray,
+  //     //   <GetStart
+  //     //     setChatArray={setChatComponentArray}
+  //     //     key={new Date().getTime()}
+  //     //   />,
+  //     // ]);
+  //   }
+  //   if (!reviewToken && botType === "") {
+  //     // dispatch(setChatArray([...chat]));
+  //     // fetchBot(environment.botType)
+  //     //   .then((data) => {
+  //     //     dispatch(setBotInfo(data.data.data[0]));
+  //     //     const botInfo = data.data.data[0];
+  //     if (convId) {
+  //     } else {
+  //       let botType = "e-comm";
+  //       // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
+  //       getConversationId(botType)
+  //         .then((data: any) => {
+  //           // dispatch(setConvId(userId));
+  //           dispatch(setConvId(data?.data?.conversationId));
+  //           // dispatch(setChatArray(data?.data?.chats));
+  //           // dispatch(setBotType(data?.data?.botType));
+  //           const endpoint = environment.directlineURL;
+  //           const socket = io(endpoint, {
+  //             query: { conversationId: convId },
+  //             path: "/socket.io",
+  //           });
+  //           const newData = {
+  //             conversationId: data?.data?.conversationId,
+  //             text: "init",
+  //             voiceFlag: false,
+  //           };
+  //           dispatch(getChatData({ newData, botType }))
+  //             .then(() => {})
+  //             .catch(() => {
+  //               dispatch(setChatArray([...chat]));
+  //             });
+  //           socket.on("sendMessage", (message) => {
+  //             if (message.data && message.data !== "") {
+  //               let data = message.data;
+  //               replyFunction(data);
+  //             }
+  //           });
+  //           socket.on("error", (error) => {});
+  //         })
+  //         .catch((error) => {});
+  //     }
+  //     // })
+  //     // .catch((error) => {
+  //     //
+  //     // });
+  //   }
+  //   if (botType !== "" && convId) {
+  //     const endpoint = environment.directlineURL;
+  //     const socket = io(endpoint, {
+  //       query: { conversationId: convId },
+  //       path: "/socket.io",
+  //     });
+  //     socket.on("sendMessage", (message) => {
+  //       if (message.data && message.data !== "") {
+  //         let data = message.data;
+
+  //         replyFunction(data);
+  //       }
+  //     });
+  //     socket.on("error", (error) => {
+  //       // dispatch(setChatArray([...chat]));
+  //     });
+  //   }
+
+  //   return () => {
+  //     setChatComponentArray([]);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    if (!reviewToken && ChatComponentArray.length === 0) {
-      // if (!reviewToken) {
-      dispatch(
-        addToChatArray([
-          {
-            type: "get start",
-            timestamp: "2023-09-25T13:17:38.182Z",
-          },
-        ])
-      );
-      // setChatComponentArray([
-      //   ...ChatComponentArray,
-      //   <GetStart
-      //     setChatArray={setChatComponentArray}
-      //     key={new Date().getTime()}
-      //   />,
-      // ]);
-    }
-    if (!reviewToken && botType === "") {
+    if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
-      // fetchBot(environment.botType)
-      //   .then((data) => {
-      //     dispatch(setBotInfo(data.data.data[0]));
-      //     const botInfo = data.data.data[0];
-      if (convId) {
-      } else {
-        let botType = "e-comm";
-        // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
-        getConversationId(botType)
-          .then((data: any) => {
-            // dispatch(setConvId(userId));
-            dispatch(setConvId(data?.data?.conversationId));
-            // dispatch(setChatArray(data?.data?.chats));
-            // dispatch(setBotType(data?.data?.botType));
-            const endpoint = environment.directlineURL;
-            const socket = io(endpoint, {
-              query: { conversationId: convId },
-              path: "/socket.io",
-            });
+      getConversationId(botType, convId)
+        .then((data: any) => {
+          if (data.status === 200 && !getStartDisplay) {
+            if (data?.data?.chats) {
+              dispatch(setChatArray(data?.data?.chats));
+            }
+          }
+          const endpoint = environment.directlineURL;
+          const socket = io(endpoint, {
+            query: { conversationId: convId },
+            path: "/socket.io",
+          });
+          if (!getStartDisplay) {
             const newData = {
-              conversationId: data?.data?.conversationId,
-              text: "init",
+              conversationId: convId,
+              text: "getStarted",
+              isCahtVisible: false,
               voiceFlag: false,
             };
             dispatch(getChatData({ newData, botType }))
-              .then(() => {})
-              .catch(() => {
-                dispatch(setChatArray([...chat]));
-              });
-            socket.on("sendMessage", (message) => {
-              if (message.data && message.data !== "") {
-                let data = message.data;
-                replyFunction(data);
-              }
-            });
-            socket.on("error", (error) => {});
-          })
-          .catch((error) => {});
-      }
-      // })
-      // .catch((error) => {
-      //
-      // });
-    }
-    if (botType !== "" && convId) {
-      const endpoint = environment.directlineURL;
-      const socket = io(endpoint, {
-        query: { conversationId: convId },
-        path: "/socket.io",
-      });
-      socket.on("sendMessage", (message) => {
-        if (message.data && message.data !== "") {
-          let data = message.data;
+              .then(() => {
+                dispatch(setGetStartDisplay(true));
+              })
+              .catch(() => {});
+          }
+          socket.on("sendMessage", (message) => {
+            if (message.data && message.data !== "") {
+              let data = message.data;
+              replyFunction(data);
+            }
+          });
+          socket.on("error", (error) => {});
+        })
+        .catch((error) => {});
 
-          replyFunction(data);
-        }
-      });
-      socket.on("error", (error) => {
-        // dispatch(setChatArray([...chat]));
-      });
-    }
+      // if (botType !== "" && convId) {
+      //   const endpoint = environment.directlineURL;
+      //   const socket = io(endpoint, {
+      //     query: { conversationId: convId },
+      //     path: "/socket.io",
+      //   });
+      //   socket.on("sendMessage", (message) => {
+      //     if (message.data && message.data !== "") {
+      //       let data = message.data;
 
+      //       replyFunction(data);
+      //     }
+      //   });
+      //   socket.on("error", (error) => {
+      //   });
+      // }
+    }
     return () => {
       setChatComponentArray([]);
     };
@@ -770,7 +830,7 @@ const Home = () => {
 
                 if (paymentCard[0]?.isOrderPlaced === true) {
                   dispatch(setCart([]));
-                  dispatch(setTotalQuantity(0))
+                  dispatch(setTotalQuantity(0));
                 }
 
                 return (

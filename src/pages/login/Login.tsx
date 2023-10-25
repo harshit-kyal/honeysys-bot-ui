@@ -9,6 +9,7 @@ import { setMobileNo, setOtp, setUserId } from "../../slices/homeSlice";
 import { useAppSelector } from "../../app/hooks";
 import toast, { Toaster } from "react-hot-toast";
 import { setBotType, setClientName, setConvId } from "../../slices/botSlice";
+import { encrypt } from "../../services/aes";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const Login = () => {
         setLoading(false);
         if (response.data?.code === 200) {
           dispatch(setUserId(response?.data?.data?.id));
-          dispatch(setConvId(12389))
-          dispatch(setBotType("e-comm"))
+          dispatch(setConvId(response?.data?.data?.id));
+          dispatch(setBotType(encrypt("e-comm")));
           dispatch(setOtp(response?.data?.data?.otp));
           toast.success(`OTP : ${response?.data?.data?.otp}`);
           setTimeout(() => {

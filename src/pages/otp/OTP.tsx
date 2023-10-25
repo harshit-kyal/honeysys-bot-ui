@@ -9,6 +9,7 @@ import { setTheme } from "../../slices/rootSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { useJsApiLoader } from "@react-google-maps/api";
 import {
+  addToCartArray,
   getChatData,
   setCartId,
   setStoreData,
@@ -22,6 +23,8 @@ const OTP = () => {
   const Mobile = useAppSelector((state) => state.home.mobileNo);
   const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
+  const cartId = useAppSelector((state) => state.home.cartId);
   const [OTP, setOTP] = useState<string>("");
   const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
@@ -69,33 +72,53 @@ const OTP = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries: ["places"],
   });
-  useEffect(() => {
+  const cartData = async () => {
     if (storeId) {
-      let botType = "e-comm";
       const newData = {
         conversationId: convId,
-        text: "getcartid",
-        isCahtVisible: false,
+        text: "viewCart",
         voiceFlag: false,
+        isCahtVisible: false,
         data: {
           storeId: storeId,
         },
       };
-
-      if (convId && botType) {
-        dispatch(getChatData({ newData, botType }))
+      if (convId && botType && convId !== "" && botType !== "") {
+        await dispatch(getChatData({ newData, botType }))
           .then((data) => {
             if (
               data &&
-              data?.payload?.data?.activities[0]?.type === "storeId"
+              data?.payload?.data?.activities[0]?.type === "viewCart"
             ) {
-              // dispatch(setStoreId())
+              let cartData =
+                data?.payload?.data?.activities[0]?.value?.data?.cartProduct;
+              cartData?.map((item: any, index: number) => {
+                let cartItem = {
+                  productId: item.variants[0]?.productId,
+                  varientId: item.variants[0]?._id,
+                  storeId: storeId,
+                  productVariantIndex: item.variants[0]?.productVariantIndex,
+                  quantity: item?.quantity,
+                  cartId: cartId,
+                };
+                dispatch(addToCartArray(cartItem));
+              });
+              // setCartList(data?.payload?.data?.activities[0]?.value.data);
+              // setLoading(false);
+              // setAmountLoader(false);
             }
           })
-          .catch(() => {});
+          .catch((error) => {
+            // setLoading(false);
+            // setAmountLoader(false);
+          });
       }
     }
-  }, [storeId]);
+  };
+  useEffect(() => {
+    cartData();
+  }, [storeId,cartId]);
+
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();

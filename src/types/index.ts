@@ -78,6 +78,7 @@ export interface HomeSliceType {
   cart: any[];
   totalQuantity: number;
   orderProduct: any[];
+  getStartDisplay: boolean;
 }
 
 export interface BotSliceType {
