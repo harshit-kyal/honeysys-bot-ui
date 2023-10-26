@@ -410,8 +410,8 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
-    if (data.activities) {
-      const activities: any[] = data.activities;
+    if (data?.activities) {
+      const activities: any[] = data?.activities;
       dispatch(addToChatArray(activities));
     }
   };
@@ -580,7 +580,10 @@ const Home = () => {
         .then((data: any) => {
           if (data.status === 200 && !getStartDisplay) {
             if (data?.data?.chats) {
-              dispatch(setChatArray(data?.data?.chats));
+              data?.data?.chats.map((item: any, index: number) => {
+                replyFunction(item);
+              });
+              // dispatch(setChatArray(data?.data?.chats));
             }
           }
           const endpoint = environment.directlineURL;
@@ -639,9 +642,7 @@ const Home = () => {
     j: number,
     flag: boolean
   ) => {
-    {
-      // console.log("ac", activity,flag);
-    }
+    console.log("act", activity);
     return (
       <ChatWrapper
         type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
@@ -721,6 +722,7 @@ const Home = () => {
                             ? iconQuickReplyCard
                             : []
                         }
+                        flag={flag}
                         buttonContent={ac?.value?.contant}
                       />
                     )}
@@ -998,14 +1000,19 @@ const Home = () => {
         ) {
           return <></>;
         }
+        let i = 0;
+        let j = 0;
+        let flag = false;
+        if (index === ChatArray.length - 1) {
+          flag = true;
+        } else {
+          flag = false;
+        }
         return (
           <>
             {/* <TimeStamp date={new Date().toISOString()} /> */}
 
             {(() => {
-              let i = 0;
-              let j = 0;
-
               let ComponentArray = [];
 
               if (index < ChatArray.length) {
@@ -1027,16 +1034,13 @@ const Home = () => {
                 } else {
                   let Iindex = i;
                   i = j;
-                  let flag = false;
                   ComponentArray.push(
                     ChatDataSetter(activity, Iindex, j, flag)
                   );
-                  console.log("aaaaaaa IN", activity,flag);
                 }
               }
-              let flag = true;
               ComponentArray.push(ChatDataSetter(activity, i, j, flag));
-              console.log("aaaaaa LAST", activity,flag);
+              // console.log("ChatDataSetter",activity)
               return ComponentArray;
             })()}
           </>
@@ -1223,9 +1227,7 @@ const Home = () => {
             voiceFlag: false,
           };
           dispatch(getChatData({ newData, botType }))
-            .then((data) => {
-              console.log("data", data);
-            })
+            .then((data) => {})
             .catch(() => {});
         }}
       />

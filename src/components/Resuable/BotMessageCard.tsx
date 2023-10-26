@@ -24,6 +24,7 @@ interface CardProp {
   buttonContent?: [];
   contentArray?: string | (string | JSX.Element)[];
   actionDataArray?: [] | (string | JSX.Element)[];
+  flag?: boolean;
 }
 
 const BotMessageCard = ({
@@ -35,6 +36,7 @@ const BotMessageCard = ({
   botIcon,
   actionDataArray,
   buttonContent,
+  flag,
 }: CardProp) => {
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
@@ -99,10 +101,12 @@ const BotMessageCard = ({
                 className={`flex-grow flex-shrink-0 py-[10x] px-[36px] ${
                   data.text.length < 10 ? "basis-1/2" : "basis-full"
                 }`}
+                flag={flag}
                 key={index}
                 src={data?.iconUrl}
                 text={data?.text}
                 onClick={() => {
+                  if(flag){
                   if (data?.value === "provideLocation") {
                     dispatch(setLocationPermission(true));
                   } else if (data?.value === "viewCatalog") {
@@ -188,7 +192,7 @@ const BotMessageCard = ({
                     dispatch(getChatData({ newData, botType }))
                       .then((dat) => console.log("data", dat))
                       .catch((err) => console.log("err", err));
-                  }
+                  }}
                 }}
               />
             ))}
