@@ -110,7 +110,6 @@ const BotMessageCard = ({
                   } else if (data?.value === "changeLocation") {
                     navigate("/addressDetails");
                   } else {
-              
                     if (data?.date) {
                       dispatch(setDeliveryDate(data?.date));
                     }
@@ -186,7 +185,9 @@ const BotMessageCard = ({
                         orderProduct: orderProduct,
                       },
                     };
-                    dispatch(getChatData({ newData, botType }));
+                    dispatch(getChatData({ newData, botType }))
+                      .then((dat) => console.log("data", dat))
+                      .catch((err) => console.log("err", err));
                   }
                 }}
               />

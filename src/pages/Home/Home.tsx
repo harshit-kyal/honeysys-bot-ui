@@ -633,7 +633,15 @@ const Home = () => {
     };
   }, []);
 
-  const ChatDataSetter = (activity: any[], i: number, j: number) => {
+  const ChatDataSetter = (
+    activity: any[],
+    i: number,
+    j: number,
+    flag: boolean
+  ) => {
+    {
+      // console.log("ac", activity,flag);
+    }
     return (
       <ChatWrapper
         type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
@@ -1019,10 +1027,16 @@ const Home = () => {
                 } else {
                   let Iindex = i;
                   i = j;
-                  ComponentArray.push(ChatDataSetter(activity, Iindex, j));
+                  let flag = false;
+                  ComponentArray.push(
+                    ChatDataSetter(activity, Iindex, j, flag)
+                  );
+                  console.log("aaaaaaa IN", activity,flag);
                 }
               }
-              ComponentArray.push(ChatDataSetter(activity, i, j));
+              let flag = true;
+              ComponentArray.push(ChatDataSetter(activity, i, j, flag));
+              console.log("aaaaaa LAST", activity,flag);
               return ComponentArray;
             })()}
           </>
@@ -1209,7 +1223,9 @@ const Home = () => {
             voiceFlag: false,
           };
           dispatch(getChatData({ newData, botType }))
-            .then(() => {})
+            .then((data) => {
+              console.log("data", data);
+            })
             .catch(() => {});
         }}
       />
