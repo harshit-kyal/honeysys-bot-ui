@@ -78,7 +78,7 @@ const OTP = () => {
         conversationId: convId,
         text: "viewCart",
         voiceFlag: false,
-        isCahtVisible: false,
+        isChatVisible: false,
         data: {
           storeId: storeId,
         },
@@ -109,15 +109,14 @@ const OTP = () => {
             }
           })
           .catch((error) => {
-            // setLoading(false);
-            // setAmountLoader(false);
+            console.log("err", error);
           });
       }
     }
   };
   useEffect(() => {
     cartData();
-  }, [storeId,cartId]);
+  }, [storeId, cartId]);
 
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
@@ -137,7 +136,7 @@ const OTP = () => {
                   conversationId: convId,
                   text: "findstores",
                   voiceFlag: false,
-                  isCahtVisible: false,
+                  isChatVisible: false,
                   data: {
                     pincode: "500084",
                     lat: "17.469857630687827",
@@ -185,7 +184,7 @@ const OTP = () => {
                               conversationId: convId,
                               text: "getcartid",
                               voiceFlag: false,
-                              isCahtVisible: false,
+                              isChatVisible: false,
                               data: {
                                 storeId: storeIds,
                               },
@@ -205,7 +204,7 @@ const OTP = () => {
                                     dispatch(setCartId(cartId));
                                   }
                                 })
-                                .catch(() => {});
+                                .catch((err) => console.log("err", err));
                             }
                           }
 
@@ -215,7 +214,7 @@ const OTP = () => {
                         }
                       }
                     })
-                    .catch(() => {});
+                    .catch((err) => console.log("err", err));
                 }
               }
             } else {
@@ -225,7 +224,7 @@ const OTP = () => {
             console.error("Geocoder failed due to: " + status);
           }
         })
-        .catch(() => {});
+        .catch((err) => console.log("err", err));
     }
   }, [latLng]);
   return (

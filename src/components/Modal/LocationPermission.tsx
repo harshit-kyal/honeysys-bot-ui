@@ -56,25 +56,28 @@ const LocationPermission = () => {
                       .then(function (result) {
                         dispatch(setLocationPermission(false));
                         if (result.state === "granted") {
-                          // const newData = {
-                          //   conversationId: convId,
-                          //   text: "address",
-                          //   voiceFlag: false,
-                          // };
-                          // dispatch(getChatData({ newData, botType })).then((res) => {
-                          //   if (
-                          //     res?.payload?.data?.activities[0]?.value?.data
-                          //       ?.length !== 0
-                          //   ) {
-                          //     navigate("/addressDetails");
-                          //   } else {
-                          //     navigate("/address");
-                          //   }
-                          // });
-                          navigate("/address");
-                          // navigator.geolocation.getCurrentPosition(function (
-                          //   position
-                          // ) {});
+                          const newData = {
+                            conversationId: convId,
+                            isChatVisible: false,
+                            text: "address",
+                            voiceFlag: false,
+                          };
+                          dispatch(getChatData({ newData, botType })).then((res) => {
+                            if (
+                              res?.payload?.data?.activities[0]?.value?.data
+                                ?.length !== 0
+                            ) {
+                              navigate("/addressDetails");
+                            } else {
+                              navigate("/address");
+                            }
+                          }).catch((error)=>{
+                            console.log("err",error)
+                          })
+                          // navigate("/address");
+                          navigator.geolocation.getCurrentPosition(function (
+                            position
+                          ) {});
                         } else if (result.state === "prompt") {
                           navigator.geolocation.getCurrentPosition(function (
                             position
@@ -83,9 +86,9 @@ const LocationPermission = () => {
                           navigate("/address", {
                             state: { page: "contactDetails" },
                           });
-                          // navigator.geolocation.getCurrentPosition(function (
-                          //   position
-                          // ) {});
+                          navigator.geolocation.getCurrentPosition(function (
+                            position
+                          ) {});
                         } else if (result.state === "denied") {
                           dispatch(setDeniedModal(true));
                         }

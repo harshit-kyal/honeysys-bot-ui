@@ -2,12 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { environment } from "../../environments/environment";
-import { setBotType, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
 import { io } from "socket.io-client";
 import {
   getChatData,
-  setChatArray,
   addToChatArray,
   setUiUpdate,
   setCart,
@@ -410,6 +408,7 @@ const Home = () => {
     setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   };
   const replyFunction = (data: any) => {
+    console.log("rrrrrrrrrrr",data)
     if (data?.activities) {
       const activities: any[] = data?.activities;
       dispatch(addToChatArray(activities));
@@ -595,14 +594,16 @@ const Home = () => {
             const newData = {
               conversationId: convId,
               text: "getStarted",
-              isCahtVisible: false,
+              isChatVisible: false,
               voiceFlag: false,
             };
             dispatch(getChatData({ newData, botType }))
               .then(() => {
                 dispatch(setGetStartDisplay(true));
               })
-              .catch(() => {});
+              .catch((error)=>{
+                console.log("err",error)
+              })
           }
           socket.on("sendMessage", (message) => {
             if (message.data && message.data !== "") {
@@ -642,7 +643,6 @@ const Home = () => {
     j: number,
     flag: boolean
   ) => {
-    console.log("act", activity);
     return (
       <ChatWrapper
         type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
@@ -650,6 +650,7 @@ const Home = () => {
       >
         <div className="chatWrapper">
           {activity?.map((ac: any, index: number) => {
+            console.log("poojiData", ac?.type);
             if (index >= i && index < j) {
               if (ac["sub_type"] && ac["sub_type"] === "screen") {
               } else if (ac?.type === "get start") {
@@ -1228,7 +1229,9 @@ const Home = () => {
           };
           dispatch(getChatData({ newData, botType }))
             .then((data) => {})
-            .catch(() => {});
+            .catch((error)=>{
+              console.log("err",error)
+            })
         }}
       />
       <LocationPermission />

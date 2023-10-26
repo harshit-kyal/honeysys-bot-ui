@@ -4,7 +4,6 @@ import ActionButton from "./ActionButton";
 import {
   addToChatArray,
   getChatData,
-  setCart,
   setDeliveryDate,
   setDeliveryType,
   setEndTime,
@@ -13,8 +12,6 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
@@ -106,93 +103,97 @@ const BotMessageCard = ({
                 src={data?.iconUrl}
                 text={data?.text}
                 onClick={() => {
-                  if(flag){
-                  if (data?.value === "provideLocation") {
-                    dispatch(setLocationPermission(true));
-                  } else if (data?.value === "viewCatalog") {
-                    navigate("/catalog");
-                  } else if (data?.value === "changeLocation") {
-                    navigate("/addressDetails");
-                  } else {
-                    if (data?.date) {
-                      dispatch(setDeliveryDate(data?.date));
-                    }
-                    if (data?.deliveryType) {
-                      dispatch(setDeliveryType(data?.deliveryType));
-                    }
-                    if (data?.startTime) {
-                      dispatch(setStartTime(data?.startTime));
-                    }
-                    if (data?.deliveryType) {
-                      dispatch(setEndTime(data?.endTime));
-                    }
-                    if (buttonContent && buttonContent.length > 0) {
-                      const replyCard = [
-                        {
-                          type: "replyMessage",
+                  if (flag) {
+                    if (data?.value === "provideLocation") {
+                      dispatch(setLocationPermission(true));
+                    } else if (data?.value === "viewCatalog") {
+                      navigate("/catalog");
+                    } else if (data?.value === "changeLocation") {
+                      navigate("/addressDetails");
+                    } else {
+                      if (data?.date) {
+                        dispatch(setDeliveryDate(data?.date));
+                      }
+                      if (data?.deliveryType) {
+                        dispatch(setDeliveryType(data?.deliveryType));
+                      }
+                      if (data?.startTime) {
+                        dispatch(setStartTime(data?.startTime));
+                      }
+                      if (data?.deliveryType) {
+                        dispatch(setEndTime(data?.endTime));
+                      }
+                      if (buttonContent && buttonContent.length > 0) {
+                        const replyCard = [
+                          {
+                            type: "replyMessage",
 
-                          value: {
-                            data: [
-                              {
-                                content: data?.text,
-                                replayArray: buttonContent,
-                              },
-                            ],
-                            sender: "user",
-                            status: "Talking with Bot",
+                            value: {
+                              data: [
+                                {
+                                  content: data?.text,
+                                  replayArray: buttonContent,
+                                },
+                              ],
+                              sender: "user",
+                              status: "Talking with Bot",
+                            },
+                            timestamp: new Date(),
                           },
-                          timestamp: new Date(),
-                        },
-                      ];
+                        ];
 
-                      dispatch(addToChatArray(replyCard));
+                        dispatch(addToChatArray(replyCard));
+                      }
+                      const newData = {
+                        conversationId: convId,
+                        text: data.value,
+                        voiceFlag: false,
+                        isChatVisible: false,
+                        sourceAction: true,
+                        content: data?.text,
+                        replayArray: buttonContent,
+                        data: {
+                          lat: cartData?.location?.latitude,
+                          lag: cartData?.location?.longitude,
+                          location: cartData?.location?.pincode,
+                          deliveryType: deliveryType
+                            ? deliveryType
+                            : data?.deliveryType
+                            ? data?.deliveryType
+                            : ["Normal", "Express"],
+                          slotIndex: slotIndex
+                            ? slotIndex
+                            : data?.slotIndex
+                            ? data?.slotIndex
+                            : "",
+                          storeId: cartData?.id,
+                          cartId: cartId,
+                          totalAmount: cartTotalAmount,
+                          startTime: startTime
+                            ? startTime
+                            : data?.startTime
+                            ? data?.startTime
+                            : "",
+                          endTime: endTime
+                            ? endTime
+                            : data?.endTime
+                            ? data?.endTime
+                            : "",
+                          deliveryDate: deliveryDate
+                            ? deliveryDate
+                            : data?.date
+                            ? data?.date
+                            : "",
+                          mobileNumber: mobileNumber,
+                          appliedPromoCode: false,
+                          orderProduct: orderProduct,
+                        },
+                      };
+                      dispatch(getChatData({ newData, botType }))
+                        .then((dat) => console.log("data", dat))
+                        .catch((err) => console.log("err", err));
                     }
-                    const newData = {
-                      conversationId: convId,
-                      text: data.value,
-                      voiceFlag: false,
-                      isCahtVisible: false,
-                      payload: {
-                        lat: cartData?.location?.latitude,
-                        lag: cartData?.location?.longitude,
-                        location: cartData?.location?.pincode,
-                        deliveryType: deliveryType
-                          ? deliveryType
-                          : data?.deliveryType
-                          ? data?.deliveryType
-                          : ["Normal", "Express"],
-                        slotIndex: slotIndex
-                          ? slotIndex
-                          : data?.slotIndex
-                          ? data?.slotIndex
-                          : "",
-                        storeId: cartData?.id,
-                        cartId: cartId,
-                        totalAmount: cartTotalAmount,
-                        startTime: startTime
-                          ? startTime
-                          : data?.startTime
-                          ? data?.startTime
-                          : "",
-                        endTime: endTime
-                          ? endTime
-                          : data?.endTime
-                          ? data?.endTime
-                          : "",
-                        deliveryDate: deliveryDate
-                          ? deliveryDate
-                          : data?.date
-                          ? data?.date
-                          : "",
-                        mobileNumber: mobileNumber,
-                        appliedPromoCode: false,
-                        orderProduct: orderProduct,
-                      },
-                    };
-                    dispatch(getChatData({ newData, botType }))
-                      .then((dat) => console.log("data", dat))
-                      .catch((err) => console.log("err", err));
-                  }}
+                  }
                 }}
               />
             ))}

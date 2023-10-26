@@ -18,6 +18,7 @@ const ViewProduct = () => {
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [cartItem, setCartItem] = useState<any>({});
   const [Loading, setLoading] = useState(false);
+  const [Error, setError] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const categoryIds = location?.state?.categoryIds;
@@ -27,7 +28,7 @@ const ViewProduct = () => {
     let newData = {
       conversationId: convId,
       text: "viewProduct",
-      isCahtVisible: false,
+      isChatVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,
@@ -41,9 +42,12 @@ const ViewProduct = () => {
         .then((data) => {
           if (data?.payload?.data?.activities[0]?.type === "viewProduct") {
             setProductData(data?.payload?.data?.activities[0]?.value?.data);
+            setError(false);
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          setError(true);
+        });
     }
   };
 
@@ -52,17 +56,27 @@ const ViewProduct = () => {
       conversationId: convId,
       text: "viewCategoryCatalog",
       voiceFlag: false,
-      isCahtVisible: false,
+      isChatVisible: false,
       data: {
         storeId: storeId,
       },
     };
     if (convId && botType && convId !== "" && botType !== "") {
-      await dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data && data?.payload?.data?.activities[0]?.type === "storeCheck") {
-          setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
-        }
-      });
+      await dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          if (
+            data &&
+            data?.payload?.data?.activities[0]?.type === "storeCheck"
+          ) {
+            setError(false);
+            setCategoriesCatalog(
+              data?.payload?.data?.activities[0]?.value?.data
+            );
+          }
+        })
+        .catch(() => {
+          setError(true);
+        });
     }
   };
   const api = (data: any) => {
@@ -70,13 +84,12 @@ const ViewProduct = () => {
       conversationId: convId,
       text: "addtocart",
       voiceFlag: false,
-      isCahtVisible: false,
+      isChatVisible: false,
       data: data,
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
-        })
+        .then((data) => {})
         .catch(() => {});
     }
   };
@@ -95,6 +108,13 @@ const ViewProduct = () => {
     fetchData();
   }, []);
   const [varient, setVarient] = useState<any>([]);
+  useEffect(() => {
+    if (error) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [error]);
 
   const AddBtn = (subCategory: any) => {
     return (
@@ -135,7 +155,7 @@ const ViewProduct = () => {
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
-      {!Loading && !error ? (
+      {!Loading && !Error ? (
         <>
           <div className="pb-12">
             {productData?.map((data: any, index: number) => (
@@ -150,8 +170,7 @@ const ViewProduct = () => {
                     alt=""
                   />
                 }
-                onClick={() => {
-                }}
+                onClick={() => {}}
                 title={data?.title}
               />
             ))}
@@ -253,7 +272,7 @@ const ViewProduct = () => {
             </div>
           </DrawerModal>
         </>
-      ) : Loading && !error ? (
+      ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>
       ) : (
         <div className="px-2 pt-2">something went wrong</div>

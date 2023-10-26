@@ -20,49 +20,49 @@ const Cart = () => {
   const cartId = useAppSelector((state) => state.home.cartId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const dummy = {
-    estimatedCost: "₹1200.00",
-    gst: "₹12.00",
-    totalAmount: "₹1212.00",
-    itemList: [
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 2,
-      },
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 1,
-      },
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 3,
-      },
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 1,
-      },
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 3,
-      },
-      {
-        imageSrc: "/images/onion.svg",
-        title: "Fresh Onion (500gm)",
-        price: "₹60.00",
-        quantity: 2,
-      },
-    ],
-  };
+  // const dummy = {
+  //   estimatedCost: "₹1200.00",
+  //   gst: "₹12.00",
+  //   totalAmount: "₹1212.00",
+  //   itemList: [
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 2,
+  //     },
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 1,
+  //     },
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 3,
+  //     },
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 1,
+  //     },
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 3,
+  //     },
+  //     {
+  //       imageSrc: "/images/onion.svg",
+  //       title: "Fresh Onion (500gm)",
+  //       price: "₹60.00",
+  //       quantity: 2,
+  //     },
+  //   ],
+  // };
   const [cartList, setCartList] = useState<any>({});
   const [Loading, setLoading] = useState(false);
   const [amountLoader, setAmountLoader] = useState(false);
@@ -75,7 +75,7 @@ const Cart = () => {
       conversationId: convId,
       text: "viewCart",
       voiceFlag: false,
-      isCahtVisible: false,
+      isChatVisible: false,
       data: {
         storeId: storeId,
       },
@@ -116,7 +116,7 @@ const Cart = () => {
     const newData = {
       conversationId: convId,
       text: "addtocart",
-      isCahtVisible: false,
+      isChatVisible: false,
       voiceFlag: false,
       data: data,
     };
@@ -161,7 +161,7 @@ const Cart = () => {
     let newData = {
       conversationId: convId,
       text: "removefromcart",
-      isCahtVisible: false,
+      isChatVisible: false,
       voiceFlag: false,
       data: data,
     };
@@ -193,7 +193,7 @@ const Cart = () => {
           }
           if (
             stockBalance < qua ||
-            (purchaseLimit != 0 && qua > purchaseLimit)
+            (purchaseLimit !== 0 && qua > purchaseLimit)
           ) {
             alert("This product stock is limited");
             return;
@@ -278,7 +278,7 @@ const Cart = () => {
         productVariantIndex: item?.productVariantIndex,
         quantity: item?.quantity,
       };
-      dispatch(addToOrderList(orederData));
+      return dispatch(addToOrderList(orederData));
     });
   }, [cartList]);
 
@@ -394,7 +394,7 @@ const Cart = () => {
                       conversationId: convId,
                       text: "cartAction",
                       voiceFlag: false,
-                      isCahtVisible: false,
+                      isChatVisible: false,
                       data: {
                         deliveryType: ["Normal", "Express"],
                         location: storeData?.location?.pincode,
@@ -406,7 +406,9 @@ const Cart = () => {
                     };
                     dispatch(getChatData({ newData, botType }))
                       .then(() => {})
-                      .catch(() => {});
+                      .catch((error)=>{
+                        console.log("err",error)
+                      })
                   }}
                 >
                   Send To Business

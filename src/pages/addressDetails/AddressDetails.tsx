@@ -76,7 +76,7 @@ export function RadioButtonGroup(props: any) {
       conversationId: convId,
       text: "getAddress",
       voiceFlag: false,
-      isCahtVisible: false,
+      isChatVisible: false,
       data: {
         storeId: storeId,
       },
@@ -95,7 +95,9 @@ export function RadioButtonGroup(props: any) {
             );
           }
         })
-        .catch(() => {});
+        .catch((error)=>{
+          console.log("err",error)
+        })
     }
   };
   useEffect(() => {
@@ -173,12 +175,14 @@ export function RadioButtonGroup(props: any) {
                   conversationId: convId,
                   text: "saveaddress",
                   voiceFlag: false,
-                  isCahtVisible: false,
+                  isChatVisible: false,
                   data: selectedAddress,
                 };
                 dispatch(getChatData({ newData, botType }))
                   .then(() => {})
-                  .catch(() => {});
+                  .catch((error)=>{
+                    console.log("err",error)
+                  })
               }}
             >
               Save

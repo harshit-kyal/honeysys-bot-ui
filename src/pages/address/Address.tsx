@@ -241,7 +241,7 @@ const Address = () => {
         conversationId: convId,
         text: "findstores",
         voiceFlag: false,
-        isCahtVisible: false,
+        isChatVisible: false,
         data: {
           pincode: "500084",
           lat: "17.469857630687827",
@@ -287,7 +287,7 @@ const Address = () => {
                     conversationId: convId,
                     text: "getcartid",
                     voiceFlag: false,
-                    isCahtVisible: false,
+                    isChatVisible: false,
                     data: {
                       storeId: storeIds,
                     },
@@ -307,7 +307,9 @@ const Address = () => {
                           dispatch(setCartId(cartId));
                         }
                       })
-                      .catch(() => {});
+                      .catch((error)=>{
+                        console.log("err",error)
+                      })
                   }
                 }
 
@@ -326,7 +328,9 @@ const Address = () => {
               }
             }
           })
-          .catch(() => {});
+          .catch((error)=>{
+            console.log("err",error)
+          })
       }
     } else {
       toastModal({ text: "Please enter the address" });

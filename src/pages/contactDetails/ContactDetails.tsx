@@ -77,7 +77,7 @@ const ContactDetails = () => {
       const newData = {
         conversationId: convId,
         text: "addAddress",
-        isCahtVisible: false,
+        isChatVisible: false,
         voiceFlag: false,
         data: {
           addressId: addressData?.addressId ? addressData?.addressId : 0, //0 for new,
@@ -114,7 +114,9 @@ const ContactDetails = () => {
                 : navigate("/addressDetails");
             }
           })
-          .catch(() => {});
+          .catch((error)=>{
+            console.log("err",error)
+          })
       }
     }
     setErrorLabel(error);

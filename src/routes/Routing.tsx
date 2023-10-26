@@ -7,7 +7,6 @@ import OTP from "../pages/otp/OTP";
 import Success from "../pages/success/Success";
 import Catalog from "../pages/catalog/Catalog";
 import Categories from "../pages/categories/Categories";
-import AddProduct from "../pages/addProduct/AddProduct";
 import ViewProduct from "../pages/viewProduct/ViewProduct";
 import Cart from "../pages/cart/Cart";
 import Address from "../pages/address/Address";
@@ -30,7 +29,6 @@ const Routing = () => {
         <Route index element={<Home />} />
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/categories/:id" element={<Categories />} />
-        <Route path="/addProduct/:id" element={<AddProduct />} />
         <Route path="/viewProduct/:id" element={<ViewProduct />} />
         <Route path="/pdp/:id" element={<PDP />} />
         <Route path="/cart" element={<Cart />} />

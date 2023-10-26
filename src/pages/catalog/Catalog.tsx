@@ -18,6 +18,7 @@ const Catalog = () => {
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [productCatalog, setProductCatalog] = useState<any>([]);
   const [Loading, setLoading] = useState(false);
+  const [Error, setError] = useState(false);
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const params: any = searchParams.get("catalogData");
@@ -42,19 +43,23 @@ const Catalog = () => {
     let newData = {
       conversationId: convId,
       text: "viewCategoryCatalog",
-      isCahtVisible: false,
+      isChatVisible: false,
       voiceFlag: false,
       data: {
         storeId: storeId,
       },
     };
-  
+
     if (convId && botType && convId !== "" && botType !== "") {
-      await dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data?.payload?.data?.activities[0]?.type === "storeCheck") {
-          setCategoriesCatalog(data?.payload?.data?.activities[0]?.value?.data);
-        }
-      });
+      await dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          if (data?.payload?.data?.activities[0]?.type === "storeCheck") {
+            setCategoriesCatalog(
+              data?.payload?.data?.activities[0]?.value?.data
+            );
+          }
+        })
+        .catch(() => setError(true));
     }
   };
   const productCatalogData = async () => {
@@ -62,17 +67,21 @@ const Catalog = () => {
       conversationId: convId,
       text: "viewProductCatalog",
       voiceFlag: false,
-      isCahtVisible: false,
+      isChatVisible: false,
       data: {
         storeId: storeId,
       },
     };
     if (convId && botType && convId !== "") {
-      await dispatch(getChatData({ newData, botType })).then((data) => {
-        if (data?.payload?.data?.activities[0]?.type === "viewProductCatalog") {
-          setProductCatalog(data?.payload?.data?.activities[0]?.value?.data);
-        }
-      });
+      await dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          if (
+            data?.payload?.data?.activities[0]?.type === "viewProductCatalog"
+          ) {
+            setProductCatalog(data?.payload?.data?.activities[0]?.value?.data);
+          }
+        })
+        .catch(() => setError(true));
     }
   };
   useEffect(() => {
@@ -86,6 +95,7 @@ const Catalog = () => {
         );
       } catch (error) {
         setLoading(false);
+        setError(true);
         console.error("Error in fetchData:", error);
       }
     };
@@ -93,10 +103,17 @@ const Catalog = () => {
   }, []);
 
   const error = useAppSelector((state) => state.home.error);
+  useEffect(() => {
+    if (error) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [error]);
   return (
     <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />
-      {!Loading && !error ? (
+      {!Loading && !Error ? (
         <>
           <OverlayWrapperCard
             className="w-full h-[50%] md:h-[60%] rounded-none"
@@ -188,7 +205,7 @@ const Catalog = () => {
             </div>
           </div>
         </>
-      ) : Loading && !error ? (
+      ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>
       ) : (
         <div className="px-2 pt-2">something went wrong</div>

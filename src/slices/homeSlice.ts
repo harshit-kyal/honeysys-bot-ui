@@ -171,7 +171,7 @@ export const HomeSlice = createSlice({
             item?.productId === action?.payload?.productId &&
             item?.varientId === action?.payload?.varientId
         );
-        if (find != -1) {
+        if (find !== -1) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
           state.cart.push(action.payload);
@@ -185,7 +185,7 @@ export const HomeSlice = createSlice({
           item?.productId === action?.payload?.productId &&
           item?.varientId === action?.payload?.varientId
       );
-      if (find != -1) {
+      if (find !== -1) {
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
