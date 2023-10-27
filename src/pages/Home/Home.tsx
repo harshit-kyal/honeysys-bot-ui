@@ -50,6 +50,16 @@ const Home = () => {
   const loading = useAppSelector((state) => state.home.loading);
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
+  const cartData = useAppSelector((state) => state.home.storeData);
+  const cartId = useAppSelector((state) => state.home.cartId);
+  const mobileNumber = useAppSelector((state) => state.home.mobileNo);
+  const deliveryDate = useAppSelector((state) => state.home.deliveryDate);
+  const deliveryType = useAppSelector((state) => state.home.deliveryType);
+  const orderProduct = useAppSelector((state) => state.home.orderProduct);
+  const startTime = useAppSelector((state) => state.home.startTime);
+  const slotIndex = useAppSelector((state) => state.home.slotIndex);
+  const cartTotalAmount = useAppSelector((state) => state.home.cartTotalAmount);
+  const endTime = useAppSelector((state) => state.home.endTime);
   const [ChatComponentArray, setChatComponentArray] = useState<JSX.Element[]>(
     []
   );
@@ -57,320 +67,320 @@ const Home = () => {
   const [isLoadingVisible, setLoadingVisible] = useState(false);
   const loadingDelayTimeout = useRef<number | undefined>(undefined);
 
-  const chat = [
-    // [
-    //   {
-    //     type: "cartReplyCard",
-    //     value: {
-    //       data: [
-    //         {
-    //           imageSrc:
-    //             "https://fuchsna.wpenginepowered.com/wp-content/uploads/2020/01/AdobeStock_221818930-1-1024x683.jpeg",
-    //           totalAmount: 3500,
-    //           totalItems: 6,
-    //         },
-    //       ],
-    //       sender: "user",
-    //       status: "Talking with Bot",
-    //     },
-    //     timestamp: "2023-09-22T11:03:34.323Z",
-    //   },
-    // ],
-    // [
-    //   {
-    //     type: "message",
-    //     text: "Hi! I'm your SHONA. Welcome to Colive",
-    //     value: {
-    //       sender: "bot",
-    //       status: "Talking with Bot",
-    //     },
-    //     id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-    //     timestamp: "2023-09-25T13:17:38.182Z",
-    //     channelId: "directline",
-    //     from: {
-    //       id: "polynomial-coco-solution-dev",
-    //       name: "polynomial-coco-solution-dev",
-    //     },
-    //     conversation: {
-    //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-    //     },
-    //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-    //   },
-    // ],
-    [
-      {
-        type: "message",
-        text: "Check out our services!",
-        value: {
-          sender: "user",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.183Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
+  // const chat = [
+  //   // [
+  //   //   {
+  //   //     type: "cartReplyCard",
+  //   //     value: {
+  //   //       data: [
+  //   //         {
+  //   //           imageSrc:
+  //   //             "https://fuchsna.wpenginepowered.com/wp-content/uploads/2020/01/AdobeStock_221818930-1-1024x683.jpeg",
+  //   //           totalAmount: 3500,
+  //   //           totalItems: 6,
+  //   //         },
+  //   //       ],
+  //   //       sender: "user",
+  //   //       status: "Talking with Bot",
+  //   //     },
+  //   //     timestamp: "2023-09-22T11:03:34.323Z",
+  //   //   },
+  //   // ],
+  //   // [
+  //   //   {
+  //   //     type: "message",
+  //   //     text: "Hi! I'm your SHONA. Welcome to Colive",
+  //   //     value: {
+  //   //       sender: "bot",
+  //   //       status: "Talking with Bot",
+  //   //     },
+  //   //     id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //   //     timestamp: "2023-09-25T13:17:38.182Z",
+  //   //     channelId: "directline",
+  //   //     from: {
+  //   //       id: "polynomial-coco-solution-dev",
+  //   //       name: "polynomial-coco-solution-dev",
+  //   //     },
+  //   //     conversation: {
+  //   //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //   //     },
+  //   //     replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //   //   },
+  //   // ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Check out our services!",
+  //       value: {
+  //         sender: "user",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.183Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
 
-    [
-      {
-        type: "richCard",
-        value: {
-          data: [
-            {
-              title: "👋 Got you!",
-              description: [
-                "Your address is “Jiya Sharma, Ocean View Apartment, D-302, Test Lane, Street 3, 12th Street, Custom Lane, Tested Street, Custom Tested sector",
-              ],
-            },
-          ],
+  //   [
+  //     {
+  //       type: "richCard",
+  //       value: {
+  //         data: [
+  //           {
+  //             title: "👋 Got you!",
+  //             description: [
+  //               "Your address is “Jiya Sharma, Ocean View Apartment, D-302, Test Lane, Street 3, 12th Street, Custom Lane, Tested Street, Custom Tested sector",
+  //             ],
+  //           },
+  //         ],
 
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        // quickReplay: [
-        //   {
-        //     text: "View Catalog",
-        //     iconUrl:
-        //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-        //     value: "",
-        //   },
-        //   {
-        //     text: "Change Location",
-        //     iconUrl:
-        //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-        //     value: "",
-        //   },
-        // ],
-        timestamp: "2023-09-22T11:03:34.323Z",
-      },
-      {
-        type: "iconQuickReply",
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       // quickReplay: [
+  //       //   {
+  //       //     text: "View Catalog",
+  //       //     iconUrl:
+  //       //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+  //       //     value: "",
+  //       //   },
+  //       //   {
+  //       //     text: "Change Location",
+  //       //     iconUrl:
+  //       //       "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+  //       //     value: "",
+  //       //   },
+  //       // ],
+  //       timestamp: "2023-09-22T11:03:34.323Z",
+  //     },
+  //     {
+  //       type: "iconQuickReply",
 
-        value: {
-          content: [
-            "Welcome to HoneySys Bot powered e-commerce experience.",
-            "  I will assist you in shopping for your product discovery, cart management and checkout experiences.",
-          ],
-          data: [
-            {
-              text: "1",
-              iconUrl:
-                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "viewCatalog",
-            },
+  //       value: {
+  //         content: [
+  //           "Welcome to HoneySys Bot powered e-commerce experience.",
+  //           "  I will assist you in shopping for your product discovery, cart management and checkout experiences.",
+  //         ],
+  //         data: [
+  //           {
+  //             text: "1",
+  //             iconUrl:
+  //               "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+  //             value: "viewCatalog",
+  //           },
 
-            {
-              text: "2",
-              iconUrl:
-                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "changeLocation",
-            },
-            {
-              text: "Provide location",
-              iconUrl:
-                "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
-              value: "provideLocation",
-            },
-          ],
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        timestamp: "2023-09-25T13:17:38.184Z",
-      },
-    ],
-    [
-      {
-        type: "paymentCard",
-        value: {
-          data: [
-            {
-              orderId: "#532612378",
-              totalAmount: 450,
-              totalItems: 2,
-              content: [
-                "Thank you for Jiya for shopping with us at Honeysys Ecommerce.",
-                "Here’s a quick update on your order with order ID #532612378.Total amount: ₹ 310.00",
-                "While we are preparing your order, please take a moment to share your feedback with us.",
-              ],
-            },
-          ],
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        timestamp: "2023-09-25T13:17:38.184Z",
-      },
-    ],
-    // [
-    //   {
-    //     type: "summaryCard",
-    //     value: {
-    //       data: [
-    //         {
-    //           imageURL:
-    //             "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-    //           quantity: "",
-    //           price: [
-    //             {
-    //               price: "₹ 316.00",
-    //               title: "Estimated Price",
-    //             },
-    //             {
-    //               price: "₹ 20.00",
-    //               title: "Delivery Charges",
-    //             },
-    //           ],
-    //           subtitle: "Quantity 6",
-    //           title: "Fresh onions (500gm), Tomatoes (500gm)",
-    //           totalAmount: "₹ 314.00",
-    //           totaltitle: "Total Amount",
-    //           topText: "Great! The total payable amount for this order is. 👇",
-    //           bottomText: " Hurry, order now before the products sell out.",
-    //         },
-    //       ],
+  //           {
+  //             text: "2",
+  //             iconUrl:
+  //               "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+  //             value: "changeLocation",
+  //           },
+  //           {
+  //             text: "Provide location",
+  //             iconUrl:
+  //               "https://coliveshona.blob.core.windows.net/coliveshonabot/Raise%20a%20request.png",
+  //             value: "provideLocation",
+  //           },
+  //         ],
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       timestamp: "2023-09-25T13:17:38.184Z",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "paymentCard",
+  //       value: {
+  //         data: [
+  //           {
+  //             orderId: "#532612378",
+  //             totalAmount: 450,
+  //             totalItems: 2,
+  //             content: [
+  //               "Thank you for Jiya for shopping with us at Honeysys Ecommerce.",
+  //               "Here’s a quick update on your order with order ID #532612378.Total amount: ₹ 310.00",
+  //               "While we are preparing your order, please take a moment to share your feedback with us.",
+  //             ],
+  //           },
+  //         ],
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       timestamp: "2023-09-25T13:17:38.184Z",
+  //     },
+  //   ],
+  //   // [
+  //   //   {
+  //   //     type: "summaryCard",
+  //   //     value: {
+  //   //       data: [
+  //   //         {
+  //   //           imageURL:
+  //   //             "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+  //   //           quantity: "",
+  //   //           price: [
+  //   //             {
+  //   //               price: "₹ 316.00",
+  //   //               title: "Estimated Price",
+  //   //             },
+  //   //             {
+  //   //               price: "₹ 20.00",
+  //   //               title: "Delivery Charges",
+  //   //             },
+  //   //           ],
+  //   //           subtitle: "Quantity 6",
+  //   //           title: "Fresh onions (500gm), Tomatoes (500gm)",
+  //   //           totalAmount: "₹ 314.00",
+  //   //           totaltitle: "Total Amount",
+  //   //           topText: "Great! The total payable amount for this order is. 👇",
+  //   //           bottomText: " Hurry, order now before the products sell out.",
+  //   //         },
+  //   //       ],
 
-    //       sender: "bot",
-    //       status: "Talking with Bot",
-    //     },
-    //     timestamp: "2023-09-22T11:03:34.323Z",
-    //   },
-    // ],
-  ];
-  const paginationChat = [
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your dhruvil. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your dhruvil. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T14:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your dubey. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your SHONA. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your prince. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-    [
-      {
-        type: "message",
-        text: "Hi! I'm your prince. Welcome to Colive",
-        value: {
-          sender: "bot",
-          status: "Talking with Bot",
-        },
-        id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-        timestamp: "2023-09-25T13:17:38.182Z",
-        channelId: "directline",
-        from: {
-          id: "polynomial-coco-solution-dev",
-          name: "polynomial-coco-solution-dev",
-        },
-        conversation: {
-          id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
-        },
-        replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
-      },
-    ],
-  ];
+  //   //       sender: "bot",
+  //   //       status: "Talking with Bot",
+  //   //     },
+  //   //     timestamp: "2023-09-22T11:03:34.323Z",
+  //   //   },
+  //   // ],
+  // ];
+  // const paginationChat = [
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your dhruvil. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your dhruvil. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T14:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your dubey. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your SHONA. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your prince. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  //   [
+  //     {
+  //       type: "message",
+  //       text: "Hi! I'm your prince. Welcome to Colive",
+  //       value: {
+  //         sender: "bot",
+  //         status: "Talking with Bot",
+  //       },
+  //       id: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //       timestamp: "2023-09-25T13:17:38.182Z",
+  //       channelId: "directline",
+  //       from: {
+  //         id: "polynomial-coco-solution-dev",
+  //         name: "polynomial-coco-solution-dev",
+  //       },
+  //       conversation: {
+  //         id: "4d1c1860-89de-42f2-b734-ed8042d0702d",
+  //       },
+  //       replyToId: "4d1c1860-89de-42f2-b734-ed8042d0702d|000001",
+  //     },
+  //   ],
+  // ];
   const showLoading = () => {
     loadingDelayTimeout.current = window.setTimeout(() => {
       setLoadingVisible(true);
@@ -404,11 +414,11 @@ const Home = () => {
     }
   };
 
-  const setArray = (component: JSX.Element) => {
-    setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
-  };
+  // const setArray = (component: JSX.Element) => {
+  //   setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
+  // };
   const replyFunction = (data: any) => {
-    console.log("rrrrrrrrrrr",data)
+    console.log("ChatComponentArray", ChatComponentArray.length, data);
     if (data?.activities) {
       const activities: any[] = data?.activities;
       dispatch(addToChatArray(activities));
@@ -601,9 +611,9 @@ const Home = () => {
               .then(() => {
                 dispatch(setGetStartDisplay(true));
               })
-              .catch((error)=>{
-                console.log("err",error)
-              })
+              .catch((error) => {
+                console.log("err", error);
+              });
           }
           socket.on("sendMessage", (message) => {
             if (message.data && message.data !== "") {
@@ -650,16 +660,15 @@ const Home = () => {
       >
         <div className="chatWrapper">
           {activity?.map((ac: any, index: number) => {
-            console.log("poojiData", ac?.type);
             if (index >= i && index < j) {
               if (ac["sub_type"] && ac["sub_type"] === "screen") {
               } else if (ac?.type === "get start") {
                 return (
                   <div className="w-full">
-                    <GetStart
+                    {/* <GetStart
                       setChatArray={setChatComponentArray}
                       key={new Date().getTime()}
-                    />
+                    /> */}
                   </div>
                 );
               } else if (ac?.type === "message" && ac?.text !== "") {
@@ -677,7 +686,10 @@ const Home = () => {
                         time={ac?.timestamp}
                       />
                     ) : (
-                      <BotMessageCard title={ac?.text} time={ac?.timestamp} />
+                      <BotMessageCard
+                        title={ac?.text ? ac?.text : ""}
+                        time={ac?.timestamp ? ac?.timestamp : ""}
+                      />
                     )}
                   </div>
                 );
@@ -695,11 +707,15 @@ const Home = () => {
                       richCard?.map((richCard: any, index: number) => {
                         return (
                           <BotMessageCard
-                            title={richCard?.title}
-                            time={ac?.timestamp}
-                            contentArray={richCard?.description}
-                            imageSrc={richCard?.imageURL}
-                            botIcon={richCard?.botIcon}
+                            title={richCard?.title ? richCard?.title : ""}
+                            time={ac?.timestamp ? ac?.timestamp : ""}
+                            contentArray={
+                              richCard?.description ? richCard?.description : ""
+                            }
+                            imageSrc={
+                              richCard?.imageURL ? richCard?.imageURL : ""
+                            }
+                            botIcon={richCard?.botIcon ? richCard?.botIcon : ""}
                             key={index}
                           />
                         );
@@ -723,8 +739,10 @@ const Home = () => {
                             ? iconQuickReplyCard
                             : []
                         }
-                        flag={flag}
-                        buttonContent={ac?.value?.contant}
+                        flag={flag ? flag : true}
+                        buttonContent={
+                          ac?.value?.contant ? ac?.value?.contant : ""
+                        }
                       />
                     )}
                   </div>
@@ -746,7 +764,12 @@ const Home = () => {
                             key={index}
                             title=""
                             contentArray={[
-                              <div> {summaryCard.topText}</div>,
+                              <div>
+                                {" "}
+                                {summaryCard?.topText
+                                  ? summaryCard?.topText
+                                  : ""}
+                              </div>,
 
                               <SummaryCard
                                 className="w-full mt-3"
@@ -757,18 +780,36 @@ const Home = () => {
                                     className="h-[60px] w-[60px] rounded-md"
                                   />
                                 }
-                                priceList={summaryCard.price}
-                                subtitle={summaryCard.subtitle}
-                                title={summaryCard.title}
-                                totalAmount={summaryCard.totalAmount}
-                                totaltitle={summaryCard.totaltitle}
+                                priceList={
+                                  summaryCard.price ? summaryCard.price : ""
+                                }
+                                subtitle={
+                                  summaryCard?.subtitle
+                                    ? summaryCard?.subtitle
+                                    : ""
+                                }
+                                title={
+                                  summaryCard.title ? summaryCard.title : ""
+                                }
+                                totalAmount={
+                                  summaryCard?.totalAmount
+                                    ? summaryCard?.totalAmount
+                                    : ""
+                                }
+                                totaltitle={
+                                  summaryCard?.totaltitle
+                                    ? summaryCard?.totaltitle
+                                    : ""
+                                }
                               />,
                               <Text
                                 type="body"
                                 size="md"
                                 className="font-semibold mt-3 mb-1"
                               >
-                                {summaryCard.bottomText}
+                                {summaryCard?.bottomText
+                                  ? summaryCard?.bottomText
+                                  : ""}
                               </Text>,
                             ]}
                           />
@@ -805,14 +846,26 @@ const Home = () => {
                                         size="sm"
                                         className="text-[#505050]"
                                       >
-                                        {`🛒 Order ${trackOrderCard.orderId}`}
+                                        {`🛒 Order ${
+                                          trackOrderCard?.orderId
+                                            ? trackOrderCard?.orderId
+                                            : ""
+                                        }`}
                                       </Text>
                                       <Text
                                         type="label"
                                         size="lg"
                                         className="text-[#505050]"
                                       >
-                                        {`Total ${trackOrderCard.totalItems} items ₹ ${trackOrderCard.totalAmount} `}
+                                        {`Total ${
+                                          trackOrderCard?.totalItems
+                                            ? trackOrderCard?.totalItems
+                                            : ""
+                                        } items ₹ ${
+                                          trackOrderCard?.totalAmount
+                                            ? trackOrderCard?.totalAmount
+                                            : ""
+                                        } `}
                                       </Text>
                                       <img
                                         src="/images/vegetables.svg"
@@ -824,13 +877,25 @@ const Home = () => {
                                   </ReplyCard>
                                 </div>
                                 <div className="text-[14px] font-normal">
-                                  {`${trackOrderCard?.orderNo}`}{" "}
+                                  {`${
+                                    trackOrderCard?.orderNo
+                                      ? trackOrderCard?.orderNo
+                                      : ""
+                                  }`}{" "}
                                   <span className="font-semibold">
-                                    {`${trackOrderCard?.deliveryDate}`}
+                                    {`${
+                                      trackOrderCard?.deliveryDate
+                                        ? trackOrderCard?.deliveryDate
+                                        : ""
+                                    }`}
                                   </span>
                                   {`- ${trackOrderCard?.items} -`}
                                   <span className="font-semibold">
-                                    {` ₹ ${trackOrderCard?.totalAmount}`}
+                                    {` ₹ ${
+                                      trackOrderCard?.totalAmount
+                                        ? trackOrderCard?.totalAmount
+                                        : ""
+                                    }`}
                                   </span>{" "}
                                   - Delivered
                                 </div>
@@ -873,14 +938,26 @@ const Home = () => {
                                       size="sm"
                                       className="text-[#505050]"
                                     >
-                                      {`🛒 Order ${paymentCard.orderId}`}
+                                      {`🛒 Order ${
+                                        paymentCard?.orderId
+                                          ? paymentCard?.orderId
+                                          : ""
+                                      }`}
                                     </Text>
                                     <Text
                                       type="label"
                                       size="lg"
                                       className="text-[#505050]"
                                     >
-                                      {`Total ${paymentCard.totalItems} items ₹ ${paymentCard.totalAmount} `}
+                                      {`Total ${
+                                        paymentCard?.totalItems
+                                          ? paymentCard?.totalItems
+                                          : ""
+                                      } items ₹ ${
+                                        paymentCard?.totalAmount
+                                          ? paymentCard?.totalAmount
+                                          : ""
+                                      } `}
                                     </Text>
                                     <img
                                       src="/images/vegetables.svg"
@@ -913,7 +990,7 @@ const Home = () => {
                               {paymentCard?.content?.map(
                                 (item: string, index: number) => (
                                   <div className="text-[14px] font-normal">
-                                    {item}
+                                    {item ? item : ""}
                                   </div>
                                 )
                               )}
@@ -928,24 +1005,34 @@ const Home = () => {
                 ac?.type === "replyMessage" &&
                 ac?.value?.data?.length !== 0
               ) {
-                const replyMessageCard = ac.value.data;
+                const replyMessageCard = ac?.value?.data;
                 return (
+                  // <></>
                   <div className="w-full">
                     {Array.isArray(replyMessageCard) &&
                       replyMessageCard?.map(
                         (replyMessageCard: any, index: number) => {
                           return (
                             <ReplyMessageCard
-                              time={ac?.timestamp}
-                              content={`${replyMessageCard?.content}`}
-                              replyArray={replyMessageCard?.replayArray}
+                              time={ac?.timestamp ? ac?.timestamp : ""}
+                              content={`${
+                                replyMessageCard?.content
+                                  ? replyMessageCard?.content
+                                  : ""
+                              }`}
+                              replyArray={
+                                replyMessageCard?.replayArray
+                                  ? replyMessageCard?.replayArray
+                                  : ""
+                              }
                             />
                           );
                         }
                       )}
                   </div>
                 );
-              } else if (
+              } 
+              else if (
                 ac?.type === "cartReplyCard" &&
                 ac?.value?.data?.length !== 0
               ) {
@@ -960,10 +1047,22 @@ const Home = () => {
                         (cartReplyCard: any, index: number) => {
                           return (
                             <CartReplyCard
-                              time={ac?.timestamp}
-                              imageSrc={cartReplyCard?.imageSrc}
-                              price={cartReplyCard?.totalAmount}
-                              items={cartReplyCard?.totalItems}
+                              time={ac?.timestamp ? ac?.timestamp : ""}
+                              imageSrc={
+                                cartReplyCard?.imageSrc
+                                  ? cartReplyCard?.imageSrc
+                                  : ""
+                              }
+                              price={
+                                cartReplyCard?.totalAmount
+                                  ? cartReplyCard?.totalAmount
+                                  : ""
+                              }
+                              items={
+                                cartReplyCard?.totalItems
+                                  ? cartReplyCard?.totalItems
+                                  : ""
+                              }
                             />
                           );
                         }
@@ -991,63 +1090,152 @@ const Home = () => {
     // .replace(" at", "");
     return formattedDate;
   };
+  // useEffect(() => {
+  //   let reverseChat = [...ChatArray].reverse();
+  //   setChatComponentArray(
+  //     ChatArray?.map((activity: any, index: number) => {
+  //       if (
+  //         activity.length === 1 &&
+  //         activity[0].sub_type &&
+  //         activity[0].sub_type === "screen"
+  //       ) {
+  //         if (index < ChatArray.length) {
+  //           let date = ChatArray[index][0]?.timestamp;
+  //           let date1 =
+  //             index - 1 >= 0
+  //               ? ChatArray[index - 1][0]?.timestamp
+  //               : "January 1, 1570";
+  //           let dateTime1 = formatedDate(date);
+  //           let dateTime2 = formatedDate(date1);
+  //           if (dateTime1 !== dateTime2) {
+  //             return <TimeStamp date={date} />;
+  //           }
+  //         }
+  //         return <></>;
+  //       }
+  //       let i = 0;
+  //       let j = 0;
+  //       // let flag = false;
+  //       // if (index === ChatArray.length - 1) {
+  //       //   flag = true;
+  //       // } else {
+  //       //   flag = false;
+  //       // }
+  //       return (
+  //         <>
+  //           {/* <TimeStamp date={new Date().toISOString()} /> */}
+
+  //           {(() => {
+  //             let ComponentArray = [];
+
+  //             if (index < ChatArray.length) {
+  //               let date = ChatArray[index][0]?.timestamp;
+  //               let date1 =
+  //                 index - 1 >= 0
+  //                   ? ChatArray[index - 1][0]?.timestamp
+  //                   : "January 1, 1570";
+  //               let dateTime1 = formatedDate(date);
+  //               let dateTime2 = formatedDate(date1);
+  //               if (dateTime1 !== dateTime2) {
+  //                 ComponentArray.push(<TimeStamp date={date} />);
+  //               }
+  //             }
+  //             let flag = false;
+  //             console.log("chat123", ChatArray);
+  //             if (index === ChatArray.length - 1) {
+  //               flag = true;
+  //             } else {
+  //               flag = false;
+  //             }
+  //             while (i < activity.length && j < activity.length) {
+  //               if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
+  //                 j++;
+  //               } else {
+  //                 let Iindex = i;
+  //                 i = j;
+  //                 ComponentArray.push(
+  //                   ChatDataSetter(activity, Iindex, j, flag)
+  //                 );
+  //               }
+  //             }
+  //             ComponentArray.push(ChatDataSetter(activity, i, j, flag));
+  //             return ComponentArray;
+  //           })()}
+  //         </>
+  //       );
+  //     })
+  //   );
+  // }, [ChatArray]);
   useEffect(() => {
-    setChatComponentArray(
-      ChatArray?.map((activity: any, index: number) => {
-        if (
-          activity.length === 1 &&
-          activity[0].sub_type &&
-          activity[0].sub_type === "screen"
-        ) {
-          return <></>;
+    let reverseChat = [...ChatArray].reverse();
+    let flag = true;
+    let data = reverseChat?.map((activity: any, index: number) => {
+      let tempFlag = false;
+      if (
+        activity.length === 1 &&
+        activity[0].sub_type &&
+        activity[0].sub_type === "screen"
+      ) {
+        if (index < ChatArray.length) {
+          let date = ChatArray[index][0]?.timestamp;
+          let date1 =
+            index + 1 < ChatArray.length
+              ? ChatArray[index + 1][0]?.timestamp
+              : "January 1, 1570";
+          let dateTime1 = formatedDate(date);
+          let dateTime2 = formatedDate(date1);
+          if (dateTime1 !== dateTime2) {
+            return <TimeStamp date={date} />;
+          }
         }
-        let i = 0;
-        let j = 0;
-        let flag = false;
-        if (index === ChatArray.length - 1) {
-          flag = true;
-        } else {
-          flag = false;
-        }
-        return (
-          <>
-            {/* <TimeStamp date={new Date().toISOString()} /> */}
+        return <></>;
+      }
+      let i = 0;
+      let j = 0;
 
-            {(() => {
-              let ComponentArray = [];
+      return (
+        <>
+          {/* <TimeStamp date={new Date().toISOString()} /> */}
 
-              if (index < ChatArray.length) {
-                let date = ChatArray[index][0]?.timestamp;
-                let date1 =
-                  index - 1 >= 0
-                    ? ChatArray[index - 1][0]?.timestamp
-                    : "January 1, 1570";
-                let dateTime1 = formatedDate(date);
-                let dateTime2 = formatedDate(date1);
-                if (dateTime1 !== dateTime2) {
-                  ComponentArray.push(<TimeStamp date={date} />);
-                }
+          {(() => {
+            let ComponentArray = [];
+
+            while (i < activity.length && j < activity.length) {
+              if (activity[j].type === "iconQuickReply") {
+                tempFlag = true;
               }
 
-              while (i < activity.length && j < activity.length) {
-                if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
-                  j++;
-                } else {
-                  let Iindex = i;
-                  i = j;
-                  ComponentArray.push(
-                    ChatDataSetter(activity, Iindex, j, flag)
-                  );
-                }
+              if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
+                j++;
+              } else {
+                let Iindex = i;
+                i = j;
+                ComponentArray.push(ChatDataSetter(activity, Iindex, j, flag));
               }
-              ComponentArray.push(ChatDataSetter(activity, i, j, flag));
-              // console.log("ChatDataSetter",activity)
-              return ComponentArray;
-            })()}
-          </>
-        );
-      })
-    );
+            }
+            if (index < ChatArray.length) {
+              let date = ChatArray[index][0]?.timestamp;
+              let date1 =
+                index + 1 < ChatArray.length
+                  ? ChatArray[index + 1][0]?.timestamp
+                  : "January 1, 1570";
+              let dateTime1 = formatedDate(date);
+              let dateTime2 = formatedDate(date1);
+              if (dateTime1 !== dateTime2) {
+                ComponentArray.push(<TimeStamp date={date} />);
+              }
+            }
+            ComponentArray.push(ChatDataSetter(activity, i, j, flag));
+            if (tempFlag) {
+              flag = false;
+            }
+            return ComponentArray;
+          })()}
+        </>
+      );
+    });
+    let FinalData = data.reverse();
+    setChatComponentArray(FinalData);
   }, [ChatArray]);
 
   useEffect(() => {
@@ -1226,12 +1414,28 @@ const Home = () => {
             conversationId: convId,
             text: inputText,
             voiceFlag: false,
+            data: {
+              lat: cartData?.location?.latitude,
+              lag: cartData?.location?.longitude,
+              location: cartData?.location?.pincode,
+              deliveryType: deliveryType ? deliveryType : ["Normal", "Express"],
+              slotIndex: slotIndex ? slotIndex : "",
+              storeId: cartData?.id,
+              cartId: cartId,
+              totalAmount: cartTotalAmount,
+              startTime: startTime ? startTime : "",
+              endTime: endTime ? endTime : "",
+              deliveryDate: deliveryDate ? deliveryDate : "",
+              mobileNumber: mobileNumber,
+              appliedPromoCode: false,
+              orderProduct: orderProduct,
+            },
           };
           dispatch(getChatData({ newData, botType }))
             .then((data) => {})
-            .catch((error)=>{
-              console.log("err",error)
-            })
+            .catch((error) => {
+              console.log("err", error);
+            });
         }}
       />
       <LocationPermission />

@@ -69,7 +69,8 @@ export function RadioButtonGroup(props: any) {
   const botType = useAppSelector((state) => state.bot.botType);
   const storeId = useAppSelector((state) => state.home.storeId);
   const [addressArray, setAddressArray] = useState([]);
-  const [selectedAddress, setSelectedAdress] = useState({});
+  const [selectedAddress, setSelectedAdress] = useState<any>({});
+  const [Error, setError] = useState(false);
   const cartData = () => {
     let botType = "e-comm";
     const newData = {
@@ -93,11 +94,13 @@ export function RadioButtonGroup(props: any) {
             setSelectedAdress(
               data?.payload?.data?.activities[0]?.value?.data[0]
             );
+            setError(false);
           }
         })
-        .catch((error)=>{
-          console.log("err",error)
-        })
+        .catch((error) => {
+          setError(true);
+          console.log("err", error);
+        });
     }
   };
   useEffect(() => {
@@ -105,9 +108,16 @@ export function RadioButtonGroup(props: any) {
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
   const error = useAppSelector((state) => state.home.error);
+  useEffect(() => {
+    if (error) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [error]);
   return (
     <>
-      {!error && !loading ? (
+      {!Error && !loading ? (
         <div>
           <div className="h-[calc(100vh-159px)] md:h-[calc(100vh-164px)] overflow-auto">
             {addressArray.map((item: any, index: any) => (
@@ -122,7 +132,6 @@ export function RadioButtonGroup(props: any) {
                     }
                     onClick={() => {
                       setSelectedAdress(item);
-                      dispatch(setUserPincode(item?.address?.pincode));
                     }}
                     onChange={props?.handleChange && props?.handleChange}
                     style={{ opacity: "1" }}
@@ -130,13 +139,14 @@ export function RadioButtonGroup(props: any) {
                   <div className="ms-2 w-full">
                     <div
                       className="flex justify-end"
-                      onClick={() =>
+                      onClick={() => {
+                        console.log("item", item);
                         navigate("/contactDetails", {
                           state: {
                             address: item,
                           },
-                        })
-                      }
+                        });
+                      }}
                     >
                       <img
                         src="/images/edit.svg"
@@ -179,17 +189,19 @@ export function RadioButtonGroup(props: any) {
                   data: selectedAddress,
                 };
                 dispatch(getChatData({ newData, botType }))
-                  .then(() => {})
-                  .catch((error)=>{
-                    console.log("err",error)
+                  .then(() => {
+                    dispatch(setUserPincode(selectedAddress?.pincode));
                   })
+                  .catch((error) => {
+                    console.log("err", error);
+                  });
               }}
             >
               Save
             </Button>
           </div>
         </div>
-      ) : loading && !error ? (
+      ) : loading && !Error ? (
         <div className="mx-2 mt-2">Loading...</div>
       ) : (
         <div className="mx-2 mt-2">something went wrong</div>

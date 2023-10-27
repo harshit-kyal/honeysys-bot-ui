@@ -19,6 +19,7 @@ const ViewProduct = () => {
   const [cartItem, setCartItem] = useState<any>({});
   const [Loading, setLoading] = useState(false);
   const [Error, setError] = useState(false);
+  const [qtyLoading, setQtyLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const categoryIds = location?.state?.categoryIds;
@@ -80,6 +81,7 @@ const ViewProduct = () => {
     }
   };
   const api = (data: any) => {
+    setQtyLoading(true);
     let newData = {
       conversationId: convId,
       text: "addtocart",
@@ -89,8 +91,12 @@ const ViewProduct = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {})
-        .catch(() => {});
+        .then((data) => {
+          setQtyLoading(false);
+        })
+        .catch(() => {
+          setQtyLoading(false);
+        });
     }
   };
   useEffect(() => {
@@ -271,6 +277,11 @@ const ViewProduct = () => {
               </div>
             </div>
           </DrawerModal>
+          {qtyLoading && (
+            <div className="cartLoader">
+              <div className="cartLoader-text">Loading...</div>
+            </div>
+          )}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

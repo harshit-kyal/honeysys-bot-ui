@@ -14,6 +14,7 @@ const LocationPermission = () => {
   const locationPermission = useAppSelector(
     (state) => state.home.locationPermission
   );
+  const storeId = useAppSelector((state) => state.home.storeId);
   const navigate = useNavigate();
 
   return (
@@ -59,21 +60,26 @@ const LocationPermission = () => {
                           const newData = {
                             conversationId: convId,
                             isChatVisible: false,
-                            text: "address",
+                            text: "getAddress",
                             voiceFlag: false,
+                            data: {
+                              storeId: storeId,
+                            },
                           };
-                          dispatch(getChatData({ newData, botType })).then((res) => {
-                            if (
-                              res?.payload?.data?.activities[0]?.value?.data
-                                ?.length !== 0
-                            ) {
-                              navigate("/addressDetails");
-                            } else {
-                              navigate("/address");
-                            }
-                          }).catch((error)=>{
-                            console.log("err",error)
-                          })
+                          dispatch(getChatData({ newData, botType }))
+                            .then((res) => {
+                              if (
+                                res?.payload?.data?.activities[0]?.value?.data
+                                  ?.length !== 0
+                              ) {
+                                navigate("/addressDetails");
+                              } else {
+                                navigate("/address");
+                              }
+                            })
+                            .catch((error) => {
+                              console.log("err", error);
+                            });
                           // navigate("/address");
                           navigator.geolocation.getCurrentPosition(function (
                             position
@@ -81,8 +87,7 @@ const LocationPermission = () => {
                         } else if (result.state === "prompt") {
                           navigator.geolocation.getCurrentPosition(function (
                             position
-                          ) {
-                          });
+                          ) {});
                           navigate("/address", {
                             state: { page: "contactDetails" },
                           });

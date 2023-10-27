@@ -11,14 +11,16 @@ const ContactDetails = () => {
   const navigateData = location?.state?.navigate;
 
   const [errorLabel, setErrorLabel] = useState<any>({});
-  const pincode = useAppSelector((state) => state.home.userPincode);
+  const pincodeData = useAppSelector((state) => state.home.userPincode);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const storeInfo = useAppSelector((state) => state.home.storeData);
   const convId = useAppSelector((state) => state.bot.convId);
   const addressData = location?.state?.address;
-
+  console.log("addre", addressData);
   const [name, setName] = useState(addressData?.name ? addressData?.name : "");
-
+  const [pincode, setPincode] = useState(
+    addressData?.pincode ? addressData?.pincode : pincodeData
+  );
   const [address, setAddress] = useState(
     addressData?.address1 ? addressData?.address1 : ""
   );
@@ -114,9 +116,9 @@ const ContactDetails = () => {
                 : navigate("/addressDetails");
             }
           })
-          .catch((error)=>{
-            console.log("err",error)
-          })
+          .catch((error) => {
+            console.log("err", error);
+          });
       }
     }
     setErrorLabel(error);

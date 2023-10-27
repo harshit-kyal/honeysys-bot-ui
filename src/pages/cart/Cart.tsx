@@ -373,9 +373,8 @@ const Cart = () => {
                   <span>
                     {amountLoader
                       ? "-"
-                      : cartList?.cartCalculation?.finalAmount
-                      ? cartList?.cartCalculation?.finalAmount
-                      : 0}
+                      : parseInt(cartList?.cartCalculation?.totalAmount) +
+                          parseInt(cartList?.cartCalculation?.totalTax) || 0}
                   </span>
                 </div>
                 <div className="min-[264.5px]:text-[12px] max-[264.5px]:text-[11px] text-secondaryFontColor font-light mt-2">
@@ -387,7 +386,10 @@ const Cart = () => {
                   className="bg-primary text-white text-[12px] py-2 font-light w-full my-3 rounded-md"
                   onClick={() => {
                     dispatch(
-                      setCartTotalAmount(cartList?.cartCalculation?.finalAmount)
+                      setCartTotalAmount(
+                        parseInt(cartList?.cartCalculation?.totalAmount) +
+                          parseInt(cartList?.cartCalculation?.totalTax)
+                      )
                     );
                     navigate("/");
                     const newData = {
@@ -406,9 +408,9 @@ const Cart = () => {
                     };
                     dispatch(getChatData({ newData, botType }))
                       .then(() => {})
-                      .catch((error)=>{
-                        console.log("err",error)
-                      })
+                      .catch((error) => {
+                        console.log("err", error);
+                      });
                   }}
                 >
                   Send To Business

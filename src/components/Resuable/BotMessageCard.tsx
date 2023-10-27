@@ -104,6 +104,7 @@ const BotMessageCard = ({
                 text={data?.text}
                 onClick={() => {
                   if (flag) {
+                    console.log("change",data?.value)
                     if (data?.value === "provideLocation") {
                       dispatch(setLocationPermission(true));
                     } else if (data?.value === "viewCatalog") {
