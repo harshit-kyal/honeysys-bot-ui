@@ -133,7 +133,7 @@ const BotMessageCard = ({
                               data: [
                                 {
                                   content: data?.text,
-                                  replayArray: buttonContent,
+                                  replyArray: buttonContent,
                                 },
                               ],
                               sender: "user",
@@ -147,12 +147,12 @@ const BotMessageCard = ({
                       }
                       const newData = {
                         conversationId: convId,
-                        text: data.value,
+                        text: data?.value,
                         voiceFlag: false,
                         isChatVisible: false,
                         sourceAction: true,
                         content: data?.text,
-                        replayArray: buttonContent,
+                        replyArray: buttonContent,
                         data: {
                           lat: cartData?.location?.latitude,
                           lag: cartData?.location?.longitude,

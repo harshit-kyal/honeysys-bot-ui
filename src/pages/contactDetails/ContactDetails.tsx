@@ -109,7 +109,7 @@ const ContactDetails = () => {
           .then((data) => {
             if (
               data &&
-              data?.payload?.data?.activities[0]?.type === "addaddress"
+              data?.payload?.data?.activities[0][0]?.type === "addaddress"
             ) {
               navigateData && navigateData === "home"
                 ? navigate("/")

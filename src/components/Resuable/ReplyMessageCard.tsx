@@ -26,9 +26,13 @@ const ReplyMessageCard = ({
     >
       <ReplyCard title={replyTitle} titleCN="text-primary">
         <div>
-          {replyArray.map((item: string, index: number) => (
-            <p key={index}>{item}</p>
-          ))}
+          {replyArray && replyArray.length > 0 ? (
+            replyArray.map((item: string, index: number) => (
+              <p key={index}>{item}</p>
+            ))
+          ) : (
+            <></>
+          )}
         </div>
       </ReplyCard>
     </RichCard>

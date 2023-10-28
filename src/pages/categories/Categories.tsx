@@ -48,15 +48,11 @@ const Categories = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (
-            data &&
-            data?.payload?.data?.activities[0]?.type === "storeCheck"
-          ) {
-            const id1 = data?.payload?.data?.activities[0]?.value?.data[0]?.id;
+          let categoryData = data?.payload?.data?.activities[0][0];
+          if (data && categoryData?.type === "storeCheck") {
+            const id1 = categoryData?.value?.data[0]?.id;
             setSelected(id === "home" ? id1 : id);
-            setCategoriesCatalog(
-              data?.payload?.data?.activities[0]?.value?.data
-            );
+            setCategoriesCatalog(categoryData?.value?.data);
             setError(false);
           }
         })

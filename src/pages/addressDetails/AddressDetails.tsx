@@ -86,14 +86,10 @@ export function RadioButtonGroup(props: any) {
     if (convId && botType && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (
-            data &&
-            data?.payload?.data?.activities[0]?.type === "getaddress"
-          ) {
-            setAddressArray(data?.payload?.data?.activities[0]?.value?.data);
-            setSelectedAdress(
-              data?.payload?.data?.activities[0]?.value?.data[0]
-            );
+          let addressData = data?.payload?.data?.activities[0][0];
+          if (data && addressData?.type === "getaddress") {
+            setAddressArray(addressData?.value?.data);
+            setSelectedAdress(addressData?.value?.data[0]);
             setError(false);
           }
         })

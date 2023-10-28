@@ -11,8 +11,8 @@ const TimeStamp = ({ date }: { date: string }) => {
       // hour: "numeric",
       // minute: "numeric",
       // hour12: true,
-    })
-    .replace(" at", "");
+    });
+    // .replace(" at", "");
 
   return (
     <div className="flex justify-center my-[10px]">

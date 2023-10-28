@@ -41,8 +41,8 @@ const ViewProduct = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data?.payload?.data?.activities[0]?.type === "viewProduct") {
-            setProductData(data?.payload?.data?.activities[0]?.value?.data);
+          if (data?.payload?.data?.activities[0][0]?.type === "viewProduct") {
+            setProductData(data?.payload?.data?.activities[0][0]?.value?.data);
             setError(false);
           }
         })
@@ -67,11 +67,11 @@ const ViewProduct = () => {
         .then((data) => {
           if (
             data &&
-            data?.payload?.data?.activities[0]?.type === "storeCheck"
+            data?.payload?.data?.activities[0][0]?.type === "storeCheck"
           ) {
             setError(false);
             setCategoriesCatalog(
-              data?.payload?.data?.activities[0]?.value?.data
+              data?.payload?.data?.activities[0][0]?.value?.data
             );
           }
         })
@@ -158,6 +158,7 @@ const ViewProduct = () => {
       </div>
     );
   };
+  console.log("cartItem", cartItem,cartId);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
@@ -244,6 +245,7 @@ const ViewProduct = () => {
                   }
                 />
               ))}
+
               <div className="flex justify-center gap-5 mt-5">
                 <Button
                   type="secondary"

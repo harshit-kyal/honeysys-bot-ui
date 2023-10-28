@@ -45,9 +45,9 @@ const PDP = () => {
         .then((data) => {
           if (
             data &&
-            data?.payload?.data?.activities[0]?.type === "productdetails"
+            data?.payload?.data?.activities[0][0]?.type === "productdetails"
           ) {
-            setProduct(data?.payload?.data?.activities[0]?.value?.data);
+            setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
           }
         })
         .catch((error) => setError(true));

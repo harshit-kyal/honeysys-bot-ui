@@ -256,31 +256,14 @@ const Address = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
-            if (
-              data &&
-              data?.payload?.data?.activities[0]?.type === "storeCheck"
-            ) {
-              if (
-                data?.payload?.data?.activities[0]?.value?.data[0]
-                  ?.status_code === 500
-              ) {
+            let storeData = data?.payload?.data?.activities[0][0];
+            if (data && storeData?.type === "storeCheck") {
+              if (storeData?.value?.data[0]?.status_code === 500) {
                 toastModal({ text: "Not found" });
-              } else if (
-                data?.payload?.data?.activities[0]?.value?.data[0]
-                  ?.status_code === 200
-              ) {
-                dispatch(
-                  setStoreData(
-                    data?.payload?.data?.activities[0]?.value?.data[0]
-                  )
-                );
-                dispatch(
-                  setStoreId(
-                    data?.payload?.data?.activities[0]?.value?.data[0]?.id
-                  )
-                );
-                let storeIds =
-                  data?.payload?.data?.activities[0]?.value?.data[0]?.id;
+              } else if (storeData?.value?.data[0]?.status_code === 200) {
+                dispatch(setStoreData(storeData?.value?.data[0]));
+                dispatch(setStoreId(storeData?.value?.data[0]?.id));
+                let storeIds = storeData?.value?.data[0]?.id;
                 if (storeIds) {
                   let botType = "e-comm";
                   const newData = {
@@ -296,20 +279,15 @@ const Address = () => {
                   if (convId && botType) {
                     dispatch(getChatData({ newData, botType }))
                       .then((data) => {
-                        if (
-                          data &&
-                          data?.payload?.data?.activities[0]?.type ===
-                            "storeCheck"
-                        ) {
-                          let cartId =
-                            data?.payload?.data?.activities[0]?.value?.data
-                              ?.cartId;
+                        let cartData = data?.payload?.data?.activities[0][0];
+                        if (data && cartData?.type === "storeCheck") {
+                          let cartId = cartData?.value?.data?.cartId;
                           dispatch(setCartId(cartId));
                         }
                       })
-                      .catch((error)=>{
-                        console.log("err",error)
-                      })
+                      .catch((error) => {
+                        console.log("err", error);
+                      });
                   }
                 }
 
@@ -328,9 +306,9 @@ const Address = () => {
               }
             }
           })
-          .catch((error)=>{
-            console.log("err",error)
-          })
+          .catch((error) => {
+            console.log("err", error);
+          });
       }
     } else {
       toastModal({ text: "Please enter the address" });

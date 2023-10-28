@@ -60,9 +60,7 @@ const Home = () => {
   const slotIndex = useAppSelector((state) => state.home.slotIndex);
   const cartTotalAmount = useAppSelector((state) => state.home.cartTotalAmount);
   const endTime = useAppSelector((state) => state.home.endTime);
-  const [ChatComponentArray, setChatComponentArray] = useState<JSX.Element[]>(
-    []
-  );
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isLoadingVisible, setLoadingVisible] = useState(false);
   const loadingDelayTimeout = useRef<number | undefined>(undefined);
@@ -418,10 +416,13 @@ const Home = () => {
   //   setChatComponentArray((prevChartArray) => [...prevChartArray, component]);
   // };
   const replyFunction = (data: any) => {
-    console.log("ChatComponentArray", ChatComponentArray.length, data);
     if (data?.activities) {
       const activities: any[] = data?.activities;
-      dispatch(addToChatArray(activities));
+      console.log("activities", activities);
+      activities?.forEach((item) => {
+        console.log("item", item);
+        dispatch(addToChatArray(item));
+      });
     }
   };
   useEffect(() => {
@@ -461,126 +462,38 @@ const Home = () => {
       );
     }
   }, [window.location.search]);
-  useEffect(() => {
-    if (reviewToken) {
-      setChatComponentArray([
-        <TimeStamp date={new Date().toISOString()} />,
-        <ChatWrapper type="bot">
-          <div className="flex flex-col chatWrapper">
-            <BotMessageCard
-              contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
-              imageSrc="/images/greeting.svg"
-              title={greetingMessage}
-            />
-            <ActionButton
-              src="/images/widgets.svg"
-              text="Get Started"
-              onClick={() => {}}
-            />
-          </div>
-        </ChatWrapper>,
-        <ChatWrapper type="user">
-          <div className="chatWrapper">
-            <ReplyMessageCard
-              content="Get Started"
-              replyArray={[
-                "Greetings!",
-                "I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform.",
-              ]}
-            ></ReplyMessageCard>
-          </div>
-        </ChatWrapper>,
-      ]);
-    }
-  }, [title, greetingMessage, botIcon]);
-
   // useEffect(() => {
-  //   if (!reviewToken && ChatComponentArray.length === 0) {
-  //     // if (!reviewToken) {
-  //     // dispatch(
-  //     //   addToChatArray([
-  //     //     {
-  //     //       type: "get start",
-  //     //       timestamp: "2023-09-25T13:17:38.182Z",
-  //     //     },
-  //     //   ])
-  //     // );
-  //     // setChatComponentArray([
-  //     //   ...ChatComponentArray,
-  //     //   <GetStart
-  //     //     setChatArray={setChatComponentArray}
-  //     //     key={new Date().getTime()}
-  //     //   />,
-  //     // ]);
+  //   if (reviewToken) {
+  //     setChatComponentArray([
+  //       <TimeStamp date={new Date().toISOString()} />,
+  //       <ChatWrapper type="bot">
+  //         <div className="flex flex-col chatWrapper">
+  //           <BotMessageCard
+  //             contentArray="I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform"
+  //             imageSrc="/images/greeting.svg"
+  //             title={greetingMessage}
+  //           />
+  //           <ActionButton
+  //             src="/images/widgets.svg"
+  //             text="Get Started"
+  //             onClick={() => {}}
+  //           />
+  //         </div>
+  //       </ChatWrapper>,
+  //       <ChatWrapper type="user">
+  //         <div className="chatWrapper">
+  //           <ReplyMessageCard
+  //             content="Get Started"
+  //             replyArray={[
+  //               "Greetings!",
+  //               "I am Honeysys bot. I will assist you in experiencing a new turn to bot powered ecommerce platform.",
+  //             ]}
+  //           ></ReplyMessageCard>
+  //         </div>
+  //       </ChatWrapper>,
+  //     ]);
   //   }
-  //   if (!reviewToken && botType === "") {
-  //     // dispatch(setChatArray([...chat]));
-  //     // fetchBot(environment.botType)
-  //     //   .then((data) => {
-  //     //     dispatch(setBotInfo(data.data.data[0]));
-  //     //     const botInfo = data.data.data[0];
-  //     if (convId) {
-  //     } else {
-  //       let botType = "e-comm";
-  //       // let token = botInfo.botDeploymentInfo?.directLine_secret || "";
-  //       getConversationId(botType)
-  //         .then((data: any) => {
-  //           // dispatch(setConvId(userId));
-  //           dispatch(setConvId(data?.data?.conversationId));
-  //           // dispatch(setChatArray(data?.data?.chats));
-  //           // dispatch(setBotType(data?.data?.botType));
-  //           const endpoint = environment.directlineURL;
-  //           const socket = io(endpoint, {
-  //             query: { conversationId: convId },
-  //             path: "/socket.io",
-  //           });
-  //           const newData = {
-  //             conversationId: data?.data?.conversationId,
-  //             text: "init",
-  //             voiceFlag: false,
-  //           };
-  //           dispatch(getChatData({ newData, botType }))
-  //             .then(() => {})
-  //             .catch(() => {
-  //               dispatch(setChatArray([...chat]));
-  //             });
-  //           socket.on("sendMessage", (message) => {
-  //             if (message.data && message.data !== "") {
-  //               let data = message.data;
-  //               replyFunction(data);
-  //             }
-  //           });
-  //           socket.on("error", (error) => {});
-  //         })
-  //         .catch((error) => {});
-  //     }
-  //     // })
-  //     // .catch((error) => {
-  //     //
-  //     // });
-  //   }
-  //   if (botType !== "" && convId) {
-  //     const endpoint = environment.directlineURL;
-  //     const socket = io(endpoint, {
-  //       query: { conversationId: convId },
-  //       path: "/socket.io",
-  //     });
-  //     socket.on("sendMessage", (message) => {
-  //       if (message.data && message.data !== "") {
-  //         let data = message.data;
-
-  //         replyFunction(data);
-  //       }
-  //     });
-  //     socket.on("error", (error) => {
-  //       // dispatch(setChatArray([...chat]));
-  //     });
-  //   }
-
-  //   return () => {
-  //     setChatComponentArray([]);
-  //   };
-  // }, []);
+  // }, [title, greetingMessage, botIcon]);
 
   useEffect(() => {
     if (!reviewToken) {
@@ -617,6 +530,7 @@ const Home = () => {
           }
           socket.on("sendMessage", (message) => {
             if (message.data && message.data !== "") {
+              console.log("message", message);
               let data = message.data;
               replyFunction(data);
             }
@@ -642,441 +556,448 @@ const Home = () => {
       //   });
       // }
     }
-    return () => {
-      setChatComponentArray([]);
-    };
+    
   }, []);
 
-  const ChatDataSetter = (
-    activity: any[],
-    i: number,
-    j: number,
-    flag: boolean
-  ) => {
-    return (
-      <ChatWrapper
-        type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
-        key={new Date().getTime()}
-      >
-        <div className="chatWrapper">
-          {activity?.map((ac: any, index: number) => {
-            if (index >= i && index < j) {
-              if (ac["sub_type"] && ac["sub_type"] === "screen") {
-              } else if (ac?.type === "get start") {
-                return (
-                  <div className="w-full">
-                    {/* <GetStart
-                      setChatArray={setChatComponentArray}
-                      key={new Date().getTime()}
-                    /> */}
-                  </div>
-                );
-              } else if (ac?.type === "message" && ac?.text !== "") {
-                if (ac?.updateUI === true) {
-                  dispatch(setUiUpdate(true));
-                } else {
-                  dispatch(setUiUpdate(false));
-                }
+  //   activity: any[],
+  //   i: number,
+  //   j: number,
+  //   flag: boolean
+  // ) => {
+  //   return (
+  //     <ChatWrapper
+  //       type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
+  //       key={new Date().getTime()}
+  //     >
+  //       <div className="chatWrapper">
+  //         {activity?.map((ac: any, index: number) => {
+  //           if (index >= i && index < j) {
+  //             if (ac["sub_type"] && ac["sub_type"] === "screen") {
+  //             } else if (ac?.type === "get start") {
+  //               return (
+  //                 <div className="w-full">
+  //                   {/* <GetStart
+  //                     setChatArray={setChatComponentArray}
+  //                     key={new Date().getTime()}
+  //                   /> */}
+  //                 </div>
+  //               );
+  //             } else if (ac?.type === "message" && ac?.text !== "") {
+  //               if (ac?.updateUI === true) {
+  //                 dispatch(setUiUpdate(true));
+  //               } else {
+  //                 dispatch(setUiUpdate(false));
+  //               }
 
-                return (
-                  <div className="w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <UserMessageCard
-                        content={ac?.text}
-                        time={ac?.timestamp}
-                      />
-                    ) : (
-                      <BotMessageCard
-                        title={ac?.text ? ac?.text : ""}
-                        time={ac?.timestamp ? ac?.timestamp : ""}
-                      />
-                    )}
-                  </div>
-                );
-              } else if (
-                ac?.type === "richCard" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const richCard = ac?.value?.data;
-                return (
-                  <div className="w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      Array.isArray(richCard) &&
-                      richCard?.map((richCard: any, index: number) => {
-                        return (
-                          <BotMessageCard
-                            title={richCard?.title ? richCard?.title : ""}
-                            time={ac?.timestamp ? ac?.timestamp : ""}
-                            contentArray={
-                              richCard?.description ? richCard?.description : ""
-                            }
-                            imageSrc={
-                              richCard?.imageURL ? richCard?.imageURL : ""
-                            }
-                            botIcon={richCard?.botIcon ? richCard?.botIcon : ""}
-                            key={index}
-                          />
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              } else if (
-                ac?.type === "iconQuickReply" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const iconQuickReplyCard = ac?.value?.data;
-                return (
-                  <div className=" w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      <BotMessageCard
-                        actionDataArray={
-                          Array.isArray(iconQuickReplyCard)
-                            ? iconQuickReplyCard
-                            : []
-                        }
-                        flag={flag ? flag : true}
-                        buttonContent={
-                          ac?.value?.contant ? ac?.value?.contant : ""
-                        }
-                      />
-                    )}
-                  </div>
-                );
-              } else if (
-                ac?.type === "summaryCard" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const summaryCard: any = ac?.value?.data;
-                return (
-                  <div className=" w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      Array.isArray(summaryCard) &&
-                      summaryCard?.map((summaryCard: any, index: number) => {
-                        return (
-                          <BotMessageCard
-                            key={index}
-                            title=""
-                            contentArray={[
-                              <div>
-                                {" "}
-                                {summaryCard?.topText
-                                  ? summaryCard?.topText
-                                  : ""}
-                              </div>,
+  //               return (
+  //                 <div className="w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <UserMessageCard
+  //                       content={ac?.text}
+  //                       time={ac?.timestamp}
+  //                     />
+  //                   ) : (
+  //                     <BotMessageCard
+  //                       title={ac?.text ? ac?.text : ""}
+  //                       time={ac?.timestamp ? ac?.timestamp : ""}
+  //                     />
+  //                   )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "richCard" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const richCard = ac?.value?.data;
+  //               return (
+  //                 <div className="w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <></>
+  //                   ) : (
+  //                     Array.isArray(richCard) &&
+  //                     richCard.length > 0 &&
+  //                     richCard?.map((richCard: any, index: number) => {
+  //                       return (
+  //                         <BotMessageCard
+  //                           title={richCard?.title ? richCard?.title : ""}
+  //                           time={ac?.timestamp ? ac?.timestamp : ""}
+  //                           contentArray={
+  //                             richCard?.description ? richCard?.description : ""
+  //                           }
+  //                           imageSrc={
+  //                             richCard?.imageURL ? richCard?.imageURL : ""
+  //                           }
+  //                           botIcon={richCard?.botIcon ? richCard?.botIcon : ""}
+  //                           key={index}
+  //                         />
+  //                       );
+  //                     })
+  //                   )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "iconQuickReply" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const iconQuickReplyCard = ac?.value?.data;
+  //               console.log(
+  //                 "iconQuickReplyCard",
+  //                 iconQuickReplyCard,
+  //                 ac?.value?.content
+  //               );
+  //               return (
+  //                 <div className=" w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <></>
+  //                   ) : (
+  //                     <BotMessageCard
+  //                       actionDataArray={
+  //                         Array.isArray(iconQuickReplyCard) &&
+  //                         iconQuickReplyCard.length > 0
+  //                           ? iconQuickReplyCard
+  //                           : []
+  //                       }
+  //                       flag={flag ? flag : true}
+  //                       buttonContent={
+  //                         ac?.value?.content ? ac?.value?.content : ""
+  //                       }
+  //                     />
+  //                   )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "summaryCard" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const summaryCard: any = ac?.value?.data;
+  //               return (
+  //                 <div className=" w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <></>
+  //                   ) : (
+  //                     Array.isArray(summaryCard) &&
+  //                     summaryCard.length > 0 &&
+  //                     summaryCard?.map((summaryCard: any, index: number) => {
+  //                       return (
+  //                         <BotMessageCard
+  //                           key={index}
+  //                           title=""
+  //                           contentArray={[
+  //                             <div>
+  //                               {" "}
+  //                               {summaryCard?.topText
+  //                                 ? summaryCard?.topText
+  //                                 : ""}
+  //                             </div>,
 
-                              <SummaryCard
-                                className="w-full mt-3"
-                                image={
-                                  <img
-                                    src="/images/onion.svg"
-                                    alt=""
-                                    className="h-[60px] w-[60px] rounded-md"
-                                  />
-                                }
-                                priceList={
-                                  summaryCard.price ? summaryCard.price : ""
-                                }
-                                subtitle={
-                                  summaryCard?.subtitle
-                                    ? summaryCard?.subtitle
-                                    : ""
-                                }
-                                title={
-                                  summaryCard.title ? summaryCard.title : ""
-                                }
-                                totalAmount={
-                                  summaryCard?.totalAmount
-                                    ? summaryCard?.totalAmount
-                                    : ""
-                                }
-                                totaltitle={
-                                  summaryCard?.totaltitle
-                                    ? summaryCard?.totaltitle
-                                    : ""
-                                }
-                              />,
-                              <Text
-                                type="body"
-                                size="md"
-                                className="font-semibold mt-3 mb-1"
-                              >
-                                {summaryCard?.bottomText
-                                  ? summaryCard?.bottomText
-                                  : ""}
-                              </Text>,
-                            ]}
-                          />
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              } else if (
-                ac?.type === "trackOrder" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const trackOrderCard = ac?.value?.data;
-                return (
-                  <div className="w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      Array.isArray(trackOrderCard) &&
-                      trackOrderCard?.map(
-                        (trackOrderCard: any, index: number) => {
-                          return (
-                            <RichCard>
-                              <>
-                                <div className="relative">
-                                  <ReplyCard
-                                    className="w-full"
-                                    title="Honeysys Bot"
-                                    titleCN="text-primary"
-                                  >
-                                    <div className="flex flex-col justify-evenly w-full">
-                                      <Text
-                                        type="body"
-                                        size="sm"
-                                        className="text-[#505050]"
-                                      >
-                                        {`🛒 Order ${
-                                          trackOrderCard?.orderId
-                                            ? trackOrderCard?.orderId
-                                            : ""
-                                        }`}
-                                      </Text>
-                                      <Text
-                                        type="label"
-                                        size="lg"
-                                        className="text-[#505050]"
-                                      >
-                                        {`Total ${
-                                          trackOrderCard?.totalItems
-                                            ? trackOrderCard?.totalItems
-                                            : ""
-                                        } items ₹ ${
-                                          trackOrderCard?.totalAmount
-                                            ? trackOrderCard?.totalAmount
-                                            : ""
-                                        } `}
-                                      </Text>
-                                      <img
-                                        src="/images/vegetables.svg"
-                                        height={50}
-                                        alt="vegetable"
-                                        className="max-w-[54px] rounded-md absolute right-1 bottom-1"
-                                      />
-                                    </div>
-                                  </ReplyCard>
-                                </div>
-                                <div className="text-[14px] font-normal">
-                                  {`${
-                                    trackOrderCard?.orderNo
-                                      ? trackOrderCard?.orderNo
-                                      : ""
-                                  }`}{" "}
-                                  <span className="font-semibold">
-                                    {`${
-                                      trackOrderCard?.deliveryDate
-                                        ? trackOrderCard?.deliveryDate
-                                        : ""
-                                    }`}
-                                  </span>
-                                  {`- ${trackOrderCard?.items} -`}
-                                  <span className="font-semibold">
-                                    {` ₹ ${
-                                      trackOrderCard?.totalAmount
-                                        ? trackOrderCard?.totalAmount
-                                        : ""
-                                    }`}
-                                  </span>{" "}
-                                  - Delivered
-                                </div>
-                              </>
-                            </RichCard>
-                          );
-                        }
-                      )
-                    )}
-                  </div>
-                );
-              }
-              if (ac?.type === "paymentCard" && ac?.value?.data?.length !== 0) {
-                const paymentCard = ac?.value?.data;
+  //                             <SummaryCard
+  //                               className="w-full mt-3"
+  //                               image={
+  //                                 <img
+  //                                   src="/images/onion.svg"
+  //                                   alt=""
+  //                                   className="h-[60px] w-[60px] rounded-md"
+  //                                 />
+  //                               }
+  //                               priceList={
+  //                                 summaryCard.price ? summaryCard.price : ""
+  //                               }
+  //                               subtitle={
+  //                                 summaryCard?.subtitle
+  //                                   ? summaryCard?.subtitle
+  //                                   : ""
+  //                               }
+  //                               title={
+  //                                 summaryCard.title ? summaryCard.title : ""
+  //                               }
+  //                               totalAmount={
+  //                                 summaryCard?.totalAmount
+  //                                   ? summaryCard?.totalAmount
+  //                                   : ""
+  //                               }
+  //                               totaltitle={
+  //                                 summaryCard?.totaltitle
+  //                                   ? summaryCard?.totaltitle
+  //                                   : ""
+  //                               }
+  //                             />,
+  //                             <Text
+  //                               type="body"
+  //                               size="md"
+  //                               className="font-semibold mt-3 mb-1"
+  //                             >
+  //                               {summaryCard?.bottomText
+  //                                 ? summaryCard?.bottomText
+  //                                 : ""}
+  //                             </Text>,
+  //                           ]}
+  //                         />
+  //                       );
+  //                     })
+  //                   )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "trackOrder" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const trackOrderCard = ac?.value?.data;
+  //               return (
+  //                 <div className="w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <></>
+  //                   ) : (
+  //                     Array.isArray(trackOrderCard) &&
+  //                     trackOrderCard.length > 0 &&
+  //                     trackOrderCard?.map(
+  //                       (trackOrderCard: any, index: number) => {
+  //                         return (
+  //                           <RichCard>
+  //                             <>
+  //                               <div className="relative">
+  //                                 <ReplyCard
+  //                                   className="w-full"
+  //                                   title="Honeysys Bot"
+  //                                   titleCN="text-primary"
+  //                                 >
+  //                                   <div className="flex flex-col justify-evenly w-full">
+  //                                     <Text
+  //                                       type="body"
+  //                                       size="sm"
+  //                                       className="text-[#505050]"
+  //                                     >
+  //                                       {`🛒 Order ${
+  //                                         trackOrderCard?.orderId
+  //                                           ? trackOrderCard?.orderId
+  //                                           : ""
+  //                                       }`}
+  //                                     </Text>
+  //                                     <Text
+  //                                       type="label"
+  //                                       size="lg"
+  //                                       className="text-[#505050]"
+  //                                     >
+  //                                       {`Total ${
+  //                                         trackOrderCard?.totalItems
+  //                                           ? trackOrderCard?.totalItems
+  //                                           : ""
+  //                                       } items ₹ ${
+  //                                         trackOrderCard?.totalAmount ?? ""
+  //                                       } `}
+  //                                     </Text>
+  //                                     <img
+  //                                       src="/images/vegetables.svg"
+  //                                       height={50}
+  //                                       alt="vegetable"
+  //                                       className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+  //                                     />
+  //                                   </div>
+  //                                 </ReplyCard>
+  //                               </div>
+  //                               <div className="text-[14px] font-normal">
+  //                                 {`${
+  //                                   trackOrderCard?.orderNo
+  //                                     ? trackOrderCard?.orderNo
+  //                                     : ""
+  //                                 }`}{" "}
+  //                                 <span className="font-semibold">
+  //                                   {`${
+  //                                     trackOrderCard?.deliveryDate
+  //                                       ? trackOrderCard?.deliveryDate
+  //                                       : ""
+  //                                   }`}
+  //                                 </span>
+  //                                 {`- ${trackOrderCard?.items} -`}
+  //                                 <span className="font-semibold">
+  //                                   {` ₹ ${
+  //                                     trackOrderCard?.totalAmount
+  //                                       ? trackOrderCard?.totalAmount
+  //                                       : ""
+  //                                   }`}
+  //                                 </span>{" "}
+  //                                 - Delivered
+  //                               </div>
+  //                             </>
+  //                           </RichCard>
+  //                         );
+  //                       }
+  //                     )
+  //                   )}
+  //                 </div>
+  //               );
+  //             }
+  //             if (ac?.type === "paymentCard" && ac?.value?.data?.length !== 0) {
+  //               const paymentCard = ac?.value?.data;
 
-                if (paymentCard[0]?.isOrderPlaced === true) {
-                  dispatch(setCart([]));
-                  dispatch(setTotalQuantity(0));
-                }
+  //               if (paymentCard[0]?.isOrderPlaced === true) {
+  //                 dispatch(setCart([]));
+  //                 dispatch(setTotalQuantity(0));
+  //               }
 
-                return (
-                  <div className="w-full">
-                    {ac?.value?.sender === "user" ? (
-                      <></>
-                    ) : (
-                      Array.isArray(paymentCard) &&
-                      paymentCard?.map((paymentCard: any, index: number) => {
-                        return (
-                          <RichCard>
-                            <>
-                              <div className="relative">
-                                <ReplyCard
-                                  className="w-full"
-                                  title="Honeysys Bot"
-                                  titleCN="text-primary"
-                                >
-                                  <div className="flex flex-col justify-evenly w-full">
-                                    <Text
-                                      type="body"
-                                      size="sm"
-                                      className="text-[#505050]"
-                                    >
-                                      {`🛒 Order ${
-                                        paymentCard?.orderId
-                                          ? paymentCard?.orderId
-                                          : ""
-                                      }`}
-                                    </Text>
-                                    <Text
-                                      type="label"
-                                      size="lg"
-                                      className="text-[#505050]"
-                                    >
-                                      {`Total ${
-                                        paymentCard?.totalItems
-                                          ? paymentCard?.totalItems
-                                          : ""
-                                      } items ₹ ${
-                                        paymentCard?.totalAmount
-                                          ? paymentCard?.totalAmount
-                                          : ""
-                                      } `}
-                                    </Text>
-                                    <img
-                                      src="/images/vegetables.svg"
-                                      height={50}
-                                      alt="vegetable"
-                                      className="max-w-[54px] rounded-md absolute right-1 bottom-1"
-                                    />
-                                  </div>
-                                </ReplyCard>
-                              </div>
-                              <div className="flex ms-1 align-middle">
-                                <img
-                                  src="/images/rupee.svg"
-                                  height="24"
-                                  width="24"
-                                  alt=""
-                                ></img>
-                                <div className="m-2 ">
-                                  <div className="text-[14px] text-[black] flex">
-                                    <div className="font-normal me-1">
-                                      Payment to
-                                    </div>{" "}
-                                    Honeysys
-                                  </div>
-                                  <div className="text-[#075E54] text-[12px] font-normal">
-                                    Successful
-                                  </div>
-                                </div>
-                              </div>
-                              {paymentCard?.content?.map(
-                                (item: string, index: number) => (
-                                  <div className="text-[14px] font-normal">
-                                    {item ? item : ""}
-                                  </div>
-                                )
-                              )}
-                            </>
-                          </RichCard>
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              } else if (
-                ac?.type === "replyMessage" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const replyMessageCard = ac?.value?.data;
-                return (
-                  // <></>
-                  <div className="w-full">
-                    {Array.isArray(replyMessageCard) &&
-                      replyMessageCard?.map(
-                        (replyMessageCard: any, index: number) => {
-                          return (
-                            <ReplyMessageCard
-                              time={ac?.timestamp ? ac?.timestamp : ""}
-                              content={`${
-                                replyMessageCard?.content
-                                  ? replyMessageCard?.content
-                                  : ""
-                              }`}
-                              replyArray={
-                                replyMessageCard?.replayArray
-                                  ? replyMessageCard?.replayArray
-                                  : ""
-                              }
-                            />
-                          );
-                        }
-                      )}
-                  </div>
-                );
-              } 
-              else if (
-                ac?.type === "cartReplyCard" &&
-                ac?.value?.data?.length !== 0
-              ) {
-                const cartReplyCard = ac?.value?.data;
-                return (
-                  <div className="w-full">
-                    {ac?.value?.sender === "bot" ? (
-                      <></>
-                    ) : (
-                      Array.isArray(cartReplyCard) &&
-                      cartReplyCard?.map(
-                        (cartReplyCard: any, index: number) => {
-                          return (
-                            <CartReplyCard
-                              time={ac?.timestamp ? ac?.timestamp : ""}
-                              imageSrc={
-                                cartReplyCard?.imageSrc
-                                  ? cartReplyCard?.imageSrc
-                                  : ""
-                              }
-                              price={
-                                cartReplyCard?.totalAmount
-                                  ? cartReplyCard?.totalAmount
-                                  : ""
-                              }
-                              items={
-                                cartReplyCard?.totalItems
-                                  ? cartReplyCard?.totalItems
-                                  : ""
-                              }
-                            />
-                          );
-                        }
-                      )
-                    )}
-                  </div>
-                );
-              }
-            }
-          })}
-        </div>
-      </ChatWrapper>
-    );
-  };
+  //               return (
+  //                 <div className="w-full">
+  //                   {ac?.value?.sender === "user" ? (
+  //                     <></>
+  //                   ) : (
+  //                     Array.isArray(paymentCard) &&
+  //                     paymentCard.length > 0 &&
+  //                     paymentCard?.map((paymentCard: any, index: number) => {
+  //                       return (
+  //                         <RichCard>
+  //                           <>
+  //                             <div className="relative">
+  //                               <ReplyCard
+  //                                 className="w-full"
+  //                                 title="Honeysys Bot"
+  //                                 titleCN="text-primary"
+  //                               >
+  //                                 <div className="flex flex-col justify-evenly w-full">
+  //                                   <Text
+  //                                     type="body"
+  //                                     size="sm"
+  //                                     className="text-[#505050]"
+  //                                   >
+  //                                     {`🛒 Order ${
+  //                                       paymentCard?.orderId
+  //                                         ? paymentCard?.orderId
+  //                                         : ""
+  //                                     }`}
+  //                                   </Text>
+  //                                   <Text
+  //                                     type="label"
+  //                                     size="lg"
+  //                                     className="text-[#505050]"
+  //                                   >
+  //                                     {`Total ${
+  //                                       paymentCard?.totalItems
+  //                                         ? paymentCard?.totalItems
+  //                                         : ""
+  //                                     } items ₹ ${
+  //                                       paymentCard?.totalAmount
+  //                                         ? paymentCard?.totalAmount
+  //                                         : ""
+  //                                     } `}
+  //                                   </Text>
+  //                                   <img
+  //                                     src="/images/vegetables.svg"
+  //                                     height={50}
+  //                                     alt="vegetable"
+  //                                     className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+  //                                   />
+  //                                 </div>
+  //                               </ReplyCard>
+  //                             </div>
+  //                             <div className="flex ms-1 align-middle">
+  //                               <img
+  //                                 src="/images/rupee.svg"
+  //                                 height="24"
+  //                                 width="24"
+  //                                 alt=""
+  //                               ></img>
+  //                               <div className="m-2 ">
+  //                                 <div className="text-[14px] text-[black] flex">
+  //                                   <div className="font-normal me-1">
+  //                                     Payment to
+  //                                   </div>{" "}
+  //                                   Honeysys
+  //                                 </div>
+  //                                 <div className="text-[#075E54] text-[12px] font-normal">
+  //                                   Successful
+  //                                 </div>
+  //                               </div>
+  //                             </div>
+  //                             {paymentCard?.content?.map(
+  //                               (item: string, index: number) => (
+  //                                 <div className="text-[14px] font-normal">
+  //                                   {item ? item : ""}
+  //                                 </div>
+  //                               )
+  //                             )}
+  //                           </>
+  //                         </RichCard>
+  //                       );
+  //                     })
+  //                   )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "replyMessage" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const replyMessageCard = ac?.value?.data;
+  //               console.log("replyMessageCard", replyMessageCard);
+  //               return (
+  //                 // <></>
+  //                 <div className="w-full">
+  //                   {Array.isArray(replyMessageCard) &&
+  //                     replyMessageCard.length > 0 &&
+  //                     replyMessageCard?.map(
+  //                       (replyMessageCard: any, index: number) => {
+  //                         return (
+  //                           <ReplyMessageCard
+  //                             time={ac?.timestamp ? ac?.timestamp : ""}
+  //                             content={`${
+  //                               replyMessageCard?.content
+  //                                 ? replyMessageCard?.content
+  //                                 : ""
+  //                             }`}
+  //                             replyArray={
+  //                               replyMessageCard?.replyArray
+  //                                 ? replyMessageCard?.replyArray
+  //                                 : ""
+  //                             }
+  //                           />
+  //                         );
+  //                       }
+  //                     )}
+  //                 </div>
+  //               );
+  //             } else if (
+  //               ac?.type === "cartReplyCard" &&
+  //               ac?.value?.data?.length !== 0
+  //             ) {
+  //               const cartReplyCard = ac?.value?.data;
+  //               return (
+  //                 <div className="w-full">
+  //                   {ac?.value?.sender === "bot" ? (
+  //                     <></>
+  //                   ) : (
+  //                     Array.isArray(cartReplyCard) &&
+  //                     cartReplyCard.length > 0 &&
+  //                     cartReplyCard?.map(
+  //                       (cartReplyCard: any, index: number) => {
+  //                         return (
+  //                           <CartReplyCard
+  //                             time={ac?.timestamp ? ac?.timestamp : ""}
+  //                             imageSrc={
+  //                               cartReplyCard?.imageSrc
+  //                                 ? cartReplyCard?.imageSrc
+  //                                 : ""
+  //                             }
+  //                             price={
+  //                               cartReplyCard?.totalAmount
+  //                                 ? cartReplyCard?.totalAmount
+  //                                 : ""
+  //                             }
+  //                             items={
+  //                               cartReplyCard?.totalItems
+  //                                 ? cartReplyCard?.totalItems
+  //                                 : ""
+  //                             }
+  //                           />
+  //                         );
+  //                       }
+  //                     )
+  //                   )}
+  //                 </div>
+  //               );
+  //             }
+  //           }
+  //         })}
+  //       </div>
+  //     </ChatWrapper>
+  //   );
+  // };
   const formatedDate = (data: any) => {
     let date = new Date(data);
     const formattedDate = date.toLocaleString("en-US", {
@@ -1090,158 +1011,12 @@ const Home = () => {
     // .replace(" at", "");
     return formattedDate;
   };
-  // useEffect(() => {
-  //   let reverseChat = [...ChatArray].reverse();
-  //   setChatComponentArray(
-  //     ChatArray?.map((activity: any, index: number) => {
-  //       if (
-  //         activity.length === 1 &&
-  //         activity[0].sub_type &&
-  //         activity[0].sub_type === "screen"
-  //       ) {
-  //         if (index < ChatArray.length) {
-  //           let date = ChatArray[index][0]?.timestamp;
-  //           let date1 =
-  //             index - 1 >= 0
-  //               ? ChatArray[index - 1][0]?.timestamp
-  //               : "January 1, 1570";
-  //           let dateTime1 = formatedDate(date);
-  //           let dateTime2 = formatedDate(date1);
-  //           if (dateTime1 !== dateTime2) {
-  //             return <TimeStamp date={date} />;
-  //           }
-  //         }
-  //         return <></>;
-  //       }
-  //       let i = 0;
-  //       let j = 0;
-  //       // let flag = false;
-  //       // if (index === ChatArray.length - 1) {
-  //       //   flag = true;
-  //       // } else {
-  //       //   flag = false;
-  //       // }
-  //       return (
-  //         <>
-  //           {/* <TimeStamp date={new Date().toISOString()} /> */}
-
-  //           {(() => {
-  //             let ComponentArray = [];
-
-  //             if (index < ChatArray.length) {
-  //               let date = ChatArray[index][0]?.timestamp;
-  //               let date1 =
-  //                 index - 1 >= 0
-  //                   ? ChatArray[index - 1][0]?.timestamp
-  //                   : "January 1, 1570";
-  //               let dateTime1 = formatedDate(date);
-  //               let dateTime2 = formatedDate(date1);
-  //               if (dateTime1 !== dateTime2) {
-  //                 ComponentArray.push(<TimeStamp date={date} />);
-  //               }
-  //             }
-  //             let flag = false;
-  //             console.log("chat123", ChatArray);
-  //             if (index === ChatArray.length - 1) {
-  //               flag = true;
-  //             } else {
-  //               flag = false;
-  //             }
-  //             while (i < activity.length && j < activity.length) {
-  //               if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
-  //                 j++;
-  //               } else {
-  //                 let Iindex = i;
-  //                 i = j;
-  //                 ComponentArray.push(
-  //                   ChatDataSetter(activity, Iindex, j, flag)
-  //                 );
-  //               }
-  //             }
-  //             ComponentArray.push(ChatDataSetter(activity, i, j, flag));
-  //             return ComponentArray;
-  //           })()}
-  //         </>
-  //       );
-  //     })
-  //   );
-  // }, [ChatArray]);
-  useEffect(() => {
-    let reverseChat = [...ChatArray].reverse();
-    let flag = true;
-    let data = reverseChat?.map((activity: any, index: number) => {
-      let tempFlag = false;
-      if (
-        activity.length === 1 &&
-        activity[0].sub_type &&
-        activity[0].sub_type === "screen"
-      ) {
-        if (index < ChatArray.length) {
-          let date = ChatArray[index][0]?.timestamp;
-          let date1 =
-            index + 1 < ChatArray.length
-              ? ChatArray[index + 1][0]?.timestamp
-              : "January 1, 1570";
-          let dateTime1 = formatedDate(date);
-          let dateTime2 = formatedDate(date1);
-          if (dateTime1 !== dateTime2) {
-            return <TimeStamp date={date} />;
-          }
-        }
-        return <></>;
-      }
-      let i = 0;
-      let j = 0;
-
-      return (
-        <>
-          {/* <TimeStamp date={new Date().toISOString()} /> */}
-
-          {(() => {
-            let ComponentArray = [];
-
-            while (i < activity.length && j < activity.length) {
-              if (activity[j].type === "iconQuickReply") {
-                tempFlag = true;
-              }
-
-              if (activity[i]?.value?.sender === activity[j]?.value?.sender) {
-                j++;
-              } else {
-                let Iindex = i;
-                i = j;
-                ComponentArray.push(ChatDataSetter(activity, Iindex, j, flag));
-              }
-            }
-            if (index < ChatArray.length) {
-              let date = ChatArray[index][0]?.timestamp;
-              let date1 =
-                index + 1 < ChatArray.length
-                  ? ChatArray[index + 1][0]?.timestamp
-                  : "January 1, 1570";
-              let dateTime1 = formatedDate(date);
-              let dateTime2 = formatedDate(date1);
-              if (dateTime1 !== dateTime2) {
-                ComponentArray.push(<TimeStamp date={date} />);
-              }
-            }
-            ComponentArray.push(ChatDataSetter(activity, i, j, flag));
-            if (tempFlag) {
-              flag = false;
-            }
-            return ComponentArray;
-          })()}
-        </>
-      );
-    });
-    let FinalData = data.reverse();
-    setChatComponentArray(FinalData);
-  }, [ChatArray]);
-
   useEffect(() => {
     scroll();
-  }, [ChatComponentArray, isLoadingVisible]);
+  }, [ isLoadingVisible]);
   const [pageNumber, setPageNumber] = useState(0);
+  console.log("ChatArray", ChatArray);
+
   // const fetchData = () => {
   //   setTimeout(() => {
   //     let data = paginationChat.slice(pageNumber, 2);
@@ -1371,7 +1146,7 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
-
+  console.log("chatAraay", ChatArray);
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
@@ -1381,30 +1156,514 @@ const Home = () => {
         ref={scrollRef}
         className="bg-background h-full overflow-y-auto py-5"
       >
-        {/* <div
-          id="scrollableDiv"
-          style={{
-            height: "100%",
-            overflow: "auto",
-            display: "flex",
-            flexDirection: "column-reverse",
-          }}
-          ref={timelineRef}
-        >
-          <InfiniteScroll
-            dataLength={ChatComponentArray.length}
-            next={fetchData}
-            style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
-            inverse={true}
-            hasMore={true}
-            loader={<h4>Loading...</h4>}
-            scrollableTarget="scrollableDiv"
-          >
-            {ChatComponentArray.reverse()}
-            {isLoadingVisible && !reviewToken && <Loading />}
-          </InfiniteScroll>
-        </div> */}
-        {ChatComponentArray}
+        {ChatArray.map((activity: any, mainIndex: number) => {
+          return (
+            <>
+              {(() => {
+                if (mainIndex < ChatArray.length) {
+                  let currentMessageTimeStamp =
+                    ChatArray[mainIndex][0]?.timestamp;
+                  if (!currentMessageTimeStamp) {
+                    console.log("Object: ", activity);
+                  }
+                  let previousMessageTimeStamp =
+                    mainIndex - 1 >= 0
+                      ? ChatArray[mainIndex - 1][0]?.timestamp
+                      : "1957-10-28T08:45:54.524Z";
+                  let currentMessageDate = formatedDate(
+                    currentMessageTimeStamp
+                  );
+                  let previousMessageDate = formatedDate(
+                    previousMessageTimeStamp
+                  );
+                  if (currentMessageDate !== previousMessageDate) {
+                    return <TimeStamp date={currentMessageTimeStamp} />;
+                  }
+                }
+              })()}
+              {activity.length === 1 &&
+              activity[0].sub_type &&
+              activity[0].sub_type === "screen" ? (
+                <></>
+              ) : Array.isArray(activity) && activity.length > 0 ? (
+                <ChatWrapper
+                  type={activity[0]?.value?.sender === "user" ? "user" : "bot"}
+                  key={new Date().getTime() + mainIndex}
+                >
+                  <div className="chatWrapper">
+                    {activity?.map((ac: any, index: number) => {
+                      if (ac["sub_type"] && ac["sub_type"] === "screen") {
+                      } else if (ac?.type === "get start") {
+                        return (
+                          <div className="w-full">
+                            {/* <GetStart
+                      setChatArray={setChatComponentArray}
+                      key={new Date().getTime()}
+                    /> */}
+                          </div>
+                        );
+                      } else if (ac?.type === "message" && ac?.text !== "") {
+                        if (ac?.updateUI === true) {
+                          dispatch(setUiUpdate(true));
+                        } else {
+                          dispatch(setUiUpdate(false));
+                        }
+
+                        return (
+                          <div className="w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <UserMessageCard
+                                content={ac?.text}
+                                time={ac?.timestamp}
+                              />
+                            ) : (
+                              <BotMessageCard
+                                title={ac?.text ? ac?.text : ""}
+                                time={ac?.timestamp ? ac?.timestamp : ""}
+                              />
+                            )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "richCard" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const richCard = ac?.value?.data;
+                        return (
+                          <div className="w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <></>
+                            ) : (
+                              Array.isArray(richCard) &&
+                              richCard.length > 0 &&
+                              richCard?.map((richCard: any, index: number) => {
+                                return (
+                                  <BotMessageCard
+                                    title={
+                                      richCard?.title ? richCard?.title : ""
+                                    }
+                                    time={ac?.timestamp ? ac?.timestamp : ""}
+                                    contentArray={
+                                      richCard?.description
+                                        ? richCard?.description
+                                        : ""
+                                    }
+                                    imageSrc={
+                                      richCard?.imageURL
+                                        ? richCard?.imageURL
+                                        : ""
+                                    }
+                                    botIcon={
+                                      richCard?.botIcon ? richCard?.botIcon : ""
+                                    }
+                                    key={index}
+                                  />
+                                );
+                              })
+                            )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "iconQuickReply" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const iconQuickReplyCard = ac?.value?.data;
+                        console.log(
+                          "iconQuickReplyCard",
+                          iconQuickReplyCard,
+                          ac?.value?.content
+                        );
+                        return (
+                          <div className=" w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <></>
+                            ) : (
+                              <BotMessageCard
+                                actionDataArray={
+                                  Array.isArray(iconQuickReplyCard) &&
+                                  iconQuickReplyCard.length > 0
+                                    ? iconQuickReplyCard
+                                    : []
+                                }
+                                flag={(() => {
+                                  if (activity[0]?.value?.sender === "bot") {
+                                    if (mainIndex + 1 < ChatArray.length) {
+                                      for (
+                                        let i = mainIndex + 1;
+                                        i < ChatArray.length;
+                                        i++
+                                      ) {
+                                        let chat = ChatArray[i];
+                                        if (
+                                          chat[0]?.value?.sender === "bot" &&
+                                          chat?.find((x: any) => !x.sub_type)
+                                        ) {
+                                          return false;
+                                        }
+                                      }
+                                    }
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                })()}
+                                buttonContent={
+                                  ac?.value?.content ? ac?.value?.content : ""
+                                }
+                              />
+                            )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "summaryCard" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const summaryCard: any = ac?.value?.data;
+                        return (
+                          <div className=" w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <></>
+                            ) : (
+                              Array.isArray(summaryCard) &&
+                              summaryCard.length > 0 &&
+                              summaryCard?.map(
+                                (summaryCard: any, index: number) => {
+                                  return (
+                                    <BotMessageCard
+                                      key={index}
+                                      title=""
+                                      contentArray={[
+                                        <div>
+                                          {" "}
+                                          {summaryCard?.topText
+                                            ? summaryCard?.topText
+                                            : ""}
+                                        </div>,
+
+                                        <SummaryCard
+                                          className="w-full mt-3"
+                                          image={
+                                            <img
+                                              src="/images/onion.svg"
+                                              alt=""
+                                              className="h-[60px] w-[60px] rounded-md"
+                                            />
+                                          }
+                                          priceList={
+                                            summaryCard.price
+                                              ? summaryCard.price
+                                              : ""
+                                          }
+                                          subtitle={
+                                            summaryCard?.subtitle
+                                              ? summaryCard?.subtitle
+                                              : ""
+                                          }
+                                          title={
+                                            summaryCard.title
+                                              ? summaryCard.title
+                                              : ""
+                                          }
+                                          totalAmount={
+                                            summaryCard?.totalAmount
+                                              ? summaryCard?.totalAmount
+                                              : ""
+                                          }
+                                          totaltitle={
+                                            summaryCard?.totaltitle
+                                              ? summaryCard?.totaltitle
+                                              : ""
+                                          }
+                                        />,
+                                        <Text
+                                          type="body"
+                                          size="md"
+                                          className="font-semibold mt-3 mb-1"
+                                        >
+                                          {summaryCard?.bottomText
+                                            ? summaryCard?.bottomText
+                                            : ""}
+                                        </Text>,
+                                      ]}
+                                    />
+                                  );
+                                }
+                              )
+                            )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "trackOrder" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const trackOrderCard = ac?.value?.data;
+                        return (
+                          <div className="w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <></>
+                            ) : (
+                              Array.isArray(trackOrderCard) &&
+                              trackOrderCard.length > 0 &&
+                              trackOrderCard?.map(
+                                (trackOrderCard: any, index: number) => {
+                                  return (
+                                    <RichCard>
+                                      <>
+                                        <div className="relative">
+                                          <ReplyCard
+                                            className="w-full"
+                                            title="Honeysys Bot"
+                                            titleCN="text-primary"
+                                          >
+                                            <div className="flex flex-col justify-evenly w-full">
+                                              <Text
+                                                type="body"
+                                                size="sm"
+                                                className="text-[#505050]"
+                                              >
+                                                {`🛒 Order ${
+                                                  trackOrderCard?.orderId
+                                                    ? trackOrderCard?.orderId
+                                                    : ""
+                                                }`}
+                                              </Text>
+                                              <Text
+                                                type="label"
+                                                size="lg"
+                                                className="text-[#505050]"
+                                              >
+                                                {`Total ${
+                                                  trackOrderCard?.totalItems
+                                                    ? trackOrderCard?.totalItems
+                                                    : ""
+                                                } items ₹ ${
+                                                  trackOrderCard?.totalAmount ??
+                                                  ""
+                                                } `}
+                                              </Text>
+                                              <img
+                                                src="/images/vegetables.svg"
+                                                height={50}
+                                                alt="vegetable"
+                                                className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                                              />
+                                            </div>
+                                          </ReplyCard>
+                                        </div>
+                                        <div className="text-[14px] font-normal">
+                                          {`${
+                                            trackOrderCard?.orderNo
+                                              ? trackOrderCard?.orderNo
+                                              : ""
+                                          }`}{" "}
+                                          <span className="font-semibold">
+                                            {`${
+                                              trackOrderCard?.deliveryDate
+                                                ? trackOrderCard?.deliveryDate
+                                                : ""
+                                            }`}
+                                          </span>
+                                          {`- ${trackOrderCard?.items} -`}
+                                          <span className="font-semibold">
+                                            {` ₹ ${
+                                              trackOrderCard?.totalAmount
+                                                ? trackOrderCard?.totalAmount
+                                                : ""
+                                            }`}
+                                          </span>{" "}
+                                          - Delivered
+                                        </div>
+                                      </>
+                                    </RichCard>
+                                  );
+                                }
+                              )
+                            )}
+                          </div>
+                        );
+                      }
+                      if (
+                        ac?.type === "paymentCard" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const paymentCard = ac?.value?.data;
+
+                        if (paymentCard[0]?.isOrderPlaced === true) {
+                          dispatch(setCart([]));
+                          dispatch(setTotalQuantity(0));
+                        }
+
+                        return (
+                          <div className="w-full">
+                            {ac?.value?.sender === "user" ? (
+                              <></>
+                            ) : (
+                              Array.isArray(paymentCard) &&
+                              paymentCard.length > 0 &&
+                              paymentCard?.map(
+                                (paymentCard: any, index: number) => {
+                                  return (
+                                    <RichCard>
+                                      <>
+                                        <div className="relative">
+                                          <ReplyCard
+                                            className="w-full"
+                                            title="Honeysys Bot"
+                                            titleCN="text-primary"
+                                          >
+                                            <div className="flex flex-col justify-evenly w-full">
+                                              <Text
+                                                type="body"
+                                                size="sm"
+                                                className="text-[#505050]"
+                                              >
+                                                {`🛒 Order ${
+                                                  paymentCard?.orderId
+                                                    ? paymentCard?.orderId
+                                                    : ""
+                                                }`}
+                                              </Text>
+                                              <Text
+                                                type="label"
+                                                size="lg"
+                                                className="text-[#505050]"
+                                              >
+                                                {`Total ${
+                                                  paymentCard?.totalItems
+                                                    ? paymentCard?.totalItems
+                                                    : ""
+                                                } items ₹ ${
+                                                  paymentCard?.totalAmount
+                                                    ? paymentCard?.totalAmount
+                                                    : ""
+                                                } `}
+                                              </Text>
+                                              <img
+                                                src="/images/vegetables.svg"
+                                                height={50}
+                                                alt="vegetable"
+                                                className="max-w-[54px] rounded-md absolute right-1 bottom-1"
+                                              />
+                                            </div>
+                                          </ReplyCard>
+                                        </div>
+                                        <div className="flex ms-1 align-middle">
+                                          <img
+                                            src="/images/rupee.svg"
+                                            height="24"
+                                            width="24"
+                                            alt=""
+                                          ></img>
+                                          <div className="m-2 ">
+                                            <div className="text-[14px] text-[black] flex">
+                                              <div className="font-normal me-1">
+                                                Payment to
+                                              </div>{" "}
+                                              Honeysys
+                                            </div>
+                                            <div className="text-[#075E54] text-[12px] font-normal">
+                                              Successful
+                                            </div>
+                                          </div>
+                                        </div>
+                                        {paymentCard?.content?.map(
+                                          (item: string, index: number) => (
+                                            <div className="text-[14px] font-normal">
+                                              {item ? item : ""}
+                                            </div>
+                                          )
+                                        )}
+                                      </>
+                                    </RichCard>
+                                  );
+                                }
+                              )
+                            )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "replyMessage" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const replyMessageCard = ac?.value?.data;
+                        console.log("replyMessageCard", replyMessageCard);
+                        return (
+                          // <></>
+                          <div className="w-full">
+                            {Array.isArray(replyMessageCard) &&
+                              replyMessageCard.length > 0 &&
+                              replyMessageCard?.map(
+                                (replyMessageCard: any, index: number) => {
+                                  return (
+                                    <ReplyMessageCard
+                                      time={ac?.timestamp ? ac?.timestamp : ""}
+                                      content={`${
+                                        replyMessageCard?.content
+                                          ? replyMessageCard?.content
+                                          : ""
+                                      }`}
+                                      replyArray={
+                                        replyMessageCard?.replyArray
+                                          ? replyMessageCard?.replyArray
+                                          : ""
+                                      }
+                                    />
+                                  );
+                                }
+                              )}
+                          </div>
+                        );
+                      } else if (
+                        ac?.type === "cartReplyCard" &&
+                        ac?.value?.data?.length !== 0
+                      ) {
+                        const cartReplyCard = ac?.value?.data;
+                        console.log("cartReplyCard123", cartReplyCard);
+                        return (
+                          <div className="w-full">
+                            {ac?.value?.sender === "bot" ? (
+                              <></>
+                            ) : (
+                              Array.isArray(cartReplyCard) &&
+                              cartReplyCard.length > 0 &&
+                              cartReplyCard?.map(
+                                (cartReplyCard: any, index: number) => {
+                                  return (
+                                    <CartReplyCard
+                                      time={ac?.timestamp ? ac?.timestamp : ""}
+                                      imageSrc={
+                                        cartReplyCard?.imageSrc
+                                          ? cartReplyCard?.imageSrc
+                                          : ""
+                                      }
+                                      price={
+                                        cartReplyCard?.totalAmount
+                                          ? cartReplyCard?.totalAmount
+                                          : ""
+                                      }
+                                      items={
+                                        cartReplyCard?.totalItems
+                                          ? cartReplyCard?.totalItems
+                                          : ""
+                                      }
+                                    />
+                                  );
+                                }
+                              )
+                            )}
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                </ChatWrapper>
+              ) : (
+                <></>
+              )}
+            </>
+          );
+        })}
+
         {isLoadingVisible && !reviewToken && <Loading />}
         {/* {botIcon ? <img src={botIcon} height="50px" width="50px"></img> : ""} */}
       </div>
@@ -1446,3 +1705,31 @@ const Home = () => {
 };
 
 export default Home;
+
+{
+  /* <div
+          id="scrollableDiv"
+          style={{
+            height: "100%",
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column-reverse",
+          }}
+          ref={timelineRef}
+        >
+          <InfiniteScroll
+            dataLength={ChatComponentArray.length}
+            next={fetchData}
+            style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
+            inverse={true}
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+            scrollableTarget="scrollableDiv"
+          >
+            {ChatComponentArray.reverse()}
+            {isLoadingVisible && !reviewToken && <Loading />}
+          </InfiniteScroll>
+        </div> */
+}
+
+// {ChatComponentArray}

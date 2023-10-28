@@ -88,10 +88,10 @@ const OTP = () => {
           .then((data) => {
             if (
               data &&
-              data?.payload?.data?.activities[0]?.type === "viewCart"
+              data?.payload?.data?.activities[0][0]?.type === "viewCart"
             ) {
               let cartData =
-                data?.payload?.data?.activities[0]?.value?.data?.cartProduct;
+                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct[0];
               cartData?.map((item: any, index: number) => {
                 let cartItem = {
                   productId: item.variants[0]?.productId,
@@ -125,7 +125,8 @@ const OTP = () => {
         .geocode({ location: latLng }, (results: any, status: any) => {
           if (status === "OK" && results) {
             if (results?.length > 0) {
-              const addressComponents = results[0]?.address_components;
+              const addressComponents = results[1]?.address_components;
+              console.log("results", addressComponents);
               const postalCode = addressComponents.find((component: any) =>
                 component?.types?.includes("postal_code")
               );
@@ -150,34 +151,23 @@ const OTP = () => {
                 if (convId && botType) {
                   dispatch(getChatData({ newData, botType }))
                     .then((data) => {
-                      if (
-                        data &&
-                        data?.payload?.data?.activities[0]?.type ===
-                          "storeCheck"
-                      ) {
+                      let actiVitiesData =
+                        data?.payload?.data?.activities[0][0];
+                      if (data && actiVitiesData?.type === "storeCheck") {
                         if (
-                          data?.payload?.data?.activities[0]?.value?.data[0]
-                            ?.status_code === 500
+                          actiVitiesData?.value?.data[0]?.status_code === 500
                         ) {
                           navigate("/serviceableArea");
                         } else if (
-                          data?.payload?.data?.activities[0]?.value?.data[0]
-                            ?.status_code === 200
+                          actiVitiesData?.value?.data[0]?.status_code === 200
                         ) {
                           dispatch(
-                            setStoreData(
-                              data?.payload?.data?.activities[0]?.value?.data[0]
-                            )
+                            setStoreData(actiVitiesData?.value?.data[0])
                           );
                           dispatch(
-                            setStoreId(
-                              data?.payload?.data?.activities[0]?.value?.data[0]
-                                ?.id
-                            )
+                            setStoreId(actiVitiesData?.value?.data[0]?.id)
                           );
-                          let storeIds =
-                            data?.payload?.data?.activities[0]?.value?.data[0]
-                              ?.id;
+                          let storeIds = actiVitiesData?.value?.data[0]?.id;
                           if (storeIds) {
                             let botType = "e-comm";
                             const newData = {
@@ -189,18 +179,17 @@ const OTP = () => {
                                 storeId: storeIds,
                               },
                             };
-
                             if (convId && botType) {
                               dispatch(getChatData({ newData, botType }))
-                                .then((data) => {
+                              .then((data) => {
+                                  let cartActivity =
+                                    data?.payload?.data?.activities[0][0];
                                   if (
                                     data &&
-                                    data?.payload?.data?.activities[0]?.type ===
-                                      "storeCheck"
+                                    cartActivity?.type === "storeCheck"
                                   ) {
                                     let cartId =
-                                      data?.payload?.data?.activities[0]?.value
-                                        ?.data?.cartId;
+                                      cartActivity?.value?.data?.cartId;
                                     dispatch(setCartId(cartId));
                                   }
                                 })
@@ -349,5 +338,3 @@ const OTP = () => {
 };
 
 export default OTP;
-
-

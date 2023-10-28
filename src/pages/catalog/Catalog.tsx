@@ -53,9 +53,9 @@ const Catalog = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data?.payload?.data?.activities[0]?.type === "storeCheck") {
+          if (data?.payload?.data?.activities[0][0]?.type === "storeCheck") {
             setCategoriesCatalog(
-              data?.payload?.data?.activities[0]?.value?.data
+              data?.payload?.data?.activities[0][0]?.value?.data
             );
           }
         })
@@ -76,9 +76,9 @@ const Catalog = () => {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
           if (
-            data?.payload?.data?.activities[0]?.type === "viewProductCatalog"
+            data?.payload?.data?.activities[0][0]?.type === "viewProductCatalog"
           ) {
-            setProductCatalog(data?.payload?.data?.activities[0]?.value?.data);
+            setProductCatalog(data?.payload?.data?.activities[0][0]?.value?.data);
           }
         })
         .catch(() => setError(true));

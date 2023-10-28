@@ -69,7 +69,7 @@ const LocationPermission = () => {
                           dispatch(getChatData({ newData, botType }))
                             .then((res) => {
                               if (
-                                res?.payload?.data?.activities[0]?.value?.data
+                                res?.payload?.data?.activities[0][0]?.value?.data
                                   ?.length !== 0
                               ) {
                                 navigate("/addressDetails");

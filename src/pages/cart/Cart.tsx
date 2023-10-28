@@ -83,8 +83,8 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data && data?.payload?.data?.activities[0]?.type === "viewCart") {
-            setCartList(data?.payload?.data?.activities[0]?.value.data);
+          if (data && data?.payload?.data?.activities[0][0]?.type === "viewCart") {
+            setCartList(data?.payload?.data?.activities[0][0]?.value.data);
             // setLoading(false);
             setAmountLoader(false);
           }
