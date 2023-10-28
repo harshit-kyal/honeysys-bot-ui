@@ -90,6 +90,7 @@ const OTP = () => {
               data &&
               data?.payload?.data?.activities[0][0]?.type === "viewCart"
             ) {
+         
               let cartData =
                 data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
               cartData?.map((item: any, index: number) => {
@@ -119,18 +120,19 @@ const OTP = () => {
   }, [storeId, cartId]);
 
   useEffect(() => {
+    console.log("latlng", latLng);
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
       geocoder
         .geocode({ location: latLng }, (results: any, status: any) => {
           if (status === "OK" && results) {
+            console.log("results123", results);
             if (results?.length > 0) {
-              const addressComponents = results[1]?.address_components;
-              console.log("results", addressComponents);
-              const postalCode = addressComponents.find((component: any) =>
-                component?.types?.includes("postal_code")
+              let postalCode = results?.find((ele: any) =>
+                ele.address_components?.find((component: any) =>
+                  component?.types?.includes("postal_code")
+                )
               );
-
               if (postalCode) {
                 const pincode = postalCode?.long_name;
                 let botType = "e-comm";
@@ -144,8 +146,8 @@ const OTP = () => {
                     // lat: "17.469857630687827",
                     // lag: "78.35782449692486",
                     pincode: pincode,
-                    lat: latLng?.lat,
-                    lag: latLng?.lng,
+                    lat: `${latLng?.lat}`,
+                    lag: `${latLng?.lng}`,
                     type: "location",
                   },
                 };
@@ -184,7 +186,7 @@ const OTP = () => {
                             if (convId && botType) {
                               dispatch(getChatData({ newData, botType }))
                                 .then((data) => {
-                                  setLoading(false);
+                                  // setLoading(false);
                                   let cartActivity =
                                     data?.payload?.data?.activities[0][0];
                                   if (
@@ -197,7 +199,7 @@ const OTP = () => {
                                   }
                                 })
                                 .catch((err) => {
-                                  setLoading(false);
+                                  // setLoading(false);
                                   console.log("err", err);
                                 });
                             }
@@ -222,6 +224,7 @@ const OTP = () => {
         .catch((err) => console.log("err", err));
     }
   }, [latLng]);
+
   return (
     <div className="w-screen h-screen px-5 py-3">
       <BackButton />

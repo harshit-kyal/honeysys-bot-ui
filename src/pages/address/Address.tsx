@@ -26,6 +26,7 @@ const Address = () => {
   const dispatch = useAppDispatch();
   const [formattedAdd, setFormattedAdd] = useState<string>("");
   const [formattedShortAdd, setFormattedShortAdd] = useState<string>("");
+  const [Loading, setLoading] = useState(false);
   const [address, setAddress] = useState<any>({
     id: "",
     customerId: "",
@@ -236,6 +237,7 @@ const Address = () => {
 
   const saveHandler = () => {
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
+      setLoading(true);
       let botType = "e-comm";
       const newData = {
         conversationId: convId,
@@ -247,8 +249,8 @@ const Address = () => {
           // lat: "17.469857630687827",
           // lag: "78.35782449692486",
           pincode: address?.pincode,
-          lat: latLng?.lat,
-          lag: latLng?.lng,
+          lat: `${latLng?.lat}`,
+          lag: `${latLng?.lng}`,
           type: "location",
         },
       };
@@ -256,6 +258,7 @@ const Address = () => {
       if (convId && botType) {
         dispatch(getChatData({ newData, botType }))
           .then((data) => {
+            setLoading(false);
             let storeData = data?.payload?.data?.activities[0][0];
             if (data && storeData?.type === "storeCheck") {
               if (storeData?.value?.data[0]?.status_code === 500) {
@@ -286,6 +289,7 @@ const Address = () => {
                         }
                       })
                       .catch((error) => {
+                        setLoading(false);
                         console.log("err", error);
                       });
                   }
@@ -446,6 +450,7 @@ const Address = () => {
         </div>
         <div className="fixed bottom-3 left-0 w-full flex justify-center items-center">
           <Button
+            isLoading={Loading}
             className=" !bg-primary max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[30%] text-white text-xs  text-center py-[10px] "
             onClick={() => {
               saveHandler();

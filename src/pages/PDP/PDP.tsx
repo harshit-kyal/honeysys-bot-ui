@@ -355,6 +355,7 @@ const PDP = () => {
                     maximumFractionDigits: 2,
                   })}`}
                   onClick={() => {
+                    console.log("quaaaa")
                     if (quantity === 0) {
                       addItem();
                     } else {

@@ -5,7 +5,7 @@ const ActionButton = ({
   text,
   onClick,
   className,
-  flag,
+  flag=true,
 }: {
   src?: string;
   text: string;
