@@ -556,7 +556,6 @@ const Home = () => {
       //   });
       // }
     }
-    
   }, []);
 
   //   activity: any[],
@@ -1013,7 +1012,7 @@ const Home = () => {
   };
   useEffect(() => {
     scroll();
-  }, [ isLoadingVisible]);
+  }, [isLoadingVisible]);
   const [pageNumber, setPageNumber] = useState(0);
   console.log("ChatArray", ChatArray);
 
@@ -1163,21 +1162,20 @@ const Home = () => {
                 if (mainIndex < ChatArray.length) {
                   let currentMessageTimeStamp =
                     ChatArray[mainIndex][0]?.timestamp;
-                  if (!currentMessageTimeStamp) {
-                    console.log("Object: ", activity);
-                  }
-                  let previousMessageTimeStamp =
-                    mainIndex - 1 >= 0
-                      ? ChatArray[mainIndex - 1][0]?.timestamp
-                      : "1957-10-28T08:45:54.524Z";
-                  let currentMessageDate = formatedDate(
-                    currentMessageTimeStamp
-                  );
-                  let previousMessageDate = formatedDate(
-                    previousMessageTimeStamp
-                  );
-                  if (currentMessageDate !== previousMessageDate) {
-                    return <TimeStamp date={currentMessageTimeStamp} />;
+                  if (currentMessageTimeStamp) {
+                    let previousMessageTimeStamp =
+                      mainIndex - 1 >= 0
+                        ? ChatArray[mainIndex - 1][0]?.timestamp
+                        : "1957-10-28T08:45:54.524Z";
+                    let currentMessageDate = formatedDate(
+                      currentMessageTimeStamp
+                    );
+                    let previousMessageDate = formatedDate(
+                      previousMessageTimeStamp
+                    );
+                    if (currentMessageDate !== previousMessageDate) {
+                      return <TimeStamp date={currentMessageTimeStamp} />;
+                    }
                   }
                 }
               })()}

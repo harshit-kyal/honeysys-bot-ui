@@ -91,7 +91,7 @@ const OTP = () => {
               data?.payload?.data?.activities[0][0]?.type === "viewCart"
             ) {
               let cartData =
-                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct[0];
+                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
               cartData?.map((item: any, index: number) => {
                 let cartItem = {
                   productId: item.variants[0]?.productId,
@@ -130,6 +130,7 @@ const OTP = () => {
               const postalCode = addressComponents.find((component: any) =>
                 component?.types?.includes("postal_code")
               );
+
               if (postalCode) {
                 const pincode = postalCode?.long_name;
                 let botType = "e-comm";
@@ -139,16 +140,17 @@ const OTP = () => {
                   voiceFlag: false,
                   isChatVisible: false,
                   data: {
-                    pincode: "500084",
-                    lat: "17.469857630687827",
-                    lag: "78.35782449692486",
-                    // pincode: pincode,
-                    // lat: latLng?.lat,
-                    // lag: latLng?.lng,
+                    // pincode: "500084",
+                    // lat: "17.469857630687827",
+                    // lag: "78.35782449692486",
+                    pincode: pincode,
+                    lat: latLng?.lat,
+                    lag: latLng?.lng,
                     type: "location",
                   },
                 };
                 if (convId && botType) {
+                  setLoading(true);
                   dispatch(getChatData({ newData, botType }))
                     .then((data) => {
                       let actiVitiesData =
@@ -181,7 +183,8 @@ const OTP = () => {
                             };
                             if (convId && botType) {
                               dispatch(getChatData({ newData, botType }))
-                              .then((data) => {
+                                .then((data) => {
+                                  setLoading(false);
                                   let cartActivity =
                                     data?.payload?.data?.activities[0][0];
                                   if (
@@ -193,12 +196,15 @@ const OTP = () => {
                                     dispatch(setCartId(cartId));
                                   }
                                 })
-                                .catch((err) => console.log("err", err));
+                                .catch((err) => {
+                                  setLoading(false);
+                                  console.log("err", err);
+                                });
                             }
                           }
 
-                          dispatch(setUserPincode(500084));
-                          // dispatch(setUserPincode(pincode));
+                          // dispatch(setUserPincode(500084));
+                          dispatch(setUserPincode(pincode));
                           navigate("/success");
                         }
                       }

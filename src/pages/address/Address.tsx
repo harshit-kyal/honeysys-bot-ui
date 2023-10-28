@@ -243,12 +243,12 @@ const Address = () => {
         voiceFlag: false,
         isChatVisible: false,
         data: {
-          pincode: "500084",
-          lat: "17.469857630687827",
-          lag: "78.35782449692486",
-          // pincode: address?.pincode,
-          // lat: latLng?.lat,
-          // lag: latLng?.lng,
+          // pincode: "500084",
+          // lat: "17.469857630687827",
+          // lag: "78.35782449692486",
+          pincode: address?.pincode,
+          lat: latLng?.lat,
+          lag: latLng?.lng,
           type: "location",
         },
       };
@@ -276,7 +276,7 @@ const Address = () => {
                     },
                   };
 
-                  if (convId && botType) {
+                  if (convId && botType && convId !== "" && botType !== "") {
                     dispatch(getChatData({ newData, botType }))
                       .then((data) => {
                         let cartData = data?.payload?.data?.activities[0][0];
@@ -291,9 +291,9 @@ const Address = () => {
                   }
                 }
 
-                dispatch(setUserPincode(500084));
+                // dispatch(setUserPincode(500084));
 
-                // dispatch(setUserPincode(address?.pincode));
+                dispatch(setUserPincode(address?.pincode));
                 {
                   navigateData && navigateData !== ""
                     ? navigate("/contactDetails", {
