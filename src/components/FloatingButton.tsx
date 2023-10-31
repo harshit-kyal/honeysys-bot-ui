@@ -37,20 +37,21 @@ const FloatingButton = () => {
   }
   document.body.addEventListener("dragover", drag_over, false);
   document.body.addEventListener("drop", drop, false);
-
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   const dispatch = useAppDispatch();
   const [displayPopup, setDisplayPopup] = useState<boolean>(false);
   const updateUI = () => {
     getTheme().then((response) => {
-      // toast("UI is updated", {
-      //   style: {
-      //     padding: " 16px 10px",
-      //     borderRadius: "8px",
-      //     background: "#C25E5E",
-      //     color: "#FFF",
-      //   },
-      // });
-      alert("UI is updated");
+      toastModal({ text: "UI is updated" });
       // setDisplayPopup(true);
       // setTimeout(() => {
       //   setDisplayPopup(false);

@@ -30,7 +30,7 @@ const ProtectedRoute = () => {
     }, 500);
   }, []);
   return render ? (
-    (token && storeId) || reviewToken ? (
+    (token ) || reviewToken ? (
       <div className="">
         {isHeader && <HeaderBar />}
         <Outlet />

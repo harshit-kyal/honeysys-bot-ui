@@ -2,7 +2,12 @@ import { Button } from "@polynomialai/alpha-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getChatData, setUserPincode } from "../../slices/homeSlice";
+import {
+  getChatData,
+  setGetStartDisplay,
+  setUserPincode,
+  setUserSavedAddres,
+} from "../../slices/homeSlice";
 
 const AddressDetails = () => {
   const navigate = useNavigate();
@@ -68,6 +73,8 @@ export function RadioButtonGroup(props: any) {
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
   const storeId = useAppSelector((state) => state.home.storeId);
+  const storeData = useAppSelector((state) => state.home.storeData);
+  const getStartDisplay = useAppSelector((state) => state.home.getStartDisplay);
   const [addressArray, setAddressArray] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState<any>({});
   const [Error, setError] = useState(false);
@@ -80,6 +87,9 @@ export function RadioButtonGroup(props: any) {
       isChatVisible: false,
       data: {
         storeId: storeId,
+        pincode: storeData?.location?.pincode,
+        lat: storeData?.location?.latitude,
+        lag: storeData?.location?.longitude,
       },
     };
     // if (convId && botType && convId !== "" && botType !== "") {
@@ -87,7 +97,7 @@ export function RadioButtonGroup(props: any) {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           let addressData = data?.payload?.data?.activities[0][0];
-          if (data && addressData?.type === "getaddress") {
+          if (data && addressData?.type === "getAddress") {
             setAddressArray(addressData?.value?.data);
             setSelectedAdress(addressData?.value?.data[0]);
             setError(false);
@@ -136,7 +146,6 @@ export function RadioButtonGroup(props: any) {
                     <div
                       className="flex justify-end"
                       onClick={() => {
-                        console.log("item", item);
                         navigate("/contactDetails", {
                           state: {
                             address: item,
@@ -176,21 +185,27 @@ export function RadioButtonGroup(props: any) {
             <Button
               className=" !bg-primary text-white text-xs mx-5 max-[500px]:w-[90%] min-[500px]:w-[40%] min-[1024px]:w-[20%] text-center py-[10px]  "
               onClick={() => {
-                navigate("/");
-                const newData = {
-                  conversationId: convId,
-                  text: "saveaddress",
-                  voiceFlag: false,
-                  isChatVisible: false,
-                  data: selectedAddress,
-                };
-                dispatch(getChatData({ newData, botType }))
-                  .then(() => {
-                    dispatch(setUserPincode(selectedAddress?.pincode));
-                  })
-                  .catch((error) => {
-                    console.log("err", error);
-                  });
+                if (getStartDisplay) {
+                  navigate("/");
+                  const newData = {
+                    conversationId: convId,
+                    text: "saveaddress",
+                    voiceFlag: false,
+                    isChatVisible: false,
+                    data: selectedAddress,
+                  };
+                  dispatch(getChatData({ newData, botType }))
+                    .then(() => {
+                      dispatch(setUserSavedAddres(selectedAddress));
+                      dispatch(setUserPincode(selectedAddress?.pincode));
+                    })
+                    .catch((error) => {
+                      console.log("err", error);
+                    });
+                } else {
+                  dispatch(setGetStartDisplay(true));
+                  navigate("/");
+                }
               }}
             >
               Save

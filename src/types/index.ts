@@ -60,7 +60,8 @@ export interface HomeSliceType {
   mobileNo: string;
   otp: number;
   userId: string;
-  cartId: any;
+  cartId: string;
+  userSavedAddres:any;
   cartTotalAmount: any;
   deliveryType: any;
   deliveryDate: any;

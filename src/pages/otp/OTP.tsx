@@ -29,12 +29,9 @@ const OTP = () => {
   const [Loading, setLoading] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(30);
-  const [latLng, setLatLng] = useState<any>({
-    lat: 0,
-    lng: 0,
-  });
+  const correctOTP = useAppSelector((state) => state.home.otp);
+  const [CorrectOTP, setCorrectOTP] = useState<number>(correctOTP);
   const navigate = useNavigate();
-  const CorrectOTP = useAppSelector((state) => state.home.otp);
 
   const wrongOTP = ({ text = "" }: { text: string }) => {
     toast(text, {
@@ -90,7 +87,6 @@ const OTP = () => {
               data &&
               data?.payload?.data?.activities[0][0]?.type === "viewCart"
             ) {
-         
               let cartData =
                 data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
               cartData?.map((item: any, index: number) => {
@@ -118,113 +114,19 @@ const OTP = () => {
   useEffect(() => {
     cartData();
   }, [storeId, cartId]);
-
-  useEffect(() => {
-    console.log("latlng", latLng);
-    if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
-      const geocoder = new google.maps.Geocoder();
-      geocoder
-        .geocode({ location: latLng }, (results: any, status: any) => {
-          if (status === "OK" && results) {
-            console.log("results123", results);
-            if (results?.length > 0) {
-              let postalCode = results?.find((ele: any) =>
-                ele.address_components?.find((component: any) =>
-                  component?.types?.includes("postal_code")
-                )
-              );
-              if (postalCode) {
-                const pincode = postalCode?.long_name;
-                let botType = "e-comm";
-                const newData = {
-                  conversationId: convId,
-                  text: "findstores",
-                  voiceFlag: false,
-                  isChatVisible: false,
-                  data: {
-                    // pincode: "500084",
-                    // lat: "17.469857630687827",
-                    // lag: "78.35782449692486",
-                    pincode: pincode,
-                    lat: `${latLng?.lat}`,
-                    lag: `${latLng?.lng}`,
-                    type: "location",
-                  },
-                };
-                if (convId && botType) {
-                  setLoading(true);
-                  dispatch(getChatData({ newData, botType }))
-                    .then((data) => {
-                      let actiVitiesData =
-                        data?.payload?.data?.activities[0][0];
-                      if (data && actiVitiesData?.type === "storeCheck") {
-                        if (
-                          actiVitiesData?.value?.data[0]?.status_code === 500
-                        ) {
-                          navigate("/serviceableArea");
-                        } else if (
-                          actiVitiesData?.value?.data[0]?.status_code === 200
-                        ) {
-                          dispatch(
-                            setStoreData(actiVitiesData?.value?.data[0])
-                          );
-                          dispatch(
-                            setStoreId(actiVitiesData?.value?.data[0]?.id)
-                          );
-                          let storeIds = actiVitiesData?.value?.data[0]?.id;
-                          if (storeIds) {
-                            let botType = "e-comm";
-                            const newData = {
-                              conversationId: convId,
-                              text: "getcartid",
-                              voiceFlag: false,
-                              isChatVisible: false,
-                              data: {
-                                storeId: storeIds,
-                              },
-                            };
-                            if (convId && botType) {
-                              dispatch(getChatData({ newData, botType }))
-                                .then((data) => {
-                                  // setLoading(false);
-                                  let cartActivity =
-                                    data?.payload?.data?.activities[0][0];
-                                  if (
-                                    data &&
-                                    cartActivity?.type === "storeCheck"
-                                  ) {
-                                    let cartId =
-                                      cartActivity?.value?.data?.cartId;
-                                    dispatch(setCartId(cartId));
-                                  }
-                                })
-                                .catch((err) => {
-                                  // setLoading(false);
-                                  console.log("err", err);
-                                });
-                            }
-                          }
-
-                          // dispatch(setUserPincode(500084));
-                          dispatch(setUserPincode(pincode));
-                          navigate("/success");
-                        }
-                      }
-                    })
-                    .catch((err) => console.log("err", err));
-                }
-              }
-            } else {
-              console.error("ress", results);
-            }
-          } else {
-            console.error("Geocoder failed due to: " + status);
-          }
-        })
-        .catch((err) => console.log("err", err));
-    }
-  }, [latLng]);
-
+  const resend = () => {
+    botApi({
+      loginId: Mobile,
+      action: "login",
+      clientName: "honeySys",
+    }).then((response) => {
+      setLoading(false);
+      if (response.data?.code === 200) {
+        setCorrectOTP(parseInt(response?.data?.data?.otp));
+        toast.success(`OTP : ${response?.data?.data?.otp}`);
+      }
+    });
+  };
   return (
     <div className="w-screen h-screen px-5 py-3">
       <BackButton />
@@ -277,36 +179,8 @@ const OTP = () => {
                       response.data?.data.access_token
                     );
                     dispatch(setTheme(response.data.data.customiseUI));
-                    if (navigator.geolocation) {
-                      navigator.permissions
-                        .query({ name: "geolocation" })
-                        .then(function (result) {
-                          if (result.state === "granted") {
-                            navigator.geolocation.getCurrentPosition(function (
-                              position
-                            ) {
-                              const latLng = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                              };
-                              setLatLng(latLng);
-                            });
-                          } else if (result.state === "prompt") {
-                            navigator.geolocation.getCurrentPosition(function (
-                              position
-                            ) {});
-                          } else if (result.state === "denied") {
-                            navigate("/address", {
-                              state: { navigate: "home" },
-                            });
-                          }
-                          result.onchange = function () {};
-                        });
-                    } else {
-                      alert("Sorry Not available!");
-                    }
 
-                    // navigate("/success");
+                    navigate("/success");
                     setLoading(false);
                   }
                 })
@@ -320,10 +194,8 @@ const OTP = () => {
         </Button>
       </div>
       <div className="flex justify-center gap-1 mt-5">
-        <Text type="body" size="md">
-          Didn’t get the code?
-        </Text>
-        <Text type="body" size="md" className="text-primary">
+        <div className="text-[14px]">Didn’t get the code?</div>
+        <div className="text-primary text-[14px]" onClick={resend}>
           {seconds > 0 || minutes > 0 ? (
             <>
               {minutes.toLocaleString("en-IN", { minimumIntegerDigits: 2 })}:
@@ -339,7 +211,7 @@ const OTP = () => {
               Resend
             </div>
           )}
-        </Text>
+        </div>
       </div>
       <Toaster />
     </div>

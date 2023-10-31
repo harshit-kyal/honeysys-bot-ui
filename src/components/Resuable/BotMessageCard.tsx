@@ -12,6 +12,7 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
@@ -43,6 +44,7 @@ const BotMessageCard = ({
   const bot = overallThemeUI.botIcons;
   const navigate = useNavigate();
   const cartData = useAppSelector((state) => state.home.storeData);
+  const storeId = useAppSelector((state) => state.home.storeId);
   const cartId = useAppSelector((state) => state.home.cartId);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const deliveryDate = useAppSelector((state) => state.home.deliveryDate);
@@ -87,6 +89,55 @@ const BotMessageCard = ({
       </RichCard>
     );
   }
+  //razorpay
+  const loadScript = (src: any) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
+  const displayRazorpay = async (paymentDetails: any) => {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      toastModal({ text: "you are offline" });
+    }
+    const option = {
+      key: paymentDetails?.key,
+      currency: paymentDetails?.currency,
+      amount: paymentDetails?.amount,
+      name: "Honeysys",
+      describe: "Thanks for purchasing",
+      image:
+        "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+      handler: function (response: any) {
+        toastModal({ text: `${response.razorpay_payment_id}` });
+      },
+      prefill: {
+        name: "Honeysys",
+      },
+    };
+    const paymentObject = new (window as any).Razorpay(option);
+    paymentObject.open();
+  };
   return (
     <div>
       {actionDataArray && actionDataArray.length !== 0 ? (
@@ -104,9 +155,31 @@ const BotMessageCard = ({
                 text={data?.text}
                 onClick={() => {
                   if (flag) {
-                    console.log("change",data?.value)
                     if (data?.value === "provideLocation") {
-                      dispatch(setLocationPermission(true));
+                      const newData = {
+                        conversationId: convId,
+                        isChatVisible: false,
+                        text: "getAddress",
+                        voiceFlag: false,
+                        data: {
+                          storeId: storeId,
+                        },
+                      };
+                      dispatch(getChatData({ newData, botType }))
+                        .then((res) => {
+                          if (
+                            res?.payload?.data?.activities[0][0]?.value?.data
+                              ?.length !== 0
+                          ) {
+                            navigate("/addressDetails");
+                          } else {
+                            navigate("/address");
+                          }
+                        })
+                        .catch((error) => {
+                          console.log("err", error);
+                        });
+                      // dispatch(setLocationPermission(true));
                     } else if (data?.value === "viewCatalog") {
                       navigate("/catalog");
                     } else if (data?.value === "changeLocation") {
@@ -153,6 +226,12 @@ const BotMessageCard = ({
                         sourceAction: true,
                         content: data?.text,
                         replyArray: buttonContent,
+                        paymentMethod:
+                          data?.text === "Pay Online"
+                            ? "Pay Online"
+                            : data?.text === "Cash on delivery"
+                            ? "Pay on Delivery"
+                            : "",
                         data: {
                           lat: cartData?.location?.latitude,
                           lag: cartData?.location?.longitude,
@@ -191,7 +270,31 @@ const BotMessageCard = ({
                         },
                       };
                       dispatch(getChatData({ newData, botType }))
-                        .then((dat) => console.log("data", dat))
+                        .then((response) => {
+                          if (data?.text === "Pay online") {
+                            let paymentCard =
+                              response?.payload?.data?.activities[0][0];
+                            if (data && paymentCard?.type === "paymentCard") {
+                              const paymentContent: any =
+                                paymentCard?.value?.data[0];
+                              if (
+                                paymentContent?.onlinePaymentDetails &&
+                                paymentContent?.secretKey
+                              ) {
+                                let paymentDetails = {
+                                  key: paymentContent?.secretKey,
+                                  currency:
+                                    paymentContent?.onlinePaymentDetails
+                                      ?.currency,
+                                  amount:
+                                    paymentContent?.onlinePaymentDetails
+                                      ?.amount,
+                                };
+                                displayRazorpay(paymentDetails);
+                              }
+                            }
+                          }
+                        })
                         .catch((err) => console.log("err", err));
                     }
                   }

@@ -16,7 +16,6 @@ const ContactDetails = () => {
   const storeInfo = useAppSelector((state) => state.home.storeData);
   const convId = useAppSelector((state) => state.bot.convId);
   const addressData = location?.state?.address;
-  console.log("addre", addressData);
   const [name, setName] = useState(addressData?.name ? addressData?.name : "");
   const [pincode, setPincode] = useState(
     addressData?.pincode ? addressData?.pincode : pincodeData
@@ -111,7 +110,7 @@ const ContactDetails = () => {
           .then((data) => {
             if (
               data &&
-              data?.payload?.data?.activities[0][0]?.type === "addaddress"
+              data?.payload?.data?.activities[0][0]?.type === "addAddress"
             ) {
               setAddAddressLoading(false);
               navigateData && navigateData === "home"

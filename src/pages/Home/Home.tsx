@@ -11,6 +11,10 @@ import {
   setCart,
   setTotalQuantity,
   setGetStartDisplay,
+  setStoreData,
+  setStoreId,
+  setCartId,
+  setUserPincode,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -35,6 +39,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axiosInstance from "../../lib/axiosInstance";
 import axios from "axios";
 import CartReplyCard from "../../components/Resuable/CartReplyCard";
+import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
+import { promises } from "dns";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -63,6 +71,11 @@ const Home = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isLoadingVisible, setLoadingVisible] = useState(false);
+  const [latLng, setLatLng] = useState<any>({
+    lat: 0,
+    lng: 0,
+  });
+  const navigate = useNavigate();
   const loadingDelayTimeout = useRef<number | undefined>(undefined);
 
   // const chat = [
@@ -418,13 +431,12 @@ const Home = () => {
   const replyFunction = (data: any) => {
     if (data?.activities) {
       const activities: any[] = data?.activities;
-      console.log("activities", activities);
       activities?.forEach((item) => {
-        console.log("item", item);
         dispatch(addToChatArray(item));
       });
     }
   };
+
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const radiusParam = searchParams.get("radius");
@@ -494,7 +506,121 @@ const Home = () => {
   //     ]);
   //   }
   // }, [title, greetingMessage, botIcon]);
-
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
+    libraries: ["places"],
+  });
+  useEffect(() => {
+    if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
+      const geocoder = new google.maps.Geocoder();
+      geocoder
+        .geocode({ location: latLng }, (results: any, status: any) => {
+          if (status === "OK" && results) {
+            if (results?.length > 0) {
+              let postalCode = results?.find((ele: any) =>
+                ele.address_components?.find((component: any) =>
+                  component?.types?.includes("postal_code")
+                )
+              );
+              if (postalCode) {
+                const pincode = postalCode?.long_name;
+                let botType = "e-comm";
+                const newData = {
+                  conversationId: convId,
+                  text: "findstores",
+                  voiceFlag: false,
+                  isChatVisible: false,
+                  data: {
+                    // pincode: "500084",
+                    // lat: "17.469857630687827",
+                    // lag: "78.35782449692486",
+                    pincode: pincode,
+                    lat: `${latLng?.lat}`,
+                    lag: `${latLng?.lng}`,
+                    type: "location",
+                  },
+                };
+                if (convId && botType) {
+                  dispatch(getChatData({ newData, botType }))
+                    .then((data) => {
+                      let actiVitiesData =
+                        data?.payload?.data?.activities[0][0];
+                      if (data && actiVitiesData?.type === "findStores") {
+                        if (
+                          actiVitiesData?.value?.data[0]?.status_code === 500
+                        ) {
+                          navigate("/serviceableArea");
+                        } else if (
+                          actiVitiesData?.value?.data[0]?.status_code === 200
+                        ) {
+                          dispatch(
+                            setStoreData(actiVitiesData?.value?.data[0])
+                          );
+                          dispatch(
+                            setStoreId(actiVitiesData?.value?.data[0]?.id)
+                          );
+                          let storeIds = actiVitiesData?.value?.data[0]?.id;
+                          if (storeIds) {
+                            let botType = "e-comm";
+                            const newData = {
+                              conversationId: convId,
+                              text: "getcartid",
+                              voiceFlag: false,
+                              isChatVisible: false,
+                              data: {
+                                storeId: storeIds,
+                              },
+                            };
+                            if (convId && botType) {
+                              dispatch(getChatData({ newData, botType }))
+                                .then((data) => {
+                                  // setLoading(false);
+                                  let cartActivity =
+                                    data?.payload?.data?.activities[0][0];
+                                  if (
+                                    data &&
+                                    cartActivity?.type === "getCartId"
+                                  ) {
+                                    let cartId =
+                                      cartActivity?.value?.data?.cartId;
+                                    dispatch(setCartId(cartId));
+                                  }
+                                })
+                                .catch((err) => {
+                                  // setLoading(false);
+                                  console.log("err", err);
+                                });
+                            }
+                          }
+                          // dispatch(setUserPincode(500084));
+                          dispatch(setUserPincode(pincode));
+                        }
+                      }
+                    })
+                    .catch((err) => console.log("err", err));
+                }
+              }
+            } else {
+              console.error("ress", results);
+            }
+          } else {
+            console.error("Geocoder failed due to: " + status);
+          }
+        })
+        .catch((err) => console.log("err", err));
+    }
+  }, [latLng]);
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   useEffect(() => {
     if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
@@ -514,6 +640,34 @@ const Home = () => {
             path: "/socket.io",
           });
           if (!getStartDisplay) {
+            if (navigator.geolocation) {
+              navigator.permissions
+                .query({ name: "geolocation" })
+                .then(function (result) {
+                  if (result.state === "granted") {
+                    navigator.geolocation.getCurrentPosition(function (
+                      position
+                    ) {
+                      const latLng = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                      };
+                      setLatLng(latLng);
+                    });
+                  } else if (result.state === "prompt") {
+                    navigator.geolocation.getCurrentPosition(function (
+                      position
+                    ) {});
+                  } else if (result.state === "denied") {
+                    navigate("/address", {
+                      state: { navigate: "home" },
+                    });
+                  }
+                  result.onchange = function () {};
+                });
+            } else {
+              toastModal({ text: "Sorry Not available!" });
+            }
             const newData = {
               conversationId: convId,
               text: "getStarted",
@@ -522,7 +676,7 @@ const Home = () => {
             };
             dispatch(getChatData({ newData, botType }))
               .then(() => {
-                dispatch(setGetStartDisplay(true));
+                // dispatch(setGetStartDisplay(true));
               })
               .catch((error) => {
                 console.log("err", error);
@@ -530,7 +684,6 @@ const Home = () => {
           }
           socket.on("sendMessage", (message) => {
             if (message.data && message.data !== "") {
-              console.log("message", message);
               let data = message.data;
               replyFunction(data);
             }
@@ -557,446 +710,6 @@ const Home = () => {
       // }
     }
   }, []);
-
-  //   activity: any[],
-  //   i: number,
-  //   j: number,
-  //   flag: boolean
-  // ) => {
-  //   return (
-  //     <ChatWrapper
-  //       type={activity[i]?.value?.sender === "user" ? "user" : "bot"}
-  //       key={new Date().getTime()}
-  //     >
-  //       <div className="chatWrapper">
-  //         {activity?.map((ac: any, index: number) => {
-  //           if (index >= i && index < j) {
-  //             if (ac["sub_type"] && ac["sub_type"] === "screen") {
-  //             } else if (ac?.type === "get start") {
-  //               return (
-  //                 <div className="w-full">
-  //                   {/* <GetStart
-  //                     setChatArray={setChatComponentArray}
-  //                     key={new Date().getTime()}
-  //                   /> */}
-  //                 </div>
-  //               );
-  //             } else if (ac?.type === "message" && ac?.text !== "") {
-  //               if (ac?.updateUI === true) {
-  //                 dispatch(setUiUpdate(true));
-  //               } else {
-  //                 dispatch(setUiUpdate(false));
-  //               }
-
-  //               return (
-  //                 <div className="w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <UserMessageCard
-  //                       content={ac?.text}
-  //                       time={ac?.timestamp}
-  //                     />
-  //                   ) : (
-  //                     <BotMessageCard
-  //                       title={ac?.text ? ac?.text : ""}
-  //                       time={ac?.timestamp ? ac?.timestamp : ""}
-  //                     />
-  //                   )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "richCard" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const richCard = ac?.value?.data;
-  //               return (
-  //                 <div className="w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <></>
-  //                   ) : (
-  //                     Array.isArray(richCard) &&
-  //                     richCard.length > 0 &&
-  //                     richCard?.map((richCard: any, index: number) => {
-  //                       return (
-  //                         <BotMessageCard
-  //                           title={richCard?.title ? richCard?.title : ""}
-  //                           time={ac?.timestamp ? ac?.timestamp : ""}
-  //                           contentArray={
-  //                             richCard?.description ? richCard?.description : ""
-  //                           }
-  //                           imageSrc={
-  //                             richCard?.imageURL ? richCard?.imageURL : ""
-  //                           }
-  //                           botIcon={richCard?.botIcon ? richCard?.botIcon : ""}
-  //                           key={index}
-  //                         />
-  //                       );
-  //                     })
-  //                   )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "iconQuickReply" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const iconQuickReplyCard = ac?.value?.data;
-  //               console.log(
-  //                 "iconQuickReplyCard",
-  //                 iconQuickReplyCard,
-  //                 ac?.value?.content
-  //               );
-  //               return (
-  //                 <div className=" w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <></>
-  //                   ) : (
-  //                     <BotMessageCard
-  //                       actionDataArray={
-  //                         Array.isArray(iconQuickReplyCard) &&
-  //                         iconQuickReplyCard.length > 0
-  //                           ? iconQuickReplyCard
-  //                           : []
-  //                       }
-  //                       flag={flag ? flag : true}
-  //                       buttonContent={
-  //                         ac?.value?.content ? ac?.value?.content : ""
-  //                       }
-  //                     />
-  //                   )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "summaryCard" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const summaryCard: any = ac?.value?.data;
-  //               return (
-  //                 <div className=" w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <></>
-  //                   ) : (
-  //                     Array.isArray(summaryCard) &&
-  //                     summaryCard.length > 0 &&
-  //                     summaryCard?.map((summaryCard: any, index: number) => {
-  //                       return (
-  //                         <BotMessageCard
-  //                           key={index}
-  //                           title=""
-  //                           contentArray={[
-  //                             <div>
-  //                               {" "}
-  //                               {summaryCard?.topText
-  //                                 ? summaryCard?.topText
-  //                                 : ""}
-  //                             </div>,
-
-  //                             <SummaryCard
-  //                               className="w-full mt-3"
-  //                               image={
-  //                                 <img
-  //                                   src="/images/onion.svg"
-  //                                   alt=""
-  //                                   className="h-[60px] w-[60px] rounded-md"
-  //                                 />
-  //                               }
-  //                               priceList={
-  //                                 summaryCard.price ? summaryCard.price : ""
-  //                               }
-  //                               subtitle={
-  //                                 summaryCard?.subtitle
-  //                                   ? summaryCard?.subtitle
-  //                                   : ""
-  //                               }
-  //                               title={
-  //                                 summaryCard.title ? summaryCard.title : ""
-  //                               }
-  //                               totalAmount={
-  //                                 summaryCard?.totalAmount
-  //                                   ? summaryCard?.totalAmount
-  //                                   : ""
-  //                               }
-  //                               totaltitle={
-  //                                 summaryCard?.totaltitle
-  //                                   ? summaryCard?.totaltitle
-  //                                   : ""
-  //                               }
-  //                             />,
-  //                             <Text
-  //                               type="body"
-  //                               size="md"
-  //                               className="font-semibold mt-3 mb-1"
-  //                             >
-  //                               {summaryCard?.bottomText
-  //                                 ? summaryCard?.bottomText
-  //                                 : ""}
-  //                             </Text>,
-  //                           ]}
-  //                         />
-  //                       );
-  //                     })
-  //                   )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "trackOrder" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const trackOrderCard = ac?.value?.data;
-  //               return (
-  //                 <div className="w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <></>
-  //                   ) : (
-  //                     Array.isArray(trackOrderCard) &&
-  //                     trackOrderCard.length > 0 &&
-  //                     trackOrderCard?.map(
-  //                       (trackOrderCard: any, index: number) => {
-  //                         return (
-  //                           <RichCard>
-  //                             <>
-  //                               <div className="relative">
-  //                                 <ReplyCard
-  //                                   className="w-full"
-  //                                   title="Honeysys Bot"
-  //                                   titleCN="text-primary"
-  //                                 >
-  //                                   <div className="flex flex-col justify-evenly w-full">
-  //                                     <Text
-  //                                       type="body"
-  //                                       size="sm"
-  //                                       className="text-[#505050]"
-  //                                     >
-  //                                       {`🛒 Order ${
-  //                                         trackOrderCard?.orderId
-  //                                           ? trackOrderCard?.orderId
-  //                                           : ""
-  //                                       }`}
-  //                                     </Text>
-  //                                     <Text
-  //                                       type="label"
-  //                                       size="lg"
-  //                                       className="text-[#505050]"
-  //                                     >
-  //                                       {`Total ${
-  //                                         trackOrderCard?.totalItems
-  //                                           ? trackOrderCard?.totalItems
-  //                                           : ""
-  //                                       } items ₹ ${
-  //                                         trackOrderCard?.totalAmount ?? ""
-  //                                       } `}
-  //                                     </Text>
-  //                                     <img
-  //                                       src="/images/vegetables.svg"
-  //                                       height={50}
-  //                                       alt="vegetable"
-  //                                       className="max-w-[54px] rounded-md absolute right-1 bottom-1"
-  //                                     />
-  //                                   </div>
-  //                                 </ReplyCard>
-  //                               </div>
-  //                               <div className="text-[14px] font-normal">
-  //                                 {`${
-  //                                   trackOrderCard?.orderNo
-  //                                     ? trackOrderCard?.orderNo
-  //                                     : ""
-  //                                 }`}{" "}
-  //                                 <span className="font-semibold">
-  //                                   {`${
-  //                                     trackOrderCard?.deliveryDate
-  //                                       ? trackOrderCard?.deliveryDate
-  //                                       : ""
-  //                                   }`}
-  //                                 </span>
-  //                                 {`- ${trackOrderCard?.items} -`}
-  //                                 <span className="font-semibold">
-  //                                   {` ₹ ${
-  //                                     trackOrderCard?.totalAmount
-  //                                       ? trackOrderCard?.totalAmount
-  //                                       : ""
-  //                                   }`}
-  //                                 </span>{" "}
-  //                                 - Delivered
-  //                               </div>
-  //                             </>
-  //                           </RichCard>
-  //                         );
-  //                       }
-  //                     )
-  //                   )}
-  //                 </div>
-  //               );
-  //             }
-  //             if (ac?.type === "paymentCard" && ac?.value?.data?.length !== 0) {
-  //               const paymentCard = ac?.value?.data;
-
-  //               if (paymentCard[0]?.isOrderPlaced === true) {
-  //                 dispatch(setCart([]));
-  //                 dispatch(setTotalQuantity(0));
-  //               }
-
-  //               return (
-  //                 <div className="w-full">
-  //                   {ac?.value?.sender === "user" ? (
-  //                     <></>
-  //                   ) : (
-  //                     Array.isArray(paymentCard) &&
-  //                     paymentCard.length > 0 &&
-  //                     paymentCard?.map((paymentCard: any, index: number) => {
-  //                       return (
-  //                         <RichCard>
-  //                           <>
-  //                             <div className="relative">
-  //                               <ReplyCard
-  //                                 className="w-full"
-  //                                 title="Honeysys Bot"
-  //                                 titleCN="text-primary"
-  //                               >
-  //                                 <div className="flex flex-col justify-evenly w-full">
-  //                                   <Text
-  //                                     type="body"
-  //                                     size="sm"
-  //                                     className="text-[#505050]"
-  //                                   >
-  //                                     {`🛒 Order ${
-  //                                       paymentCard?.orderId
-  //                                         ? paymentCard?.orderId
-  //                                         : ""
-  //                                     }`}
-  //                                   </Text>
-  //                                   <Text
-  //                                     type="label"
-  //                                     size="lg"
-  //                                     className="text-[#505050]"
-  //                                   >
-  //                                     {`Total ${
-  //                                       paymentCard?.totalItems
-  //                                         ? paymentCard?.totalItems
-  //                                         : ""
-  //                                     } items ₹ ${
-  //                                       paymentCard?.totalAmount
-  //                                         ? paymentCard?.totalAmount
-  //                                         : ""
-  //                                     } `}
-  //                                   </Text>
-  //                                   <img
-  //                                     src="/images/vegetables.svg"
-  //                                     height={50}
-  //                                     alt="vegetable"
-  //                                     className="max-w-[54px] rounded-md absolute right-1 bottom-1"
-  //                                   />
-  //                                 </div>
-  //                               </ReplyCard>
-  //                             </div>
-  //                             <div className="flex ms-1 align-middle">
-  //                               <img
-  //                                 src="/images/rupee.svg"
-  //                                 height="24"
-  //                                 width="24"
-  //                                 alt=""
-  //                               ></img>
-  //                               <div className="m-2 ">
-  //                                 <div className="text-[14px] text-[black] flex">
-  //                                   <div className="font-normal me-1">
-  //                                     Payment to
-  //                                   </div>{" "}
-  //                                   Honeysys
-  //                                 </div>
-  //                                 <div className="text-[#075E54] text-[12px] font-normal">
-  //                                   Successful
-  //                                 </div>
-  //                               </div>
-  //                             </div>
-  //                             {paymentCard?.content?.map(
-  //                               (item: string, index: number) => (
-  //                                 <div className="text-[14px] font-normal">
-  //                                   {item ? item : ""}
-  //                                 </div>
-  //                               )
-  //                             )}
-  //                           </>
-  //                         </RichCard>
-  //                       );
-  //                     })
-  //                   )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "replyMessage" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const replyMessageCard = ac?.value?.data;
-  //               console.log("replyMessageCard", replyMessageCard);
-  //               return (
-  //                 // <></>
-  //                 <div className="w-full">
-  //                   {Array.isArray(replyMessageCard) &&
-  //                     replyMessageCard.length > 0 &&
-  //                     replyMessageCard?.map(
-  //                       (replyMessageCard: any, index: number) => {
-  //                         return (
-  //                           <ReplyMessageCard
-  //                             time={ac?.timestamp ? ac?.timestamp : ""}
-  //                             content={`${
-  //                               replyMessageCard?.content
-  //                                 ? replyMessageCard?.content
-  //                                 : ""
-  //                             }`}
-  //                             replyArray={
-  //                               replyMessageCard?.replyArray
-  //                                 ? replyMessageCard?.replyArray
-  //                                 : ""
-  //                             }
-  //                           />
-  //                         );
-  //                       }
-  //                     )}
-  //                 </div>
-  //               );
-  //             } else if (
-  //               ac?.type === "cartReplyCard" &&
-  //               ac?.value?.data?.length !== 0
-  //             ) {
-  //               const cartReplyCard = ac?.value?.data;
-  //               return (
-  //                 <div className="w-full">
-  //                   {ac?.value?.sender === "bot" ? (
-  //                     <></>
-  //                   ) : (
-  //                     Array.isArray(cartReplyCard) &&
-  //                     cartReplyCard.length > 0 &&
-  //                     cartReplyCard?.map(
-  //                       (cartReplyCard: any, index: number) => {
-  //                         return (
-  //                           <CartReplyCard
-  //                             time={ac?.timestamp ? ac?.timestamp : ""}
-  //                             imageSrc={
-  //                               cartReplyCard?.imageSrc
-  //                                 ? cartReplyCard?.imageSrc
-  //                                 : ""
-  //                             }
-  //                             price={
-  //                               cartReplyCard?.totalAmount
-  //                                 ? cartReplyCard?.totalAmount
-  //                                 : ""
-  //                             }
-  //                             items={
-  //                               cartReplyCard?.totalItems
-  //                                 ? cartReplyCard?.totalItems
-  //                                 : ""
-  //                             }
-  //                           />
-  //                         );
-  //                       }
-  //                     )
-  //                   )}
-  //                 </div>
-  //               );
-  //             }
-  //           }
-  //         })}
-  //       </div>
-  //     </ChatWrapper>
-  //   );
-  // };
   const formatedDate = (data: any) => {
     let date = new Date(data);
     const formattedDate = date.toLocaleString("en-US", {
@@ -1014,7 +727,6 @@ const Home = () => {
     scroll();
   }, [isLoadingVisible]);
   const [pageNumber, setPageNumber] = useState(0);
-  console.log("ChatArray", ChatArray);
 
   // const fetchData = () => {
   //   setTimeout(() => {
@@ -1145,7 +857,8 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
-  console.log("chatAraay", ChatArray);
+  console.log("poojan", ChatArray);
+
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
@@ -1180,8 +893,8 @@ const Home = () => {
                 }
               })()}
               {activity.length === 1 &&
-              activity[0].sub_type &&
-              activity[0].sub_type === "screen" ? (
+              activity[0].subType &&
+              activity[0].subType === "screen" ? (
                 <></>
               ) : Array.isArray(activity) && activity.length > 0 ? (
                 <ChatWrapper
@@ -1190,7 +903,7 @@ const Home = () => {
                 >
                   <div className="chatWrapper">
                     {activity?.map((ac: any, index: number) => {
-                      if (ac["sub_type"] && ac["sub_type"] === "screen") {
+                      if (ac["subType"] && ac["subType"] === "screen") {
                       } else if (ac?.type === "get start") {
                         return (
                           <div className="w-full">
@@ -1266,11 +979,6 @@ const Home = () => {
                         ac?.value?.data?.length !== 0
                       ) {
                         const iconQuickReplyCard = ac?.value?.data;
-                        console.log(
-                          "iconQuickReplyCard",
-                          iconQuickReplyCard,
-                          ac?.value?.content
-                        );
                         return (
                           <div className=" w-full">
                             {ac?.value?.sender === "user" ? (
@@ -1283,28 +991,29 @@ const Home = () => {
                                     ? iconQuickReplyCard
                                     : []
                                 }
-                                flag={(() => {
-                                  if (activity[0]?.value?.sender === "bot") {
-                                    if (mainIndex + 1 < ChatArray.length) {
-                                      for (
-                                        let i = mainIndex + 1;
-                                        i < ChatArray.length;
-                                        i++
-                                      ) {
-                                        let chat = ChatArray[i];
-                                        if (
-                                          chat[0]?.value?.sender === "bot" &&
-                                          chat?.find((x: any) => !x.sub_type)
-                                        ) {
-                                          return false;
-                                        }
-                                      }
-                                    }
-                                    return true;
-                                  } else {
-                                    return false;
-                                  }
-                                })()}
+                                flag={true}
+                                // flag={(() => {
+                                //   if (activity[0]?.value?.sender === "bot") {
+                                //     if (mainIndex + 1 < ChatArray.length) {
+                                //       for (
+                                //         let i = mainIndex + 1;
+                                //         i < ChatArray.length;
+                                //         i++
+                                //       ) {
+                                //         let chat = ChatArray[i];
+                                //         if (
+                                //           chat[0]?.value?.sender === "bot" &&
+                                //           chat?.find((x: any) => !x.subType)
+                                //         ) {
+                                //           return false;
+                                //         }.
+                                //       }
+                                //     }
+                                //     return true;
+                                //   } else {
+                                //     return false;
+                                //   }
+                                // })()}
                                 buttonContent={
                                   ac?.value?.content ? ac?.value?.content : ""
                                 }
@@ -1469,7 +1178,10 @@ const Home = () => {
                                                 : ""
                                             }`}
                                           </span>{" "}
-                                          - Delivered
+                                          -{" "}
+                                          {trackOrderCard?.orderStatus
+                                            ? trackOrderCard?.orderStatus
+                                            : ""}
                                         </div>
                                       </>
                                     </RichCard>
@@ -1584,7 +1296,6 @@ const Home = () => {
                         ac?.value?.data?.length !== 0
                       ) {
                         const replyMessageCard = ac?.value?.data;
-                        console.log("replyMessageCard", replyMessageCard);
                         return (
                           // <></>
                           <div className="w-full">
@@ -1616,7 +1327,6 @@ const Home = () => {
                         ac?.value?.data?.length !== 0
                       ) {
                         const cartReplyCard = ac?.value?.data;
-                        console.log("cartReplyCard123", cartReplyCard);
                         return (
                           <div className="w-full">
                             {ac?.value?.sender === "bot" ? (

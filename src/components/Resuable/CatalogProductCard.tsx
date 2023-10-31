@@ -10,6 +10,7 @@ interface cardProps {
   imageSrc: string;
   title: string;
   price: number;
+  onClick: any;
   // titleCn: string | null;
   // priceCn: string | null;
 }
@@ -19,6 +20,7 @@ const CatalogProductCard = ({
   imageSrc,
   price,
   title,
+  onClick,
 }: // titleCn,
 // priceCn,
 cardProps) => {
@@ -29,11 +31,7 @@ cardProps) => {
   // );
   const dispatch = useAppDispatch();
   return (
-    <div
-      onClick={() => {
-        // navigate(`/pdp/${id}`);
-      }}
-    >
+    <div onClick={onClick}>
       <ProductCard
         className="mb-2"
         image={
@@ -66,4 +64,3 @@ cardProps) => {
 };
 
 export default CatalogProductCard;
-

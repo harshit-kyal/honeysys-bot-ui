@@ -92,7 +92,7 @@ export const getChatApi = async ({
   if (!newData.attachment) {
     newData.attachment = [];
   }
-
+  const token = localStorage.getItem("accessToken");
   try {
     const response: any = await axiosInstance.post(
       `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`,

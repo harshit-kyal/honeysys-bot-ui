@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { setCatalogUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getChatData } from "../../slices/homeSlice";
+import { addToCartArray, getChatData } from "../../slices/homeSlice";
+import toast from "react-hot-toast";
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -15,10 +16,12 @@ const Catalog = () => {
   const storeId = useAppSelector((state) => state.home.storeId);
   const botType = useAppSelector((state) => state.bot.botType);
   const pincode = useAppSelector((state) => state.home.userPincode);
+  const cartId = useAppSelector((state) => state.home.cartId);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [productCatalog, setProductCatalog] = useState<any>([]);
   const [Loading, setLoading] = useState(false);
   const [Error, setError] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const params: any = searchParams.get("catalogData");
@@ -53,7 +56,10 @@ const Catalog = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data?.payload?.data?.activities[0][0]?.type === "storeCheck") {
+          if (
+            data?.payload?.data?.activities[0][0]?.type ===
+            "viewCategoryCatalog"
+          ) {
             setCategoriesCatalog(
               data?.payload?.data?.activities[0][0]?.value?.data
             );
@@ -78,7 +84,13 @@ const Catalog = () => {
           if (
             data?.payload?.data?.activities[0][0]?.type === "viewProductCatalog"
           ) {
-            setProductCatalog(data?.payload?.data?.activities[0][0]?.value?.data);
+            console.log(
+              "productData",
+              data?.payload?.data?.activities[0][0]?.value?.data[0]?.variants[0]
+            );
+            setProductCatalog(
+              data?.payload?.data?.activities[0][0]?.value?.data
+            );
           }
         })
         .catch(() => setError(true));
@@ -110,6 +122,35 @@ const Catalog = () => {
       setError(false);
     }
   }, [error]);
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
+  const handleAddApi = (data: any) => {
+    setAddLoading(true);
+    const newData = {
+      conversationId: convId,
+      text: "addtocart",
+      isChatVisible: false,
+      voiceFlag: false,
+      data: data,
+    };
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          setAddLoading(false);
+        })
+        .catch(() => {
+          setAddLoading(false);
+        });
+    }
+  };
   return (
     <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />
@@ -195,15 +236,53 @@ const Catalog = () => {
                 <div className="w-full sm:w-[50%] flex-shrink-0 basis-full sm:basis-[49%]">
                   <CatalogProductCard
                     key={index}
-                    id={data?.id ? data?.id : ""}
+                    id={data?.variants[0]?.id ? data?.variants[0]?.id : ""}
                     imageSrc={data?.imageSrc ? data?.imageSrc : ""}
-                    price={data?.price ? data?.price : ""}
-                    title={data?.title ? data?.title : ""}
+                    price={
+                      data?.variants[0]?.price ? data?.variants[0]?.price : ""
+                    }
+                    onClick={() => {
+                      let varientData = data.variants[0];
+                      console.log("data", data);
+                      // let qua = 1;
+                      // if (varientData?.minPurchaseLimit > qua) {
+                      //   qua = varientData?.minPurchaseLimit;
+                      // }
+                      // if (
+                      //   varientData?.stockBalance < qua ||
+                      //   (varientData?.purchaseLimit != 0 &&
+                      //     qua > varientData?.purchaseLimit)
+                      // ) {
+                      //   toastModal({ text: "This product stock is limited" });
+                      //   return;
+                      // } else {
+                      //   let cartItem = {
+                      //     productId: data?.id,
+                      //     varientId: varientData?.id,
+                      //     storeId: storeId,
+                      //     productVariantIndex: varientData?.productVariantIndex,
+                      //     quantity: qua,
+                      //     cartId: cartId,
+                      //   };
+                      //   dispatch(addToCartArray(cartItem));
+                      //   handleAddApi(cartItem);
+                      // }
+                    }}
+                    title={
+                      data?.variants[0]?.productName
+                        ? data?.variants[0]?.productName
+                        : ""
+                    }
                   />
                 </div>
               ))}
             </div>
           </div>
+          {addLoading && (
+            <div className="cartLoader">
+              <div className="cartLoader-text">Loading...</div>
+            </div>
+          )}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

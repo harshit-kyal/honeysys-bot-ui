@@ -1,8 +1,20 @@
 import { Button } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
+import {
+  getChatData,
+  setCartId,
+  setGetStartDisplay,
+  setStoreData,
+  setStoreId,
+} from "../../slices/homeSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import toast from "react-hot-toast";
 
 const ServiceableArea = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
   let storeData = [
     {
       id: "648beef8f65367341ca5f066",
@@ -95,6 +107,57 @@ const ServiceableArea = () => {
       creationDate: "2023-06-16T05:11:33.330Z",
     },
   ];
+  const skipHandler = () => {
+    const newData = {
+      conversationId: convId,
+      text: "experienceStore",
+      isChatVisible: false,
+      voiceFlag: false,
+    };
+
+    if (convId && botType) {
+      dispatch(getChatData({ newData, botType }))
+        .then((data: any) => {
+          let storeData = data?.payload?.data?.activities[0][0];
+          if (data && storeData?.type === "experienceStore") {
+            dispatch(setStoreData(storeData?.value?.data[0]));
+            dispatch(setStoreId(storeData?.value?.data[0]?.id));
+            let storeIds = storeData?.value?.data[0]?.id;
+            if (storeIds) {
+              let botType = "e-comm";
+              const newData = {
+                conversationId: convId,
+                text: "getcartid",
+                voiceFlag: false,
+                isChatVisible: false,
+                data: {
+                  storeId: storeIds,
+                },
+              };
+
+              if (convId && botType && convId !== "" && botType !== "") {
+                dispatch(getChatData({ newData, botType }))
+                  .then((data) => {
+                    let cartData = data?.payload?.data?.activities[0][0];
+                    if (data && cartData?.type === "getCartId") {
+                      let cartId = cartData?.value?.data?.cartId;
+                      dispatch(setCartId(cartId));
+                      navigate('/')
+                      dispatch(setGetStartDisplay(true))
+                    }
+                  })
+                  .catch((error) => {
+                    console.log("err", error);
+                  });
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("err", error);
+        });
+    }
+  };
   return (
     <div>
       <div className="h-[32vh] bg-[#d3d3df] py-3">
@@ -155,7 +218,10 @@ const ServiceableArea = () => {
             >
               Change Location
             </Button>
-            <div className="text-primary mt-2 text-sm cursor-pointer">
+            <div
+              className="text-primary mt-2 text-sm cursor-pointer"
+              onClick={skipHandler}
+            >
               Skip & Browse
             </div>
           </div>

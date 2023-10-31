@@ -5,7 +5,7 @@ const ActionButton = ({
   text,
   onClick,
   className,
-  flag=true,
+  flag = true,
 }: {
   src?: string;
   text: string;
@@ -15,7 +15,9 @@ const ActionButton = ({
 }) => {
   return (
     <button
-      className={`w-full flex justify-center items-center gap-1 bg-background rounded-actionButtonBorder border border-primary py-[10px] mt-[2px] ${className}`}
+      className={`w-full flex justify-center items-center gap-1 bg-background rounded-actionButtonBorder border border-primary py-[10px] mt-[2px] ${className} ${
+        !flag ? "bg-[#e2e2e2]" : ""
+      }`}
       onClick={onClick}
       disabled={!flag}
     >

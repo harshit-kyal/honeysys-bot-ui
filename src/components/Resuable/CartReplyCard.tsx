@@ -43,7 +43,6 @@ const CartReplyCard = ({ imageSrc = "", time, items, price }: CardProp) => {
         text="View Sent Cart"
         className="bg-primary text-white"
         onClick={() => {
-          console.log("carttt")
           navigate("/cart");
         }}
       />

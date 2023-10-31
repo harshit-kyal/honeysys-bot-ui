@@ -102,7 +102,8 @@ const LocationPermission = () => {
                   } else {
                     alert("Sorry Not available!");
                   }
-                }}
+                }
+              }
               >
                 Allow
               </Button>

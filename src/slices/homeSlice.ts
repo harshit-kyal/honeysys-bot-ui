@@ -11,6 +11,7 @@ const initialState: HomeSliceType = {
   storeId: "",
   cartId: "",
   userPincode: 0,
+  userSavedAddres: {},
   ChatArray: [],
   locationPermission: false,
   cartTotalAmount: "",
@@ -102,6 +103,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         deliveryDate: action.payload,
+      };
+    },
+    setUserSavedAddres(state, action) {
+      return {
+        ...state,
+        userSavedAddres: action.payload,
       };
     },
     setSlotIndex(state, action) {
@@ -296,5 +303,6 @@ export const {
   setCart,
   setTotalQuantity,
   setGetStartDisplay,
+  setUserSavedAddres,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

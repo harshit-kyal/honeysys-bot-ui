@@ -5,6 +5,7 @@ import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
@@ -67,7 +68,8 @@ const ViewProduct = () => {
         .then((data) => {
           if (
             data &&
-            data?.payload?.data?.activities[0][0]?.type === "storeCheck"
+            data?.payload?.data?.activities[0][0]?.type ===
+              "viewCategoryCatalog"
           ) {
             setError(false);
             setCategoriesCatalog(
@@ -158,7 +160,16 @@ const ViewProduct = () => {
       </div>
     );
   };
-  console.log("cartItem", cartItem,cartId);
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
@@ -232,15 +243,30 @@ const ViewProduct = () => {
                       value="HTML"
                       className="w-[24px] h-[24px] border-2 bg-[#505050] !opacity-100 shadow-none focus-visible:outline-none checked:bg-primary checked:hover:bg-primary checked:active:bg-primary checked:focus:bg-primary focus:bg-primary focus:outline-none focus:ring-primary"
                       onClick={() => {
-                        setCartItem({
-                          productId: item?.productId,
-                          varientId: item?.id,
-                          storeId: storeId,
-                          productVariantIndex: item?.productVariantIndex,
-                          quantity: 1,
-                          cartId: cartId,
-                        });
-                      }}
+                        console.log("item",item)
+                        let qua = 1;
+                        if (item?.minPurchaseLimit > qua) {
+                          qua = item?.minPurchaseLimit;
+                        }
+                        if (
+                          item?.stockBalance < qua ||
+                          (item?.purchaseLimit != 0 &&
+                            qua > item?.purchaseLimit)
+                        ) {
+                          toastModal({ text: "This product stock is limited" });
+                          return;
+                        } else {
+                          setCartItem({
+                            productId: item?.productId,
+                            varientId: item?.id,
+                            storeId: storeId,
+                            productVariantIndex: item?.productVariantIndex,
+                            quantity: qua,
+                            cartId: cartId,
+                          });
+                        }
+                      }
+                    }
                     />
                   }
                 />

@@ -10,6 +10,7 @@ import {
   getChatData,
   minusToCartArray,
 } from "../../slices/homeSlice";
+import toast from "react-hot-toast";
 
 const PDP = () => {
   const { id } = useParams();
@@ -45,7 +46,7 @@ const PDP = () => {
         .then((data) => {
           if (
             data &&
-            data?.payload?.data?.activities[0][0]?.type === "productdetails"
+            data?.payload?.data?.activities[0][0]?.type === "productDetails"
           ) {
             setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
           }
@@ -56,9 +57,20 @@ const PDP = () => {
   useEffect(() => {
     if (error) {
       setError(true);
+    } else {
+      setError(false);
     }
   }, [error]);
-
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -211,7 +223,7 @@ const PDP = () => {
           item?.stockBalance < qua ||
           (item?.purchaseLimit != 0 && qua > item?.purchaseLimit)
         ) {
-          alert("This product stock is limited");
+          toastModal({ text: "This product stock is limited" });
           return;
         } else {
           let cartItem = {
@@ -355,7 +367,6 @@ const PDP = () => {
                     maximumFractionDigits: 2,
                   })}`}
                   onClick={() => {
-                    console.log("quaaaa")
                     if (quantity === 0) {
                       addItem();
                     } else {

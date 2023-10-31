@@ -13,6 +13,7 @@ import {
   setStoreData,
   setStoreId,
   setUserPincode,
+  setUserSavedAddres,
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DeniedModal from "../../components/Modal/DeniedModal";
@@ -104,8 +105,8 @@ const Address = () => {
       cityId: "",
       locality: "",
       localityId: "",
-      latitude: "",
-      longitude: "",
+      latitude: latLng?.lat,
+      longitude: latLng?.lng,
       defaultAddress: false,
       societyId: "",
       pincode: postalCode ? postalCode.long_name : "",
@@ -139,6 +140,7 @@ const Address = () => {
     });
   };
   useEffect(() => {
+    
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
       geocoder
@@ -191,7 +193,7 @@ const Address = () => {
           result.onchange = function () {};
         });
     } else {
-      alert("Sorry Not available!");
+      toastModal({ text: "Sorry Not available!" });
     }
   };
   const handleOnLoad = (map: any) => {
@@ -247,10 +249,10 @@ const Address = () => {
         data: {
           // pincode: "500084",
           // lat: "17.469857630687827",
-          // lag: "78.35782449692486",
+          // lng: "78.35782449692486",
           pincode: address?.pincode,
           lat: `${latLng?.lat}`,
-          lag: `${latLng?.lng}`,
+          lng: `${latLng?.lng}`,
           type: "location",
         },
       };
@@ -260,9 +262,9 @@ const Address = () => {
           .then((data) => {
             setLoading(false);
             let storeData = data?.payload?.data?.activities[0][0];
-            if (data && storeData?.type === "storeCheck") {
+            if (data && storeData?.type === "findStores") {
               if (storeData?.value?.data[0]?.status_code === 500) {
-                toastModal({ text: "Not found" });
+                toastModal({ text: `${storeData?.value?.data[0]?.msg}` });
               } else if (storeData?.value?.data[0]?.status_code === 200) {
                 dispatch(setStoreData(storeData?.value?.data[0]));
                 dispatch(setStoreId(storeData?.value?.data[0]?.id));
@@ -283,7 +285,7 @@ const Address = () => {
                     dispatch(getChatData({ newData, botType }))
                       .then((data) => {
                         let cartData = data?.payload?.data?.activities[0][0];
-                        if (data && cartData?.type === "storeCheck") {
+                        if (data && cartData?.type === "getCartId") {
                           let cartId = cartData?.value?.data?.cartId;
                           dispatch(setCartId(cartId));
                         }
@@ -296,7 +298,7 @@ const Address = () => {
                 }
 
                 // dispatch(setUserPincode(500084));
-
+                dispatch(setUserSavedAddres(address));
                 dispatch(setUserPincode(address?.pincode));
                 {
                   navigateData && navigateData !== ""
@@ -318,7 +320,7 @@ const Address = () => {
       toastModal({ text: "Please enter the address" });
     }
   };
-
+  console.log("latlng", latLng);
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">

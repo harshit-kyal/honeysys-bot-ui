@@ -49,7 +49,7 @@ const Categories = () => {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           let categoryData = data?.payload?.data?.activities[0][0];
-          if (data && categoryData?.type === "storeCheck") {
+          if (data && categoryData?.type === "viewCategoryCatalog") {
             const id1 = categoryData?.value?.data[0]?.id;
             setSelected(id === "home" ? id1 : id);
             setCategoriesCatalog(categoryData?.value?.data);

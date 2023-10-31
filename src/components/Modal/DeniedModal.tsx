@@ -34,7 +34,7 @@ const DeniedModal = () => {
               <div className="mt-1 ms-1 text-base text-black font-medium">Steps to Enable Location</div>
               <Text>
                 <ul className="px-5 py-2 text-black font-normal" style={{ listStyleType: "disc" }}>
-                  <li>Turn on Location</li>
+                  <li>Must downloaded PWA</li>
                   <li>Open this link {document.URL} in browser</li>
                   <li>Click on ⋮ (menu) and open settings</li>
                   <li>Go to Site Settings</li>

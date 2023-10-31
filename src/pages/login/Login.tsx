@@ -57,7 +57,45 @@ const Login = () => {
       });
     }
   };
+  const loadScript = (src: any) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+  const displayRazorpay = async (amount: any) => {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      alert("you are offline");
+    }
 
+    const option = {
+      key: "rzp_test_Ojwn335sZyoBXe",
+      currency: "INR",
+      amount: amount * 100,
+      name: "Honeysys",
+      describe: "Thanks for purchaing",
+      image:
+        "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+      handler: function (response: any) {
+        alert(response.razorpay_payment_id);
+      },
+      prefill: {
+        name: "Honeysys",
+      },
+    };
+    const paymentObject = new (window as any).Razorpay(option);
+    paymentObject.open();
+  };
   return (
     <div className="login px-5 py-3">
       <BackButton />

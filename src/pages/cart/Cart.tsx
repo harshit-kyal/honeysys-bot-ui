@@ -11,6 +11,7 @@ import {
   minusToCartArray,
   setCartTotalAmount,
 } from "../../slices/homeSlice";
+import toast from "react-hot-toast";
 
 const Cart = () => {
   const convId = useAppSelector((state) => state.bot.convId);
@@ -18,6 +19,10 @@ const Cart = () => {
   const storeId = useAppSelector((state) => state.home.storeId);
   const storeData = useAppSelector((state) => state.home.storeData);
   const cartId = useAppSelector((state) => state.home.cartId);
+  const userSavedAddress = useAppSelector(
+    (state) => state.home.userSavedAddres
+  );
+  console.log("userSaved", userSavedAddress);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // const dummy = {
@@ -83,7 +88,10 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
-          if (data && data?.payload?.data?.activities[0][0]?.type === "viewCart") {
+          if (
+            data &&
+            data?.payload?.data?.activities[0][0]?.type === "viewCart"
+          ) {
             setCartList(data?.payload?.data?.activities[0][0]?.value.data);
             // setLoading(false);
             setAmountLoader(false);
@@ -104,7 +112,6 @@ const Cart = () => {
         });
       } catch (error) {
         setLoading(false);
-        console.error("Error in fetchData:", error);
       }
     };
     fetchData();
@@ -176,6 +183,16 @@ const Cart = () => {
         });
     }
   };
+  const toastModal = ({ text = "" }: { text: string }) => {
+    toast(text, {
+      style: {
+        padding: " 16px 10px",
+        borderRadius: "8px",
+        background: "#0a4310",
+        color: "#FFF",
+      },
+    });
+  };
   const handleIncrement = (index: number, type: string) => {
     let cartCopy = JSON.parse(JSON.stringify(cartList));
     switch (type) {
@@ -195,7 +212,8 @@ const Cart = () => {
             stockBalance < qua ||
             (purchaseLimit !== 0 && qua > purchaseLimit)
           ) {
-            alert("This product stock is limited");
+            toastModal({ text: "This product stock is limited" });
+
             return;
           } else {
             let cartItem = {
