@@ -991,29 +991,28 @@ const Home = () => {
                                     ? iconQuickReplyCard
                                     : []
                                 }
-                                flag={true}
-                                // flag={(() => {
-                                //   if (activity[0]?.value?.sender === "bot") {
-                                //     if (mainIndex + 1 < ChatArray.length) {
-                                //       for (
-                                //         let i = mainIndex + 1;
-                                //         i < ChatArray.length;
-                                //         i++
-                                //       ) {
-                                //         let chat = ChatArray[i];
-                                //         if (
-                                //           chat[0]?.value?.sender === "bot" &&
-                                //           chat?.find((x: any) => !x.subType)
-                                //         ) {
-                                //           return false;
-                                //         }.
-                                //       }
-                                //     }
-                                //     return true;
-                                //   } else {
-                                //     return false;
-                                //   }
-                                // })()}
+                                flag={(() => {
+                                  if (activity[0]?.value?.sender === "bot") {
+                                    if (mainIndex + 1 < ChatArray.length) {
+                                      for (
+                                        let i = mainIndex + 1;
+                                        i < ChatArray.length;
+                                        i++
+                                      ) {
+                                        let chat = ChatArray[i];
+                                        if (
+                                          chat[0]?.value?.sender === "bot" &&
+                                          chat?.find((x: any) => !x.subType)
+                                        ) {
+                                          return false;
+                                        }
+                                      }
+                                    }
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                })()}
                                 buttonContent={
                                   ac?.value?.content ? ac?.value?.content : ""
                                 }

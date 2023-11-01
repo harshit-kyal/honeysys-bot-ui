@@ -6,7 +6,7 @@ import { setTheme } from "../slices/rootSlice";
 
 export const botApi = async (body: any) => {
   const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJlM2MwYWQxYWJiMzQzYzI5MjYxMzYiLCJhcHBUeXBlIjoiU3VwZXIgQWRtaW4iLCJyb2xlSWQiOiI2MzIwNzdiZGNmZmQ3YzIxZWJlN2M4ZjAiLCJzZXNzaW9uSWQiOiJhbHBoYW51bWVyaWMiLCJ1c2VyTmFtZSI6Ikd1ZXN0IHVzZXIgIiwiaWF0IjoxNjk0MDgxMzEyLCJleHAiOjE3MjU2MTczMTJ9.K_9RKs0sZPnnVH2NTHxyg2AXYh2V8rehJ42tlpkx_Vc";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQyM2ZkMGMzN2NlMTVjNWJhNTFhN2QiLCJhcHBUeXBlIjoid2ViIiwicm9sZUlkIjoiNjMyMDc3YmRjZmZkN2MyMWViZTdjOGYwIiwic2Vzc2lvbklkIjoiYWxwaGFudW1lcmljIiwidXNlck5hbWUiOiIgIiwiaWF0IjoxNjk4ODQwNTYxLCJleHAiOjE3MzAzNzY1NjF9.5fTE-u1CpIkvLdNxkOei44-Hwhdp2RXHat3aRUxuqPQ";
   const token = localStorage.getItem("token");
   try {
     const response: any = await axiosInstance.post("", body, {

@@ -12,6 +12,7 @@ import {
   setCartTotalAmount,
 } from "../../slices/homeSlice";
 import toast from "react-hot-toast";
+import ExperienceModal from "../../components/Modal/ExperienceModal";
 
 const Cart = () => {
   const convId = useAppSelector((state) => state.bot.convId);
@@ -22,7 +23,7 @@ const Cart = () => {
   const userSavedAddress = useAppSelector(
     (state) => state.home.userSavedAddres
   );
-  console.log("userSaved", userSavedAddress);
+  console.log("userSaved");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // const dummy = {
@@ -403,32 +404,38 @@ const Cart = () => {
                 <button
                   className="bg-primary text-white text-[12px] py-2 font-light w-full my-3 rounded-md"
                   onClick={() => {
-                    dispatch(
-                      setCartTotalAmount(
-                        parseInt(cartList?.cartCalculation?.totalAmount) +
-                          parseInt(cartList?.cartCalculation?.totalTax)
-                      )
+                    Object.keys(userSavedAddress).length !== 0 ? (
+                      (() => {
+                        dispatch(
+                          setCartTotalAmount(
+                            parseInt(cartList?.cartCalculation?.totalAmount) +
+                              parseInt(cartList?.cartCalculation?.totalTax)
+                          )
+                        );
+                        navigate("/");
+                        const newData = {
+                          conversationId: convId,
+                          text: "cartAction",
+                          voiceFlag: false,
+                          isChatVisible: false,
+                          data: {
+                            deliveryType: ["Normal", "Express"],
+                            location: storeData?.location?.pincode,
+                            lat: storeData?.location?.latitude,
+                            lag: storeData?.location?.longitude,
+                            storeId: storeData?.id,
+                            cartId: cartId,
+                          },
+                        };
+                        dispatch(getChatData({ newData, botType }))
+                          .then(() => {})
+                          .catch((error) => {
+                            console.log("err", error);
+                          });
+                      })()
+                    ) : (
+                      <ExperienceModal />
                     );
-                    navigate("/");
-                    const newData = {
-                      conversationId: convId,
-                      text: "cartAction",
-                      voiceFlag: false,
-                      isChatVisible: false,
-                      data: {
-                        deliveryType: ["Normal", "Express"],
-                        location: storeData?.location?.pincode,
-                        lat: storeData?.location?.latitude,
-                        lag: storeData?.location?.longitude,
-                        storeId: storeData?.id,
-                        cartId: cartId,
-                      },
-                    };
-                    dispatch(getChatData({ newData, botType }))
-                      .then(() => {})
-                      .catch((error) => {
-                        console.log("err", error);
-                      });
                   }}
                 >
                   Send To Business

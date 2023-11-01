@@ -18,6 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DeniedModal from "../../components/Modal/DeniedModal";
 import toast, { Toaster } from "react-hot-toast";
+import { formatCustomAddress } from "../../utils/AddressFormate";
 const Address = () => {
   const navigate = useNavigate();
   const [latLng, setLatLng] = useState<any>({
@@ -61,69 +62,7 @@ const Address = () => {
   const location = useLocation();
   const navigateData =
     location && location?.state?.navigate ? location?.state?.navigate : "";
-  const formatCustomAddress = (addressComponents: any) => {
-    let formattedAddress = "";
-    const streetNumber = addressComponents.find((component: any) =>
-      component.types.includes("street_number")
-    );
-    const route = addressComponents.find((component: any) =>
-      component.types.includes("route")
-    );
-    const landMark = addressComponents.find((component: any) =>
-      component.types.includes("landmark")
-    );
-    const city = addressComponents.find((component: any) =>
-      component.types.includes("locality")
-    );
-    const state = addressComponents.find((component: any) =>
-      component.types.includes("administrative_area_level_1")
-    );
-    const postalCode = addressComponents.find((component: any) =>
-      component.types.includes("postal_code")
-    );
 
-    if (streetNumber) formattedAddress += streetNumber.long_name + " ";
-    if (landMark) formattedAddress += landMark.long_name + ", ";
-    if (route) formattedAddress += route.long_name + " ";
-    // if (city) formattedAddress += city.long_name + ", ";
-    // if (state) formattedAddress += state.short_name + " ";
-    // if (postalCode) formattedAddress += postalCode.long_name;
-    setAddress({
-      id: "",
-      customerId: "",
-      addressId: 0,
-      name: "",
-      mobile: "",
-      email: "",
-      addressName: "",
-      flatNo: "",
-      buildingName: "",
-      address2: "",
-      countryId: "",
-      country: "",
-      stateId: "",
-      cityId: "",
-      locality: "",
-      localityId: "",
-      latitude: latLng?.lat,
-      longitude: latLng?.lng,
-      defaultAddress: false,
-      societyId: "",
-      pincode: postalCode ? postalCode.long_name : "",
-      address1:
-        streetNumber && route
-          ? `${streetNumber.long_name},${route.long_name}`
-          : streetNumber
-          ? streetNumber.long_name
-          : route
-          ? route.long_name
-          : "",
-      landmark: landMark ? landMark.long_name : "",
-      city: city ? city.long_name : "",
-      state: state ? state.long_name : "",
-    });
-    return formattedAddress;
-  };
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
@@ -140,7 +79,6 @@ const Address = () => {
     });
   };
   useEffect(() => {
-    
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
       geocoder
@@ -149,7 +87,11 @@ const Address = () => {
             if (results?.length > 0) {
               setFormattedAdd(results[0]?.formatted_address);
               const addressComponents = results[0]?.address_components;
-              const formattedAddress = formatCustomAddress(addressComponents);
+              const formattedAddress = formatCustomAddress(
+                addressComponents,
+                setAddress,
+                latLng
+              );
               setFormattedShortAdd(formattedAddress);
             } else {
             }
@@ -252,7 +194,7 @@ const Address = () => {
           // lng: "78.35782449692486",
           pincode: address?.pincode,
           lat: `${latLng?.lat}`,
-          lng: `${latLng?.lng}`,
+          lag: `${latLng?.lng}`,
           type: "location",
         },
       };
