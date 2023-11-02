@@ -15,6 +15,7 @@ import {
   setStoreId,
   setCartId,
   setUserPincode,
+  setUserSavedAddres,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -43,6 +44,7 @@ import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import { promises } from "dns";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { formatCustomAddress } from "../../utils/AddressFormate";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -71,6 +73,33 @@ const Home = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isLoadingVisible, setLoadingVisible] = useState(false);
+  const [address, setAddress] = useState<any>({
+    id: "",
+    customerId: "",
+    addressId: 0,
+    name: "",
+    mobile: "",
+    email: "",
+    addressName: "",
+    flatNo: "",
+    buildingName: "",
+    address1: "",
+    address2: "",
+    countryId: "",
+    country: "",
+    stateId: "",
+    state: "",
+    cityId: "",
+    city: "",
+    locality: "",
+    localityId: "",
+    landmark: "",
+    pincode: "",
+    latitude: "",
+    longitude: "",
+    defaultAddress: false,
+    societyId: "",
+  });
   const [latLng, setLatLng] = useState<any>({
     lat: 0,
     lng: 0,
@@ -511,6 +540,7 @@ const Home = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries: ["places"],
   });
+
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
@@ -518,13 +548,22 @@ const Home = () => {
         .geocode({ location: latLng }, (results: any, status: any) => {
           if (status === "OK" && results) {
             if (results?.length > 0) {
+              const addressComponents = results[0]?.address_components;
+              let data = formatCustomAddress(
+                addressComponents,
+                setAddress,
+                latLng
+              );
               let postalCode = results?.find((ele: any) =>
                 ele.address_components?.find((component: any) =>
                   component?.types?.includes("postal_code")
                 )
               );
+              const postalCodeData = postalCode.address_components.find(
+                (component: any) => component.types.includes("postal_code")
+              );
               if (postalCode) {
-                const pincode = postalCode?.long_name;
+                const pincode = postalCodeData?.long_name;
                 let botType = "e-comm";
                 const newData = {
                   conversationId: convId,
@@ -594,6 +633,7 @@ const Home = () => {
                             }
                           }
                           // dispatch(setUserPincode(500084));
+                          dispatch(setUserSavedAddres(address));
                           dispatch(setUserPincode(pincode));
                         }
                       }
@@ -621,6 +661,7 @@ const Home = () => {
       },
     });
   };
+  console.log("get", getStartDisplay);
   useEffect(() => {
     if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
@@ -655,9 +696,20 @@ const Home = () => {
                       setLatLng(latLng);
                     });
                   } else if (result.state === "prompt") {
-                    navigator.geolocation.getCurrentPosition(function (
-                      position
-                    ) {});
+                    navigator.geolocation.getCurrentPosition(
+                      function (position) {
+                        const latLng = {
+                          lat: position.coords.latitude,
+                          lng: position.coords.longitude,
+                        };
+                        setLatLng(latLng);
+                      },
+                      function (error) {
+                        navigate("/address", {
+                          state: { navigate: "home" },
+                        });
+                      }
+                    );
                   } else if (result.state === "denied") {
                     navigate("/address", {
                       state: { navigate: "home" },
@@ -857,7 +909,6 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
-  console.log("poojan", ChatArray);
 
   return (
     <div

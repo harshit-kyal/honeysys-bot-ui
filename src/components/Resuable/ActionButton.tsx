@@ -16,7 +16,7 @@ const ActionButton = ({
   return (
     <button
       className={`w-full flex justify-center items-center gap-1 bg-background rounded-actionButtonBorder border border-primary py-[10px] mt-[2px] ${className} ${
-        !flag ? "bg-[#e2e2e2]" : ""
+        !flag ? "bg-[#E5E5E5]  text-[#ACACAC]" : ""
       }`}
       onClick={onClick}
       disabled={!flag}

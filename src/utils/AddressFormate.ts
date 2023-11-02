@@ -1,20 +1,29 @@
-export const formatCustomAddress = (addressComponents: any, setAddress:any, latLng:any) => {
+export const formatCustomAddress = (
+  addressComponents: any,
+  setAddress: any,
+  latLng: any
+) => {
   let formattedAddress = "";
   const streetNumber = addressComponents.find((component: any) =>
     component.types.includes("street_number")
   );
+
   const route = addressComponents.find((component: any) =>
     component.types.includes("route")
   );
+
   const landMark = addressComponents.find((component: any) =>
     component.types.includes("landmark")
   );
+
   const city = addressComponents.find((component: any) =>
     component.types.includes("locality")
   );
+
   const state = addressComponents.find((component: any) =>
     component.types.includes("administrative_area_level_1")
   );
+
   const postalCode = addressComponents.find((component: any) =>
     component.types.includes("postal_code")
   );

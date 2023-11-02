@@ -9,7 +9,7 @@ const BackButton = (noTitle?:any) => {
         navigate(-1);
       }}
     >
-      <div className="flex items-center h-min">
+      <div className="flex items-center h-min cursor-pointer">
         <img
           src="/images/keyboard_backspace.svg"
           alt="back"

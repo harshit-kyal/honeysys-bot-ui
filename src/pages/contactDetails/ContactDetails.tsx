@@ -113,9 +113,10 @@ const ContactDetails = () => {
               data?.payload?.data?.activities[0][0]?.type === "addAddress"
             ) {
               setAddAddressLoading(false);
-              navigateData && navigateData === "home"
-                ? navigate("/")
-                : navigate("/addressDetails");
+              navigate("/addressDetails")
+              // navigateData && navigateData === "home"
+              //   ? navigate("/")
+              //   : navigate("/addressDetails");
             }
           })
           .catch((error) => {

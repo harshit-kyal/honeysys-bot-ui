@@ -226,13 +226,14 @@ const BotMessageCard = ({
                         sourceAction: true,
                         content: data?.text,
                         replyArray: buttonContent,
-                        paymentMethod:
+                     
+                        data: {
+                          paymentMethod:
                           data?.text === "Pay online"
                             ? "Pay Online"
                             : data?.text === "Cash on delivery"
                             ? "Pay on Delivery"
                             : "",
-                        data: {
                           lat: cartData?.location?.latitude,
                           lag: cartData?.location?.longitude,
                           location: cartData?.location?.pincode,

@@ -402,43 +402,47 @@ const Cart = () => {
                   with the business so it can confirm your order and total price
                   including any tax and discounts.
                 </div>
-                <button
-                  className="bg-primary text-white text-[12px] py-2 font-light w-full my-3 rounded-md"
-                  onClick={() => {
-                    Object.keys(userSavedAddress).length !== 0
-                      ? (() => {
-                          dispatch(
-                            setCartTotalAmount(
-                              parseInt(cartList?.cartCalculation?.totalAmount) +
-                                parseInt(cartList?.cartCalculation?.totalTax)
-                            )
-                          );
-                          navigate("/");
-                          const newData = {
-                            conversationId: convId,
-                            text: "cartAction",
-                            voiceFlag: false,
-                            isChatVisible: false,
-                            data: {
-                              deliveryType: ["Normal", "Express"],
-                              location: storeData?.location?.pincode,
-                              lat: storeData?.location?.latitude,
-                              lag: storeData?.location?.longitude,
-                              storeId: storeData?.id,
-                              cartId: cartId,
-                            },
-                          };
-                          dispatch(getChatData({ newData, botType }))
-                            .then(() => {})
-                            .catch((error) => {
-                              console.log("err", error);
-                            });
-                        })()
-                      : dispatch(setExperienceModal(true));
-                  }}
-                >
-                  Send To Business
-                </button>
+                <div className="flex justify-center align-middle">
+                  <button
+                    className="bg-primary text-white text-[12px] py-2 font-light max-[500px]:w-[100%] min-[500px]:w-[55%] min-[1024px]:w-[40%] my-3 rounded-md mx-auto"
+                    onClick={() => {
+                      Object.keys(userSavedAddress).length !== 0
+                        ? (() => {
+                            dispatch(
+                              setCartTotalAmount(
+                                parseInt(
+                                  cartList?.cartCalculation?.totalAmount
+                                ) +
+                                  parseInt(cartList?.cartCalculation?.totalTax)
+                              )
+                            );
+                            navigate("/");
+                            const newData = {
+                              conversationId: convId,
+                              text: "cartAction",
+                              voiceFlag: false,
+                              isChatVisible: false,
+                              data: {
+                                deliveryType: ["Normal", "Express"],
+                                location: storeData?.location?.pincode,
+                                lat: storeData?.location?.latitude,
+                                lag: storeData?.location?.longitude,
+                                storeId: storeData?.id,
+                                cartId: cartId,
+                              },
+                            };
+                            dispatch(getChatData({ newData, botType }))
+                              .then(() => {})
+                              .catch((error) => {
+                                console.log("err", error);
+                              });
+                          })()
+                        : dispatch(setExperienceModal(true));
+                    }}
+                  >
+                    Send To Business
+                  </button>
+                </div>
               </div>
               {amountLoader && (
                 <div className="cartLoader">
@@ -455,7 +459,7 @@ const Cart = () => {
                 <img
                   src="/images/Cart.svg"
                   alt="shopping"
-                  width={"100%"}
+                  width="autos"
                   onClick={() => {
                     navigate("/cart");
                   }}
@@ -469,7 +473,7 @@ const Cart = () => {
                   </Text>
                 </div>
                 <Button
-                  className="!bg-primary w-full text-sm py-[10px]"
+                  className="!bg-primary max-[500px]:w-[90%] min-[500px]:w-[55%] min-[1024px]:w-[40%] text-sm py-[10px]"
                   onClick={() => {
                     navigate("/catalog");
                   }}

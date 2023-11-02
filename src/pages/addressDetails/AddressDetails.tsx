@@ -61,6 +61,7 @@ const AddressDetails = () => {
         <RadioButtonGroup
           selectedOption={selectedOption}
           handleChange={handleChange}
+          setSelectedOption={setSelectedOption}
         />
       </div>
     </div>
@@ -98,8 +99,13 @@ export function RadioButtonGroup(props: any) {
         .then((data) => {
           let addressData = data?.payload?.data?.activities[0][0];
           if (data && addressData?.type === "getAddress") {
-            setAddressArray(addressData?.value?.data);
-            setSelectedAdress(addressData?.value?.data[0]);
+            if (addressData?.value?.data) {
+              setAddressArray(addressData?.value?.data);
+              props.setSelectedOption(addressData?.value?.data.length - 1);
+              setSelectedAdress(
+                addressData?.value?.data[addressData?.value?.data.length - 1]
+              );
+            }
             setError(false);
           }
         })
@@ -126,60 +132,69 @@ export function RadioButtonGroup(props: any) {
       {!Error && !loading ? (
         <div>
           <div className="h-[calc(100vh-159px)] md:h-[calc(100vh-164px)] overflow-auto">
-            {addressArray.map((item: any, index: any) => (
-              <>
-                <label className="flex items-start mt-2 mb-3 px-5" key={index}>
-                  <input
-                    type="radio"
-                    className="mt-[22px]"
-                    value={index}
-                    checked={
-                      props?.selectedOption && props?.selectedOption == index
-                    }
-                    onClick={() => {
-                      setSelectedAdress(item);
-                    }}
-                    onChange={props?.handleChange && props?.handleChange}
-                    style={{ opacity: "1" }}
-                  />
-                  <div className="ms-2 w-full">
-                    <div
-                      className="flex justify-end"
+            {addressArray.map((item: any, index: any) => {
+  
+              return (
+                <>
+                  <label
+                    className="flex items-start mt-2 mb-3 px-5"
+                    key={index}
+                  >
+                    <input
+                      type="radio"
+                      className="mt-[22px]"
+                      value={index}
+                      checked={
+                        props?.selectedOption?.toString() &&
+                        parseInt(props?.selectedOption) === index
+                      }
                       onClick={() => {
-                        navigate("/contactDetails", {
-                          state: {
-                            address: item,
-                          },
-                        });
+                        setSelectedAdress(item);
                       }}
-                    >
-                      <img
-                        src="/images/edit.svg"
-                        height="16px"
-                        width="16px"
-                      ></img>
+                      onChange={props?.handleChange && props?.handleChange}
+                      style={{ opacity: "1" }}
+                    />
+                    <div className="ms-2 w-full">
+                      <div
+                        className="flex justify-end"
+                        onClick={() => {
+                          navigate("/contactDetails", {
+                            state: {
+                              address: item,
+                            },
+                          });
+                        }}
+                      >
+                        <img
+                          src="/images/edit.svg"
+                          height="16px"
+                          width="16px"
+                        ></img>
+                      </div>
+                      <div className="text-black text-sm font-medium">
+                        {item?.name}
+                      </div>
+                      <div className="text-black text-sm font-normal">
+                        {item?.mobile}
+                      </div>
+                      <div className="text-black text-sm font-normal mt-3">
+                        {`${
+                          item?.buildingName ? item?.buildingName + "/" : ""
+                        }${item?.flatNo ? item?.flatNo + "," : ""}${
+                          item?.address1 ? item?.address1 + "," : ""
+                        } ${item?.locality ? item?.locality + "," : ""} ${
+                          item?.city ? item?.city + "," : ""
+                        } ${item?.state ? item?.state + "," : ""} ${
+                          item?.pincode ? item?.pincode : ""
+                        }`}
+                        {/* {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`} */}
+                      </div>
                     </div>
-                    <div className="text-black text-sm font-medium">
-                      {item?.name}
-                    </div>
-                    <div className="text-black text-sm font-normal">
-                      {item?.mobile}
-                    </div>
-                    <div className="text-black text-sm font-normal mt-3">
-                      {`${item?.buildingName ? item?.buildingName + "/" : ""}${
-                        item?.flatNo ? item?.flatNo + "," : ""
-                      }${item?.address1 ? item?.address1 + "," : ""} ${
-                        item?.locality ? item?.locality + "," : ""
-                      } ${item?.city ? item?.city + "," : ""} ${
-                        item?.state ? item?.state + "," : ""
-                      } ${item?.pincode ? item?.pincode : ""}`}
-                      {/* {`${item.address.address},${item.address.landMark},${item.address.city}-${item.address.pincode},${item.address.state}`} */}
-                    </div>
-                  </div>
-                </label>
-                <div className=" border-b-[1px] border-[#E6E6E6]"></div>
-              </>
-            ))}
+                  </label>
+                  <div className=" border-b-[1px] border-[#E6E6E6]"></div>
+                </>
+              );
+            })}
           </div>
           <div className=" w-full h-[43px] flex justify-end items-center flex-col mt-[10px]">
             <Button

@@ -9,12 +9,14 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const ServiceableArea = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const [Loading, setLoading] = useState(false);
   let storeData = [
     {
       id: "648beef8f65367341ca5f066",
@@ -108,6 +110,7 @@ const ServiceableArea = () => {
     },
   ];
   const skipHandler = () => {
+    setLoading(true);
     const newData = {
       conversationId: convId,
       text: "experienceStore",
@@ -138,15 +141,17 @@ const ServiceableArea = () => {
               if (convId && botType && convId !== "" && botType !== "") {
                 dispatch(getChatData({ newData, botType }))
                   .then((data) => {
+                    setLoading(false);
                     let cartData = data?.payload?.data?.activities[0][0];
                     if (data && cartData?.type === "getCartId") {
                       let cartId = cartData?.value?.data?.cartId;
                       dispatch(setCartId(cartId));
-                      navigate('/')
-                      dispatch(setGetStartDisplay(true))
+                      navigate("/");
+                      dispatch(setGetStartDisplay(true));
                     }
                   })
                   .catch((error) => {
+                    setLoading(false);
                     console.log("err", error);
                   });
               }
@@ -227,6 +232,11 @@ const ServiceableArea = () => {
           </div>
         </div>
       </div>
+      {Loading && (
+        <div className="cartLoader">
+          <div className="cartLoader-text">Loading...</div>
+        </div>
+      )}
     </div>
   );
 };

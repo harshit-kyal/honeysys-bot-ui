@@ -84,10 +84,6 @@ const Catalog = () => {
           if (
             data?.payload?.data?.activities[0][0]?.type === "viewProductCatalog"
           ) {
-            console.log(
-              "productData",
-              data?.payload?.data?.activities[0][0]?.value?.data[0]?.variants[0]
-            );
             setProductCatalog(
               data?.payload?.data?.activities[0][0]?.value?.data
             );
@@ -243,30 +239,29 @@ const Catalog = () => {
                     }
                     onClick={() => {
                       let varientData = data.variants[0];
-                      console.log("data", data);
-                      // let qua = 1;
-                      // if (varientData?.minPurchaseLimit > qua) {
-                      //   qua = varientData?.minPurchaseLimit;
-                      // }
-                      // if (
-                      //   varientData?.stockBalance < qua ||
-                      //   (varientData?.purchaseLimit != 0 &&
-                      //     qua > varientData?.purchaseLimit)
-                      // ) {
-                      //   toastModal({ text: "This product stock is limited" });
-                      //   return;
-                      // } else {
-                      //   let cartItem = {
-                      //     productId: data?.id,
-                      //     varientId: varientData?.id,
-                      //     storeId: storeId,
-                      //     productVariantIndex: varientData?.productVariantIndex,
-                      //     quantity: qua,
-                      //     cartId: cartId,
-                      //   };
-                      //   dispatch(addToCartArray(cartItem));
-                      //   handleAddApi(cartItem);
-                      // }
+                      let qua = 1;
+                      if (varientData?.minPurchaseLimit > qua) {
+                        qua = varientData?.minPurchaseLimit;
+                      }
+                      if (
+                        varientData?.stockBalance < qua ||
+                        (varientData?.purchaseLimit != 0 &&
+                          qua > varientData?.purchaseLimit)
+                      ) {
+                        toastModal({ text: "This product stock is limited" });
+                        return;
+                      } else {
+                        let cartItem = {
+                          productId: data?.id,
+                          varientId: varientData?.id,
+                          storeId: storeId,
+                          productVariantIndex: varientData?.productVariantIndex,
+                          quantity: qua,
+                          cartId: cartId,
+                        };
+                        dispatch(addToCartArray(cartItem));
+                        handleAddApi(cartItem);
+                      }
                     }}
                     title={
                       data?.variants[0]?.productName
