@@ -25,37 +25,50 @@ const SearchProduct = () => {
     "Watches",
     "Car Care",
   ]);
-  // useEffect(() => {
-  //   if (searchStr) {
-  //     const newData = {
-  //       conversationId: convId,
-  //       text: "searchProduct123",
-  //       voiceFlag: false,
-  //       isChatVisible: false,
-  //       data: {
-  //         storeId: storeId,
-  //         searchText: searchStr,
-  //         searchKey: searchStr,
-  //       },
-  //     };
+  const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
+  const handleSearchData = (data: any) => {
+    const newData = {
+      conversationId: convId,
+      text: "searchProduct",
+      voiceFlag: false,
+      isChatVisible: false,
+      data: {
+        storeId: storeId,
+        searchText: data,
+        searchKey: data,
+      },
+    };
 
-  //     if (convId && botType && convId !== "" && botType !== "") {
-  //       dispatch(getChatData({ newData, botType }))
-  //         .then((data) => {
-  //           let searchData = data?.payload?.data?.activities[0][0];
-  //           console.log("searchData", searchData);
-  //           // if (data && cartData?.type === "getCartId") {
-  //           //   let cartId = cartData?.value?.data?.cartId;
-  //           //   dispatch(setCartId(cartId));
-  //           // }
-  //         })
-  //         .catch((error) => {
-  //           // setLoading(false);
-  //           console.log("err", error);
-  //         });
-  //     }
-  //   }
-  // }, [searchStr]);
+    if (convId && botType && convId !== "" && botType !== "") {
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          let searchData = data?.payload?.data?.activities[0][0];
+          console.log("searchData", searchData);
+          // if (data && cartData?.type === "getCartId") {
+          //   let cartId = cartData?.value?.data?.cartId;
+          //   dispatch(setCartId(cartId));
+          // }
+        })
+        .catch((error) => {
+          // setLoading(false);
+          console.log("err", error);
+        });
+    }
+  };
+  const debounceSearchApi = (data: any) => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+    const timeoutId = setTimeout(() => {
+      handleSearchData(data);
+    }, 800);
+    setDebounceTimeout(timeoutId);
+  };
+  useEffect(() => {
+    if (searchStr) {
+      debounceSearchApi(searchStr);
+    }
+  }, [searchStr]);
 
   const [searchList, setSearchList] = useState([
     {

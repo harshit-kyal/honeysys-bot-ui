@@ -6,7 +6,7 @@ import { setTheme } from "../slices/rootSlice";
 
 export const botApi = async (body: any) => {
   const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQyM2ZkMGMzN2NlMTVjNWJhNTFhN2QiLCJhcHBUeXBlIjoid2ViIiwicm9sZUlkIjoiNjMyMDc3YmRjZmZkN2MyMWViZTdjOGYwIiwic2Vzc2lvbklkIjoiYWxwaGFudW1lcmljIiwidXNlck5hbWUiOiIgIiwiaWF0IjoxNjk4ODQwNTYxLCJleHAiOjE3MzAzNzY1NjF9.5fTE-u1CpIkvLdNxkOei44-Hwhdp2RXHat3aRUxuqPQ";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGIxODJhMjYxYmRkZTQ4Y2UxMzg5MGIiLCJhcHBUeXBlIjoid2ViIiwicm9sZUlkIjoiNjMyMDc4OTVjZmZkN2MyMWViZTdjOGY2Iiwic2Vzc2lvbklkIjoiYWxwaGFudW1lcmljIiwidXNlck5hbWUiOiIgIiwiaWF0IjoxNjk4ODQwNDcxLCJleHAiOjE3MzAzNzY0NzF9.pzZbUMSjIHtNX4bCq7UnBR8wT-B6TwAI32AhSA1ODaA";
   const token = localStorage.getItem("token");
   try {
     const response: any = await axiosInstance.post("", body, {

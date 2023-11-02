@@ -227,7 +227,7 @@ const BotMessageCard = ({
                         content: data?.text,
                         replyArray: buttonContent,
                         paymentMethod:
-                          data?.text === "Pay Online"
+                          data?.text === "Pay online"
                             ? "Pay Online"
                             : data?.text === "Cash on delivery"
                             ? "Pay on Delivery"

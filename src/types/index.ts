@@ -61,7 +61,7 @@ export interface HomeSliceType {
   otp: number;
   userId: string;
   cartId: string;
-  userSavedAddres:any;
+  userSavedAddres: any;
   cartTotalAmount: any;
   deliveryType: any;
   deliveryDate: any;
@@ -74,6 +74,7 @@ export interface HomeSliceType {
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
+  experienceModal: boolean;
   deniedModal: boolean;
   UiUpdate: boolean;
   cart: any[];

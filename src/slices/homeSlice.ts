@@ -17,6 +17,7 @@ const initialState: HomeSliceType = {
   cartTotalAmount: "",
   deniedModal: false,
   locationModal: false,
+  experienceModal: false,
   storeData: {},
   UiUpdate: false,
   cart: [],
@@ -219,6 +220,12 @@ export const HomeSlice = createSlice({
         deniedModal: action.payload,
       };
     },
+    setExperienceModal(state, action) {
+      return {
+        ...state,
+        experienceModal: action.payload,
+      };
+    },
     setGetStartDisplay(state, action) {
       return {
         ...state,
@@ -304,5 +311,6 @@ export const {
   setTotalQuantity,
   setGetStartDisplay,
   setUserSavedAddres,
+  setExperienceModal,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;
