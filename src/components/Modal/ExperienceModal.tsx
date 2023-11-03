@@ -43,7 +43,7 @@ const ExperienceModal = () => {
                   navigate("/address");
                 }}
               >
-                Change Location
+                Add Location
               </Button>
             </div>
           </div>
