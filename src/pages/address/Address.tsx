@@ -68,7 +68,7 @@ const Address = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries: ["places"],
   });
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const addressToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -135,7 +135,7 @@ const Address = () => {
           result.onchange = function () {};
         });
     } else {
-      toastModal({ text: "Sorry Not available!" });
+      addressToastModal({ text: "Sorry Not available!" });
     }
   };
   const handleOnLoad = (map: any) => {
@@ -206,7 +206,9 @@ const Address = () => {
             let storeData = data?.payload?.data?.activities[0][0];
             if (data && storeData?.type === "findStores") {
               if (storeData?.value?.data[0]?.status_code === 500) {
-                toastModal({ text: `${storeData?.value?.data[0]?.msg}` });
+                addressToastModal({
+                  text: `${storeData?.value?.data[0]?.msg}`,
+                });
               } else if (storeData?.value?.data[0]?.status_code === 200) {
                 dispatch(setStoreData(storeData?.value?.data[0]));
                 dispatch(setStoreId(storeData?.value?.data[0]?.id));
@@ -259,7 +261,7 @@ const Address = () => {
           });
       }
     } else {
-      toastModal({ text: "Please enter the address" });
+      addressToastModal({ text: "Please enter the address" });
     }
   };
   console.log("latlng", latLng);
@@ -412,7 +414,7 @@ const Address = () => {
           <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
         </div>
       </div>
-      <Toaster />
+      {/* <Toaster /> */}
       <DeniedModal />
     </div>
   );

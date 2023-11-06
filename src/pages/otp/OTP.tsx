@@ -33,7 +33,7 @@ const OTP = () => {
   const [CorrectOTP, setCorrectOTP] = useState<number>(correctOTP);
   const navigate = useNavigate();
 
-  const wrongOTP = ({ text = "" }: { text: string }) => {
+  const wrongOTPModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -161,9 +161,9 @@ const OTP = () => {
           isLoading={Loading}
           onClick={() => {
             if (OTP === "") {
-              wrongOTP({ text: "Please enter OTP" });
+              wrongOTPModal({ text: "Please enter OTP" });
             } else if (parseInt(OTP) !== CorrectOTP) {
-              wrongOTP({ text: "You have entered incorrect OTP" });
+              wrongOTPModal({ text: "You have entered incorrect OTP" });
             } else {
               setLoading(true);
               botApi({
@@ -195,7 +195,7 @@ const OTP = () => {
       </div>
       <div className="flex justify-center gap-1 mt-5">
         <div className="text-[14px]">Didn’t get the code?</div>
-        <div className="text-primary text-[14px]" onClick={resend}>
+        <div className="text-primary text-[14px]" onClick={()=>{resend()}}>
           {seconds > 0 || minutes > 0 ? (
             <>
               {minutes.toLocaleString("en-IN", { minimumIntegerDigits: 2 })}:
@@ -213,7 +213,7 @@ const OTP = () => {
           )}
         </div>
       </div>
-      <Toaster />
+      {/* <Toaster /> */}
     </div>
   );
 };

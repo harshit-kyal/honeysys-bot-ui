@@ -8,7 +8,6 @@ import {
   setStoreId,
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import toast from "react-hot-toast";
 import { useState } from "react";
 
 const ServiceableArea = () => {

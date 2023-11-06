@@ -18,6 +18,7 @@ const initialState: HomeSliceType = {
   deniedModal: false,
   locationModal: false,
   experienceModal: false,
+  cartChagedModal: false,
   storeData: {},
   UiUpdate: false,
   cart: [],
@@ -154,6 +155,12 @@ export const HomeSlice = createSlice({
         ChatArray: [...state.ChatArray, action.payload],
       };
     },
+    setOrderProduct(state, action) {
+      return {
+        ...state,
+        orderProduct: action.payload,
+      };
+    },
     addToOrderList(state, action) {
       return {
         ...state,
@@ -193,6 +200,7 @@ export const HomeSlice = createSlice({
           item?.productId === action?.payload?.productId &&
           item?.varientId === action?.payload?.varientId
       );
+      // console.log()
       if (find !== -1) {
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
@@ -224,6 +232,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         experienceModal: action.payload,
+      };
+    },
+    setCartChagedModal(state, action) {
+      return {
+        ...state,
+        cartChagedModal: action.payload,
       };
     },
     setGetStartDisplay(state, action) {
@@ -312,5 +326,7 @@ export const {
   setGetStartDisplay,
   setUserSavedAddres,
   setExperienceModal,
+  setOrderProduct,
+  setCartChagedModal,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

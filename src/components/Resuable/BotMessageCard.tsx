@@ -12,7 +12,7 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
@@ -103,7 +103,7 @@ const BotMessageCard = ({
       document.body.appendChild(script);
     });
   };
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const botToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -118,7 +118,7 @@ const BotMessageCard = ({
       "https://checkout.razorpay.com/v1/checkout.js"
     );
     if (!res) {
-      toastModal({ text: "you are offline" });
+      botToastModal({ text: "you are offline" });
     }
     const option = {
       key: paymentDetails?.key,
@@ -129,7 +129,7 @@ const BotMessageCard = ({
       image:
         "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
       handler: function (response: any) {
-        toastModal({ text: `${response.razorpay_payment_id}` });
+        botToastModal({ text: `${response.razorpay_payment_id}` });
       },
       prefill: {
         name: "Honeysys",
@@ -332,6 +332,7 @@ const BotMessageCard = ({
           </div>
         </RichCard>
       )}
+      {/* <Toaster /> */}
     </div>
   );
 };

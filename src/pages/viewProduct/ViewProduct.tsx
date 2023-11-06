@@ -5,7 +5,7 @@ import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
@@ -160,7 +160,7 @@ const ViewProduct = () => {
       </div>
     );
   };
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const viewProductToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -252,7 +252,9 @@ const ViewProduct = () => {
                           (item?.purchaseLimit != 0 &&
                             qua > item?.purchaseLimit)
                         ) {
-                          toastModal({ text: "This product stock is limited" });
+                          viewProductToastModal({
+                            text: "This product stock is limited",
+                          });
                           return;
                         } else {
                           setCartItem({
@@ -264,8 +266,7 @@ const ViewProduct = () => {
                             cartId: cartId,
                           });
                         }
-                      }
-                    }
+                      }}
                     />
                   }
                 />
@@ -309,6 +310,7 @@ const ViewProduct = () => {
               <div className="cartLoader-text">Loading...</div>
             </div>
           )}
+          {/* <Toaster /> */}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

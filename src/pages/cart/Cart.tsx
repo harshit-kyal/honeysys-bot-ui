@@ -11,9 +11,11 @@ import {
   minusToCartArray,
   setCartTotalAmount,
   setExperienceModal,
+  setOrderProduct,
 } from "../../slices/homeSlice";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import ExperienceModal from "../../components/Modal/ExperienceModal";
+import CartChagedModal from "../../components/Modal/CartChagedModal";
 
 const Cart = () => {
   const convId = useAppSelector((state) => state.bot.convId);
@@ -75,6 +77,8 @@ const Cart = () => {
   const [amountLoader, setAmountLoader] = useState(false);
   const [Index, setIndex] = useState(-1);
   const error = useAppSelector((state) => state.home.error);
+  const cart = useAppSelector((state) => state.home.cart);
+  const orderProduct = useAppSelector((state) => state.home.orderProduct);
   const cartData = async () => {
     // setLoading(true);
     setAmountLoader(true);
@@ -185,7 +189,7 @@ const Cart = () => {
         });
     }
   };
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const cartToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -195,6 +199,7 @@ const Cart = () => {
       },
     });
   };
+
   const handleIncrement = (index: number, type: string) => {
     let cartCopy = JSON.parse(JSON.stringify(cartList));
     switch (type) {
@@ -214,12 +219,12 @@ const Cart = () => {
             stockBalance < qua ||
             (purchaseLimit !== 0 && qua > purchaseLimit)
           ) {
-            toastModal({ text: "This product stock is limited" });
+            cartToastModal({ text: "This product stock is limited" });
 
             return;
           } else {
             let cartItem = {
-              productId: cartCopy.cartProduct[index].variants[0].productId,
+              productId: cartCopy.cartProduct[index].productId,
               varientId: cartCopy.cartProduct[index].variants[0]._id,
               storeId: storeId,
               productVariantIndex:
@@ -291,20 +296,19 @@ const Cart = () => {
       );
     }
   }, [window.location.search]);
-  useEffect(() => {
-    cartList?.cartProduct?.map((item: any) => {
-      let orederData = {
-        productId: item?.productId,
-        productVariantIndex: item?.productVariantIndex,
-        quantity: item?.quantity,
-      };
-      return dispatch(addToOrderList(orederData));
-    });
-  }, [cartList]);
-
+  // useEffect(() => {
+  //   cartList?.cartProduct?.map((item: any) => {
+  //     let orederData = {
+  //       productId: item?.productId,
+  //       productVariantIndex: item?.productVariantIndex,
+  //       quantity: item?.quantity,
+  //     };
+  //     return dispatch(addToOrderList(orederData));
+  //   });
+  // }, [cartList]);
   return (
     <div className="h-screen sticky">
-      <PageHeader title="Your Cart" isDisableSearch={false} />
+      <PageHeader title="Your Cart" isDisableSearch={false} cart={true} />
       {!Loading && !error ? (
         <>
           {cartList?.cartProduct && cartList?.cartProduct?.length > 0 ? (
@@ -417,6 +421,26 @@ const Cart = () => {
                               )
                             );
                             navigate("/");
+                            let data = cartList?.cartProduct?.map(
+                              (item: any) => {
+                                let orederData = {
+                                  productId: item?.productId,
+                                  productVariantIndex:
+                                    item?.productVariantIndex,
+                                  quantity: item?.quantity,
+                                };
+                                // console.log("orederData", orederData);
+                                // orderList.push(orederData);
+                                return orederData;
+                              }
+                            );
+                            {
+                              data.length > 0 ? (
+                                dispatch(setOrderProduct(data))
+                              ) : (
+                                <></>
+                              );
+                            }
                             const newData = {
                               conversationId: convId,
                               text: "cartAction",
@@ -484,6 +508,8 @@ const Cart = () => {
             </>
           )}
           <ExperienceModal />
+          <CartChagedModal />
+          {/* <Toaster /> */}
         </>
       ) : Loading && !error ? (
         <>

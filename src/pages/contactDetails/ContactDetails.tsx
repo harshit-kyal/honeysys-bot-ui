@@ -171,6 +171,7 @@ const ContactDetails = () => {
                 <div className="px-5">
                   <input
                     type="text"
+                    name="name"
                     className={`border-0 !p-0 shadow-none px-5 w-full text-xs
                 
                 `}
@@ -200,6 +201,7 @@ const ContactDetails = () => {
                 <div className="px-5">
                   <input
                     type="number"
+                    name="mobileNumber"
                     disabled
                     className={`border-0 !p-0 shadow-none px-5 w-full text-xs`}
                     placeholder="Enter your mobile number"
@@ -241,6 +243,7 @@ const ContactDetails = () => {
                     type="number"
                     className="border-0 !p-0 shadow-none px-5 w-full text-xs"
                     placeholder="Enter pincode"
+                    name="pincode"
                     value={pincode}
                     disabled={true}
                     // onChange={(e: any) => {
@@ -276,6 +279,7 @@ const ContactDetails = () => {
                     type="text"
                     className="border-0 !p-0 shadow-none w-full text-xs "
                     placeholder="Enter your address"
+                    name="address"
                     value={address}
                     onChange={(e: any) => setAddress(e.target.value)}
                     style={{
@@ -301,6 +305,7 @@ const ContactDetails = () => {
                     className="border-0 !p-0 shadow-none w-full text-xs"
                     placeholder="Enter landmark"
                     value={landmark}
+                    name="landmark"
                     onChange={(e: any) => setLandmark(e.target.value)}
                     style={{
                       borderBottom: "1px solid #0D1282",
@@ -325,6 +330,7 @@ const ContactDetails = () => {
                     className="border-0 !p-0 shadow-none w-full text-xs"
                     placeholder="Enter city"
                     value={city}
+                    name="city"
                     disabled
                     onChange={(e: any) => setCity(e.target.value)}
                     style={{
@@ -350,6 +356,7 @@ const ContactDetails = () => {
                     className="border-0 !p-0 shadow-none w-full text-xs"
                     placeholder="Enter state"
                     value={state}
+                    name="state"
                     onChange={(e: any) => setState(e.target.value)}
                     disabled
                     style={{

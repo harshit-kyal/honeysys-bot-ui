@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import Routing from "./routes/Routing";
 import { useAppSelector } from "./app/hooks";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const color = useAppSelector((state) => state.root.color);
@@ -144,7 +145,12 @@ function App() {
     reviewToken && localStorage.setItem("reviewToken", reviewToken);
   }, [window.location.search]);
 
-  return <Routing />;
+  return (
+    <>
+      <Routing />
+      <Toaster />
+    </>
+  );
 }
 
 export default App;

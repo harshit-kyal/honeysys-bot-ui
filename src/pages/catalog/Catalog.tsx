@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { setCatalogUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -118,7 +118,7 @@ const Catalog = () => {
       setError(false);
     }
   }, [error]);
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const catalogToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -248,7 +248,7 @@ const Catalog = () => {
                         (varientData?.purchaseLimit != 0 &&
                           qua > varientData?.purchaseLimit)
                       ) {
-                        toastModal({ text: "This product stock is limited" });
+                        catalogToastModal({ text: "This product stock is limited" });
                         return;
                       } else {
                         let cartItem = {
@@ -278,6 +278,7 @@ const Catalog = () => {
               <div className="cartLoader-text">Loading...</div>
             </div>
           )}
+          {/* <Toaster /> */}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

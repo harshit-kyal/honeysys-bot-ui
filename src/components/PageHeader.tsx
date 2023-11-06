@@ -2,15 +2,20 @@ import { Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { resetHome } from "../slices/homeSlice";
+import { resetHome, setCartChagedModal } from "../slices/homeSlice";
 import { resetBot } from "../slices/botSlice";
 import { resetRoot } from "../slices/rootSlice";
+import { boolean } from "yargs";
+import { useState } from "react";
+import CartChagedModal from "./Modal/CartChagedModal";
 const PageHeader = ({
   title,
   isDisableSearch = false,
+  cart,
 }: {
   title: string;
   isDisableSearch?: boolean;
+  cart?: boolean;
 }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -19,15 +24,63 @@ const PageHeader = ({
   };
   const reviewToken = localStorage.getItem("reviewToken");
   const cartQuantity = useAppSelector((state) => state.home.totalQuantity);
+  const cartData = useAppSelector((state) => state.home.cart);
+  const orderProduct = useAppSelector((state) => state.home.orderProduct);
+  const [Modal, setModal] = useState(false);
+  const cartHandler = () => {
+    if (!reviewToken) {
+      if (cart) {
+        if (orderProduct.length > 0) {
+          if (cartData.length === orderProduct.length) {
+            let valid = true;
+            cartData.forEach((item, index) => {
+              if (
+                item?.productId === orderProduct[index]?.productId &&
+                item?.productVariantIndex ===
+                  orderProduct[index]?.productVariantIndex &&
+                item?.quantity === orderProduct[index]?.quantity
+              ) {
+                valid = false;
+                // break;
+              }else{
+                valid=true
+              }
+              console.log(
+                "modal",
+                valid,
+                item?.productId,
+                orderProduct[index]?.productId,
+                item?.productVariantIndex,
+                orderProduct[index]?.productVariantIndex,
+                item?.quantity,
+                orderProduct[index]?.quantity
+              );
+            });
+            if (valid) {
+              dispatch(setCartChagedModal(true));
+            } else {
+              console.log("modal Here");
+              navigate(-1);
+            }
+          } else {
+            dispatch(setCartChagedModal(true));
+          }
+        } else {
+          navigate(-1);
+        }
+      } else {
+        navigate(-1);
+      }
+    }
+  };
+
   return (
     <div className="fixed top-0 w-full z-50">
       <div className="bg-primary flex items-center justify-between gap-3 max-[350px]:px-2 min-[350px]:px-4 py-[16.5px]">
         <div
           className="flex "
           onClick={() => {
-            if (!reviewToken) {
-              navigate(-1);
-            }
+            cartHandler();
           }}
         >
           <img

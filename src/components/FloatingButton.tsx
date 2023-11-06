@@ -37,7 +37,7 @@ const FloatingButton = () => {
   }
   document.body.addEventListener("dragover", drag_over, false);
   document.body.addEventListener("drop", drop, false);
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const flotingButtontoastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -51,7 +51,7 @@ const FloatingButton = () => {
   const [displayPopup, setDisplayPopup] = useState<boolean>(false);
   const updateUI = () => {
     getTheme().then((response) => {
-      toastModal({ text: "UI is updated" });
+      flotingButtontoastModal({ text: "UI is updated" });
       // setDisplayPopup(true);
       // setTimeout(() => {
       //   setDisplayPopup(false);
@@ -77,14 +77,14 @@ const FloatingButton = () => {
           draggable="true"
           id="dragme"
           style={{ display: UiUpdate ? "block" : "none" }}
-          onClick={updateUI}
+          onClick={()=>updateUI()}
         >
           <img
             src="/images/refresh-arrow-white.png"
             alt="refresh"
             className="h-10 w-10 p-3"
           />
-          <Toaster />
+          {/* <Toaster /> */}
           {/* <MessagePopup
         display={displayPopup}
         setDisplay={displayPopup}

@@ -10,7 +10,7 @@ import {
   getChatData,
   minusToCartArray,
 } from "../../slices/homeSlice";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const PDP = () => {
   const { id } = useParams();
@@ -61,7 +61,7 @@ const PDP = () => {
       setError(false);
     }
   }, [error]);
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const pdpToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -213,6 +213,7 @@ const PDP = () => {
     // let pricingCopy: any[] = [...DataCopy.variants];
 
     // pricingCopy = pricingCopy?.map((item: any) => {
+
     product?.variants?.map((item: any) => {
       if (item.id === activePrice?.id) {
         let qua = quantity + 1;
@@ -223,7 +224,8 @@ const PDP = () => {
           item?.stockBalance < qua ||
           (item?.purchaseLimit != 0 && qua > item?.purchaseLimit)
         ) {
-          toastModal({ text: "This product stock is limited" });
+          // alert("hii")
+          pdpToastModal({ text: "This product stock is limited" });
           return;
         } else {
           let cartItem = {
@@ -234,6 +236,7 @@ const PDP = () => {
             quantity: qua,
             cartId: cartId,
           };
+
           dispatch(addToCartArray(cartItem));
           // addApi(cartItem);
           setQuantity(qua);
@@ -391,6 +394,7 @@ const PDP = () => {
               <div className="cartLoader-text">Loading...</div>
             </div>
           )}
+          {/* <Toaster /> */}
         </>
       ) : Loading && !Error ? (
         <div className="px-2 pt-2">Loading...</div>

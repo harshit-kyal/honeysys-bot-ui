@@ -16,6 +16,7 @@ import {
   setCartId,
   setUserPincode,
   setUserSavedAddres,
+  setOrderProduct,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -43,7 +44,7 @@ import CartReplyCard from "../../components/Resuable/CartReplyCard";
 import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import { promises } from "dns";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { formatCustomAddress } from "../../utils/AddressFormate";
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -651,7 +652,7 @@ const Home = () => {
         .catch((err) => console.log("err", err));
     }
   }, [latLng]);
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const homeToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -718,7 +719,7 @@ const Home = () => {
                   result.onchange = function () {};
                 });
             } else {
-              toastModal({ text: "Sorry Not available!" });
+              homeToastModal({ text: "Sorry Not available!" });
             }
             const newData = {
               conversationId: convId,
@@ -909,7 +910,6 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
-
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
@@ -954,6 +954,7 @@ const Home = () => {
                 >
                   <div className="chatWrapper">
                     {activity?.map((ac: any, index: number) => {
+                      console.log("chat",ChatArray, ac?.type);
                       if (ac["subType"] && ac["subType"] === "screen") {
                       } else if (ac?.type === "get start") {
                         return (
@@ -970,7 +971,7 @@ const Home = () => {
                         } else {
                           dispatch(setUiUpdate(false));
                         }
-
+                        
                         return (
                           <div className="w-full">
                             {ac?.value?.sender === "user" ? (
@@ -1250,6 +1251,7 @@ const Home = () => {
 
                         if (paymentCard[0]?.isOrderPlaced === true) {
                           dispatch(setCart([]));
+                          dispatch(setOrderProduct([]))
                           dispatch(setTotalQuantity(0));
                         }
 
@@ -1431,6 +1433,7 @@ const Home = () => {
             conversationId: convId,
             text: inputText,
             voiceFlag: false,
+            isChatVisible: true,
             data: {
               lat: cartData?.location?.latitude,
               lag: cartData?.location?.longitude,
@@ -1458,6 +1461,7 @@ const Home = () => {
       <LocationPermission />
       <DeniedModal />
       {UiUpdate && <FloatingButton />}
+      {/* <Toaster /> */}
     </div>
   );
 };

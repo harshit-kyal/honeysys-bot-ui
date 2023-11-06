@@ -3,7 +3,7 @@ import "./searchProduct.css";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import BackButton from "../../components/Button/BackButton";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
@@ -114,7 +114,7 @@ const SearchProduct = () => {
       </div>
     );
   };
-  const toastModal = ({ text = "" }: { text: string }) => {
+  const searchToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
         padding: " 16px 10px",
@@ -256,7 +256,7 @@ const SearchProduct = () => {
                                       (item?.purchaseLimit != 0 &&
                                         qua > item?.purchaseLimit)
                                     ) {
-                                      toastModal({
+                                      searchToastModal({
                                         text: "This product stock is limited",
                                       });
                                       return;
@@ -351,6 +351,7 @@ const SearchProduct = () => {
           <div className="px-2 pt-2">something went wrong</div>
         )}
       </div>
+      {/* <Toaster /> */}
     </>
   );
 };
