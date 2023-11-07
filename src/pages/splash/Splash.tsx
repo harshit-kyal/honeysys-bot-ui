@@ -1,21 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button/Button";
+import Button1 from "../../components/Button/Button";
+import { Text, VerificationInput, Button } from "@polynomialai/alpha-react";
 import { botApi } from "../../api";
+import { useAppSelector } from "../../app/hooks";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const Splash = () => {
   const navigation = useNavigate();
+  const Error = useAppSelector((state) => state.home.error);
+  const [Loading, setLoading] = useState(false);
   const handleGetStartedClick = React.useCallback(() => {
-    botApi({
-      loginId: "7013721300",
-      otp: "8409",
-      action: "genrateGuestToken",
-      clientName: "honeySys",
-    },"splash").then((response) => {
-      const accessToken = response?.data?.data?.access_token;
-      localStorage.setItem("token", accessToken);
-    });
-    navigation("/login");
+    setLoading(true);
+    botApi(
+      {
+        loginId: "7013721300",
+        otp: "8409",
+        action: "genrateGuestToken",
+        clientName: "honeySys",
+      },
+      "splash"
+    )
+      .then((response) => {
+        setLoading(false);
+        const accessToken = response?.data?.data?.access_token;
+        if (accessToken) {
+          localStorage.setItem("token", accessToken);
+          navigation("/login");
+        }
+      })
+      .catch(() => {
+        ToastPopup({ text: "something went wrong" });
+        setLoading(false);
+      });
   }, [navigation]);
 
   return (
@@ -40,7 +57,22 @@ const Splash = () => {
         evolution in online shopping!
       </div>
       <div className="flex justify-center mt-8 w-100">
-        <Button title="Get Started" handleClick={handleGetStartedClick} />
+        <Button
+          isLoading={Loading}
+          className="flex justify-center items-center !bg-primary text-background px-6 py-2 rounded-3xl min-h-[46px] min-w-[165px]"
+          onClick={() => handleGetStartedClick()}
+        >
+          <span className="text-white text-[14px] flex">
+            <span className="mt-1"> Get Started</span>
+            <img
+              src="/images/arrow_circle_right.svg"
+              alt="right"
+              width={30}
+              height={30}
+              className="ml-2"
+            ></img>
+          </span>
+        </Button>
       </div>
     </div>
   );

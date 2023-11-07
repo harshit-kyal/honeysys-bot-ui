@@ -8,6 +8,7 @@ import {
   setDeliveryType,
   setEndTime,
   setLocationPermission,
+  setSlotIndex,
   setStartTime,
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -114,29 +115,29 @@ const BotMessageCard = ({
     });
   };
   const displayRazorpay = async (paymentDetails: any) => {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-    if (!res) {
-      botToastModal({ text: "you are offline" });
-    }
-    const option = {
-      key: paymentDetails?.key,
-      currency: paymentDetails?.currency,
-      amount: paymentDetails?.amount,
-      name: "Honeysys",
-      describe: "Thanks for purchasing",
-      image:
-        "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-      handler: function (response: any) {
-        botToastModal({ text: `${response.razorpay_payment_id}` });
-      },
-      prefill: {
-        name: "Honeysys",
-      },
-    };
-    const paymentObject = new (window as any).Razorpay(option);
-    paymentObject.open();
+    // const res = await loadScript(
+    //   "https://checkout.razorpay.com/v1/checkout.js"
+    // );
+    // if (!res) {
+    //   botToastModal({ text: "you are offline" });
+    // }
+    // const option = {
+    //   key: paymentDetails?.key,
+    //   currency: paymentDetails?.currency,
+    //   amount: paymentDetails?.amount,
+    //   name: "Honeysys",
+    //   describe: "Thanks for purchasing",
+    //   image:
+    //     "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+    //   handler: function (response: any) {
+    //     botToastModal({ text: `${response.razorpay_payment_id}` });
+    //   },
+    //   prefill: {
+    //     name: "Honeysys",
+    //   },
+    // };
+    // const paymentObject = new (window as any).Razorpay(option);
+    // paymentObject.open();
   };
   return (
     <div>
@@ -196,10 +197,11 @@ const BotMessageCard = ({
                         dispatch(setStartTime(data?.startTime));
                       }
                       if (data?.endTime) {
+                        console.log("data",data)
                         dispatch(setEndTime(data?.endTime));
                       }
                       if (data?.slotIndex) {
-                        dispatch(setEndTime(data?.slotIndex));
+                        dispatch(setSlotIndex(data?.slotIndex));
                       }
                       if (buttonContent && buttonContent.length > 0) {
                         const replyCard = [

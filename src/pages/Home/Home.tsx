@@ -50,6 +50,7 @@ import { promises } from "dns";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { formatCustomAddress } from "../../utils/AddressFormate";
+import { ToastPopup } from "../../utils/TosterPopup";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -666,7 +667,6 @@ const Home = () => {
       },
     });
   };
-  console.log("chatArray", ChatArray);
   useEffect(() => {
     if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
@@ -914,6 +914,13 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
+  const Error = useAppSelector((state) => state.home.error);
+  useEffect(() => {
+    if (Error) {
+      ToastPopup({ text: "something went wrong" });
+    }
+  }, [Error]);
+
   return (
     <div
       className="w-full bg-background text-primary text-[40px] font-bold"
@@ -1456,10 +1463,21 @@ const Home = () => {
           };
           dispatch(getChatData({ newData, botType }))
             .then((response) => {
-              let navigatePage = response?.payload?.data?.activities[0][0];
-              console.log("navigatePage", navigatePage);
+              let navigateData = response?.payload?.data?.activities[0][0];
+              if (response && navigateData?.type === "navigatePage") {
+                let navigatePage = navigateData?.value?.data[0]?.navigatePage;
+                if (navigatePage === "showCart") {
+                  navigate("/cart");
+                } else if (
+                  navigatePage === "showProduct" ||
+                  navigatePage === "showCategory"
+                ) {
+                  navigate("/catalog");
+                }
+              }
             })
             .catch((error) => {
+              ToastPopup({ text: "something went wrong" });
               console.log("err", error);
             });
         }}

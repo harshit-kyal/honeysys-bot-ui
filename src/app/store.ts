@@ -32,9 +32,10 @@ const botPersist = persistReducer(botpersistConfig, botSlice);
 export const store = configureStore({
   reducer: { root: rootPersist, home: homePersist, bot: botPersist },
   middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
+    serializableCheck: false,
+    // serializableCheck: {
+    //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    // },
   }),
 });
 const persistor = persistStore(store);

@@ -10,6 +10,7 @@ import { useAppSelector } from "../../app/hooks";
 import toast, { Toaster } from "react-hot-toast";
 import { setBotType, setClientName, setConvId } from "../../slices/botSlice";
 import { encrypt } from "../../services/aes";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -45,60 +46,29 @@ const Login = () => {
           clientName: "honeySys",
         },
         "login"
-      ).then((response) => {
-        setLoading(false);
-        if (response.data?.code === 200) {
-          dispatch(setUserId(response?.data?.data?.userId));
-          dispatch(setConvId(response?.data?.data?.userId));
-          dispatch(setBotType(encrypt("fd50c4b3a21b1e9e5c941_Dev")));
-          dispatch(setOtp(response?.data?.data?.otp));
-          toast.success(`OTP : ${response?.data?.data?.otp}`);
-          setTimeout(() => {
-            navigation("/otp");
-          }, 2000);
-        }
-      });
+      )
+        .then((response) => {
+          setLoading(false);
+          if (response.data?.status_code === 200) {
+            dispatch(setUserId(response?.data?.data?.userId));
+            dispatch(setConvId(response?.data?.data?.userId));
+            dispatch(setBotType(encrypt("fd50c4b3a21b1e9e5c941_Dev")));
+            dispatch(setOtp(response?.data?.data?.otp));
+            toast.success(`OTP : ${response?.data?.data?.otp}`);
+            setTimeout(() => {
+              navigation("/otp");
+            }, 2000);
+          }
+          if (response.data?.status_code === 500) {
+            wrongOTP({ text: "something went wrong" });
+          }
+        })
+        .catch(() => {
+          ToastPopup({ text: "something went wrong" });
+        });
     }
   };
-  const loadScript = (src: any) => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  };
-  const displayRazorpay = async (amount: any) => {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-    if (!res) {
-      alert("you are offline");
-    }
 
-    const option = {
-      key: "rzp_test_Ojwn335sZyoBXe",
-      currency: "INR",
-      amount: amount * 100,
-      name: "Honeysys",
-      describe: "Thanks for purchaing",
-      image:
-        "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-      handler: function (response: any) {
-        alert(response.razorpay_payment_id);
-      },
-      prefill: {
-        name: "Honeysys",
-      },
-    };
-    const paymentObject = new (window as any).Razorpay(option);
-    paymentObject.open();
-  };
   return (
     <div className="login px-5 py-3">
       <BackButton />

@@ -9,6 +9,8 @@ import {
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const ServiceableArea = () => {
   const navigate = useNavigate();
@@ -143,9 +145,13 @@ const ServiceableArea = () => {
                     let cartData = data?.payload?.data?.activities[0][0];
                     if (data && cartData?.type === "getCartId") {
                       let cartId = cartData?.value?.data?.cartId;
-                      dispatch(setCartId(cartId));
-                      navigate("/");
-                      dispatch(setGetStartDisplay(true));
+                      if (cartId) {
+                        dispatch(setCartId(cartId));
+                        navigate("/");
+                        dispatch(setGetStartDisplay(true));
+                      } else {
+                        ToastPopup({ text: "Sorry Not available!" });
+                      }
                     }
                   })
                   .catch((error) => {

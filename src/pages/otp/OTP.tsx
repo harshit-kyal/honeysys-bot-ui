@@ -16,6 +16,7 @@ import {
   setStoreId,
   setUserPincode,
 } from "../../slices/homeSlice";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const OTP = () => {
   const dispatch = useAppDispatch();
@@ -110,11 +111,14 @@ const OTP = () => {
     cartData();
   }, [storeId, cartId]);
   const resend = () => {
-    botApi({
-      loginId: Mobile,
-      action: "login",
-      clientName: "honeySys",
-    },"otp").then((response) => {
+    botApi(
+      {
+        loginId: Mobile,
+        action: "login",
+        clientName: "honeySys",
+      },
+      "otp"
+    ).then((response) => {
       setLoading(false);
       if (response.data?.code === 200) {
         setCorrectOTP(parseInt(response?.data?.data?.otp));
@@ -161,12 +165,15 @@ const OTP = () => {
               wrongOTPModal({ text: "You have entered incorrect OTP" });
             } else {
               setLoading(true);
-              botApi({
-                loginId: Mobile,
-                otp: OTP,
-                action: "genrateAccessToken",
-                clientName: "honeySys",
-              },"otp")
+              botApi(
+                {
+                  loginId: Mobile,
+                  otp: OTP,
+                  action: "genrateAccessToken",
+                  clientName: "honeySys",
+                },
+                "otp"
+              )
                 .then((response) => {
                   if (response.data?.code === 200) {
                     localStorage.setItem(
@@ -180,6 +187,7 @@ const OTP = () => {
                   }
                 })
                 .catch((error) => {
+                  ToastPopup({ text: "something went wrong" });
                   setLoading(false);
                 });
             }
@@ -190,7 +198,12 @@ const OTP = () => {
       </div>
       <div className="flex justify-center gap-1 mt-5">
         <div className="text-[14px]">Didn’t get the code?</div>
-        <div className="text-primary text-[14px]" onClick={()=>{resend()}}>
+        <div
+          className="text-primary text-[14px]"
+          onClick={() => {
+            resend();
+          }}
+        >
           {seconds > 0 || minutes > 0 ? (
             <>
               {minutes.toLocaleString("en-IN", { minimumIntegerDigits: 2 })}:
