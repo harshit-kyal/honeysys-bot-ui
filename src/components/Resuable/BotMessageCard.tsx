@@ -154,6 +154,7 @@ const BotMessageCard = ({
                 src={data?.iconUrl}
                 text={data?.text}
                 onClick={() => {
+                  console.log("data",data,endTime)
                   if (flag) {
                     if (data?.value === "provideLocation") {
                       const newData = {
@@ -194,8 +195,11 @@ const BotMessageCard = ({
                       if (data?.startTime) {
                         dispatch(setStartTime(data?.startTime));
                       }
-                      if (data?.deliveryType) {
+                      if (data?.endTime) {
                         dispatch(setEndTime(data?.endTime));
+                      }
+                      if (data?.slotIndex) {
+                        dispatch(setEndTime(data?.slotIndex));
                       }
                       if (buttonContent && buttonContent.length > 0) {
                         const replyCard = [
@@ -226,14 +230,14 @@ const BotMessageCard = ({
                         sourceAction: true,
                         content: data?.text,
                         replyArray: buttonContent,
-                     
+
                         data: {
                           paymentMethod:
-                          data?.text === "Pay online"
-                            ? "Pay Online"
-                            : data?.text === "Cash on delivery"
-                            ? "Pay on Delivery"
-                            : "",
+                            data?.text === "Pay online"
+                              ? "Pay Online"
+                              : data?.text === "Cash on delivery"
+                              ? "Pay on Delivery"
+                              : "",
                           lat: cartData?.location?.latitude,
                           lag: cartData?.location?.longitude,
                           location: cartData?.location?.pincode,

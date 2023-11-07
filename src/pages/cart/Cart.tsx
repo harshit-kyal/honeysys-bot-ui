@@ -26,7 +26,7 @@ const Cart = () => {
   const userSavedAddress = useAppSelector(
     (state) => state.home.userSavedAddres
   );
-  console.log("userSaved");
+  const [functionality, setFunctionality] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // const dummy = {
@@ -113,6 +113,7 @@ const Cart = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
+        console.log("cart")
         Promise.all([cartData()]).then((res) => {
           setLoading(false);
         });
@@ -135,8 +136,22 @@ const Cart = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
           cartData();
+          let cartItem = {
+            productId: data?.productId,
+            varientId: data?.varientId,
+            storeId: storeId,
+            productVariantIndex: data?.productVariantIndex,
+            quantity: data?.quantity,
+            cartId: cartId,
+          };
+          if (functionality === "increment") {
+            dispatch(addToCartArray(cartItem));
+          }
+          if (functionality === "decrement") {
+            dispatch(minusToCartArray(cartItem));
+          }
           // setAmountLoader(false);
         })
         .catch(() => {
@@ -180,8 +195,17 @@ const Cart = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
           cartData();
+          let cartItem = {
+            productId: data?.productId,
+            varientId: data?.varientId,
+            storeId: storeId,
+            productVariantIndex: data?.productVariantIndex,
+            quantity: 0,
+            cartId: cartId,
+          };
+          dispatch(minusToCartArray(cartItem));
           // setAmountLoader(false);
         })
         .catch(() => {
@@ -223,16 +247,17 @@ const Cart = () => {
 
             return;
           } else {
-            let cartItem = {
-              productId: cartCopy.cartProduct[index].productId,
-              varientId: cartCopy.cartProduct[index].variants[0]._id,
-              storeId: storeId,
-              productVariantIndex:
-                cartCopy.cartProduct[index].variants[0].productVariantIndex,
-              quantity: qua,
-              cartId: cartId,
-            };
-            dispatch(addToCartArray(cartItem));
+            setFunctionality("increment");
+            // let cartItem = {
+            //   productId: cartCopy.cartProduct[index].productId,
+            //   varientId: cartCopy.cartProduct[index].variants[0]._id,
+            //   storeId: storeId,
+            //   productVariantIndex:
+            //     cartCopy.cartProduct[index].variants[0].productVariantIndex,
+            //   quantity: qua,
+            //   cartId: cartId,
+            // };
+            // dispatch(addToCartArray(cartItem));
             // addApi(cartItem);
             setIndex(index);
 
@@ -249,16 +274,17 @@ const Cart = () => {
           if (minPurchaseLimit > qua) {
             qua = 0;
           }
-          let cartItem = {
-            productId: cartCopy.cartProduct[index].variants[0].productId,
-            varientId: cartCopy.cartProduct[index].variants[0]._id,
-            storeId: storeId,
-            productVariantIndex:
-              cartCopy.cartProduct[index].variants[0].productVariantIndex,
-            quantity: qua,
-            cartId: cartId,
-          };
-          dispatch(minusToCartArray(cartItem));
+          setFunctionality("decrement");
+          // let cartItem = {
+          //   productId: cartCopy.cartProduct[index].variants[0].productId,
+          //   varientId: cartCopy.cartProduct[index].variants[0]._id,
+          //   storeId: storeId,
+          //   productVariantIndex:
+          //     cartCopy.cartProduct[index].variants[0].productVariantIndex,
+          //   quantity: qua,
+          //   cartId: cartId,
+          // };
+          // dispatch(minusToCartArray(cartItem));
           if (qua >= 1) {
             // addApi(cartItem);
             setIndex(index);
@@ -269,6 +295,8 @@ const Cart = () => {
               productVariantIndex:
                 cartCopy.cartProduct[index].variants[0].productVariantIndex,
               cartId: cartId,
+              varientId: cartCopy.cartProduct[index].variants[0]._id,
+              quantity: 0,
             };
             removeApi(cartItem);
           }

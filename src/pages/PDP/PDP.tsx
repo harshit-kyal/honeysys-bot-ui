@@ -11,7 +11,7 @@ import {
   minusToCartArray,
 } from "../../slices/homeSlice";
 import toast, { Toaster } from "react-hot-toast";
-
+  
 const PDP = () => {
   const { id } = useParams();
   const storeId = useAppSelector((state) => state.home.storeId);
@@ -29,6 +29,7 @@ const PDP = () => {
   const [Error, setError] = useState(false);
   const [Loading, setLoading] = useState(false);
   const [qtyLoading, setQtyLoading] = useState(false);
+  const [functionality, setFunctionality] = useState("");
 
   const categoryCatalog = async () => {
     let newData = {
@@ -97,7 +98,22 @@ const PDP = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
+          console.log("varient",data)
+          let cartItem = {
+            productId: data?.productId,
+            varientId: data?.varientId,
+            storeId: storeId,
+            productVariantIndex: data?.productVariantIndex,
+            quantity: data?.quantity,
+            cartId: cartId,
+          };
+          if (functionality === "increment") {
+            dispatch(addToCartArray(cartItem));
+          }
+          if (functionality === "decrement") {
+            dispatch(minusToCartArray(cartItem));
+          }
           setQtyLoading(false);
         })
         .catch(() => {
@@ -116,9 +132,10 @@ const PDP = () => {
   };
   useEffect(() => {
     if (quantity !== 0) {
+      console.log("productt",product)
       let changedData = {
         productId: product?.productId,
-        varientId: product?.variants[0]._id,
+        varientId: product?.variants[0].id,
         storeId: storeId,
         productVariantIndex: product?.variants[0].productVariantIndex,
         quantity: quantity,
@@ -167,26 +184,6 @@ const PDP = () => {
     );
     setActivePrice(pricing);
   };
-  // const addApi = (data: any) => {
-  //   setQtyLoading(true);
-  //   let newData = {
-  //     conversationId: convId,
-  //     text: "addtocart",
-  //     voiceFlag: false,
-  //     isChatVisible: false,
-  //     data: data,
-  //   };
-  //   if (convId && botType && convId !== "" && botType !== "") {
-  //     dispatch(getChatData({ newData, botType }))
-  //       .then((data) => {
-  //         setQtyLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         setError(true);
-  //         setQtyLoading(false);
-  //       });
-  //   }
-  // };
   const removeApi = (data: any) => {
     clearTimeout(debounceTimeout);
     setQtyLoading(true);
@@ -199,7 +196,16 @@ const PDP = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
+          let cartItem = {
+            productId: data?.productId,
+            varientId: data?.varientId,
+            storeId: storeId,
+            productVariantIndex: data?.productVariantIndex,
+            quantity: 0,
+            cartId: cartId,
+          };
+          dispatch(minusToCartArray(cartItem));
           setQtyLoading(false);
         })
         .catch(() => {
@@ -224,20 +230,20 @@ const PDP = () => {
           item?.stockBalance < qua ||
           (item?.purchaseLimit != 0 && qua > item?.purchaseLimit)
         ) {
-          // alert("hii")
           pdpToastModal({ text: "This product stock is limited" });
           return;
         } else {
-          let cartItem = {
-            productId: product?.productId,
-            varientId: item?.id,
-            storeId: storeId,
-            productVariantIndex: item?.productVariantIndex,
-            quantity: qua,
-            cartId: cartId,
-          };
+          setFunctionality("increment");
+          // let cartItem = {
+          //   productId: product?.productId,
+          //   varientId: item?.id,
+          //   storeId: storeId,
+          //   productVariantIndex: item?.productVariantIndex,
+          //   quantity: qua,
+          //   cartId: cartId,
+          // };
 
-          dispatch(addToCartArray(cartItem));
+          // dispatch(addToCartArray(cartItem));
           // addApi(cartItem);
           setQuantity(qua);
         }
@@ -258,21 +264,23 @@ const PDP = () => {
         if (item?.minPurchaseLimit > qua) {
           qua = 0;
         }
-        let cartItem = {
-          productId: product?.productId,
-          varientId: item?.id,
-          storeId: storeId,
-          productVariantIndex: item?.productVariantIndex,
-          quantity: qua,
-          cartId: cartId,
-        };
-        dispatch(minusToCartArray(cartItem));
+        setFunctionality("decrement");
+        // let cartItem = {
+        //   productId: product?.productId,
+        //   varientId: item?.id,
+        //   storeId: storeId,
+        //   productVariantIndex: item?.productVariantIndex,
+        //   quantity: qua,
+        //   cartId: cartId,
+        // };
+        // dispatch(minusToCartArray(cartItem));
         setQuantity(qua);
         if (qua >= 1) {
           // addApi(cartItem);
         } else {
           let cartItem = {
             productId: product?.productId,
+            varientId: product?.varientId,
             storeId: storeId,
             productVariantIndex: item?.productVariantIndex,
             cartId: cartId,

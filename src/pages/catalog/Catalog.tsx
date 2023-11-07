@@ -139,7 +139,8 @@ const Catalog = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
+          dispatch(addToCartArray(data));
           setAddLoading(false);
         })
         .catch(() => {
@@ -248,7 +249,9 @@ const Catalog = () => {
                         (varientData?.purchaseLimit != 0 &&
                           qua > varientData?.purchaseLimit)
                       ) {
-                        catalogToastModal({ text: "This product stock is limited" });
+                        catalogToastModal({
+                          text: "This product stock is limited",
+                        });
                         return;
                       } else {
                         let cartItem = {
@@ -259,7 +262,6 @@ const Catalog = () => {
                           quantity: qua,
                           cartId: cartId,
                         };
-                        dispatch(addToCartArray(cartItem));
                         handleAddApi(cartItem);
                       }
                     }}

@@ -64,11 +64,6 @@ const OTP = () => {
       clearInterval(interval);
     };
   }, [seconds]);
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
-    libraries: ["places"],
-  });
   const cartData = async () => {
     if (storeId) {
       const newData = {
@@ -119,7 +114,7 @@ const OTP = () => {
       loginId: Mobile,
       action: "login",
       clientName: "honeySys",
-    }).then((response) => {
+    },"otp").then((response) => {
       setLoading(false);
       if (response.data?.code === 200) {
         setCorrectOTP(parseInt(response?.data?.data?.otp));
@@ -171,7 +166,7 @@ const OTP = () => {
                 otp: OTP,
                 action: "genrateAccessToken",
                 clientName: "honeySys",
-              })
+              },"otp")
                 .then((response) => {
                   if (response.data?.code === 200) {
                     localStorage.setItem(

@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Text } from "@polynomialai/alpha-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   useJsApiLoader,
   GoogleMap,
   Autocomplete,
+  LoadScriptProps,
 } from "@react-google-maps/api";
 import {
   getChatData,
@@ -58,15 +59,17 @@ const Address = () => {
   });
   const destinationRef = useRef<any | null>();
   const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
   const zoom = 16;
   const location = useLocation();
   const navigateData =
     location && location?.state?.navigate ? location?.state?.navigate : "";
+  const libraries: any = useMemo(() => ["places"], []);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
-    libraries: ["places"],
+    libraries: libraries,
   });
   const addressToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
@@ -182,7 +185,6 @@ const Address = () => {
   const saveHandler = () => {
     if (address?.pincode !== "" && latLng.lat !== 0 && latLng.lng !== 0) {
       setLoading(true);
-      let botType = "e-comm";
       const newData = {
         conversationId: convId,
         text: "findstores",
@@ -214,7 +216,6 @@ const Address = () => {
                 dispatch(setStoreId(storeData?.value?.data[0]?.id));
                 let storeIds = storeData?.value?.data[0]?.id;
                 if (storeIds) {
-                  let botType = "e-comm";
                   const newData = {
                     conversationId: convId,
                     text: "getcartid",
@@ -264,7 +265,6 @@ const Address = () => {
       addressToastModal({ text: "Please enter the address" });
     }
   };
-  console.log("latlng", latLng);
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">

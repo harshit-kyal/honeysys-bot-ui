@@ -93,7 +93,8 @@ const ViewProduct = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then(() => {
+          dispatch(addToCartArray(data));
           setQtyLoading(false);
         })
         .catch(() => {
@@ -293,7 +294,6 @@ const ViewProduct = () => {
                       cartItem?.varientId !== ""
                     ) {
                       api(cartItem);
-                      dispatch(addToCartArray(cartItem));
                       setModal(false);
                     } else {
                       alert("please select product");

@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
         let headers = {
             // "Content-Type": `application/json`,
         };
-        if (token) {
+        if (token && !reqConfig.headers.Authorization) {
             headers = {
                 Authorization: `Bearer ${token}`,
                 // "Content-Type": `application/json`,

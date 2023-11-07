@@ -59,7 +59,6 @@ const PageHeader = ({
             if (valid) {
               dispatch(setCartChagedModal(true));
             } else {
-              console.log("modal Here");
               navigate(-1);
             }
           } else {

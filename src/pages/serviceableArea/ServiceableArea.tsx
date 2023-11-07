@@ -126,7 +126,6 @@ const ServiceableArea = () => {
             dispatch(setStoreId(storeData?.value?.data[0]?.id));
             let storeIds = storeData?.value?.data[0]?.id;
             if (storeIds) {
-              let botType = "e-comm";
               const newData = {
                 conversationId: convId,
                 text: "getcartid",
@@ -224,7 +223,7 @@ const ServiceableArea = () => {
             </Button>
             <div
               className="text-primary mt-2 text-sm cursor-pointer"
-              onClick={skipHandler}
+              onClick={() => skipHandler()}
             >
               Skip & Browse
             </div>

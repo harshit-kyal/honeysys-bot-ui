@@ -4,14 +4,15 @@ import axiosInstance from "../lib/axiosInstance";
 import { encrypt } from "../services/aes";
 import { setTheme } from "../slices/rootSlice";
 
-export const botApi = async (body: any) => {
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGIxODJhMjYxYmRkZTQ4Y2UxMzg5MGIiLCJhcHBUeXBlIjoid2ViIiwicm9sZUlkIjoiNjMyMDc4OTVjZmZkN2MyMWViZTdjOGY2Iiwic2Vzc2lvbklkIjoiYWxwaGFudW1lcmljIiwidXNlck5hbWUiOiIgIiwiaWF0IjoxNjk4ODQwNDcxLCJleHAiOjE3MzAzNzY0NzF9.pzZbUMSjIHtNX4bCq7UnBR8wT-B6TwAI32AhSA1ODaA";
+export const botApi = async (body: any, screen: any) => {
+  // const accessToken =
+  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGIxODJhMjYxYmRkZTQ4Y2UxMzg5MGIiLCJhcHBUeXBlIjoid2ViIiwicm9sZUlkIjoiNjMyMDc4OTVjZmZkN2MyMWViZTdjOGY2Iiwic2Vzc2lvbklkIjoiYWxwaGFudW1lcmljIiwidXNlck5hbWUiOiIgIiwiaWF0IjoxNjk5Mjc5NjgyLCJleHAiOjE3MzA4MTU2ODJ9.x8ASDpyBQafZfinyBN6D3z821-152_U1gN0w2Ma2EOA";
   const token = localStorage.getItem("token");
+  const accessToken = localStorage.getItem("accessToken");
   try {
     const response: any = await axiosInstance.post("", body, {
       headers: {
-        Authorization: `Bearer ${token ? token : accessToken}`,
+        Authorization: `Bearer ${token ? token : ""}`,
         clientId: 2508190884,
         secret: "9b395a79-b30a-4f3a-abb4-22b76d62ee07",
       },
@@ -93,9 +94,10 @@ export const getChatApi = async ({
     newData.attachment = [];
   }
   const token = localStorage.getItem("accessToken");
+  let encryptBotType = encrypt("fd50c4b3a21b1e9e5c941_Dev");
   try {
     const response: any = await axiosInstance.post(
-      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`,
+      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${encryptBotType}`,
       newData
     );
 

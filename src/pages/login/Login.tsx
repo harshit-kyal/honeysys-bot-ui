@@ -38,16 +38,19 @@ const Login = () => {
       wrongOTP({ text: "Check Term and conditions" });
     } else {
       setLoading(true);
-      botApi({
-        loginId: Mobile,
-        action: "login",
-        clientName: "honeySys",
-      }).then((response) => {
+      botApi(
+        {
+          loginId: Mobile,
+          action: "login",
+          clientName: "honeySys",
+        },
+        "login"
+      ).then((response) => {
         setLoading(false);
         if (response.data?.code === 200) {
           dispatch(setUserId(response?.data?.data?.userId));
           dispatch(setConvId(response?.data?.data?.userId));
-          dispatch(setBotType(encrypt("e-comm")));
+          dispatch(setBotType(encrypt("fd50c4b3a21b1e9e5c941_Dev")));
           dispatch(setOtp(response?.data?.data?.otp));
           toast.success(`OTP : ${response?.data?.data?.otp}`);
           setTimeout(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { getConversationId } from "../../services";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { environment } from "../../environments/environment";
@@ -41,7 +41,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axiosInstance from "../../lib/axiosInstance";
 import axios from "axios";
 import CartReplyCard from "../../components/Resuable/CartReplyCard";
-import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
+import {
+  LoadScript,
+  LoadScriptProps,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 import { promises } from "dns";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -460,6 +464,7 @@ const Home = () => {
   // };
   const replyFunction = (data: any) => {
     if (data?.activities) {
+      console.log("ChatArray", data?.activities);
       const activities: any[] = data?.activities;
       activities?.forEach((item) => {
         dispatch(addToChatArray(item));
@@ -536,10 +541,11 @@ const Home = () => {
   //     ]);
   //   }
   // }, [title, greetingMessage, botIcon]);
+  const libraries: any = useMemo(() => ["places"], []);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
-    libraries: ["places"],
+    libraries,
   });
 
   useEffect(() => {
@@ -565,7 +571,6 @@ const Home = () => {
               );
               if (postalCode) {
                 const pincode = postalCodeData?.long_name;
-                let botType = "e-comm";
                 const newData = {
                   conversationId: convId,
                   text: "findstores",
@@ -602,7 +607,6 @@ const Home = () => {
                           );
                           let storeIds = actiVitiesData?.value?.data[0]?.id;
                           if (storeIds) {
-                            let botType = "e-comm";
                             const newData = {
                               conversationId: convId,
                               text: "getcartid",
@@ -662,7 +666,7 @@ const Home = () => {
       },
     });
   };
-  console.log("get", getStartDisplay);
+  console.log("chatArray", ChatArray);
   useEffect(() => {
     if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
@@ -954,7 +958,6 @@ const Home = () => {
                 >
                   <div className="chatWrapper">
                     {activity?.map((ac: any, index: number) => {
-                      console.log("chat",ChatArray, ac?.type);
                       if (ac["subType"] && ac["subType"] === "screen") {
                       } else if (ac?.type === "get start") {
                         return (
@@ -971,7 +974,7 @@ const Home = () => {
                         } else {
                           dispatch(setUiUpdate(false));
                         }
-                        
+
                         return (
                           <div className="w-full">
                             {ac?.value?.sender === "user" ? (
@@ -1251,7 +1254,7 @@ const Home = () => {
 
                         if (paymentCard[0]?.isOrderPlaced === true) {
                           dispatch(setCart([]));
-                          dispatch(setOrderProduct([]))
+                          dispatch(setOrderProduct([]));
                           dispatch(setTotalQuantity(0));
                         }
 
@@ -1452,7 +1455,10 @@ const Home = () => {
             },
           };
           dispatch(getChatData({ newData, botType }))
-            .then((data) => {})
+            .then((response) => {
+              let navigatePage = response?.payload?.data?.activities[0][0];
+              console.log("navigatePage", navigatePage);
+            })
             .catch((error) => {
               console.log("err", error);
             });

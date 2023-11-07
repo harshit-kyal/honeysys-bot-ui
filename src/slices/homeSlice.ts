@@ -205,6 +205,7 @@ export const HomeSlice = createSlice({
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
+          console.log("minus")
           state.totalQuantity = state.totalQuantity -= 1;
           state.cart.splice(find, 1);
         }

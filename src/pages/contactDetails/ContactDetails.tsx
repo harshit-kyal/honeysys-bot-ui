@@ -13,6 +13,7 @@ const ContactDetails = () => {
   const [errorLabel, setErrorLabel] = useState<any>({});
   const pincodeData = useAppSelector((state) => state.home.userPincode);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
+  const botType = useAppSelector((state) => state.bot.botType);
   const storeInfo = useAppSelector((state) => state.home.storeData);
   const convId = useAppSelector((state) => state.bot.convId);
   const addressData = location?.state?.address;
@@ -75,7 +76,6 @@ const ContactDetails = () => {
       // error.city === "" &&
       // error.state === ""
     ) {
-      let botType = "e-comm";
       const newData = {
         conversationId: convId,
         text: "addAddress",
@@ -113,7 +113,7 @@ const ContactDetails = () => {
               data?.payload?.data?.activities[0][0]?.type === "addAddress"
             ) {
               setAddAddressLoading(false);
-              navigate("/addressDetails")
+              navigate("/addressDetails");
               // navigateData && navigateData === "home"
               //   ? navigate("/")
               //   : navigate("/addressDetails");

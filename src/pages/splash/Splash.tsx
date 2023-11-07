@@ -1,10 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import { botApi } from "../../api";
 
 const Splash = () => {
   const navigation = useNavigate();
   const handleGetStartedClick = React.useCallback(() => {
+    botApi({
+      loginId: "7013721300",
+      otp: "8409",
+      action: "genrateGuestToken",
+      clientName: "honeySys",
+    },"splash").then((response) => {
+      const accessToken = response?.data?.data?.access_token;
+      localStorage.setItem("token", accessToken);
+    });
     navigation("/login");
   }, [navigation]);
 
