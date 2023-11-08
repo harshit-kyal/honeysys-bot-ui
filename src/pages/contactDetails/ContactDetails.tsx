@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getChatData } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const ContactDetails = () => {
   const navigate = useNavigate();
@@ -120,6 +121,7 @@ const ContactDetails = () => {
             }
           })
           .catch((error) => {
+            ToastPopup({ text: "something went wrong" });
             setAddAddressLoading(false);
             console.log("err", error);
           });

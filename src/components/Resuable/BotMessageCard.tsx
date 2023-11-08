@@ -4,16 +4,21 @@ import ActionButton from "./ActionButton";
 import {
   addToChatArray,
   getChatData,
+  setCart,
   setDeliveryDate,
   setDeliveryType,
   setEndTime,
   setLocationPermission,
+  setOrderProduct,
   setSlotIndex,
   setStartTime,
+  setTotalQuantity,
 } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { ToastPopup } from "../../utils/TosterPopup";
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
@@ -40,6 +45,7 @@ const BotMessageCard = ({
   const dispatch = useAppDispatch();
   const convId = useAppSelector((state) => state.bot.convId);
   const botType = useAppSelector((state) => state.bot.botType);
+  const Error = useAppSelector((state) => state.home.error);
   const overallThemeUI = useAppSelector((state) => state.root.overallThemeUI);
   const cartTotalAmount = useAppSelector((state) => state.home.cartTotalAmount);
   const bot = overallThemeUI.botIcons;
@@ -54,6 +60,7 @@ const BotMessageCard = ({
   const startTime = useAppSelector((state) => state.home.startTime);
   const slotIndex = useAppSelector((state) => state.home.slotIndex);
   const endTime = useAppSelector((state) => state.home.endTime);
+
   if (imageSrc) {
     return (
       <RichCard
@@ -115,30 +122,31 @@ const BotMessageCard = ({
     });
   };
   const displayRazorpay = async (paymentDetails: any) => {
-    // const res = await loadScript(
-    //   "https://checkout.razorpay.com/v1/checkout.js"
-    // );
-    // if (!res) {
-    //   botToastModal({ text: "you are offline" });
-    // }
-    // const option = {
-    //   key: paymentDetails?.key,
-    //   currency: paymentDetails?.currency,
-    //   amount: paymentDetails?.amount,
-    //   name: "Honeysys",
-    //   describe: "Thanks for purchasing",
-    //   image:
-    //     "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
-    //   handler: function (response: any) {
-    //     botToastModal({ text: `${response.razorpay_payment_id}` });
-    //   },
-    //   prefill: {
-    //     name: "Honeysys",
-    //   },
-    // };
-    // const paymentObject = new (window as any).Razorpay(option);
-    // paymentObject.open();
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      botToastModal({ text: "you are offline" });
+    }
+    const option = {
+      key: paymentDetails?.key,
+      currency: paymentDetails?.currency,
+      amount: paymentDetails?.amount,
+      name: "Honeysys",
+      describe: "Thanks for purchasing",
+      image:
+        "https://res.cloudinary.com/dqbub4vtj/image/upload/v1695378166/ltvgaegj6h43iqfssjcr.jpg",
+      handler: function (response: any) {
+        botToastModal({ text: "successful" });
+      },
+      prefill: {
+        name: "Honeysys",
+      },
+    };
+    const paymentObject = new (window as any).Razorpay(option);
+    paymentObject.open();
   };
+
   return (
     <div>
       {actionDataArray && actionDataArray.length !== 0 ? (
@@ -155,7 +163,7 @@ const BotMessageCard = ({
                 src={data?.iconUrl}
                 text={data?.text}
                 onClick={() => {
-                  console.log("data",data,endTime)
+                  console.log("data", data, endTime);
                   if (flag) {
                     if (data?.value === "provideLocation") {
                       const newData = {
@@ -179,6 +187,7 @@ const BotMessageCard = ({
                           }
                         })
                         .catch((error) => {
+                          ToastPopup({ text: "something went wrong" });
                           console.log("err", error);
                         });
                       // dispatch(setLocationPermission(true));
@@ -197,7 +206,7 @@ const BotMessageCard = ({
                         dispatch(setStartTime(data?.startTime));
                       }
                       if (data?.endTime) {
-                        console.log("data",data)
+                        console.log("data", data);
                         dispatch(setEndTime(data?.endTime));
                       }
                       if (data?.slotIndex) {
@@ -284,6 +293,11 @@ const BotMessageCard = ({
                             if (data && paymentCard?.type === "paymentCard") {
                               const paymentContent: any =
                                 paymentCard?.value?.data[0];
+                              if (paymentContent?.isOrderPlaced === true) {
+                                dispatch(setCart([]));
+                                dispatch(setOrderProduct([]));
+                                dispatch(setTotalQuantity(0));
+                              }
                               if (
                                 paymentContent?.onlinePaymentDetails &&
                                 paymentContent?.secretKey
@@ -302,7 +316,10 @@ const BotMessageCard = ({
                             }
                           }
                         })
-                        .catch((err) => console.log("err", err));
+                        .catch((err) => {
+                          ToastPopup({ text: "something went wrong" });
+                          console.log("err", err);
+                        });
                     }
                   }
                 }}

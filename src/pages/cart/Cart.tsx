@@ -16,6 +16,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import ExperienceModal from "../../components/Modal/ExperienceModal";
 import CartChagedModal from "../../components/Modal/CartChagedModal";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const Cart = () => {
   const convId = useAppSelector((state) => state.bot.convId);
@@ -105,23 +106,32 @@ const Cart = () => {
         })
         .catch((error) => {
           // setLoading(false);
+          ToastPopup({ text: "something went wrong" });
           setAmountLoader(false);
         });
     }
   };
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
-      try {
-        console.log("cart")
-        Promise.all([cartData()]).then((res) => {
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(false);
+    //     // Promise.all([cartData()]).then((res) => {
+    //       //   setLoading(false);
+    //       // });
+    //   } catch (error) {
+    //     setLoading(false);
+    //   }
+    // };
+    !Loading &&
+      cartData()
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(() => {
           setLoading(false);
         });
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    // fetchData();
   }, []);
 
   const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
@@ -136,25 +146,37 @@ const Cart = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
+        .then((response) => {
           cartData();
-          let cartItem = {
-            productId: data?.productId,
-            varientId: data?.varientId,
-            storeId: storeId,
-            productVariantIndex: data?.productVariantIndex,
-            quantity: data?.quantity,
-            cartId: cartId,
-          };
-          if (functionality === "increment") {
-            dispatch(addToCartArray(cartItem));
-          }
-          if (functionality === "decrement") {
-            dispatch(minusToCartArray(cartItem));
+          // let cartItem = {
+          //   productId: data?.productId,
+          //   varientId: data?.varientId,
+          //   storeId: storeId,
+          //   productVariantIndex: data?.productVariantIndex,
+          //   quantity: data?.quantity,
+          //   cartId: cartId,
+          // };
+          console.log(
+            "cartItem",
+            cart,
+            data,
+            response?.payload?.data?.activities[0][0]?.value?.data?.message
+          );
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product Update Successfully"
+          ) {
+            if (functionality === "increment") {
+              dispatch(addToCartArray(data));
+            }
+            if (functionality === "decrement") {
+              dispatch(minusToCartArray(data));
+            }
           }
           // setAmountLoader(false);
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           // setAmountLoader(false);
         });
     }
@@ -173,7 +195,7 @@ const Cart = () => {
       let findData = cartList?.cartProduct[Index];
       let changedData = {
         productId: findData?.productId,
-        varientId: findData?.variants[0]._id,
+        varientId: findData?.variants[0]?._id,
         storeId: storeId,
         productVariantIndex: findData?.variants[0].productVariantIndex,
         quantity: findData?.quantity,
@@ -195,20 +217,32 @@ const Cart = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
+        .then((response) => {
           cartData();
-          let cartItem = {
-            productId: data?.productId,
-            varientId: data?.varientId,
-            storeId: storeId,
-            productVariantIndex: data?.productVariantIndex,
-            quantity: 0,
-            cartId: cartId,
-          };
-          dispatch(minusToCartArray(cartItem));
+          // let cartItem = {
+          //   productId: data?.productId,
+          //   varientId: data?.varientId,
+          //   storeId: storeId,
+          //   productVariantIndex: data?.productVariantIndex,
+          //   quantity: 0,
+          //   cartId: cartId,
+          // };
+          console.log(
+            "cartItem",
+            cart,
+            // cartItem,
+            response?.payload?.data?.activities[0][0]?.value?.data?.message
+          );
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product deleted successfully"
+          ) {
+            dispatch(minusToCartArray(data));
+          }
           // setAmountLoader(false);
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           // setAmountLoader(false);
         });
     }
@@ -425,8 +459,10 @@ const Cart = () => {
                   <span>
                     {amountLoader
                       ? "-"
-                      : parseInt(cartList?.cartCalculation?.totalAmount) +
-                          parseInt(cartList?.cartCalculation?.totalTax) || 0}
+                      : (
+                          parseFloat(cartList?.cartCalculation?.totalAmount) +
+                          parseFloat(cartList?.cartCalculation?.totalTax)
+                        ).toFixed(2) || 0}
                   </span>
                 </div>
                 <div className="min-[264.5px]:text-[12px] max-[264.5px]:text-[11px] text-secondaryFontColor font-light mt-2">
@@ -442,10 +478,14 @@ const Cart = () => {
                         ? (() => {
                             dispatch(
                               setCartTotalAmount(
-                                parseInt(
-                                  cartList?.cartCalculation?.totalAmount
-                                ) +
-                                  parseInt(cartList?.cartCalculation?.totalTax)
+                                (
+                                  parseFloat(
+                                    cartList?.cartCalculation?.totalAmount
+                                  ) +
+                                  parseFloat(
+                                    cartList?.cartCalculation?.totalTax
+                                  )
+                                ).toFixed(2)
                               )
                             );
                             navigate("/");
@@ -486,6 +526,7 @@ const Cart = () => {
                             dispatch(getChatData({ newData, botType }))
                               .then(() => {})
                               .catch((error) => {
+                                ToastPopup({ text: "something went wrong" });
                                 console.log("err", error);
                               });
                           })()

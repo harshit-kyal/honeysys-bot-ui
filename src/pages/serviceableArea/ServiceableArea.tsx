@@ -156,6 +156,7 @@ const ServiceableArea = () => {
                   })
                   .catch((error) => {
                     setLoading(false);
+                    ToastPopup({ text: "something went wrong" });
                     console.log("err", error);
                   });
               }

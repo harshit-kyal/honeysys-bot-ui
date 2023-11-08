@@ -17,6 +17,7 @@ import {
   setUserPincode,
   setUserSavedAddres,
   setOrderProduct,
+  addToCartArray,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -67,6 +68,7 @@ const Home = () => {
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
   const cartData = useAppSelector((state) => state.home.storeData);
+  const storeId = useAppSelector((state) => state.home.storeId);
   const cartId = useAppSelector((state) => state.home.cartId);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const deliveryDate = useAppSelector((state) => state.home.deliveryDate);
@@ -578,12 +580,12 @@ const Home = () => {
                   voiceFlag: false,
                   isChatVisible: false,
                   data: {
-                    // pincode: "500084",
-                    // lat: "17.469857630687827",
-                    // lag: "78.35782449692486",
-                    pincode: pincode,
-                    lat: `${latLng?.lat}`,
-                    lag: `${latLng?.lng}`,
+                    pincode: "500084",
+                    lat: "17.469857630687827",
+                    lag: "78.35782449692486",
+                    // pincode: pincode,
+                    // lat: `${latLng?.lat}`,
+                    // lag: `${latLng?.lng}`,
                     type: "location",
                   },
                 };
@@ -608,43 +610,18 @@ const Home = () => {
                           );
                           let storeIds = actiVitiesData?.value?.data[0]?.id;
                           if (storeIds) {
-                            const newData = {
-                              conversationId: convId,
-                              text: "getcartid",
-                              voiceFlag: false,
-                              isChatVisible: false,
-                              data: {
-                                storeId: storeIds,
-                              },
-                            };
-                            if (convId && botType) {
-                              dispatch(getChatData({ newData, botType }))
-                                .then((data) => {
-                                  // setLoading(false);
-                                  let cartActivity =
-                                    data?.payload?.data?.activities[0][0];
-                                  if (
-                                    data &&
-                                    cartActivity?.type === "getCartId"
-                                  ) {
-                                    let cartId =
-                                      cartActivity?.value?.data?.cartId;
-                                    dispatch(setCartId(cartId));
-                                  }
-                                })
-                                .catch((err) => {
-                                  // setLoading(false);
-                                  console.log("err", err);
-                                });
-                            }
+                            cartItems();
+                            cartIdData(storeIds);
                           }
-                          // dispatch(setUserPincode(500084));
                           dispatch(setUserSavedAddres(address));
                           dispatch(setUserPincode(pincode));
                         }
                       }
                     })
-                    .catch((err) => console.log("err", err));
+                    .catch((err) => {
+                      ToastPopup({ text: "something went wrong" });
+                      console.log("err", err);
+                    });
                 }
               }
             } else {
@@ -657,6 +634,81 @@ const Home = () => {
         .catch((err) => console.log("err", err));
     }
   }, [latLng]);
+  const cartItems = async () => {
+    if (storeId) {
+      const newData = {
+        conversationId: convId,
+        text: "viewCart",
+        voiceFlag: false,
+        isChatVisible: false,
+        data: {
+          storeId: storeId,
+        },
+      };
+      if (convId && botType && convId !== "" && botType !== "") {
+        await dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            if (
+              data &&
+              data?.payload?.data?.activities[0][0]?.type === "viewCart"
+            ) {
+              let cartData =
+                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
+              cartData?.map((item: any, index: number) => {
+                let cartItem = {
+                  productId: item.variants[0]?.productId,
+                  varientId: item.variants[0]?._id,
+                  storeId: storeId,
+                  productVariantIndex: item.variants[0]?.productVariantIndex,
+                  quantity: item?.quantity,
+                  cartId: cartId,
+                };
+                dispatch(addToCartArray(cartItem));
+              });
+              // setCartList(data?.payload?.data?.activities[0]?.value.data);
+              // setLoading(false);
+              // setAmountLoader(false);
+            }
+          })
+          .catch((error) => {
+            ToastPopup({ text: "something went wrong" });
+            console.log("err", error);
+          });
+      }
+    }
+  };
+  const cartIdData = (storeIds: any) => {
+    if (storeIds) {
+      const newData = {
+        conversationId: convId,
+        text: "getcartid",
+        voiceFlag: false,
+        isChatVisible: false,
+        data: {
+          storeId: storeIds,
+        },
+      };
+      if (convId && botType) {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            // setLoading(false);
+            let cartActivity = data?.payload?.data?.activities[0][0];
+            if (data && cartActivity?.type === "getCartId") {
+              let cartId = cartActivity?.value?.data?.cartId;
+              dispatch(setCartId(cartId));
+            }
+          })
+          .catch((err) => {
+            // setLoading(false);
+            ToastPopup({ text: "something went wrong" });
+            console.log("err", err);
+          });
+      }
+    }
+  };
+  useEffect(() => {
+    cartItems();
+  }, [storeId, cartId]);
   const homeToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
@@ -667,6 +719,7 @@ const Home = () => {
       },
     });
   };
+
   useEffect(() => {
     if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
@@ -736,6 +789,7 @@ const Home = () => {
                 // dispatch(setGetStartDisplay(true));
               })
               .catch((error) => {
+                ToastPopup({ text: "something went wrong" });
                 console.log("err", error);
               });
           }
@@ -914,12 +968,6 @@ const Home = () => {
   //   // dispatch(setChatArray([...data]))
   // };
   const timelineRef = useRef<any>();
-  const Error = useAppSelector((state) => state.home.error);
-  useEffect(() => {
-    if (Error) {
-      ToastPopup({ text: "something went wrong" });
-    }
-  }, [Error]);
 
   return (
     <div
@@ -1258,13 +1306,6 @@ const Home = () => {
                         ac?.value?.data?.length !== 0
                       ) {
                         const paymentCard = ac?.value?.data;
-
-                        if (paymentCard[0]?.isOrderPlaced === true) {
-                          dispatch(setCart([]));
-                          dispatch(setOrderProduct([]));
-                          dispatch(setTotalQuantity(0));
-                        }
-
                         return (
                           <div className="w-full">
                             {ac?.value?.sender === "user" ? (

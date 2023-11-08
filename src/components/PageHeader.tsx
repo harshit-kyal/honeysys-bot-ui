@@ -30,7 +30,7 @@ const PageHeader = ({
   const cartHandler = () => {
     if (!reviewToken) {
       if (cart) {
-        if (orderProduct.length > 0) {
+        if (orderProduct.length > 0 && cartData.length > 0) {
           if (cartData.length === orderProduct.length) {
             let valid = true;
             cartData.forEach((item, index) => {
@@ -42,8 +42,8 @@ const PageHeader = ({
               ) {
                 valid = false;
                 // break;
-              }else{
-                valid=true
+              } else {
+                valid = true;
               }
               console.log(
                 "modal",
@@ -117,7 +117,8 @@ const PageHeader = ({
               alt="shopping"
               className="header-btn"
               onClick={() => {
-                hadnleNavigation("/cart");
+                navigate("/cart");
+                // hadnleNavigation("/cart");
               }}
             />
             {cartQuantity > 0 ? (

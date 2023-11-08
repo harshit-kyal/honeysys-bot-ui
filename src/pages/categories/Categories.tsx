@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { setCategoriesUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getChatData } from "../../slices/homeSlice";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const Categories = () => {
   const { id } = useParams();
@@ -57,6 +58,7 @@ const Categories = () => {
           }
         })
         .catch((err) => {
+          ToastPopup({ text: "something went wrong" });
           setError(true);
         });
     }

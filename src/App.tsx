@@ -3,6 +3,7 @@ import "./App.css";
 import Routing from "./routes/Routing";
 import { useAppSelector } from "./app/hooks";
 import { Toaster } from "react-hot-toast";
+import { ToastPopup } from "./utils/TosterPopup";
 
 function App() {
   const color = useAppSelector((state) => state.root.color);
@@ -11,6 +12,7 @@ function App() {
   const cartUI = useAppSelector((state) => state.root.cartUI);
   const CatalogUI = useAppSelector((state) => state.root.CatalogUI);
   const CategoriesUI = useAppSelector((state) => state.root.CategoriesUI);
+  const Error = useAppSelector((state) => state.home.error);
 
   const searchParams = new URLSearchParams(window.location.search);
   const cartTemplate = searchParams.get("cartTemplate");
@@ -144,7 +146,11 @@ function App() {
     const reviewToken = searchParams.get("token");
     reviewToken && localStorage.setItem("reviewToken", reviewToken);
   }, [window.location.search]);
-
+  useEffect(() => {
+    if (Error) {
+      ToastPopup({ text: Error });
+    }
+  }, [Error]);
   return (
     <>
       <Routing />

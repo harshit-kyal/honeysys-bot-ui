@@ -65,51 +65,7 @@ const OTP = () => {
       clearInterval(interval);
     };
   }, [seconds]);
-  const cartData = async () => {
-    if (storeId) {
-      const newData = {
-        conversationId: convId,
-        text: "viewCart",
-        voiceFlag: false,
-        isChatVisible: false,
-        data: {
-          storeId: storeId,
-        },
-      };
-      if (convId && botType && convId !== "" && botType !== "") {
-        await dispatch(getChatData({ newData, botType }))
-          .then((data) => {
-            if (
-              data &&
-              data?.payload?.data?.activities[0][0]?.type === "viewCart"
-            ) {
-              let cartData =
-                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
-              cartData?.map((item: any, index: number) => {
-                let cartItem = {
-                  productId: item.variants[0]?.productId,
-                  varientId: item.variants[0]?._id,
-                  storeId: storeId,
-                  productVariantIndex: item.variants[0]?.productVariantIndex,
-                  quantity: item?.quantity,
-                  cartId: cartId,
-                };
-                dispatch(addToCartArray(cartItem));
-              });
-              // setCartList(data?.payload?.data?.activities[0]?.value.data);
-              // setLoading(false);
-              // setAmountLoader(false);
-            }
-          })
-          .catch((error) => {
-            console.log("err", error);
-          });
-      }
-    }
-  };
-  useEffect(() => {
-    cartData();
-  }, [storeId, cartId]);
+
   const resend = () => {
     botApi(
       {

@@ -11,7 +11,8 @@ import {
   minusToCartArray,
 } from "../../slices/homeSlice";
 import toast, { Toaster } from "react-hot-toast";
-  
+import { ToastPopup } from "../../utils/TosterPopup";
+
 const PDP = () => {
   const { id } = useParams();
   const storeId = useAppSelector((state) => state.home.storeId);
@@ -52,7 +53,10 @@ const PDP = () => {
             setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
           }
         })
-        .catch((error) => setError(true));
+        .catch((error) => {
+          ToastPopup({ text: "something went wrong" });
+          setError(true);
+        });
     }
   };
   useEffect(() => {
@@ -98,25 +102,24 @@ const PDP = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
-          console.log("varient",data)
-          let cartItem = {
-            productId: data?.productId,
-            varientId: data?.varientId,
-            storeId: storeId,
-            productVariantIndex: data?.productVariantIndex,
-            quantity: data?.quantity,
-            cartId: cartId,
-          };
-          if (functionality === "increment") {
-            dispatch(addToCartArray(cartItem));
-          }
-          if (functionality === "decrement") {
-            dispatch(minusToCartArray(cartItem));
+        .then((response) => {
+          console.log("varient", data);
+
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product Update Successfully"
+          ) {
+            if (functionality === "increment") {
+              dispatch(addToCartArray(data));
+            }
+            if (functionality === "decrement") {
+              dispatch(minusToCartArray(data));
+            }
           }
           setQtyLoading(false);
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -132,7 +135,6 @@ const PDP = () => {
   };
   useEffect(() => {
     if (quantity !== 0) {
-      console.log("productt",product)
       let changedData = {
         productId: product?.productId,
         varientId: product?.variants[0].id,
@@ -196,19 +198,17 @@ const PDP = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
-          let cartItem = {
-            productId: data?.productId,
-            varientId: data?.varientId,
-            storeId: storeId,
-            productVariantIndex: data?.productVariantIndex,
-            quantity: 0,
-            cartId: cartId,
-          };
-          dispatch(minusToCartArray(cartItem));
+        .then((response) => {
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product deleted successfully"
+          ) {
+            dispatch(minusToCartArray(data));
+          }
           setQtyLoading(false);
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setQtyLoading(false);
           setError(true);
         });
@@ -254,9 +254,6 @@ const PDP = () => {
     // setProduct({ ...DataCopy });
   };
   const removeItem = () => {
-    // let DataCopy: any = JSON.parse(JSON.stringify(product));
-    // let pricingCopy: any[] = [...DataCopy.variants];
-
     product?.variants?.map((item: any) => {
       if (item.id === activePrice?.id) {
         // setActivePrice(item);
@@ -280,9 +277,10 @@ const PDP = () => {
         } else {
           let cartItem = {
             productId: product?.productId,
-            varientId: product?.varientId,
+            varientId: product?.variants[0].id,
             storeId: storeId,
             productVariantIndex: item?.productVariantIndex,
+            quantity: 0,
             cartId: cartId,
           };
           removeApi(cartItem);

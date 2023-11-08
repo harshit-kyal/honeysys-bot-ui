@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { ToastPopup } from "../../utils/TosterPopup";
+import { QuantityHandler } from "../../utils/QuantityHandler";
 
 const ViewProduct = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +16,7 @@ const ViewProduct = () => {
   const [Modal, setModal] = useState<boolean>(false);
   const convId = useAppSelector((state) => state.bot.convId);
   const cartId = useAppSelector((state) => state.home.cartId);
+  const cart = useAppSelector((state) => state.home.cart);
   const botType = useAppSelector((state) => state.bot.botType);
   const [productData, setProductData] = useState<any>([]);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
@@ -48,6 +51,7 @@ const ViewProduct = () => {
           }
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setError(true);
         });
     }
@@ -78,6 +82,7 @@ const ViewProduct = () => {
           }
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setError(true);
         });
     }
@@ -98,6 +103,7 @@ const ViewProduct = () => {
           setQtyLoading(false);
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -171,6 +177,7 @@ const ViewProduct = () => {
       },
     });
   };
+  console.log("productData",productData)
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />
@@ -245,6 +252,10 @@ const ViewProduct = () => {
                       className="w-[24px] h-[24px] border-2 bg-[#505050] !opacity-100 shadow-none focus-visible:outline-none checked:bg-primary checked:hover:bg-primary checked:active:bg-primary checked:focus:bg-primary focus:bg-primary focus:outline-none focus:ring-primary"
                       onClick={() => {
                         let qua = 1;
+                        let findData = QuantityHandler(cart, item);
+                        if (findData) {
+                          qua = findData.quantity + 1;
+                        }
                         if (item?.minPurchaseLimit > qua) {
                           qua = item?.minPurchaseLimit;
                         }

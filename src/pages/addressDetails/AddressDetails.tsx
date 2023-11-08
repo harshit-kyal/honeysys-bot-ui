@@ -8,6 +8,7 @@ import {
   setUserPincode,
   setUserSavedAddres,
 } from "../../slices/homeSlice";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const AddressDetails = () => {
   const navigate = useNavigate();
@@ -110,6 +111,7 @@ export function RadioButtonGroup(props: any) {
         })
         .catch((error) => {
           setError(true);
+          ToastPopup({ text: "something went wrong" });
           console.log("err", error);
         });
     }
@@ -118,21 +120,12 @@ export function RadioButtonGroup(props: any) {
     cartData();
   }, []);
   const loading = useAppSelector((state) => state.home.loading);
-  const error = useAppSelector((state) => state.home.error);
-  useEffect(() => {
-    if (error) {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  }, [error]);
   return (
     <>
       {!Error && !loading ? (
         <div>
           <div className="h-[calc(100vh-159px)] md:h-[calc(100vh-164px)] overflow-auto">
             {addressArray.map((item: any, index: any) => {
-  
               return (
                 <>
                   <label
@@ -214,6 +207,7 @@ export function RadioButtonGroup(props: any) {
                       dispatch(setUserPincode(selectedAddress?.pincode));
                     })
                     .catch((error) => {
+                      ToastPopup({ text: "something went wrong" });
                       console.log("err", error);
                     });
                 } else {

@@ -8,6 +8,8 @@ import { setCatalogUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { ToastPopup } from "../../utils/TosterPopup";
+import { QuantityHandler } from "../../utils/QuantityHandler";
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const Catalog = () => {
   const botType = useAppSelector((state) => state.bot.botType);
   const pincode = useAppSelector((state) => state.home.userPincode);
   const cartId = useAppSelector((state) => state.home.cartId);
+  const cart = useAppSelector((state) => state.home.cart);
   const [categoriesCatalog, setCategoriesCatalog] = useState<any>([]);
   const [productCatalog, setProductCatalog] = useState<any>([]);
   const [Loading, setLoading] = useState(false);
@@ -65,7 +68,10 @@ const Catalog = () => {
             );
           }
         })
-        .catch(() => setError(true));
+        .catch(() => {
+          ToastPopup({ text: "something went wrong" });
+          setError(true);
+        });
     }
   };
   const productCatalogData = async () => {
@@ -89,7 +95,10 @@ const Catalog = () => {
             );
           }
         })
-        .catch(() => setError(true));
+        .catch(() => {
+          ToastPopup({ text: "something went wrong" });
+          setError(true);
+        });
     }
   };
   useEffect(() => {
@@ -139,15 +148,52 @@ const Catalog = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
-          dispatch(addToCartArray(data));
-          setAddLoading(false);
+        .then((response) => {
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product Update Successfully"
+          ) {
+            console.log(data);
+            dispatch(addToCartArray(data));
+            setAddLoading(false);
+          }
         })
         .catch(() => {
+          ToastPopup({ text: "something went wrong" });
           setAddLoading(false);
         });
     }
   };
+  const clickHandler = (varientData: any) => {
+    let qua = 1;
+    let findData = QuantityHandler(cart, varientData);
+    if (findData) {
+      qua = findData.quantity + 1;
+    }
+    if (varientData?.minPurchaseLimit > qua) {
+      qua = varientData?.minPurchaseLimit;
+    }
+    if (
+      varientData?.stockBalance < qua ||
+      (varientData?.purchaseLimit != 0 && qua > varientData?.purchaseLimit)
+    ) {
+      catalogToastModal({
+        text: "This product stock is limited",
+      });
+      return;
+    } else {
+      let cartItem = {
+        productId: varientData?.productId,
+        varientId: varientData?.id,
+        storeId: storeId,
+        productVariantIndex: varientData?.productVariantIndex,
+        quantity: qua,
+        cartId: cartId,
+      };
+      handleAddApi(cartItem);
+    }
+  };
+
   return (
     <div className="h-screen max-[350px]:pt-[57px] min-[350px]:pt-[60px]">
       <PageHeader title="Catalog" />
@@ -240,30 +286,8 @@ const Catalog = () => {
                     }
                     onClick={() => {
                       let varientData = data.variants[0];
-                      let qua = 1;
-                      if (varientData?.minPurchaseLimit > qua) {
-                        qua = varientData?.minPurchaseLimit;
-                      }
-                      if (
-                        varientData?.stockBalance < qua ||
-                        (varientData?.purchaseLimit != 0 &&
-                          qua > varientData?.purchaseLimit)
-                      ) {
-                        catalogToastModal({
-                          text: "This product stock is limited",
-                        });
-                        return;
-                      } else {
-                        let cartItem = {
-                          productId: data?.id,
-                          varientId: varientData?.id,
-                          storeId: storeId,
-                          productVariantIndex: varientData?.productVariantIndex,
-                          quantity: qua,
-                          cartId: cartId,
-                        };
-                        handleAddApi(cartItem);
-                      }
+                      console.log("varientDat", varientData);
+                      clickHandler(varientData);
                     }}
                     title={
                       data?.variants[0]?.productName

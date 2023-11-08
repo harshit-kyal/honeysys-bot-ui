@@ -8,6 +8,7 @@ import {
   setCartTotalAmount,
   setOrderProduct,
 } from "../../slices/homeSlice";
+import { ToastPopup } from "../../utils/TosterPopup";
 const CartChagedModal = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -38,12 +39,15 @@ const CartChagedModal = () => {
             setCartList(data?.payload?.data?.activities[0][0]?.value.data);
           }
         })
-        .catch((error) => {});
+        .catch((error) => {
+          ToastPopup({ text: "something went wrong" });
+        });
     }
   };
   useEffect(() => {
     cartData();
   }, []);
+  const Error = useAppSelector((state) => state.home.error);
   return (
     <>
       {cartChagedModal ? (
@@ -116,7 +120,7 @@ const CartChagedModal = () => {
                     dispatch(getChatData({ newData, botType }))
                       .then(() => {})
                       .catch((error) => {
-                        console.log("err", error);
+                        ToastPopup({ text: "something went wrong" });
                       });
                   })();
                   dispatch(setCartChagedModal(false));

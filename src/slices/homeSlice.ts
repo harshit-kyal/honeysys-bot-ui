@@ -200,12 +200,12 @@ export const HomeSlice = createSlice({
           item?.productId === action?.payload?.productId &&
           item?.varientId === action?.payload?.varientId
       );
-      // console.log()
+      console.log("minus",find,action?.payload?.quantity)
       if (find !== -1) {
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
-          console.log("minus")
+          console.log("minus","remove")
           state.totalQuantity = state.totalQuantity -= 1;
           state.cart.splice(find, 1);
         }

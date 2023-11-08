@@ -6,6 +6,8 @@ import {
   setLocationPermission,
 } from "../../slices/homeSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { ToastPopup } from "../../utils/TosterPopup";
 
 const LocationPermission = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +18,7 @@ const LocationPermission = () => {
   );
   const storeId = useAppSelector((state) => state.home.storeId);
   const navigate = useNavigate();
-
+  const Error = useAppSelector((state) => state.home.error);
   return (
     <>
       {locationPermission ? (
@@ -69,8 +71,8 @@ const LocationPermission = () => {
                           dispatch(getChatData({ newData, botType }))
                             .then((res) => {
                               if (
-                                res?.payload?.data?.activities[0][0]?.value?.data
-                                  ?.length !== 0
+                                res?.payload?.data?.activities[0][0]?.value
+                                  ?.data?.length !== 0
                               ) {
                                 navigate("/addressDetails");
                               } else {
@@ -78,6 +80,7 @@ const LocationPermission = () => {
                               }
                             })
                             .catch((error) => {
+                              ToastPopup({ text: "something went wrong" });
                               console.log("err", error);
                             });
                           // navigate("/address");
@@ -102,8 +105,7 @@ const LocationPermission = () => {
                   } else {
                     alert("Sorry Not available!");
                   }
-                }
-              }
+                }}
               >
                 Allow
               </Button>

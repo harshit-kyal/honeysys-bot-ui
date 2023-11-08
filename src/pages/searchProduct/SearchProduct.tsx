@@ -6,12 +6,15 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { ToastPopup } from "../../utils/TosterPopup";
+import { QuantityHandler } from "../../utils/QuantityHandler";
 
 const SearchProduct = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
+  const cart = useAppSelector((state) => state.home.cart);
   const cartId = useAppSelector((state) => state.home.cartId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [searchStr, setSearchStr] = useState("");
@@ -58,6 +61,8 @@ const SearchProduct = () => {
         })
         .catch((error) => {
           setLoading(false);
+
+          ToastPopup({ text: "something went wrong" });
           setError(true);
           console.log("err", error);
         });
@@ -135,11 +140,18 @@ const SearchProduct = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then((data) => {
+        .then((response) => {
           setQtyLoading(false);
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product Update Successfully"
+          ) {
+            dispatch(addToCartArray(data));
+          }
         })
         .catch(() => {
           setError(true);
+          ToastPopup({ text: "something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -197,24 +209,28 @@ const SearchProduct = () => {
                   {!Loading ? (
                     <>
                       <div>
-                        {searchList.map((data: any, index: number) => (
-                          <div className="my-4" key={index}>
-                            <ProductCard
-                              key={index}
-                              addBtn={<AddBtn subCategory={data?.variants} />}
-                              className="w-full my-[6px] mb-3 px-5"
-                              image={
-                                <img
-                                  src={data?.imageSrc}
-                                  className="object-cover rounded-lg w-[60px] h-[60px]"
-                                  alt=""
-                                />
-                              }
-                              onClick={() => {}}
-                              title={data?.title}
-                            />
-                          </div>
-                        ))}
+                        {Array.isArray(searchList) && searchList.length > 0 ? (
+                          searchList.map((data: any, index: number) => (
+                            <div className="my-4" key={index}>
+                              <ProductCard
+                                key={index}
+                                addBtn={<AddBtn subCategory={data?.variants} />}
+                                className="w-full my-[6px] mb-3 px-5"
+                                image={
+                                  <img
+                                    src={data?.imageSrc}
+                                    className="object-cover rounded-lg w-[60px] h-[60px]"
+                                    alt=""
+                                  />
+                                }
+                                onClick={() => {}}
+                                title={data?.title}
+                              />
+                            </div>
+                          ))
+                        ) : (
+                          <div className="mt-2">Not found</div>
+                        )}
                       </div>
                       <DrawerModal
                         isOpen={Modal}
@@ -248,9 +264,19 @@ const SearchProduct = () => {
                                   className="w-[24px] h-[24px] border-2 bg-[#505050] !opacity-100 shadow-none focus-visible:outline-none checked:bg-primary checked:hover:bg-primary checked:active:bg-primary checked:focus:bg-primary focus:bg-primary focus:outline-none focus:ring-primary"
                                   onClick={() => {
                                     let qua = 1;
+                                    if (item) {
+                                      let findData = QuantityHandler(
+                                        cart,
+                                        item
+                                      );
+                                      if (findData) {
+                                        qua = findData.quantity + 1;
+                                      }
+                                    }
                                     if (item?.minPurchaseLimit > qua) {
                                       qua = item?.minPurchaseLimit;
                                     }
+
                                     if (
                                       item?.stockBalance < qua ||
                                       (item?.purchaseLimit != 0 &&
@@ -298,7 +324,6 @@ const SearchProduct = () => {
                                   cartItem?.varientId !== ""
                                 ) {
                                   api(cartItem);
-                                  dispatch(addToCartArray(cartItem));
                                   setModal(false);
                                 } else {
                                   alert("please select product");

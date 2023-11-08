@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DeniedModal from "../../components/Modal/DeniedModal";
 import toast, { Toaster } from "react-hot-toast";
 import { formatCustomAddress } from "../../utils/AddressFormate";
+import { ToastPopup } from "../../utils/TosterPopup";
 const Address = () => {
   const navigate = useNavigate();
   const [latLng, setLatLng] = useState<any>({
@@ -237,6 +238,7 @@ const Address = () => {
                       })
                       .catch((error) => {
                         setLoading(false);
+                        ToastPopup({ text: "something went wrong" });
                         console.log("err", error);
                       });
                   }
@@ -258,6 +260,7 @@ const Address = () => {
             }
           })
           .catch((error) => {
+            ToastPopup({ text: "something went wrong" });
             console.log("err", error);
           });
       }
@@ -265,6 +268,7 @@ const Address = () => {
       addressToastModal({ text: "Please enter the address" });
     }
   };
+
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">
