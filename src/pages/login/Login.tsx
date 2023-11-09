@@ -49,7 +49,7 @@ const Login = () => {
       )
         .then((response) => {
           setLoading(false);
-          if (response.data?.status_code === 200) {
+          if (response.data?.status_code === 200 && response?.data?.data?.otp) {
             dispatch(setUserId(response?.data?.data?.userId));
             dispatch(setConvId(response?.data?.data?.userId));
             dispatch(setBotType(encrypt("fd50c4b3a21b1e9e5c941_Dev")));

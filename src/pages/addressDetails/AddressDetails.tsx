@@ -98,15 +98,17 @@ export function RadioButtonGroup(props: any) {
       dispatch(getChatData({ newData, botType }))
         .then((data) => {
           let addressData = data?.payload?.data?.activities[0][0];
-          if (data && addressData?.type === "getAddress") {
+          if (data && addressData?.type === "getAddress" && addressData) {
             if (addressData?.value?.data) {
               setAddressArray(addressData?.value?.data);
               props.setSelectedOption(addressData?.value?.data.length - 1);
               setSelectedAdress(
                 addressData?.value?.data[addressData?.value?.data.length - 1]
               );
+              setError(false);
+            } else {
+              setError(true);
             }
-            setError(false);
           }
         })
         .catch((error) => {

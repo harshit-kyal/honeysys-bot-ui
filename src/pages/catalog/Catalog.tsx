@@ -63,9 +63,13 @@ const Catalog = () => {
             data?.payload?.data?.activities[0][0]?.type ===
             "viewCategoryCatalog"
           ) {
-            setCategoriesCatalog(
-              data?.payload?.data?.activities[0][0]?.value?.data
-            );
+            const categoryList =
+              data?.payload?.data?.activities[0][0]?.value?.data;
+            if (categoryList && Array.isArray(categoryList)) {
+              setCategoriesCatalog(categoryList);
+            } else {
+              setError(true);
+            }
           }
         })
         .catch(() => {
@@ -90,9 +94,13 @@ const Catalog = () => {
           if (
             data?.payload?.data?.activities[0][0]?.type === "viewProductCatalog"
           ) {
-            setProductCatalog(
-              data?.payload?.data?.activities[0][0]?.value?.data
-            );
+            const productList =
+              data?.payload?.data?.activities[0][0]?.value?.data;
+            if (productList && Array.isArray(productList)) {
+              setProductCatalog(productList);
+            } else {
+              setError(true);
+            }
           }
         })
         .catch(() => {
@@ -156,10 +164,12 @@ const Catalog = () => {
             console.log(data);
             dispatch(addToCartArray(data));
             setAddLoading(false);
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
           }
         })
         .catch(() => {
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           setAddLoading(false);
         });
     }

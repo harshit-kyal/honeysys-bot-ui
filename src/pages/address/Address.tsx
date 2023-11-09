@@ -8,6 +8,7 @@ import {
   LoadScriptProps,
 } from "@react-google-maps/api";
 import {
+  addToCartArray,
   getChatData,
   setCartId,
   setDeniedModal,
@@ -207,56 +208,41 @@ const Address = () => {
           .then((data) => {
             setLoading(false);
             let storeData = data?.payload?.data?.activities[0][0];
-            if (data && storeData?.type === "findStores") {
-              if (storeData?.value?.data[0]?.status_code === 500) {
-                addressToastModal({
-                  text: `${storeData?.value?.data[0]?.msg}`,
-                });
-              } else if (storeData?.value?.data[0]?.status_code === 200) {
-                dispatch(setStoreData(storeData?.value?.data[0]));
-                dispatch(setStoreId(storeData?.value?.data[0]?.id));
-                let storeIds = storeData?.value?.data[0]?.id;
-                if (storeIds) {
-                  const newData = {
-                    conversationId: convId,
-                    text: "getcartid",
-                    voiceFlag: false,
-                    isChatVisible: false,
-                    data: {
-                      storeId: storeIds,
-                    },
-                  };
-
-                  if (convId && botType && convId !== "" && botType !== "") {
-                    dispatch(getChatData({ newData, botType }))
-                      .then((data) => {
-                        let cartData = data?.payload?.data?.activities[0][0];
-                        if (data && cartData?.type === "getCartId") {
-                          let cartId = cartData?.value?.data?.cartId;
-                          dispatch(setCartId(cartId));
-                        }
-                      })
-                      .catch((error) => {
-                        setLoading(false);
-                        ToastPopup({ text: "something went wrong" });
-                        console.log("err", error);
-                      });
+            if (
+              data?.payload?.data?.activities &&
+              Array.isArray(data?.payload?.data?.activities[0]) &&
+              storeData
+            ) {
+              if (data && storeData?.type === "findStores") {
+                if (storeData?.value?.data[0]?.status_code === 500) {
+                  addressToastModal({
+                    text: `${storeData?.value?.data[0]?.msg}`,
+                  });
+                } else if (storeData?.value?.data[0]?.status_code === 200) {
+                  dispatch(setStoreData(storeData?.value?.data[0]));
+                  dispatch(setStoreId(storeData?.value?.data[0]?.id));
+                  let storeIds = storeData?.value?.data[0]?.id;
+                  if (storeIds) {
+                    cartIdData(storeIds);
+                  }
+                  // dispatch(setUserPincode(500084));
+                  dispatch(setUserSavedAddres(address));
+                  dispatch(setUserPincode(address?.pincode));
+                  {
+                    navigateData && navigateData !== ""
+                      ? navigate("/contactDetails", {
+                          state: { address: address, navigate: "home" },
+                        })
+                      : navigate("/contactDetails", {
+                          state: { address: address },
+                        });
                   }
                 }
-
-                // dispatch(setUserPincode(500084));
-                dispatch(setUserSavedAddres(address));
-                dispatch(setUserPincode(address?.pincode));
-                {
-                  navigateData && navigateData !== ""
-                    ? navigate("/contactDetails", {
-                        state: { address: address, navigate: "home" },
-                      })
-                    : navigate("/contactDetails", {
-                        state: { address: address },
-                      });
-                }
               }
+            } else {
+              ToastPopup({
+                text: "store data is not found something went wrong",
+              });
             }
           })
           .catch((error) => {
@@ -268,7 +254,87 @@ const Address = () => {
       addressToastModal({ text: "Please enter the address" });
     }
   };
+  const cartItems = async (storeIds: any, cartId: any) => {
+    if (storeIds && cartId) {
+      const newData = {
+        conversationId: convId,
+        text: "viewCart",
+        voiceFlag: false,
+        isChatVisible: false,
+        data: {
+          storeId: storeIds,
+        },
+      };
+      if (convId && botType && convId !== "" && botType !== "") {
+        await dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            if (
+              data &&
+              data?.payload?.data?.activities[0][0]?.type === "viewCart"
+            ) {
+              let cartData =
+                data?.payload?.data?.activities[0][0]?.value?.data?.cartProduct;
+              if (cartData && Array.isArray(cartData)) {
+                cartData?.map((item: any, index: number) => {
+                  let cartItem = {
+                    productId: item.variants[0]?.productId,
+                    varientId: item.variants[0]?._id,
+                    storeId: storeIds,
+                    productVariantIndex: item.variants[0]?.productVariantIndex,
+                    quantity: item?.quantity,
+                    cartId: cartId,
+                  };
+                  dispatch(addToCartArray(cartItem));
+                });
+              } else {
+                ToastPopup({
+                  text: "cart data is not found something went wrong",
+                });
+              }
+              // setCartList(data?.payload?.data?.activities[0]?.value.data);
+              // setLoading(false);
+              // setAmountLoader(false);
+            }
+          })
+          .catch((error) => {
+            ToastPopup({ text: "something went wrong" });
+            console.log("err", error);
+          });
+      }
+    }
+  };
+  const cartIdData = (storeIds: any) => {
+    if (storeIds) {
+      const newData = {
+        conversationId: convId,
+        text: "getcartid",
+        voiceFlag: false,
+        isChatVisible: false,
+        data: {
+          storeId: storeIds,
+        },
+      };
 
+      if (convId && botType && convId !== "" && botType !== "") {
+        dispatch(getChatData({ newData, botType }))
+          .then((data) => {
+            let cartData = data?.payload?.data?.activities[0][0];
+            if (data && cartData?.type === "getCartId" && cartData) {
+              let cartId = cartData?.value?.data?.cartId;
+              cartItems(storeIds, cartId);
+              dispatch(setCartId(cartId));
+            } else {
+              ToastPopup({ text: "cartid not found something went wrong" });
+            }
+          })
+          .catch((error) => {
+            setLoading(false);
+            ToastPopup({ text: "something went wrong" });
+            console.log("err", error);
+          });
+      }
+    }
+  };
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">

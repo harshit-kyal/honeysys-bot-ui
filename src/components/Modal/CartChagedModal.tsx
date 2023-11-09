@@ -36,7 +36,12 @@ const CartChagedModal = () => {
             data &&
             data?.payload?.data?.activities[0][0]?.type === "viewCart"
           ) {
-            setCartList(data?.payload?.data?.activities[0][0]?.value.data);
+            let cartList = data?.payload?.data?.activities[0][0]?.value.data;
+            if (cartList && Array.isArray(cartList && cartList.length > 0)) {
+              setCartList(data?.payload?.data?.activities[0][0]?.value.data);
+            } else {
+              ToastPopup({ text: "cart is empty please try again..." });
+            }
           }
         })
         .catch((error) => {
@@ -45,7 +50,7 @@ const CartChagedModal = () => {
     }
   };
   useEffect(() => {
-    cartData();
+    cartChagedModal && cartData();
   }, []);
   const Error = useAppSelector((state) => state.home.error);
   return (

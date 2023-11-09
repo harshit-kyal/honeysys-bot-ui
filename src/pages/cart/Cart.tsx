@@ -30,7 +30,6 @@ const Cart = () => {
   const [functionality, setFunctionality] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const dummy = {
   //   estimatedCost: "₹1200.00",
   //   gst: "₹12.00",
   //   totalAmount: "₹1212.00",
@@ -113,16 +112,6 @@ const Cart = () => {
   };
   useEffect(() => {
     setLoading(true);
-    // const fetchData = async () => {
-    //   try {
-    //     setLoading(false);
-    //     // Promise.all([cartData()]).then((res) => {
-    //       //   setLoading(false);
-    //       // });
-    //   } catch (error) {
-    //     setLoading(false);
-    //   }
-    // };
     !Loading &&
       cartData()
         .then(() => {
@@ -131,9 +120,8 @@ const Cart = () => {
         .catch(() => {
           setLoading(false);
         });
-    // fetchData();
   }, []);
-
+  console.log();
   const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
   const handleAddApi = (data: any) => {
     setAmountLoader(true);
@@ -147,21 +135,8 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((response) => {
+          console.log("called from addd api");
           cartData();
-          // let cartItem = {
-          //   productId: data?.productId,
-          //   varientId: data?.varientId,
-          //   storeId: storeId,
-          //   productVariantIndex: data?.productVariantIndex,
-          //   quantity: data?.quantity,
-          //   cartId: cartId,
-          // };
-          console.log(
-            "cartItem",
-            cart,
-            data,
-            response?.payload?.data?.activities[0][0]?.value?.data?.message
-          );
           if (
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product Update Successfully"
@@ -172,11 +147,13 @@ const Cart = () => {
             if (functionality === "decrement") {
               dispatch(minusToCartArray(data));
             }
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
           }
           // setAmountLoader(false);
         })
         .catch(() => {
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           // setAmountLoader(false);
         });
     }
@@ -218,26 +195,15 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((response) => {
+          console.log("called from remove api");
           cartData();
-          // let cartItem = {
-          //   productId: data?.productId,
-          //   varientId: data?.varientId,
-          //   storeId: storeId,
-          //   productVariantIndex: data?.productVariantIndex,
-          //   quantity: 0,
-          //   cartId: cartId,
-          // };
-          console.log(
-            "cartItem",
-            cart,
-            // cartItem,
-            response?.payload?.data?.activities[0][0]?.value?.data?.message
-          );
           if (
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product deleted successfully"
           ) {
             dispatch(minusToCartArray(data));
+          } else {
+            ToastPopup({ text: "something went wrong" });
           }
           // setAmountLoader(false);
         })

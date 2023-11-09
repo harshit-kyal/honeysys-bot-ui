@@ -50,7 +50,14 @@ const PDP = () => {
             data &&
             data?.payload?.data?.activities[0][0]?.type === "productDetails"
           ) {
-            setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
+            if (
+              Array.isArray(data?.payload?.data?.activities[0][0]?.value?.data)
+            ) {
+              setError(false);
+              setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
+            } else {
+              setError(true);
+            }
           }
         })
         .catch((error) => {
@@ -103,8 +110,6 @@ const PDP = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((response) => {
-          console.log("varient", data);
-
           if (
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product Update Successfully"
@@ -115,11 +120,14 @@ const PDP = () => {
             if (functionality === "decrement") {
               dispatch(minusToCartArray(data));
             }
+            ToastPopup({ text: "product added" });
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
           }
           setQtyLoading(false);
         })
         .catch(() => {
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -203,12 +211,15 @@ const PDP = () => {
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product deleted successfully"
           ) {
+            ToastPopup({ text: "product added" });
             dispatch(minusToCartArray(data));
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
           }
           setQtyLoading(false);
         })
         .catch(() => {
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           setQtyLoading(false);
           setError(true);
         });

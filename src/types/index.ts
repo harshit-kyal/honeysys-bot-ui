@@ -74,6 +74,7 @@ export interface HomeSliceType {
   ChatArray: any[];
   locationPermission: boolean;
   locationModal: boolean;
+  refreshModal: boolean;
   cartChagedModal: boolean;
   experienceModal: boolean;
   deniedModal: boolean;

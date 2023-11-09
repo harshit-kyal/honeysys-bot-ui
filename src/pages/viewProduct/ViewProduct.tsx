@@ -46,8 +46,16 @@ const ViewProduct = () => {
       await dispatch(getChatData({ newData, botType }))
         .then((data) => {
           if (data?.payload?.data?.activities[0][0]?.type === "viewProduct") {
-            setProductData(data?.payload?.data?.activities[0][0]?.value?.data);
-            setError(false);
+            const productList =
+              data?.payload?.data?.activities[0][0]?.value?.data;
+            if (productList && Array.isArray(productList)) {
+              setProductData(
+                data?.payload?.data?.activities[0][0]?.value?.data
+              );
+              setError(false);
+            } else {
+              setError(true);
+            }
           }
         })
         .catch(() => {
@@ -75,10 +83,16 @@ const ViewProduct = () => {
             data?.payload?.data?.activities[0][0]?.type ===
               "viewCategoryCatalog"
           ) {
-            setError(false);
-            setCategoriesCatalog(
-              data?.payload?.data?.activities[0][0]?.value?.data
-            );
+            const categoryList =
+              data?.payload?.data?.activities[0][0]?.value?.data;
+            if (categoryList && Array.isArray(categoryList)) {
+              setError(false);
+              setCategoriesCatalog(
+                data?.payload?.data?.activities[0][0]?.value?.data
+              );
+            } else {
+              setError(true);
+            }
           }
         })
         .catch(() => {
@@ -98,12 +112,19 @@ const ViewProduct = () => {
     };
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
-        .then(() => {
-          dispatch(addToCartArray(data));
+        .then((response) => {
+          if (
+            response?.payload?.data?.activities[0][0]?.value?.data?.message ===
+            "Product Update Successfully"
+          ) {
+            dispatch(addToCartArray(data));
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
+          }
           setQtyLoading(false);
         })
         .catch(() => {
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -177,7 +198,7 @@ const ViewProduct = () => {
       },
     });
   };
-  console.log("productData",productData)
+  console.log("productData", productData);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />

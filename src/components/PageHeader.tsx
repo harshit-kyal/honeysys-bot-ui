@@ -2,12 +2,13 @@ import { Text } from "@polynomialai/alpha-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { resetHome, setCartChagedModal } from "../slices/homeSlice";
+import { getChatData, resetHome, setCartChagedModal } from "../slices/homeSlice";
 import { resetBot } from "../slices/botSlice";
 import { resetRoot } from "../slices/rootSlice";
 import { boolean } from "yargs";
 import { useState } from "react";
 import CartChagedModal from "./Modal/CartChagedModal";
+import { ToastPopup } from "../utils/TosterPopup";
 const PageHeader = ({
   title,
   isDisableSearch = false,
@@ -26,7 +27,31 @@ const PageHeader = ({
   const cartQuantity = useAppSelector((state) => state.home.totalQuantity);
   const cartData = useAppSelector((state) => state.home.cart);
   const orderProduct = useAppSelector((state) => state.home.orderProduct);
-  const [Modal, setModal] = useState(false);
+  const convId = useAppSelector((state) => state.bot.convId);
+  const botType = useAppSelector((state) => state.bot.botType);
+  // const cartChangeHandler=()=>{
+  //   const newData = {
+  //     conversationId: convId,
+  //     text: "viewCart",
+  //     voiceFlag: false,
+  //     isChatVisible: false,
+
+  //   };
+  //   if (convId && botType && convId !== "" && botType !== "") {
+  //      dispatch(getChatData({ newData, botType }))
+  //       .then((data) => {
+  //         if (
+  //           data &&
+  //           data?.payload?.data?.activities[0][0]?.type === "viewCart"
+  //         ) {
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         ToastPopup({ text: "something went wrong" });
+  //         console.log("err", error);
+  //       });
+  //   }
+  // }
   const cartHandler = () => {
     if (!reviewToken) {
       if (cart) {
@@ -45,16 +70,6 @@ const PageHeader = ({
               } else {
                 valid = true;
               }
-              console.log(
-                "modal",
-                valid,
-                item?.productId,
-                orderProduct[index]?.productId,
-                item?.productVariantIndex,
-                orderProduct[index]?.productVariantIndex,
-                item?.quantity,
-                orderProduct[index]?.quantity
-              );
             });
             if (valid) {
               dispatch(setCartChagedModal(true));

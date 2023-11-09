@@ -97,7 +97,7 @@ export const getChatApi = async ({
   let encryptBotType = encrypt("fd50c4b3a21b1e9e5c941_Dev");
   try {
     const response: any = await axiosInstance.post(
-      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${encryptBotType}`,
+      `${process.env.REACT_APP_DIRECTLINE_URL}/polyline/getMessages/?botType=${botType}`,
       newData
     );
 

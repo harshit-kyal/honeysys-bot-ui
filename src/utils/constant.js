@@ -1,1 +1,1 @@
-export const TESTING_URL="http://localhost:3001"
+export const TESTING_URL="http://localhost:3000"

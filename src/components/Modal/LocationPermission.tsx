@@ -80,7 +80,7 @@ const LocationPermission = () => {
                               }
                             })
                             .catch((error) => {
-                              ToastPopup({ text: "something went wrong" });
+                              ToastPopup({ text: " something went wrong" });
                               console.log("err", error);
                             });
                           // navigate("/address");

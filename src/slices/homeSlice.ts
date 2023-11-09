@@ -19,6 +19,7 @@ const initialState: HomeSliceType = {
   locationModal: false,
   experienceModal: false,
   cartChagedModal: false,
+  refreshModal:false,
   storeData: {},
   UiUpdate: false,
   cart: [],
@@ -184,7 +185,7 @@ export const HomeSlice = createSlice({
         let find = state.cart.findIndex(
           (item: any) =>
             item?.productId === action?.payload?.productId &&
-            item?.varientId === action?.payload?.varientId
+            item?.productVariantIndex === action?.payload?.productVariantIndex
         );
         if (find !== -1) {
           state.cart[find].quantity = action?.payload?.quantity;
@@ -198,14 +199,14 @@ export const HomeSlice = createSlice({
       let find = state.cart.findIndex(
         (item: any) =>
           item?.productId === action?.payload?.productId &&
-          item?.varientId === action?.payload?.varientId
+          item?.productVariantIndex === action?.payload?.productVariantIndex
       );
-      console.log("minus",find,action?.payload?.quantity)
+      console.log("minus", find, action?.payload?.quantity);
       if (find !== -1) {
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
-          console.log("minus","remove")
+          console.log("minus", "remove");
           state.totalQuantity = state.totalQuantity -= 1;
           state.cart.splice(find, 1);
         }
@@ -221,6 +222,12 @@ export const HomeSlice = createSlice({
       return {
         ...state,
         locationModal: action.payload,
+      };
+    },
+    setRefreshModal(state, action) {
+      return {
+        ...state,
+        refreshModal: action.payload,
       };
     },
     setDeniedModal(state, action) {
@@ -329,5 +336,6 @@ export const {
   setExperienceModal,
   setOrderProduct,
   setCartChagedModal,
+  setRefreshModal
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

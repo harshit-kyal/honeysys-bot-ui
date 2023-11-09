@@ -74,13 +74,17 @@ const OTP = () => {
         clientName: "honeySys",
       },
       "otp"
-    ).then((response) => {
-      setLoading(false);
-      if (response.data?.code === 200) {
-        setCorrectOTP(parseInt(response?.data?.data?.otp));
-        toast.success(`OTP : ${response?.data?.data?.otp}`);
-      }
-    });
+    )
+      .then((response) => {
+        setLoading(false);
+        if (response.data?.code === 200) {
+          setCorrectOTP(parseInt(response?.data?.data?.otp));
+          toast.success(`OTP : ${response?.data?.data?.otp}`);
+        }
+      })
+      .catch(() => {
+        ToastPopup({ text: "something went wrong" });
+      });
   };
   return (
     <div className="w-screen h-screen px-5 py-3">

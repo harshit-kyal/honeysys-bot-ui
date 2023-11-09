@@ -8,9 +8,6 @@ import {
   getChatData,
   addToChatArray,
   setUiUpdate,
-  setCart,
-  setTotalQuantity,
-  setGetStartDisplay,
   setStoreData,
   setStoreId,
   setCartId,
@@ -18,6 +15,7 @@ import {
   setUserSavedAddres,
   setOrderProduct,
   addToCartArray,
+  setRefreshModal,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -52,6 +50,7 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { formatCustomAddress } from "../../utils/AddressFormate";
 import { ToastPopup } from "../../utils/TosterPopup";
+import RefreshModal from "../../components/Modal/RefreshModal";
 const Home = () => {
   const dispatch = useAppDispatch();
   const reviewToken = localStorage.getItem("reviewToken");
@@ -68,7 +67,6 @@ const Home = () => {
   const ChatArray = useAppSelector((state) => state.home.ChatArray);
   const UiUpdate = useAppSelector((state) => state.home.UiUpdate);
   const cartData = useAppSelector((state) => state.home.storeData);
-  const storeId = useAppSelector((state) => state.home.storeId);
   const cartId = useAppSelector((state) => state.home.cartId);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);
   const deliveryDate = useAppSelector((state) => state.home.deliveryDate);
@@ -558,12 +556,6 @@ const Home = () => {
         .geocode({ location: latLng }, (results: any, status: any) => {
           if (status === "OK" && results) {
             if (results?.length > 0) {
-              const addressComponents = results[0]?.address_components;
-              let data = formatCustomAddress(
-                addressComponents,
-                setAddress,
-                latLng
-              );
               let postalCode = results?.find((ele: any) =>
                 ele.address_components?.find((component: any) =>
                   component?.types?.includes("postal_code")
@@ -572,7 +564,9 @@ const Home = () => {
               const postalCodeData = postalCode.address_components.find(
                 (component: any) => component.types.includes("postal_code")
               );
-              if (postalCode) {
+              if (postalCodeData) {
+                const addressComponents = results[0]?.address_components;
+                formatCustomAddress(addressComponents, setAddress, latLng);
                 const pincode = postalCodeData?.long_name;
                 const newData = {
                   conversationId: convId,
@@ -580,13 +574,13 @@ const Home = () => {
                   voiceFlag: false,
                   isChatVisible: false,
                   data: {
-                    pincode: "500084",
-                    lat: "17.469857630687827",
-                    lag: "78.35782449692486",
-                    // pincode: pincode,
-                    // lat: `${latLng?.lat}`,
-                    // lag: `${latLng?.lng}`,
-                    type: "location",
+                    // pincode: "500084",
+                    // lat: "17.469857630687827",
+                    // lag: "78.35782449692486",
+                    pincode: pincode,
+                    lat: `${latLng?.lat}`,
+                    lag: `${latLng?.lng}`,
+                    // type: "location",
                   },
                 };
                 if (convId && botType) {
@@ -594,7 +588,11 @@ const Home = () => {
                     .then((data) => {
                       let actiVitiesData =
                         data?.payload?.data?.activities[0][0];
-                      if (data && actiVitiesData?.type === "findStores") {
+                      if (
+                        data &&
+                        actiVitiesData?.type === "findStores" &&
+                        actiVitiesData
+                      ) {
                         if (
                           actiVitiesData?.value?.data[0]?.status_code === 500
                         ) {
@@ -610,12 +608,15 @@ const Home = () => {
                           );
                           let storeIds = actiVitiesData?.value?.data[0]?.id;
                           if (storeIds) {
-                            cartItems();
                             cartIdData(storeIds);
                           }
                           dispatch(setUserSavedAddres(address));
                           dispatch(setUserPincode(pincode));
                         }
+                      } else {
+                        ToastPopup({
+                          text: "store not found something went wrong",
+                        });
                       }
                     })
                     .catch((err) => {
@@ -634,15 +635,15 @@ const Home = () => {
         .catch((err) => console.log("err", err));
     }
   }, [latLng]);
-  const cartItems = async () => {
-    if (storeId) {
+  const cartItems = async (storeIds: any, cartIds: any) => {
+    if (storeIds) {
       const newData = {
         conversationId: convId,
         text: "viewCart",
         voiceFlag: false,
         isChatVisible: false,
         data: {
-          storeId: storeId,
+          storeId: storeIds,
         },
       };
       if (convId && botType && convId !== "" && botType !== "") {
@@ -658,10 +659,10 @@ const Home = () => {
                 let cartItem = {
                   productId: item.variants[0]?.productId,
                   varientId: item.variants[0]?._id,
-                  storeId: storeId,
+                  storeId: storeIds,
                   productVariantIndex: item.variants[0]?.productVariantIndex,
                   quantity: item?.quantity,
-                  cartId: cartId,
+                  cartId: cartIds,
                 };
                 dispatch(addToCartArray(cartItem));
               });
@@ -693,9 +694,12 @@ const Home = () => {
           .then((data) => {
             // setLoading(false);
             let cartActivity = data?.payload?.data?.activities[0][0];
-            if (data && cartActivity?.type === "getCartId") {
-              let cartId = cartActivity?.value?.data?.cartId;
-              dispatch(setCartId(cartId));
+            if (data && cartActivity?.type === "getCartId" && cartActivity) {
+              let cartIds = cartActivity?.value?.data?.cartId;
+              cartItems(storeIds, cartIds);
+              dispatch(setCartId(cartIds));
+            } else {
+              ToastPopup({ text: "cartid not found something went wrong" });
             }
           })
           .catch((err) => {
@@ -706,9 +710,6 @@ const Home = () => {
       }
     }
   };
-  useEffect(() => {
-    cartItems();
-  }, [storeId, cartId]);
   const homeToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
@@ -730,7 +731,6 @@ const Home = () => {
               data?.data?.chats.map((item: any, index: number) => {
                 replyFunction(item);
               });
-              // dispatch(setChatArray(data?.data?.chats));
             }
           }
           const endpoint = environment.directlineURL;
@@ -789,6 +789,7 @@ const Home = () => {
                 // dispatch(setGetStartDisplay(true));
               })
               .catch((error) => {
+                dispatch(setRefreshModal(true));
                 ToastPopup({ text: "something went wrong" });
                 console.log("err", error);
               });
@@ -801,7 +802,10 @@ const Home = () => {
           });
           socket.on("error", (error) => {});
         })
-        .catch((error) => {});
+        .catch((error) => {
+          dispatch(setRefreshModal(true));
+          ToastPopup({ text: "something went wrong" });
+        });
 
       // if (botType !== "" && convId) {
       //   const endpoint = environment.directlineURL;
@@ -836,7 +840,7 @@ const Home = () => {
   };
   useEffect(() => {
     scroll();
-  }, [isLoadingVisible]);
+  }, [isLoadingVisible, ChatArray]);
   const [pageNumber, setPageNumber] = useState(0);
 
   // const fetchData = () => {
@@ -1102,7 +1106,11 @@ const Home = () => {
                                     : []
                                 }
                                 flag={(() => {
-                                  if (activity[0]?.value?.sender === "bot") {
+                                  if (isLoadingVisible) {
+                                    return false;
+                                  } else if (
+                                    activity[0]?.value?.sender === "bot"
+                                  ) {
                                     if (mainIndex + 1 < ChatArray.length) {
                                       for (
                                         let i = mainIndex + 1;
@@ -1526,6 +1534,7 @@ const Home = () => {
       <LocationPermission />
       <DeniedModal />
       {UiUpdate && <FloatingButton />}
+      <RefreshModal />
       {/* <Toaster /> */}
     </div>
   );

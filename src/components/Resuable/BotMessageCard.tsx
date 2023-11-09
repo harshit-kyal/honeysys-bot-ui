@@ -293,25 +293,42 @@ const BotMessageCard = ({
                             if (data && paymentCard?.type === "paymentCard") {
                               const paymentContent: any =
                                 paymentCard?.value?.data[0];
+                              if (paymentContent && paymentContent.length > 0) {
+                                if (paymentContent?.isOrderPlaced === true) {
+                                  dispatch(setCart([]));
+                                  dispatch(setOrderProduct([]));
+                                  dispatch(setTotalQuantity(0));
+                                }
+                                if (
+                                  paymentContent?.onlinePaymentDetails &&
+                                  paymentContent?.secretKey
+                                ) {
+                                  let paymentDetails = {
+                                    key: paymentContent?.secretKey,
+                                    currency:
+                                      paymentContent?.onlinePaymentDetails
+                                        ?.currency,
+                                    amount:
+                                      paymentContent?.onlinePaymentDetails
+                                        ?.amount,
+                                  };
+                                  displayRazorpay(paymentDetails);
+                                }
+                              } else {
+                                ToastPopup({ text: "something went wrong" });
+                              }
+                            }
+                          }
+                          if (data?.text === "Cash on delivery") {
+                            let paymentCard =
+                              response?.payload?.data?.activities[0][0];
+                            if (data && paymentCard?.type === "paymentCard") {
+                              const paymentContent: any =
+                                paymentCard?.value?.data[0];
                               if (paymentContent?.isOrderPlaced === true) {
                                 dispatch(setCart([]));
                                 dispatch(setOrderProduct([]));
                                 dispatch(setTotalQuantity(0));
-                              }
-                              if (
-                                paymentContent?.onlinePaymentDetails &&
-                                paymentContent?.secretKey
-                              ) {
-                                let paymentDetails = {
-                                  key: paymentContent?.secretKey,
-                                  currency:
-                                    paymentContent?.onlinePaymentDetails
-                                      ?.currency,
-                                  amount:
-                                    paymentContent?.onlinePaymentDetails
-                                      ?.amount,
-                                };
-                                displayRazorpay(paymentDetails);
                               }
                             }
                           }

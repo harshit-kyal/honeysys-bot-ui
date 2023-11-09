@@ -15,6 +15,8 @@ const SearchProduct = () => {
   const storeId = useAppSelector((state) => state.home.storeId);
   const convId = useAppSelector((state) => state.bot.convId);
   const cart = useAppSelector((state) => state.home.cart);
+  const cartData = useAppSelector((state) => state.home.cart);
+  const orderProduct = useAppSelector((state) => state.home.orderProduct);
   const cartId = useAppSelector((state) => state.home.cartId);
   const botType = useAppSelector((state) => state.bot.botType);
   const [searchStr, setSearchStr] = useState("");
@@ -26,13 +28,7 @@ const SearchProduct = () => {
   const [Error, setError] = useState(false);
   const [Loading, setLoading] = useState(false);
   const error = useAppSelector((state) => state.home.error);
-  const [recentSearchOptions, setRecentSearchOptions] = useState([
-    "Fresh Tomatoes",
-    "Casual Shirt",
-    "Apparels",
-    "Watches",
-    "Car Care",
-  ]);
+  const [trendingSearchOptions, setTrendingSearchOptions] = useState<any>([]);
   const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
   const handleSearchData = (data: any) => {
     const newData = {
@@ -53,15 +49,21 @@ const SearchProduct = () => {
         .then((data) => {
           let searchData = data?.payload?.data?.activities[0][0];
 
-          if (data && searchData?.type === "searchProduct") {
+          if (
+            data &&
+            searchData?.type === "searchProduct" &&
+            searchData?.value?.data &&
+            Array.isArray(searchData?.value?.data)
+          ) {
             let searchItems = searchData?.value?.data;
             setSearchList(searchItems);
             setLoading(false);
+          } else {
+            ToastPopup({ text: "something went wrong" });
           }
         })
         .catch((error) => {
           setLoading(false);
-
           ToastPopup({ text: "something went wrong" });
           setError(true);
           console.log("err", error);
@@ -146,12 +148,15 @@ const SearchProduct = () => {
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product Update Successfully"
           ) {
+            ToastPopup({ text: "Product added" });
             dispatch(addToCartArray(data));
+          } else {
+            ToastPopup({ text: "product not added something went wrong" });
           }
         })
         .catch(() => {
           setError(true);
-          ToastPopup({ text: "something went wrong" });
+          ToastPopup({ text: "product not added something went wrong" });
           setQtyLoading(false);
         });
     }
@@ -163,17 +168,96 @@ const SearchProduct = () => {
       setError(false);
     }
   }, [error]);
+  const trendingSearch = () => {};
+  useEffect(() => {
+    const newData = {
+      conversationId: convId,
+      text: "trandingSearch",
+      clientName: "honeySys",
+      voiceFlag: false,
+      isChatVisible: false,
+    };
+
+    if (convId && botType && convId !== "" && botType !== "") {
+      setLoading(true);
+      dispatch(getChatData({ newData, botType }))
+        .then((data) => {
+          let trendingData = data?.payload?.data?.activities[0][0];
+          if (data && trendingData?.type === "trandingSearch") {
+            let search = trendingData?.value?.data;
+            if (search && Array.isArray(search)) {
+              let trendingSearchArray = search.map((item: any) => {
+                return item?.title;
+              });
+              setTrendingSearchOptions(trendingSearchArray);
+            }
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          ToastPopup({ text: "something went wrong" });
+          setError(true);
+          console.log("err", error);
+        });
+    }
+  }, []);
+  const backHandler = () => {
+    if (orderProduct.length > 0 && cartData.length > 0) {
+      if (cartData.length === orderProduct.length) {
+        let valid = true;
+        cartData.forEach((item, index) => {
+          if (
+            item?.productId === orderProduct[index]?.productId &&
+            item?.productVariantIndex ===
+              orderProduct[index]?.productVariantIndex &&
+            item?.quantity === orderProduct[index]?.quantity
+          ) {
+            valid = false;
+            // break;
+          } else {
+            valid = true;
+          }
+        });
+        if (valid) {
+          navigate("/cart");
+        } else {
+          navigate(-1);
+        }
+      } else {
+        navigate("/cart");
+      }
+    } else {
+      navigate(-1);
+    }
+  };
   return (
     <>
       <div className="">
-        <div className="header h-[72px] overflow-hidden flex items-center justify-evenly flex-shrink-0 px-5">
+        <div className="header h-[72px] overflow-hidden flex items-center justify-evenly flex-shrink-0 px-5 sticky top-0">
           <div className="pt-6">
-            <BackButton noTitle={true} />
+            <div
+              className="flex h-20 pt-4"
+              onClick={() => {
+                backHandler();
+              }}
+            >
+              <div className="flex items-center h-min cursor-pointer">
+                <img
+                  src="/images/keyboard_backspace.svg"
+                  alt="back"
+                  className="cursor-pointer"
+                  color="black"
+                  height={24}
+                  width={24}
+                />
+              </div>
+            </div>
           </div>
           <div className="flex-1 px-3">
             <input
               name="search"
               id="search"
+              value={searchStr}
               className="search-product"
               placeholder="What are you looking for?"
               onInput={(e: any) => {
@@ -346,22 +430,31 @@ const SearchProduct = () => {
                     Are you looking for
                   </span>
                   <div className="mt-2">
-                    {recentSearchOptions.map((items: any, index: number) => (
-                      <>
-                        <div key={index} className="flex">
-                          <img
-                            src="/images/searchBlack.svg"
-                            alt="searchblack"
-                            width={20}
-                            height={20}
-                          ></img>
-                          <div className="ml-3 text-[12px] leading-10">
-                            {items}
+                    {Array.isArray(trendingSearchOptions) &&
+                    trendingSearchOptions.length > 0 ? (
+                      trendingSearchOptions.map((items: any, index: number) => (
+                        <>
+                          <div
+                            key={index}
+                            className="flex"
+                            onClick={() => setSearchStr(items)}
+                          >
+                            <img
+                              src="/images/searchBlack.svg"
+                              alt="searchblack"
+                              width={20}
+                              height={20}
+                            ></img>
+                            <div className="ml-3 text-[12px] leading-10">
+                              {items}
+                            </div>
                           </div>
-                        </div>
-                        <hr className="border-b-1"></hr>
-                      </>
-                    ))}
+                          <hr className="border-b-1"></hr>
+                        </>
+                      ))
+                    ) : (
+                      <div>search...</div>
+                    )}
                   </div>
                 </>
               )}

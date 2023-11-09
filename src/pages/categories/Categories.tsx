@@ -53,8 +53,15 @@ const Categories = () => {
           if (data && categoryData?.type === "viewCategoryCatalog") {
             const id1 = categoryData?.value?.data[0]?.id;
             setSelected(id === "home" ? id1 : id);
-            setCategoriesCatalog(categoryData?.value?.data);
-            setError(false);
+            if (
+              categoryData?.value?.data &&
+              Array.isArray(categoryData?.value?.data)
+            ) {
+              setCategoriesCatalog(categoryData?.value?.data);
+              setError(false);
+            } else {
+              setError(true);
+            }
           }
         })
         .catch((err) => {

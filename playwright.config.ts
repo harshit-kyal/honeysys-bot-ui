@@ -10,8 +10,8 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-testMatch: ["tests//contactDetail.spec.ts"],
-  // testDir: './tests',
+// testMatch: ["tests//contactDetail.spec.ts"],
+  testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -29,7 +29,7 @@ testMatch: ["tests//contactDetail.spec.ts"],
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless:false,
+    // headless:false,
     screenshot:"only-on-failure",
     video:"retain-on-failure",
   },
