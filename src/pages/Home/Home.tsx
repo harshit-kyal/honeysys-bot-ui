@@ -465,7 +465,7 @@ const Home = () => {
   // };
   const replyFunction = (data: any) => {
     if (data?.activities) {
-      console.log("ChatArray", data?.activities);
+      console.log("ChatArraySoket", data?.activities);
       const activities: any[] = data?.activities;
       activities?.forEach((item) => {
         dispatch(addToChatArray(item));
@@ -644,6 +644,7 @@ const Home = () => {
         isChatVisible: false,
         data: {
           storeId: storeIds,
+          cartId: cartIds,
         },
       };
       if (convId && botType && convId !== "" && botType !== "") {
@@ -722,7 +723,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!reviewToken) {
+    if (!reviewToken ) {
       // dispatch(setChatArray([...chat]));
       getConversationId(botType, convId)
         .then((data: any) => {

@@ -89,6 +89,7 @@ const Cart = () => {
       isChatVisible: false,
       data: {
         storeId: storeId,
+        cartId: cartId,
       },
     };
     if (convId && botType && convId !== "" && botType !== "") {
@@ -121,7 +122,6 @@ const Cart = () => {
           setLoading(false);
         });
   }, []);
-  console.log();
   const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
   const handleAddApi = (data: any) => {
     setAmountLoader(true);

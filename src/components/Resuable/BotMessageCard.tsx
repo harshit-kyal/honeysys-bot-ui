@@ -293,7 +293,7 @@ const BotMessageCard = ({
                             if (data && paymentCard?.type === "paymentCard") {
                               const paymentContent: any =
                                 paymentCard?.value?.data[0];
-                              if (paymentContent && paymentContent.length > 0) {
+                              if (paymentContent) {
                                 if (paymentContent?.isOrderPlaced === true) {
                                   dispatch(setCart([]));
                                   dispatch(setOrderProduct([]));
@@ -319,7 +319,7 @@ const BotMessageCard = ({
                               }
                             }
                           }
-                          if (data?.text === "Cash on delivery") {
+                          if (data?.text === "Pay on delivery") {
                             let paymentCard =
                               response?.payload?.data?.activities[0][0];
                             if (data && paymentCard?.type === "paymentCard") {

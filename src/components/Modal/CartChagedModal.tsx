@@ -27,6 +27,7 @@ const CartChagedModal = () => {
       isChatVisible: false,
       data: {
         storeId: storeId,
+        cartId: cartId,
       },
     };
     if (convId && botType && convId !== "" && botType !== "") {

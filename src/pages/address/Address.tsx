@@ -263,6 +263,7 @@ const Address = () => {
         isChatVisible: false,
         data: {
           storeId: storeIds,
+          cartId: cartId,
         },
       };
       if (convId && botType && convId !== "" && botType !== "") {

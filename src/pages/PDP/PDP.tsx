@@ -50,9 +50,7 @@ const PDP = () => {
             data &&
             data?.payload?.data?.activities[0][0]?.type === "productDetails"
           ) {
-            if (
-              Array.isArray(data?.payload?.data?.activities[0][0]?.value?.data)
-            ) {
+            if (data?.payload?.data?.activities[0][0]?.value?.data) {
               setError(false);
               setProduct(data?.payload?.data?.activities[0][0]?.value?.data);
             } else {
