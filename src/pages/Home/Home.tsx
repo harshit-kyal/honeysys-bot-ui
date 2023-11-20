@@ -723,7 +723,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!reviewToken ) {
+    if (!reviewToken) {
       // dispatch(setChatArray([...chat]));
       getConversationId(botType, convId)
         .then((data: any) => {
@@ -1516,14 +1516,15 @@ const Home = () => {
               let navigateData = response?.payload?.data?.activities[0][0];
               if (response && navigateData?.type === "navigatePage") {
                 let navigatePage = navigateData?.value?.data[0]?.navigatePage;
-                if (navigatePage === "showCart") {
-                  navigate("/cart");
-                } else if (
-                  navigatePage === "showProduct" ||
-                  navigatePage === "showCategory"
-                ) {
-                  navigate("/catalog");
-                }
+                navigate(`/${navigatePage}`);
+                // if (navigatePage === "showCart") {
+                //   navigate("/cart");
+                // } else if (
+                //   navigatePage === "showProduct" ||
+                //   navigatePage === "showCategory"
+                // ) {
+                //   navigate("/catalog");
+                // }
               }
             })
             .catch((error) => {

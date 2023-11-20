@@ -24,7 +24,8 @@ test("test 1", async ({ page }) => {
     );
     await page.getByText("Categories");
 
-    await page.getByRole("textbox", { name: "View all" }).click();
+    await page.getByRole("dialog", { name: "View all" }).click();
+    // locator('span').filter({ hasText: 'View all' })
     expect(page.goto(`${TESTING_URL}/categories/home`));
     await page.getByText("You May Like");
   }

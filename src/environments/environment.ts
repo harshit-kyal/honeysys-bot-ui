@@ -19,6 +19,7 @@ export const environment = {
   apiURLAzure_new: "https://intelligence.polynomial.ai/interaction_studio",
   // apiURLAzure_new: "http://20.244.8.172:30042",
   AESSecret: "Interaction-Studio-By-Polynomial.AI",
+  paymentSecretKey: "paymentkey",
   uploadToken: "Bearer qP0qsYX9_Ho.PGotiqdrD_L2wPddgXe7Ym1lgW6y0XZZTdMN7PGZwxM",
   avatarURL:
     "https://coliveshona.blob.core.windows.net/coliveshonabot/Shona.png",

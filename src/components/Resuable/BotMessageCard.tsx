@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { ToastPopup } from "../../utils/TosterPopup";
+import { paymentDecrypt } from "../../services/aes";
 interface CardProp {
   children?: JSX.Element;
   imageSrc?: string;
@@ -129,7 +130,7 @@ const BotMessageCard = ({
       botToastModal({ text: "you are offline" });
     }
     const option = {
-      key: paymentDetails?.key,
+      key: paymentDecrypt(paymentDetails?.key),
       currency: paymentDetails?.currency,
       amount: paymentDetails?.amount,
       name: "Honeysys",
@@ -241,7 +242,6 @@ const BotMessageCard = ({
                         sourceAction: true,
                         content: data?.text,
                         replyArray: buttonContent,
-
                         data: {
                           paymentMethod:
                             data?.text === "Pay online"

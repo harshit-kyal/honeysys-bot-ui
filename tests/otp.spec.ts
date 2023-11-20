@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { render, screen } from "@testing-library/react";
 import { TESTING_URL } from "../src/utils/constant";
 
-test("test 1", async ({ page }) => {
+test("test 1 - empty or not", async ({ page }) => {
   await page.goto(`${TESTING_URL}/otp`);
   await page.getByRole("button", { name: "Verify & Continue" }).click();
   await page
@@ -11,7 +11,7 @@ test("test 1", async ({ page }) => {
     .nth(2)
     .click();
 });
-test("test 2", async ({ page }) => {
+test("test 2 - working or not", async ({ page }) => {
   await page.goto(`${TESTING_URL}/otp`);
   await page.getByRole("textbox").first().click();
   await page.getByRole("textbox").first().fill("5");
