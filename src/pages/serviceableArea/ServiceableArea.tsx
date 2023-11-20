@@ -125,10 +125,15 @@ const ServiceableArea = () => {
           let storeData = data?.payload?.data?.activities[0][0];
           if (data && storeData?.type === "experienceStore" && storeData) {
             dispatch(setStoreData(storeData?.value?.data[0]));
-            dispatch(setStoreId(storeData?.value?.data[0]?.id));
+            let cartIds = storeData?.value?.data[0]?.cartId;
+            dispatch(setCartId(cartIds));
             let storeIds = storeData?.value?.data[0]?.id;
-            if (storeIds) {
-              cartIdData(storeIds);
+            dispatch(setStoreId(storeIds));
+            if (storeIds && cartIds) {
+              cartItems(storeIds, cartIds);
+              // cartIdData(storeIds);
+              navigate("/");
+              dispatch(setGetStartDisplay(true));
             }
           } else {
             ToastPopup({ text: "store not found something went wrong" });
@@ -186,43 +191,43 @@ const ServiceableArea = () => {
       }
     }
   };
-  const cartIdData = (storeIds: any) => {
-    if (storeIds) {
-      const newData = {
-        conversationId: convId,
-        text: "getcartid",
-        voiceFlag: false,
-        isChatVisible: false,
-        data: {
-          storeId: storeIds,
-        },
-      };
+  // const cartIdData = (storeIds: any) => {
+  //   if (storeIds) {
+  //     const newData = {
+  //       conversationId: convId,
+  //       text: "getcartid",
+  //       voiceFlag: false,
+  //       isChatVisible: false,
+  //       data: {
+  //         storeId: storeIds,
+  //       },
+  //     };
 
-      if (convId && botType && convId !== "" && botType !== "") {
-        dispatch(getChatData({ newData, botType }))
-          .then((data) => {
-            setLoading(false);
-            let cartData = data?.payload?.data?.activities[0][0];
-            if (data && cartData?.type === "getCartId") {
-              let cartId = cartData?.value?.data?.cartId;
-              if (cartId) {
-                cartItems(storeIds, cartId);
-                dispatch(setCartId(cartId));
-                navigate("/");
-                dispatch(setGetStartDisplay(true));
-              } else {
-                ToastPopup({ text: "cartid not found something went wrong" });
-              }
-            }
-          })
-          .catch((error) => {
-            setLoading(false);
-            ToastPopup({ text: "something went wrong" });
-            console.log("err", error);
-          });
-      }
-    }
-  };
+  //     if (convId && botType && convId !== "" && botType !== "") {
+  //       dispatch(getChatData({ newData, botType }))
+  //         .then((data) => {
+  //           setLoading(false);
+  //           let cartData = data?.payload?.data?.activities[0][0];
+  //           if (data && cartData?.type === "getCartId") {
+  //             let cartId = cartData?.value?.data?.cartId;
+  //             if (cartId) {
+  //               cartItems(storeIds, cartId);
+  //               dispatch(setCartId(cartId));
+  //               navigate("/");
+  //               dispatch(setGetStartDisplay(true));
+  //             } else {
+  //               ToastPopup({ text: "cartid not found something went wrong" });
+  //             }
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           setLoading(false);
+  //           ToastPopup({ text: "something went wrong" });
+  //           console.log("err", error);
+  //         });
+  //     }
+  //   }
+  // };
   return (
     <div>
       <div className="h-[32vh] bg-[#d3d3df] py-3">

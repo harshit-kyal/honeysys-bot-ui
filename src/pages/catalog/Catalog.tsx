@@ -161,12 +161,11 @@ const Catalog = () => {
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
             "Product Update Successfully"
           ) {
-            console.log(data);
             dispatch(addToCartArray(data));
-            setAddLoading(false);
           } else {
             ToastPopup({ text: "product not added something went wrong" });
           }
+          setAddLoading(false);
         })
         .catch(() => {
           ToastPopup({ text: "product not added something went wrong" });

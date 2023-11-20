@@ -30,18 +30,20 @@ const ProtectedRoute = () => {
     }, 500);
   }, []);
   return render ? (
-    // (token ) || reviewToken ? (
+    // token || reviewToken ? (
     <div className="">
       {isHeader && <HeaderBar />}
       <Outlet />
     </div>
   ) : (
-    //   ) : !reviewToken ? (
-    //     <Navigate to="/splash" />
-    //   ) : (
-    //     // <></>
-    //     <></>
-    //   )
+    // )
+    // : !reviewToken ? (
+    //   <Navigate to="/splash" />
+    // )
+    // : (
+    //   // <></>
+    //   <></>
+    // )
     <></>
   );
 };

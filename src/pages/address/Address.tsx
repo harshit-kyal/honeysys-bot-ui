@@ -220,23 +220,35 @@ const Address = () => {
                   });
                 } else if (storeData?.value?.data[0]?.status_code === 200) {
                   dispatch(setStoreData(storeData?.value?.data[0]));
-                  dispatch(setStoreId(storeData?.value?.data[0]?.id));
+                  let cartIds = storeData?.value?.data[0]?.cartId;
+                  dispatch(setCartId(cartIds));
                   let storeIds = storeData?.value?.data[0]?.id;
-                  if (storeIds) {
-                    cartIdData(storeIds);
+                  dispatch(setStoreId(storeIds));
+                  if (storeIds && cartIds) {
+                    cartItems(storeIds, cartIds);
+                    // cartIdData(storeIds);
+                    {
+                      navigateData && navigateData !== ""
+                        ? navigate("/contactDetails", {
+                            state: { address: address, navigate: "home" },
+                          })
+                        : navigate("/contactDetails", {
+                            state: { address: address },
+                          });
+                    }
                   }
                   // dispatch(setUserPincode(500084));
                   dispatch(setUserSavedAddres(address));
                   dispatch(setUserPincode(address?.pincode));
-                  {
-                    navigateData && navigateData !== ""
-                      ? navigate("/contactDetails", {
-                          state: { address: address, navigate: "home" },
-                        })
-                      : navigate("/contactDetails", {
-                          state: { address: address },
-                        });
-                  }
+                  // {
+                  //   navigateData && navigateData !== ""
+                  //     ? navigate("/contactDetails", {
+                  //         state: { address: address, navigate: "home" },
+                  //       })
+                  //     : navigate("/contactDetails", {
+                  //         state: { address: address },
+                  //       });
+                  // }
                 }
               }
             } else {
@@ -304,38 +316,38 @@ const Address = () => {
       }
     }
   };
-  const cartIdData = (storeIds: any) => {
-    if (storeIds) {
-      const newData = {
-        conversationId: convId,
-        text: "getcartid",
-        voiceFlag: false,
-        isChatVisible: false,
-        data: {
-          storeId: storeIds,
-        },
-      };
+  // const cartIdData = (storeIds: any) => {
+  //   if (storeIds) {
+  //     const newData = {
+  //       conversationId: convId,
+  //       text: "getcartid",
+  //       voiceFlag: false,
+  //       isChatVisible: false,
+  //       data: {
+  //         storeId: storeIds,
+  //       },
+  //     };
 
-      if (convId && botType && convId !== "" && botType !== "") {
-        dispatch(getChatData({ newData, botType }))
-          .then((data) => {
-            let cartData = data?.payload?.data?.activities[0][0];
-            if (data && cartData?.type === "getCartId" && cartData) {
-              let cartId = cartData?.value?.data?.cartId;
-              cartItems(storeIds, cartId);
-              dispatch(setCartId(cartId));
-            } else {
-              ToastPopup({ text: "cartid not found something went wrong" });
-            }
-          })
-          .catch((error) => {
-            setLoading(false);
-            ToastPopup({ text: "something went wrong" });
-            console.log("err", error);
-          });
-      }
-    }
-  };
+  //     if (convId && botType && convId !== "" && botType !== "") {
+  //       dispatch(getChatData({ newData, botType }))
+  //         .then((data) => {
+  //           let cartData = data?.payload?.data?.activities[0][0];
+  //           if (data && cartData?.type === "getCartId" && cartData) {
+  //             let cartId = cartData?.value?.data?.cartId;
+  //             cartItems(storeIds, cartId);
+  //             dispatch(setCartId(cartId));
+  //           } else {
+  //             ToastPopup({ text: "cartid not found something went wrong" });
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           setLoading(false);
+  //           ToastPopup({ text: "something went wrong" });
+  //           console.log("err", error);
+  //         });
+  //     }
+  //   }
+  // };
   return (
     <div className="h-screen">
       <div className="bg-primary flex items-center justify-center gap-3 px-5 py-2">

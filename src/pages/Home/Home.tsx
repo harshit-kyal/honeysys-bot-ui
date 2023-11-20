@@ -16,6 +16,7 @@ import {
   setOrderProduct,
   addToCartArray,
   setRefreshModal,
+  setGetStartDisplay,
 } from "../../slices/homeSlice";
 import ChatWrapper from "../../components/ChatWrapper";
 import SearchBar from "../../components/SearchBar";
@@ -580,7 +581,7 @@ const Home = () => {
                     pincode: pincode,
                     lat: `${latLng?.lat}`,
                     lag: `${latLng?.lng}`,
-                    // type: "location",
+                    type: "location",
                   },
                 };
                 if (convId && botType) {
@@ -600,15 +601,18 @@ const Home = () => {
                         } else if (
                           actiVitiesData?.value?.data[0]?.status_code === 200
                         ) {
+                          
                           dispatch(
                             setStoreData(actiVitiesData?.value?.data[0])
                           );
-                          dispatch(
-                            setStoreId(actiVitiesData?.value?.data[0]?.id)
-                          );
+                          let cartIds = actiVitiesData?.value?.data[0]?.cartId;
+                          dispatch(setCartId(cartIds));
                           let storeIds = actiVitiesData?.value?.data[0]?.id;
-                          if (storeIds) {
-                            cartIdData(storeIds);
+                          dispatch(setStoreId(storeIds));
+                          if (storeIds && cartIds) {
+                            cartItems(storeIds, cartIds);
+                            // cartIdData(storeIds);
+                            dispatch(setGetStartDisplay(true));
                           }
                           dispatch(setUserSavedAddres(address));
                           dispatch(setUserPincode(pincode));
@@ -679,38 +683,38 @@ const Home = () => {
       }
     }
   };
-  const cartIdData = (storeIds: any) => {
-    if (storeIds) {
-      const newData = {
-        conversationId: convId,
-        text: "getcartid",
-        voiceFlag: false,
-        isChatVisible: false,
-        data: {
-          storeId: storeIds,
-        },
-      };
-      if (convId && botType) {
-        dispatch(getChatData({ newData, botType }))
-          .then((data) => {
-            // setLoading(false);
-            let cartActivity = data?.payload?.data?.activities[0][0];
-            if (data && cartActivity?.type === "getCartId" && cartActivity) {
-              let cartIds = cartActivity?.value?.data?.cartId;
-              cartItems(storeIds, cartIds);
-              dispatch(setCartId(cartIds));
-            } else {
-              ToastPopup({ text: "cartid not found something went wrong" });
-            }
-          })
-          .catch((err) => {
-            // setLoading(false);
-            ToastPopup({ text: "something went wrong" });
-            console.log("err", err);
-          });
-      }
-    }
-  };
+  // const cartIdData = (storeIds: any) => {
+  //   if (storeIds) {
+  //     const newData = {
+  //       conversationId: convId,
+  //       text: "getcartid",
+  //       voiceFlag: false,
+  //       isChatVisible: false,
+  //       data: {
+  //         storeId: storeIds,
+  //       },
+  //     };
+  //     if (convId && botType) {
+  //       dispatch(getChatData({ newData, botType }))
+  //         .then((data) => {
+  //           // setLoading(false);
+  //           let cartActivity = data?.payload?.data?.activities[0][0];
+  //           if (data && cartActivity?.type === "getCartId" && cartActivity) {
+  //             let cartIds = cartActivity?.value?.data?.cartId;
+  //             cartItems(storeIds, cartIds);
+  //             dispatch(setCartId(cartIds));
+  //           } else {
+  //             ToastPopup({ text: "cartid not found something went wrong" });
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           // setLoading(false);
+  //           ToastPopup({ text: "something went wrong" });
+  //           console.log("err", err);
+  //         });
+  //     }
+  //   }
+  // };
   const homeToastModal = ({ text = "" }: { text: string }) => {
     toast(text, {
       style: {
