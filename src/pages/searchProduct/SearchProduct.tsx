@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./searchProduct.css";
 import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import BackButton from "../../components/Button/BackButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -30,6 +30,14 @@ const SearchProduct = () => {
   const error = useAppSelector((state) => state.home.error);
   const [trendingSearchOptions, setTrendingSearchOptions] = useState<any>([]);
   const [debounceTimeout, setDebounceTimeout] = useState<any>(null);
+  const location = useLocation();
+  const searchData = location?.state?.searchData;
+  useEffect(() => {
+    if (searchData) {
+      setSearchStr(searchData);
+    }
+  }, [searchData]);
+
   const handleSearchData = (data: any) => {
     const newData = {
       conversationId: convId,

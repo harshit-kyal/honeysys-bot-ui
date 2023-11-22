@@ -466,14 +466,12 @@ const Home = () => {
   // };
   const replyFunction = (data: any) => {
     if (data?.activities) {
-      console.log("ChatArraySoket", data?.activities);
       const activities: any[] = data?.activities;
       activities?.forEach((item) => {
         dispatch(addToChatArray(item));
       });
     }
   };
-
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const radiusParam = searchParams.get("radius");
@@ -549,7 +547,7 @@ const Home = () => {
     googleMapsApiKey: "AIzaSyAc7Ky1gAkw_g-HoZM9eOhmvqBFOCqGL-c",
     libraries,
   });
-
+  console.log("data", ChatArray);
   useEffect(() => {
     if (isLoaded && latLng.lat !== 0 && latLng.lng !== 0) {
       const geocoder = new google.maps.Geocoder();
@@ -601,7 +599,6 @@ const Home = () => {
                         } else if (
                           actiVitiesData?.value?.data[0]?.status_code === 200
                         ) {
-                          
                           dispatch(
                             setStoreData(actiVitiesData?.value?.data[0])
                           );
@@ -1139,6 +1136,9 @@ const Home = () => {
                                 buttonContent={
                                   ac?.value?.content ? ac?.value?.content : ""
                                 }
+                                payload={
+                                  ac?.value?.payload ? ac?.value?.payload : {}
+                                }
                               />
                             )}
                           </div>
@@ -1154,7 +1154,7 @@ const Home = () => {
                               <></>
                             ) : (
                               Array.isArray(summaryCard) &&
-                              summaryCard.length > 0 &&
+                              summaryCard?.length > 0 &&
                               summaryCard?.map(
                                 (summaryCard: any, index: number) => {
                                   return (
@@ -1179,8 +1179,8 @@ const Home = () => {
                                             />
                                           }
                                           priceList={
-                                            summaryCard.price
-                                              ? summaryCard.price
+                                            summaryCard?.price
+                                              ? summaryCard?.price
                                               : ""
                                           }
                                           subtitle={
@@ -1189,8 +1189,8 @@ const Home = () => {
                                               : ""
                                           }
                                           title={
-                                            summaryCard.title
-                                              ? summaryCard.title
+                                            summaryCard?.title
+                                              ? summaryCard?.title
                                               : ""
                                           }
                                           totalAmount={
@@ -1520,7 +1520,14 @@ const Home = () => {
               let navigateData = response?.payload?.data?.activities[0][0];
               if (response && navigateData?.type === "navigatePage") {
                 let navigatePage = navigateData?.value?.data[0]?.navigatePage;
-                navigate(`/${navigatePage}`);
+                let searchData = navigateData?.value?.data[0]?.searchValue;
+                if (navigatePage === "search" && searchData) {
+                  navigate("search", {
+                    state: { searchData: searchData },
+                  });
+                } else {
+                  navigate(`/${navigatePage}`);
+                }
                 // if (navigatePage === "showCart") {
                 //   navigate("/cart");
                 // } else if (

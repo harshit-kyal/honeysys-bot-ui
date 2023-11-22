@@ -295,7 +295,6 @@ const Catalog = () => {
                     }
                     onClick={() => {
                       let varientData = data.variants[0];
-                      console.log("varientDat", varientData);
                       clickHandler(varientData);
                     }}
                     title={

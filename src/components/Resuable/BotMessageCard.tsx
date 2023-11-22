@@ -27,6 +27,7 @@ interface CardProp {
   time?: string;
   title?: string;
   buttonContent?: [];
+  payload?: {};
   contentArray?: string | (string | JSX.Element)[];
   actionDataArray?: [] | (string | JSX.Element)[];
   flag?: boolean;
@@ -41,6 +42,7 @@ const BotMessageCard = ({
   botIcon,
   actionDataArray,
   buttonContent,
+  payload,
   flag,
 }: CardProp) => {
   const dispatch = useAppDispatch();
@@ -164,7 +166,6 @@ const BotMessageCard = ({
                 src={data?.iconUrl}
                 text={data?.text}
                 onClick={() => {
-                  console.log("data", data, endTime);
                   if (flag) {
                     if (data?.value === "provideLocation") {
                       const newData = {
@@ -207,7 +208,6 @@ const BotMessageCard = ({
                         dispatch(setStartTime(data?.startTime));
                       }
                       if (data?.endTime) {
-                        console.log("data", data);
                         dispatch(setEndTime(data?.endTime));
                       }
                       if (data?.slotIndex) {
@@ -243,6 +243,7 @@ const BotMessageCard = ({
                         content: data?.text,
                         replyArray: buttonContent,
                         data: {
+                          payload: payload ? payload : {},
                           paymentMethod:
                             data?.text === "Pay online"
                               ? "Pay Online"

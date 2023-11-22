@@ -107,7 +107,7 @@ const CartChagedModal = () => {
                       return orederData;
                     });
                     {
-                      data.length > 0 ? dispatch(setOrderProduct(data)) : <></>;
+                      data?.length > 0 ? dispatch(setOrderProduct(data)) : <></>;
                     }
                     const newData = {
                       conversationId: convId,
@@ -124,7 +124,8 @@ const CartChagedModal = () => {
                       },
                     };
                     dispatch(getChatData({ newData, botType }))
-                      .then(() => {})
+                      .then((res) => {
+                      })
                       .catch((error) => {
                         ToastPopup({ text: "something went wrong" });
                       });

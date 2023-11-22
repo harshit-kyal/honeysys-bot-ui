@@ -4,8 +4,8 @@ import { Button, DrawerModal, ProductCard } from "@polynomialai/alpha-react";
 import BadgeCard from "../../components/Resuable/BadgeCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addToCartArray, getChatData } from "../../slices/homeSlice";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { useLocation, useNavigate} from "react-router-dom";
+import toast from "react-hot-toast";
 import { ToastPopup } from "../../utils/TosterPopup";
 import { QuantityHandler } from "../../utils/QuantityHandler";
 
@@ -198,7 +198,6 @@ const ViewProduct = () => {
       },
     });
   };
-  console.log("productData", productData);
   return (
     <div className="h-screen pt-[60px]">
       <PageHeader title={subCategoryTitle ? subCategoryTitle : "..."} />

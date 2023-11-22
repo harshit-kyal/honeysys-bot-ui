@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import {  Navigate, Outlet, useLocation } from "react-router-dom";
 import HeaderBar from "../components/header/Header";
 import { useAppSelector } from "../app/hooks";
 
@@ -30,20 +30,18 @@ const ProtectedRoute = () => {
     }, 500);
   }, []);
   return render ? (
-    // token || reviewToken ? (
-    <div className="">
-      {isHeader && <HeaderBar />}
-      <Outlet />
-    </div>
+    (token ) || reviewToken ? (
+      <div className="">
+        {isHeader && <HeaderBar />}
+        <Outlet />
+      </div>
+    ) : !reviewToken ? (
+      <Navigate to="/splash" />
+    ) : (
+      <></>
+    )
+
   ) : (
-    // )
-    // : !reviewToken ? (
-    //   <Navigate to="/splash" />
-    // )
-    // : (
-    //   // <></>
-    //   <></>
-    // )
     <></>
   );
 };

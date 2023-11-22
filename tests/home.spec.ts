@@ -10,7 +10,6 @@ test("test", async ({ page }) => {
   await page.getByPlaceholder('Try searching "Laptops & Electronics"');
   page.on("dialog", async (alert) => {
     const text = alert.defaultValue();
-    console.log(text);
     await alert.accept();
   });
 });

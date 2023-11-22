@@ -6,14 +6,13 @@ import { setCartUI } from "../../slices/rootSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addToCartArray,
-  addToOrderList,
   getChatData,
   minusToCartArray,
   setCartTotalAmount,
   setExperienceModal,
   setOrderProduct,
 } from "../../slices/homeSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ExperienceModal from "../../components/Modal/ExperienceModal";
 import CartChagedModal from "../../components/Modal/CartChagedModal";
 import { ToastPopup } from "../../utils/TosterPopup";
@@ -77,8 +76,6 @@ const Cart = () => {
   const [amountLoader, setAmountLoader] = useState(false);
   const [Index, setIndex] = useState(-1);
   const error = useAppSelector((state) => state.home.error);
-  const cart = useAppSelector((state) => state.home.cart);
-  const orderProduct = useAppSelector((state) => state.home.orderProduct);
   const cartData = async () => {
     // setLoading(true);
     setAmountLoader(true);
@@ -135,7 +132,6 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((response) => {
-          console.log("called from addd api");
           cartData();
           if (
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===
@@ -195,7 +191,6 @@ const Cart = () => {
     if (convId && botType && convId !== "" && botType !== "") {
       dispatch(getChatData({ newData, botType }))
         .then((response) => {
-          console.log("called from remove api");
           cartData();
           if (
             response?.payload?.data?.activities[0][0]?.value?.data?.message ===

@@ -10,7 +10,6 @@ const ContactDetails = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigateData = location?.state?.navigate;
-
   const [errorLabel, setErrorLabel] = useState<any>({});
   const pincodeData = useAppSelector((state) => state.home.userPincode);
   const mobileNumber = useAppSelector((state) => state.home.mobileNo);

@@ -201,12 +201,10 @@ export const HomeSlice = createSlice({
           item?.productId === action?.payload?.productId &&
           item?.productVariantIndex === action?.payload?.productVariantIndex
       );
-      console.log("minus", find, action?.payload?.quantity);
       if (find !== -1) {
         if (action?.payload?.quantity > 0) {
           state.cart[find].quantity = action?.payload?.quantity;
         } else {
-          console.log("minus", "remove");
           state.totalQuantity = state.totalQuantity -= 1;
           state.cart.splice(find, 1);
         }

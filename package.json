@@ -31,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:api":"playwright test --config=api.config.ts --project=Chromium"
   },
   "eslintConfig": {
     "extends": [
